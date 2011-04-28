@@ -1,0 +1,132 @@
+#!/bin/sh
+
+#set -x
+
+SELF=$(basename $0)
+[ -z $XDG_CONFIG_HOME ] && XDG_CONFIG_HOME="$HOME/.config"
+VCSH_BASE="$XDG_CONFIG_HOME/vcsh/repo.d"
+
+help() {
+	echo "usage: $SELF <args>
+
+   help           Display this help
+
+   list           List all repos
+
+   use <repo>     Use this repository
+   run <repo>
+       <command>  Use this repository
+
+   init           Initialize a new repository
+   clone <remote>
+         <repo>   Clone from an existing repository
+
+   exit           Exit vcsh mode" >&2
+}
+
+use() {
+	REPO_NAME="$1"
+	GIT_DIR="$VCSH_BASE/$REPO_NAME.git"
+
+	if [ ! -d "$GIT_DIR" ]; then
+		echo E: no repository found for "$REPO_NAME" >&2
+		return 2
+	fi
+
+	export GIT_DIR
+	export GIT_WORK_TREE="$(git config --get core.worktree)"
+	export VCSH_DIRECTORY="$REPO_NAME"
+}
+
+init() {
+	[[ -e $GIT_DIR ]] &&
+		echo "$(basename $0): fatal: $GIT_DIR exists" &&
+		return 21
+	export GIT_WORK_TREE="$HOME"
+	mkdir -p $GIT_WORK_TREE
+	cd $GIT_WORK_TREE ||
+		(echo "$(basename $0): fatal: could not enter $GIT_WORK_TREE" &&
+		 exit 20) || exit 20
+	cd $GIT_WORK_TREE
+	git init
+	git config core.worktree $GIT_WORK_TREE
+}
+
+leave() {
+	unset GIT_DIR
+	unset GIT_WORK_TREE
+	unset VCSH_DIRECTORY
+}
+
+if [ "$1" = 'help' ] || [ $# -eq 0 ]; then
+	help
+	[ "$1" = 'help' ]
+	return $?
+
+elif [ "$1" = 'list' ]; then
+	for i in $VCSH_BASE/*.git; do
+		echo $(basename $i .git)
+	done
+	return 0
+
+elif [ "$1" = 'run' ]; then
+	use $2
+	shift 2
+	"$@"
+	leave
+	return 0
+
+elif [ "$1" = 'use' ]; then
+	if [[ -o NO_IGNORE_EOF ]]; then
+		export VCSH_NO_IGNORE_EOF=1
+		setopt IGNORE_EOF
+		vcsh_exit() {vcsh exit; zle reset-prompt}
+		zle -N vcsh_exit
+		bindkey '^d' 'vcsh_exit'
+	fi
+	use $2
+	buildPS1
+	return 0
+
+elif [ "$1" = 'clone' ]; then
+	export GIT_REMOTE="$2"
+	export REPO_NAME="$3"
+	export GIT_DIR="$VCSH_BASE/$REPO_NAME.git"
+	init
+
+	git remote add origin $GIT_REMOTE
+	git config branch.master.remote origin
+	git config branch.master.merge  refs/heads/master
+	git fetch
+	for i in $(git ls-tree -r origin/master | awk '{print $4}'); do
+	[[ -e $i ]] &&
+		echo "$(basename $0): error: $i exists." &&
+		CONFLICT=1;
+	done
+	[[ -n $CONFLICT ]] &&
+		echo "$(basename $0): fatal: will stop after fetching and not try to merge!\n" &&
+		exit 3
+	git merge origin/master
+	vcsh use $REPO_NAME
+
+elif [ "$1" = 'init' ]; then
+	export REPO_NAME="$2"
+	export GIT_DIR="$VCSH_BASE/$REPO_NAME.git"
+	init
+	vcsh use $REPO_NAME
+
+elif [ "$1" = 'exit' ]; then
+	if [[ $VCSH_NO_IGNORE_EOF -gt 0 ]]; then
+		unset VCSH_NO_IGNORE_EOF
+		setopt NO_IGNORE_EOF
+	fi
+	leave
+	buildPS1
+	return 0
+
+else
+	help
+	return 3
+
+fi
+

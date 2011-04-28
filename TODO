@@ -1,0 +1,8 @@
+* run-time checks for all zsh-specific stuff and make this run with /bin/sh; mostly done
+** vcsh_exit() needs to be wrapped into something that checks if it's being executed by zsh
+** setopt etc: same
+* use PROMPT_SUBST in my own prompt instead of calling buildPS1 again to make this work for everyone, not just me
+* if we are within a vcsh already, only help, run and exit should be allowed
+* ^d re-binding does fail weirdly once i vcsh exit
+* allow vcsh clone <repo>; without <target>
+* set git config core.worktree $HOME or ../../../.. ?
