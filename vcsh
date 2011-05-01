@@ -89,7 +89,7 @@ elif [ "$1" = 'use' ]; then
 	return 0
 
 elif [ "$1" = 'clone' ]; then
-	export GIT_REMOTE="$2"
+	GIT_REMOTE="$2"
 	REPO_NAME="$3"
 	[[ -z $REPO_NAME ]] && REPO_NAME=$(basename $GIT_REMOTE .git)
 	export REPO_NAME
