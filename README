@@ -1,0 +1,14 @@
+vcsh - manage and sync config files via git
+
+vcsh allows you to have several git repositories, all maintaining their working trees in $HOME without clobbering each other.
+That, in turn, means you can have one repository per config set (zsh, vim, ssh, etc), picking and choosing which configs you want to use on which machine.
+
+It's been written for use with zsh, but it works with bash and even sh. Expect full support for /bin/sh soonish.
+
+
+vcsh was designed with mr [1] in mind so you might want to install that, as well.
+
+
+Questions? RichiH@{freenode,OFTC,IRCnet}
+
+[1] http://kitenet.net/~joey/code/mr/
