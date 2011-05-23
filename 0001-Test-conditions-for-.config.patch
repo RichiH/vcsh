@@ -1,0 +1,35 @@
+From d894616047507dd249566dfb219575ae1d958991 Mon Sep 17 00:00:00 2001
+From: Corey Quinn <corey@sequestered.net>
+Date: Sun, 22 May 2011 19:06:14 -0700
+Subject: [PATCH] Test conditions for ~/.config
+
+---
+ vcsh |   12 ++++++++++++
+ 1 files changed, 12 insertions(+), 0 deletions(-)
+
+diff --git a/vcsh b/vcsh
+index 8fedc09..4e7597f 100755
+--- a/vcsh
++++ b/vcsh
+@@ -4,6 +4,18 @@
+ 
+ SELF=$(basename $0)
+ [ -z $XDG_CONFIG_HOME ] && XDG_CONFIG_HOME="$HOME/.config"
++for dir in $XDG_CONFIG_HOME $XDG_CONFIG_HOME/vcsh $XDG_CONFIG_HOME/vcsh/repo.d
++do
++
++    if [ ! -d $dir ]; then
++        if [ -e $dir ]; then
++            echo "$SELF: error: $dir exists but is not a directory" >&2
++            return 2
++        else
++            mkdir $dir || (echo "$SELF: error: could not create $dir" >&2; return 2)
++        fi  
++    fi
++done
+ VCSH_BASE="$XDG_CONFIG_HOME/vcsh/repo.d"
+ 
+ help() {
+-- 
+1.7.2.5
+
