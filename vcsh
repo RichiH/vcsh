@@ -40,12 +40,12 @@ use() {
 
 init() {
 	[[ -e $GIT_DIR ]] &&
-		echo "$(basename $0): fatal: $GIT_DIR exists" &&
+		echo "$SELF: fatal: $GIT_DIR exists" &&
 		return 21
 	export GIT_WORK_TREE="$HOME"
 	mkdir -p $GIT_WORK_TREE
 	cd $GIT_WORK_TREE ||
-		(echo "$(basename $0): fatal: could not enter $GIT_WORK_TREE" &&
+		(echo "$SELF: fatal: could not enter $GIT_WORK_TREE" &&
 		 exit 20) || exit 20
 	cd $GIT_WORK_TREE
 	git init
@@ -80,7 +80,7 @@ elif [ "$1" = 'use' ]; then
 	if [[ -o NO_IGNORE_EOF ]]; then
 		export VCSH_NO_IGNORE_EOF=1
 		setopt IGNORE_EOF
-		vcsh_exit() {vcsh exit; zle reset-prompt}
+		vcsh_exit() {vcsh exit; zle reset-prompt;}
 		zle -N vcsh_exit
 		bindkey '^d' 'vcsh_exit'
 	fi
@@ -102,11 +102,11 @@ elif [ "$1" = 'clone' ]; then
 	git fetch
 	for i in $(git ls-tree -r origin/master | awk '{print $4}'); do
 	[[ -e $i ]] &&
-		echo "$(basename $0): error: $i exists." &&
+		echo "$SELF: error: $i exists." &&
 		CONFLICT=1;
 	done
 	[[ -n $CONFLICT ]] &&
-		echo "$(basename $0): fatal: will stop after fetching and not try to merge!\n" &&
+		echo "$SELF: fatal: will stop after fetching and not try to merge!\n" &&
 		exit 3
 	git merge origin/master
 	vcsh use $REPO_NAME
