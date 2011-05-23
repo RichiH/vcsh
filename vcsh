@@ -3,19 +3,20 @@
 #set -x
 
 SELF=$(basename $0)
-[ -z $XDG_CONFIG_HOME ] && XDG_CONFIG_HOME="$HOME/.config"
-for dir in $XDG_CONFIG_HOME $XDG_CONFIG_HOME/vcsh $XDG_CONFIG_HOME/vcsh/repo.d
-do
 
-    if [ ! -d $dir ]; then
-        if [ -e $dir ]; then
-            echo "$SELF: error: $dir exists but is not a directory" >&2
-            return 2
-        else
-            mkdir $dir || (echo "$SELF: error: could not create $dir" >&2; return 2)
-        fi  
-    fi
+[ -z $XDG_CONFIG_HOME ] && XDG_CONFIG_HOME="$HOME/.config"
+for check_directory in $XDG_CONFIG_HOME $XDG_CONFIG_HOME/vcsh $XDG_CONFIG_HOME/vcsh/repo.d
+do
+	if [ ! -d $check_directory ]; then
+		if [ -e $check_directory ]; then
+			echo "$SELF: error: $check_directory exists but is not a directory" >&2
+			exit 2
+		else
+			mkdir $check_directory || (echo "$SELF: error: could not create $check_directory" >&2; exit 2)
+		fi
+	fi
 done
+
 VCSH_BASE="$XDG_CONFIG_HOME/vcsh/repo.d"
 
 help() {
