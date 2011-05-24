@@ -93,7 +93,12 @@ elif [ "$1" = 'use' ]; then
 	if [[ -o NO_IGNORE_EOF ]]; then
 		export VCSH_NO_IGNORE_EOF=1
 		setopt IGNORE_EOF
-		vcsh_exit() {vcsh exit; zle reset-prompt;}
+		if [[ -n $ZSH_VERSION ]]; then
+			vcsh_exit() {
+				vcsh exit;
+				zle reset-prompt;
+			}
+		fi
 		zle -N vcsh_exit
 		bindkey '^d' 'vcsh_exit'
 	fi
