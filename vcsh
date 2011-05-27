@@ -74,20 +74,20 @@ leave() {
 if [ "$1" = 'help' ] || [ $# -eq 0 ]; then
 	help
 	[ "$1" = 'help' ]
-	return $?
+	exit $?
 
 elif [ "$1" = 'list' ]; then
 	for i in $VCSH_BASE/*.git; do
 		echo $(basename $i .git)
 	done
-	return 0
+	exit 0
 
 elif [ "$1" = 'run' ]; then
 	use $2
 	shift 2
 	"$@"
 	leave
-	return 0
+	exit 0
 
 elif [ "$1" = 'use' ]; then
 	if [[ -o NO_IGNORE_EOF ]]; then
@@ -104,7 +104,7 @@ elif [ "$1" = 'use' ]; then
 	fi
 	use $2
 	buildPS1
-	return 0
+	exit 0
 
 elif [ "$1" = 'clone' ]; then
 	GIT_REMOTE="$2"
@@ -142,11 +142,11 @@ elif [ "$1" = 'exit' ]; then
 	fi
 	leave
 	buildPS1
-	return 0
+	exit 0
 
 else
 	help
-	return 3
+	exit 3
 
 fi
 
