@@ -1,0 +1,41 @@
+# This is how my setup looks. Adapt to your style or copy mine verbatim, both is fine.
+
+# Create workspace
+mkdir -p ~/work/git
+cd !$
+
+# Clone vcsh and make it available
+git clone git://github.com/RichiH/vcsh.git vcsh-readonly
+PATH+=":/home/richih/work/git/vcsh-readonly"
+export PATH
+
+# Grab my mr config. see below for details on how I set this up
+zsh ~/work/git/vcsh-readonly/vcsh clone ssh://<remote>/mr.git
+cd ~/.config/mr/config.d/
+ln -s ../available.d/* .
+
+# make vcsh work by default. Adapt for Bash etc as needed
+cd
+zsh ~/work/git/vcsh-readonly/vcsh clone ssh://<remote>/zsh.git
+ln -s ~/work/git/vcsh-readonly/vcsh .zsh/functions
+zsh
+
+
+
+
+################
+
+# mr
+
+~ % cat ~/.mrconfig
+[DEFAULT]
+include = cat ~/.config/mr/config.d/*
+~ % echo $XDG_CONFIG_HOME
+/home/richih/.config
+~ % ls $XDG_CONFIG_HOME/mr/available.d # random selection of my repos
+git-annex gitk.vcsh git.vcsh ikiwiki mr.vcsh reportbug.vcsh snippets.git wget.vcsh zsh.vcsh
+~ % 
+# then simply ln -s whatever you want on your local machine from
+# $XDG_CONFIG_HOME/mr/available.d to $XDG_CONFIG_HOME/mr/config.d
+~ % cd
+~ % mr -j 5 up
