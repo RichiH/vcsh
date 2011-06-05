@@ -6,4 +6,6 @@
 * set git config core.worktree $HOME or ../../../.. ?
 * vcsh clone fails when remote is empty
 
+* make git unignore work, edit config/ to include excludesfile = /home/richih/.gitconfig.d/<reponame>; maybe move that directory in .config, somewhere?
+
 * vcsh remove/delete
