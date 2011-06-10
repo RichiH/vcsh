@@ -5,7 +5,13 @@
 * ^d re-binding does fail weirdly once i vcsh exit
 * set git config core.worktree $HOME or ../../../.. ?
 * vcsh clone fails when remote is empty
+* POSIX
+** remove all zsh-specific code fom vcsh proper
+** make zsh wrapper work
+* look at stew's movin, ensure we have all features
 
 * make git unignore work, edit config/ to include excludesfile = /home/richih/.gitconfig.d/<reponame>; maybe move that directory in .config, somewhere?
 
 * vcsh remove/delete
+
+* package for Debian
