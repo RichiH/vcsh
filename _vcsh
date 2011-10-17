@@ -1,10 +1,10 @@
 #compdef vcsh
 
+#		use\:"use/enter repo"
 _arguments \
 	':subcommand:((
 		help\:"display help"
 		list\:"list all repos"
-		use\:"use/enter repo"
 		run\:"run command on repo"
 		init\:"init & clone from repo"
 		clone\:"clone from repo"

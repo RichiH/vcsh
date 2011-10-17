@@ -27,6 +27,7 @@ verbose() {
 	if [ "$VCSH_DEBUG" = '1' ] || [ "$VCSH_VERBOSE" = '1' ]; then echo "$SELF: verbose: $1"; fi
 }
 
+#   use <repo>     Use this repository
 help() {
 	echo "usage: $SELF <args>
 
@@ -34,7 +35,6 @@ help() {
 
    list           List all repos
 
-   use <repo>     Use this repository
    run <repo>
        <command>  Use this repository
 
@@ -105,24 +105,24 @@ elif [ "$1" = 'run' ]; then
 	verbose "run end"
 	exit 0
 
-elif [ "$1" = 'use' ]; then
-	verbose "use begin"
-	if [ -n "$ZSH_VERSION" ]; then
-		if [ -o NO_IGNORE_EOF ]; then
-			export VCSH_NO_IGNORE_EOF=1
-			setopt IGNORE_EOF
-		fi
-		vcsh_exit() {
-			vcsh exit;
-			zle reset-prompt;
-		}
-		zle -N vcsh_exit
-		bindkey '^d' 'vcsh_exit'
-	fi
-	use $2
-	[ -n "$ZSH_VERSION" ] && [ "$USER" = richih ] && buildPS1
-	verbose "use end"
-	exit 0
+#elif [ "$1" = 'use' ]; then
+#	verbose "use begin"
+#	if [ -n "$ZSH_VERSION" ]; then
+#		if [ -o NO_IGNORE_EOF ]; then
+#			export VCSH_NO_IGNORE_EOF=1
+#			setopt IGNORE_EOF
+#		fi
+#		vcsh_exit() {
+#			vcsh exit;
+#			zle reset-prompt;
+#		}
+#		zle -N vcsh_exit
+#		bindkey '^d' 'vcsh_exit'
+#	fi
+#	use $2
+#	[ -n "$ZSH_VERSION" ] && [ "$USER" = richih ] && buildPS1
+#	verbose "use end"
+#	exit 0
 
 elif [ "$1" = 'clone' ]; then
 	verbose "clone begin"
