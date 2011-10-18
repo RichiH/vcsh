@@ -146,7 +146,7 @@ elif [ "$1" = 'clone' ]; then
 		echo "$SELF: fatal: will stop after fetching and not try to merge!\n" &&
 		exit 3
 	git merge origin/master
-	vcsh use $REPO_NAME
+#	vcsh use $REPO_NAME
 	verbose "clone end"
 
 elif [ "$1" = 'init' ]; then
@@ -154,7 +154,7 @@ elif [ "$1" = 'init' ]; then
 	export REPO_NAME="$2"
 	export GIT_DIR="$VCSH_BASE/$REPO_NAME.git"
 	init
-	vcsh use $REPO_NAME
+#	vcsh use $REPO_NAME
 	verbose "init end"
 
 elif [ "$1" = 'exit' ]; then
