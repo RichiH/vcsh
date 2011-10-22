@@ -31,18 +31,18 @@ verbose() {
 help() {
 	echo "usage: $SELF <args>
 
-   help           Display this help
+   help              Display this help
 
-   list           List all repos
+   list              List all repos
 
-   run <repo>
-       <command>  Use this repository
+   run <repo> \\
+       <command>     Use this repository
 
-   init           Initialize a new repository
-   clone <remote>
-         [<repo>] Clone from an existing repository
+   init <repo>       Initialize a new repository
+   clone <remote> \\
+         [<repo>]    Clone from an existing repository
 
-   exit           Exit vcsh mode" >&2
+   exit              Exit vcsh mode" >&2
 }
 
 use() {
@@ -151,6 +151,7 @@ elif [ "$1" = 'clone' ]; then
 
 elif [ "$1" = 'init' ]; then
 	verbose "init begin"
+	[ -z $2 ] && help; return 0
 	export REPO_NAME="$2"
 	export GIT_DIR="$VCSH_BASE/$REPO_NAME.git"
 	init
