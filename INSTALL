@@ -64,6 +64,13 @@ This is the beauty of it all. Once you are set up, just run:
 Neat.
 
 
+=The steal-from-template way=
+
+    git clone git://github.com/RichiH/vcsh_mr_template.git
+
+Then look around in the clone. Should be reasonable simple to understand. If not, poke me RichiH on freenode (query) or OFTC (#vcs-home).
+
+
 =The manual way=
 
 # This is how my setup looks. Adapt to your style or copy mine verbatim, both is fine.
