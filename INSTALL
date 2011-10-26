@@ -1,24 +1,92 @@
+=The template way=
+
+==Prerequisites==
+
+Make sure none of those files/diretories exist for your test (user). If they do, move them away for now:
+
+~/.gitignore
+~/.mrconfig
+~/.config/mr/available.d/mr.vcsh
+~/.config/mr/available.d/zsh.vcsh
+~/.config/mr/config.d/mr.vcsh
+~/.config/vcsh/repo.d/mr.git/
+
+All of the files are part of the template repo, the directory is where the template will be stored
+
+apt-get install mr # this is optional, but highly recommended
+
+==Clone the template==
+
+    mkdir -p ~/work/git
+    cd !$
+    git clone git://github.com/RichiH/vcsh.git vcsh
+    cd vcsh
+    ln -s vcsh /usr/local/bin
+    cd
+    vcsh clone git://github.com/RichiH/vcsh_mr_template.git mr.vcsh 
+
+==Enable your test repository==
+
+    mv ~/.zsh   ~/zsh.bak
+    mv ~/.zshrc ~/zsh.bak
+    cd ~/.config/mr/config.d/
+    ln -s ../available.d/mr.vcsh .
+    cd
+    mr up
+
+==Set up your own repos==
+
+Now, it's time to edit the template config and fill it with your own remotes:
+
+    vim .config/mr/available.d/mr.vcsh
+    vim .config/mr/available.d/zsh.vcsh
+
+And then create your own stuff
+
+    vcsh init foo
+    vcsh run foo git add -f bar baz quux
+    vcsh run foo git remote add origin git://quuux
+    vcsh run foo git commit
+    vcsh run foo git push
+    
+    cp .config/mr/available.d/mr.vcsh .config/mr/available.d/foo.vcsh
+    vim .config/mr/available.d/foo.vcsh # add your own repo
+
+Done!
+
+==Daily use==
+
+This is the beauty of it all. Once you are set up, just run:
+
+   mr up
+   mr push
+
+Neat.
+
+
+=The manual way=
+
 # This is how my setup looks. Adapt to your style or copy mine verbatim, both is fine.
 
 # Create workspace
-mkdir -p ~/work/git
-cd !$
+    mkdir -p ~/work/git
+    cd !$
 
 # Clone vcsh and make it available
-git clone git://github.com/RichiH/vcsh.git vcsh
-PATH+=":$HOME/work/git/vcsh"
-export PATH
+    git clone git://github.com/RichiH/vcsh.git vcsh
+    PATH+=":$HOME/work/git/vcsh"
+    export PATH
 
 # Grab my mr config. see below for details on how I set this up
-~/work/git/vcsh/vcsh clone ssh://<remote>/mr.git
-cd ~/.config/mr/config.d/
-ln -s ../available.d/* .
+    ~/work/git/vcsh/vcsh clone ssh://<remote>/mr.git
+    cd ~/.config/mr/config.d/
+    ln -s ../available.d/* .
 
 # make vcsh work by default. Adapt for Bash etc as needed
-cd
-zsh ~/work/git/vcsh/vcsh clone ssh://<remote>/zsh.git
-ln -s ~/work/git/vcsh/vcsh .zsh/functions
-zsh
+    cd
+    zsh ~/work/git/vcsh/vcsh clone ssh://<remote>/zsh.git
+    ln -s ~/work/git/vcsh/vcsh .zsh/functions
+    zsh
 
 
 
@@ -27,15 +95,15 @@ zsh
 
 # mr
 
-~ % cat ~/.mrconfig
-[DEFAULT]
-include = cat ~/.config/mr/config.d/*
-~ % echo $XDG_CONFIG_HOME
-/home/richih/.config
-~ % ls $XDG_CONFIG_HOME/mr/available.d # random selection of my repos
-git-annex gitk.vcsh git.vcsh ikiwiki mr.vcsh reportbug.vcsh snippets.git wget.vcsh zsh.vcsh
-~ % 
+    ~ % cat ~/.mrconfig
+    [DEFAULT]
+    include = cat ~/.config/mr/config.d/*
+    ~ % echo $XDG_CONFIG_HOME
+    /home/richih/.config
+    ~ % ls $XDG_CONFIG_HOME/mr/available.d # random selection of my repos
+    git-annex gitk.vcsh git.vcsh ikiwiki mr.vcsh reportbug.vcsh snippets.git wget.vcsh zsh.vcsh
+    ~ % 
 # then simply ln -s whatever you want on your local machine from
 # $XDG_CONFIG_HOME/mr/available.d to $XDG_CONFIG_HOME/mr/config.d
-~ % cd
-~ % mr -j 5 up
+    ~ % cd
+    ~ % mr -j 5 up
