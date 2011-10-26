@@ -42,7 +42,7 @@ help() {
 
    init <repo>       Initialize a new repository
    clone <remote> \\
-         [<repo>]    Clone from an existing repository
+         [<repo>]    Clone from an existing repository" >&2
 }
 
 use() {
