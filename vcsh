@@ -151,7 +151,7 @@ elif [ "$1" = 'clone' ]; then
 
 elif [ "$1" = 'init' ]; then
 	verbose "init begin"
-	[ -z $2 ] && help; return 0
+	[ -z $2 ] && help && return 0
 	export REPO_NAME="$2"
 	export GIT_DIR="$VCSH_BASE/$REPO_NAME.git"
 	init
