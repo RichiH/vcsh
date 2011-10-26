@@ -15,3 +15,5 @@
 * vcsh remove/delete
 
 * package for Debian
+
+* make sure `vcsh run foo` only runs for git & gitk (maybe?)
