@@ -1,6 +1,7 @@
 #compdef vcsh
 
 #		use\:"use/enter repo"
+#		exit\:"exit repo"
 _arguments \
 	':subcommand:((
 		help\:"display help"
@@ -8,5 +9,4 @@ _arguments \
 		run\:"run command on repo"
 		init\:"init & clone from repo"
 		clone\:"clone from repo"
-		exit\:"exit repo"
 	))'

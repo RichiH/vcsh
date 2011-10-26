@@ -5,14 +5,14 @@
 SELF=$(basename $0)
 
 [ -z "$XDG_CONFIG_HOME" ] && XDG_CONFIG_HOME="$HOME/.config"
-for check_directory in $XDG_CONFIG_HOME $XDG_CONFIG_HOME/vcsh $XDG_CONFIG_HOME/vcsh/repo.d
+for check_directory in "$XDG_CONFIG_HOME" "$XDG_CONFIG_HOME/vcsh" "$XDG_CONFIG_HOME/vcsh/repo.d"
 do
 	if [ ! -d "$check_directory" ]; then
 		if [ -e "$check_directory" ]; then
 			echo "$SELF: error: $check_directory exists but is not a directory" >&2
 			exit 2
 		else
-			mkdir $check_directory || (echo "$SELF: error: could not create $check_directory" >&2; exit 2)
+			mkdir "$check_directory" || (echo "$SELF: error: could not create $check_directory" >&2; exit 2)
 		fi
 	fi
 done
@@ -28,6 +28,8 @@ verbose() {
 }
 
 #   use <repo>     Use this repository
+#
+#   exit              Exit vcsh mode" >&2
 help() {
 	echo "usage: $SELF <args>
 
@@ -41,8 +43,6 @@ help() {
    init <repo>       Initialize a new repository
    clone <remote> \\
          [<repo>]    Clone from an existing repository
-
-   exit              Exit vcsh mode" >&2
 }
 
 use() {
@@ -67,13 +67,13 @@ init() {
 		echo "$SELF: fatal: $GIT_DIR exists" &&
 		return 21
 	export GIT_WORK_TREE="$HOME"
-	mkdir -p $GIT_WORK_TREE
-	cd $GIT_WORK_TREE ||
+	mkdir -p "$GIT_WORK_TREE"
+	cd "$GIT_WORK_TREE" ||
 		(echo "$SELF: fatal: could not enter $GIT_WORK_TREE" &&
 		 exit 20) || exit 20
-	cd $GIT_WORK_TREE
+	cd "$GIT_WORK_TREE"
 	git init
-	git config core.worktree $GIT_WORK_TREE
+	git config core.worktree "$GIT_WORK_TREE"
 	verbose "init() end"
 }
 
@@ -90,15 +90,15 @@ if [ "$1" = 'help' ] || [ "$#" -eq 0 ]; then
 
 elif [ "$1" = 'list' ]; then
 	verbose "list begin"
-	for i in $VCSH_BASE/*.git; do
-		echo $(basename $i .git)
+	for i in "$VCSH_BASE"/*.git; do
+		echo $(basename "$i" .git)
 	done
 	verbose "list end"
 	exit 0
 
 elif [ "$1" = 'run' ]; then
 	verbose "run begin"
-	use $2
+	use "$2"
 	shift 2
 	"$@"
 	leave
@@ -128,12 +128,12 @@ elif [ "$1" = 'clone' ]; then
 	verbose "clone begin"
 	GIT_REMOTE="$2"
 	REPO_NAME="$3"
-	[ -z "$REPO_NAME" ] && REPO_NAME=$(basename $GIT_REMOTE .git)
+	[ -z "$REPO_NAME" ] && REPO_NAME=$(basename "$GIT_REMOTE" .git)
 	export REPO_NAME
 	export GIT_DIR="$VCSH_BASE/$REPO_NAME.git"
 	init
 
-	git remote add origin $GIT_REMOTE
+	git remote add origin "$GIT_REMOTE"
 	git config branch.master.remote origin
 	git config branch.master.merge  refs/heads/master
 	git fetch
@@ -155,19 +155,19 @@ elif [ "$1" = 'init' ]; then
 	export REPO_NAME="$2"
 	export GIT_DIR="$VCSH_BASE/$REPO_NAME.git"
 	init
-#	vcsh use $REPO_NAME
+#	vcsh use "$REPO_NAME"
 	verbose "init end"
 
-elif [ "$1" = 'exit' ]; then
-	verbose "exit begin"
-	if [ -n "$ZSH_VERSION" ] && [ "$VCSH_NO_IGNORE_EOF" = '1' ]; then
-		unset VCSH_NO_IGNORE_EOF
-		setopt NO_IGNORE_EOF
-	fi
-	leave
-	[ -n "$ZSH_VERSION" ] && [ "$USER" = richih ] && buildPS1
-	verbose "exit end"
-	exit 0
+#elif [ "$1" = 'exit' ]; then
+#	verbose "exit begin"
+#	if [ -n "$ZSH_VERSION" ] && [ "$VCSH_NO_IGNORE_EOF" = '1' ]; then
+#		unset VCSH_NO_IGNORE_EOF
+#		setopt NO_IGNORE_EOF
+#	fi
+#	leave
+#	[ -n "$ZSH_VERSION" ] && [ "$USER" = richih ] && buildPS1
+#	verbose "exit end"
+#	exit 0
 
 else
 	verbose "defaulting to calling help()"
