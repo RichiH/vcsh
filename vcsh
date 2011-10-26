@@ -1,6 +1,6 @@
 #!/bin/sh
 
-[ "$VCSH_DEBUG" = '1' ] && set -x
+[ -n "$VCSH_DEBUG" ] && set -x
 
 SELF=$(basename $0)
 
@@ -20,11 +20,11 @@ done
 VCSH_BASE="$XDG_CONFIG_HOME/vcsh/repo.d"
 
 debug() {
-	[ "$VCSH_DEBUG" = '1' ] && echo "$SELF: debug: $1"
+	[ -n "$VCSH_DEBUG" ] && echo "$SELF: debug: $1"
 }
 
 verbose() {
-	if [ "$VCSH_DEBUG" = '1' ] || [ "$VCSH_VERBOSE" = '1' ]; then echo "$SELF: verbose: $1"; fi
+	if [ -n "$VCSH_DEBUG" ] || [ -n "$VCSH_VERBOSE" ]; then echo "$SELF: verbose: $1"; fi
 }
 
 #   use <repo>     Use this repository
