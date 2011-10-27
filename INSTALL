@@ -107,16 +107,14 @@ This is how my old setup procedure looked like. Adapt it to your own style or co
     sudo ln -s ~/work/git/vcsh/vcsh /usr/bin/local
     hash -r
 
-    # Grab my mr config. See below for details on how I set this up.
-    ~/work/git/vcsh/vcsh clone ssh://<remote>/mr.git
+Grab my mr config. see below for details on how I set this up
+
+    vcsh clone ssh://<remote>/mr.git
     cd ~/.config/mr/config.d/
     ln -s ../available.d/* .
 
-----------------
 
-# The old tutorial (?) #
-
-    # mr is used to actually retrieve configs, etc
+mr is used to actually retrieve configs, etc
 
     ~ % cat ~/.mrconfig
     [DEFAULT]
