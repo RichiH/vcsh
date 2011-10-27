@@ -81,26 +81,20 @@ Then look around in the clone. Should be reasonable simple to understand. If not
 
 # Clone vcsh and make it available
     git clone git://github.com/RichiH/vcsh.git vcsh
-    PATH+=":$HOME/work/git/vcsh"
-    export PATH
+    sudo ln -s ~/work/git/vcsh/vcsh /usr/bin/local
+    hash -r
 
 # Grab my mr config. see below for details on how I set this up
-    ~/work/git/vcsh/vcsh clone ssh://<remote>/mr.git
+    vcsh clone ssh://<remote>/mr.git
     cd ~/.config/mr/config.d/
     ln -s ../available.d/* .
-
-# make vcsh work by default. Adapt for Bash etc as needed
-    cd
-    zsh ~/work/git/vcsh/vcsh clone ssh://<remote>/zsh.git
-    ln -s ~/work/git/vcsh/vcsh .zsh/functions
-    zsh
 
 
 
 
 ################
 
-# mr
+# mr is used to actually retrieve configs, etc
 
     ~ % cat ~/.mrconfig
     [DEFAULT]
