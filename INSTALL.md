@@ -9,7 +9,7 @@ Below you will find a few different methods for setting up vcsh:
 
 # 1. The template way #
 
-## Prerequisites ##
+## 1.1 Prerequisites ##
 
 Make sure none of the following files/diretories exist for your test (user). If they do, move them away for now:
 
@@ -24,7 +24,7 @@ All of the files are part of the template repository, the directory is where the
 
     apt-get install mr               # this is optional, but highly recommended
 
-## Clone the template ##
+## 1.2 Clone the template ##
 
     mkdir -p ~/work/git
     cd !$
@@ -34,7 +34,7 @@ All of the files are part of the template repository, the directory is where the
     cd
     vcsh clone git://github.com/RichiH/vcsh_mr_template.git mr.vcsh
 
-## Enable your test repository ##
+## 1.3 Enable your test repository ##
 
     mv ~/.zsh   ~/zsh.bak
     mv ~/.zshrc ~/zshrc.bak
@@ -43,7 +43,7 @@ All of the files are part of the template repository, the directory is where the
     cd
     mr up
 
-## Set up your own repositories ##
+## 1.4 Set up your own repositories ##
 
 Now, it's time to edit the template config and fill it with your own remotes:
 
@@ -63,9 +63,9 @@ And then create your own stuff:
 
 Done!
 
-## Daily use  ##
+## 1.5 Daily use  ##
 
-### Keeping repositories up-to-date ###
+### 1.5.1 Keeping repositories up-to-date ###
 
 This is the beauty of it all. Once you are set up, just run:
 
@@ -74,7 +74,7 @@ This is the beauty of it all. Once you are set up, just run:
 
 Neat.
 
-### Making changes ###
+### 1.5.2 Making changes ###
 
 After you have made some changes, for which you would normally use `git add` and `git commit`, use the vcsh wrapper (like above):
 
@@ -136,7 +136,7 @@ vcsh encourages you to use mr.
 It helps you manage a large number of repositories by running the necessary vcsh commands for you.
 You may choose not to use mr, in which case you will have to run those commands manually or by other means.
 
-## A few examples ##
+## 4.1 A few examples ##
 
 To initialize a new repository: `vcsh init zsh`
 
