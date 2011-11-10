@@ -32,51 +32,51 @@ The use of mr is technically optional, but it will be an integral part of the pr
 
 To illustrate, this is what a possible directory structure looks like.
 
-        $HOME
-            |-- .config
-            |   |-- mr
-            |   |   |-- available.d
-            |   |   |   |-- zsh.vcsh
-            |   |   |   |-- gitconfigs.vcsh
-            |   |   |   |-- lftp.vcsh
-            |   |   |   |-- offlineimap.vcsh
-            |   |   |   |-- s3cmd.vcsh
-            |   |   |   |-- tmux.vcsh
-            |   |   |   |-- vim.vcsh
-            |   |   |   |-- vimperator.vcsh
-            |   |   |   |-- snippets.git
-            |   |   |-- config.d
-            |   |   |   |-- zsh.mrconfig       -> ../available.d/zsh.mrconfig
-            |   |   |   |-- gitconfigs.mrconfig -> ../available.d/gitconfigs.mrconfig
-            |   |   |   |-- tmux.mrconfig       -> ../available.d/tmux.mrconfig
-            |   |   |   `-- vim.mrconfig        -> ../available.d/vim.mrconfig
-            |   `-- vcsh
-            |       `-- repo.d
-            |           |-- zsh.git  -----------+
-            |           |-- gitconfigs.git      |
-            |           |-- tmux.git            |
-            |           `-- vim.git             |
-            |-- [...]                           |
-            |-- .zshrc   <----------------------+
-            |-- .gitignore
-            |-- .mrconfig
-            `-- .mrtrust
+    $HOME
+        |-- .config
+        |   |-- mr
+        |   |   |-- available.d
+        |   |   |   |-- zsh.vcsh
+        |   |   |   |-- gitconfigs.vcsh
+        |   |   |   |-- lftp.vcsh
+        |   |   |   |-- offlineimap.vcsh
+        |   |   |   |-- s3cmd.vcsh
+        |   |   |   |-- tmux.vcsh
+        |   |   |   |-- vim.vcsh
+        |   |   |   |-- vimperator.vcsh
+        |   |   |   |-- snippets.git
+        |   |   |-- config.d
+        |   |   |   |-- zsh.mrconfig       -> ../available.d/zsh.mrconfig
+        |   |   |   |-- gitconfigs.mrconfig -> ../available.d/gitconfigs.mrconfig
+        |   |   |   |-- tmux.mrconfig       -> ../available.d/tmux.mrconfig
+        |   |   |   `-- vim.mrconfig        -> ../available.d/vim.mrconfig
+        |   `-- vcsh
+        |       `-- repo.d
+        |           |-- zsh.git  -----------+
+        |           |-- gitconfigs.git      |
+        |           |-- tmux.git            |
+        |           `-- vim.git             |
+        |-- [...]                           |
+        |-- .zshrc   <----------------------+
+        |-- .gitignore
+        |-- .mrconfig
+        `-- .mrtrust
 
 In this setup, ~/.mrconfig looks like:
 
-        [DEFAULT]
-        jobs = 5
-        include = cat ~/.config/mr/config.d/*
+    [DEFAULT]
+    jobs = 5
+    include = cat ~/.config/mr/config.d/*
 
 The files you see in ~/.config/mr/available.d are mr configuration files that contain the commands to manage (checkout, update etc.) a single repository.
 vcsh repo configs end in .vcsh, git configs end in .git, etc. This is optional and your preference.
 For example, this is what a zsh.mrconfig with read-only access to my zshrc repo looks likes. I.e. in this specific example, push can not work.
 
-        [$HOME/.config/vcsh/repo.d/zsh.git]
-        checkout = vcsh clone 'git://github.com/RichiH/zshrc.git'
-        update = vcsh run bash git pull
-        push = vcsh run bash git push
-        status = vcsh run bash git status
+    [$HOME/.config/vcsh/repo.d/zsh.git]
+    checkout = vcsh clone 'git://github.com/RichiH/zshrc.git'
+    update = vcsh run bash git pull
+    push = vcsh run bash git push
+    status = vcsh run bash git status
 
 ~/.config/mr/available.d contains *all available* repositories.
 Only files/links present in mr/config.d, however, will be used by mr.
