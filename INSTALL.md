@@ -1,10 +1,11 @@
 # Getting started with vcsh #
 
-Below you will find three methods for setting up vcsh:
+Below you will find a few different methods for setting up vcsh:
 
 1. The template way
 2. The steal-from-template way
 3. The manual way
+4. Using vcsh without mr
 
 # 1. The template way #
 
@@ -128,3 +129,32 @@ mr is used to actually retrieve configs, etc
     # $XDG_CONFIG_HOME/mr/available.d to $XDG_CONFIG_HOME/mr/config.d
     ~ % cd
     ~ % mr -j 5 up
+
+# 4. Using vcsh without mr #
+
+vcsh encourages you to use mr.
+It helps you manage a large number of repositories by running the necessary vcsh commands for you.
+You may choose not to use mr, in which case you will have to run those commands manually or by other means.
+
+## A few examples ##
+
+To initialize a new repository: `vcsh init zsh`
+
+To clone a repository: `vcsh clone ssh://<remote>/zsh.git`
+
+To interact with a repository, use the regular Git commands, but prepend them with `vcsh run $repository_name`.
+For example:
+
+    vcsh run zsh git status
+    vcsh run zsh git add -f .zshrc
+    vcsh run zsh git commit
+
+Obviously, without mr keeping repositories up-to-date, it will have to be done manually.
+Alternatively, you could try something like this:
+
+    for repo in `vcsh list`; do
+        vcsh run $repo git pull;
+    done
+
+----------
+Questions? RichiH@{Freenode,OFTC,IRCnet}

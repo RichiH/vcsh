@@ -26,6 +26,7 @@ It expects single-purpose repositories and stores them in a hidden directory (si
 However, it does not create symbolic links in $HOME; it puts the actual files right into $HOME.
 
 Furthermore, by making use of mr [1], it makes it very easy to enable/disable and clone a large number of repositories.
+The use of mr is technically optional, but it will be an integral part of the proposed system that follows.
 
 ## Default Directory Layout ##
 
