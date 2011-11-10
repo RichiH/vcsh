@@ -7,7 +7,7 @@ That, in turn, means you can have one repository per config set (zsh, vim, ssh, 
 
 vcsh was designed with mr [1] in mind so you might want to install that, as well.
 
-Read INSTALL for detailed setup instructions.
+Read INSTALL.md for detailed setup instructions.
 
 Questions? RichiH@{Freenode,OFTC,IRCnet}
 
