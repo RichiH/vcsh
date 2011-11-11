@@ -45,11 +45,11 @@ To illustrate, this is what a possible directory structure looks like.
         |   |   |   |-- vim.vcsh
         |   |   |   |-- vimperator.vcsh
         |   |   |   |-- snippets.git
-        |   |   |-- config.d
-        |   |   |   |-- zsh.mrconfig       -> ../available.d/zsh.mrconfig
-        |   |   |   |-- gitconfigs.mrconfig -> ../available.d/gitconfigs.mrconfig
-        |   |   |   |-- tmux.mrconfig       -> ../available.d/tmux.mrconfig
-        |   |   |   `-- vim.mrconfig        -> ../available.d/vim.mrconfig
+        |   |   `-- config.d
+        |   |       |-- zsh.mrconfig        -> ../available.d/zsh.mrconfig
+        |   |       |-- gitconfigs.mrconfig -> ../available.d/gitconfigs.mrconfig
+        |   |       |-- tmux.mrconfig       -> ../available.d/tmux.mrconfig
+        |   |       `-- vim.mrconfig        -> ../available.d/vim.mrconfig
         |   `-- vcsh
         |       `-- repo.d
         |           |-- zsh.git  -----------+
