@@ -1,0 +1,92 @@
+vcsh(1) - manage and sync config files via git
+==============================================
+
+## SYNOPSIS
+
+`vcsh` init <foo>
+
+`vcsh` clone <url> [<location>]
+
+`vcsh` run <foo> git command
+
+`vcsh` list
+
+`vcsh` help
+
+## DESCRIPTION
+
+`vcsh` allows you to have several `git`(1) repositories, all maintaining their
+working trees in $HOME without clobbering each other. That, in turn, means you
+can have one repository per config set (zsh, vim, ssh, etc), picking and
+choosing which configs you want to use on which machine.
+
+`vcsh` is using a technique called fake bare git repositories, keeping <$GIT_DIR>
+in a different directory from <$GIT_WORK_TREE> which is pointed to <$HOME>.
+
+The use of symlinks is not needed in this setup, making for a cleaner setup.
+
+`vcsh` was designed with `mr`(1) in mind so you might want to install it alongside
+vcsh. That being said, you can easily use `vcsh` without `mr` if you prefer.
+
+A sample configuration for `vcsh` and `mr` can be found at
+*https://github.com/RichiH/vcsh_mr_template*
+
+## OPTIONS
+
+* init:
+  Initialize an empty repository
+
+* clone:
+  Clone an existing repository
+
+* run:
+  Run command with <$GIT_DIR> and <$GIT_WORK_TREE> set. Allows you to run any
+  and all commands without any restrictions. Use with care.
+
+* list:
+  List all local vcsh repositories
+
+* help:
+  Display help
+
+## ENVIRONMENT
+
+As noted earlier, `vcsh` will set <$GIT_DIR> and <$GIT_WORK_TREE> to the
+appropriate values for fake bare git repositories.
+
+## SECURITY CONSIDERATIONS
+
+`vcsh` allows you to execute arbitrary commands via `vcsh` run. For example,
+speaking, adding a `sudo`(8) rule for `vcsh` would be pretty stupid.
+
+## BUGS
+
+None are known at this time, but reports and/or patches are more than welcome.
+
+## HISTORY
+
+Like most people, the author initially made do with a single repository for all
+config files, all of which were soft-linked into <$HOME>.
+
+Martin F. Krafft aka madduck came up with the concept of fake bare git
+repositories.
+
+vcsh was initally written by madduck. This version is a re-implementation from
+scratch with a lot more features. madduck graciously agreed to let the author
+take over the name.
+
+## AUTHOR
+
+This manpage and `vcsh` itself were written by Richard "RichiH" Hartmann.
+
+## COPYRIGHT
+
+Copyright 2011 Richard Hartmann <richih.mailinglist@gmail.com>
+
+Licensed under the GNU GPL version 3 or higher.
+
+https://github.com/RichiH/vcsh
+
+## SEE ALSO
+
+`git`(1), `mr`(1)
