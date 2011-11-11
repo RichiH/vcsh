@@ -21,9 +21,9 @@ This gives you the flexibility to check out only certain repositories on differe
 The downsides of this approach are the necessary manual steps of cloning and symlinking the individual repositories.
 It will probably become a nuisance when you try to manage more than two hosts.
 
-vcsh takes this second approach one step further.
-It expects single-purpose repositories and stores them in a hidden directory (similar to ~/.dotfiles).
-However, it does not create symbolic links in $HOME; it puts the actual files right into $HOME.
+**vcsh** takes this second approach one step further.
+It expects **single-purpose repositories** and stores them in a hidden directory (similar to ~/.dotfiles).
+However, it does not create symbolic links in $HOME; it puts the **actual files right into $HOME**.
 
 Furthermore, by making use of mr [1], it makes it very easy to enable/disable and clone a large number of repositories.
 The use of mr is technically optional, but it will be an integral part of the proposed system that follows.
@@ -83,8 +83,8 @@ Only files/links present in mr/config.d, however, will be used by mr.
 That means that in this example, only the zsh, gitconfigs, tmux and vim repositories will be checked out.
 A simple `mr update` run in $HOME will clone or update those four repositories listed in config.d.
 
-~/.config/vcsh/repo.d is the directory where vcsh clones the git repositories into.
-Since their working trees are configured to be in $HOME, the files contained in those repositories will be put in $HOME directly (see .bashrc above).
+~/.config/vcsh/repo.d is the directory into which vcsh clones the git repositories.
+Since their working trees are configured to be in $HOME, the files contained in those repositories will be put in $HOME directly (see .zshrc above).
 
 vcsh will check if any file it would want to create exists. If it exists, vcsh will throw a warning and exit. Move away your old config and try again. Optionally, merge your local and your global configs afterwards and push with `vcsh run foo git push`.
 
@@ -92,7 +92,7 @@ vcsh will check if any file it would want to create exists. If it exists, vcsh w
 
 To illustrate further, the following steps could move your desired configuration to a new host.
 
-1. Clone the mr repository (containing available.d, config.d etc.), for example: `vcsh clone git://github.com/RichiH/vcsh_mr_template.git`
+1. Clone the mr repository (containing available.d, config.d etc.). For example: `vcsh clone git://github.com/RichiH/vcsh_mr_template.git`
 2. Choose your repositories by linking them in config.d (or go with the default you may have already configured by adding symlinks to git).
 3. Run mr to clone the repositories: `cd; mr update`.
 4. Done.
