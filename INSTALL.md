@@ -11,7 +11,8 @@ Below, you will find a few different methods for setting up vcsh:
 
 ## 1.1 Prerequisites ##
 
-Make sure none of the following files/diretories exist for your test (user). If they do, move them away for now:
+Make sure none of the following files/diretories exist for your test (user). If
+they do, move them away for now:
 
 * ~/.gitignore
 * ~/.mrconfig
@@ -20,7 +21,8 @@ Make sure none of the following files/diretories exist for your test (user). If 
 * ~/.config/mr/config.d/mr.vcsh
 * ~/.config/vcsh/repo.d/mr.git/
 
-All of the files are part of the template repository, the directory is where the template will be stored.
+All of the files are part of the template repository, the directory is where
+the template will be stored.
 
     apt-get install mr               # this is optional, but highly recommended
 
@@ -76,14 +78,16 @@ Neat.
 
 ### 1.5.2 Making changes ###
 
-After you have made some changes, for which you would normally use `git add` and `git commit`, use the vcsh wrapper (like above):
+After you have made some changes, for which you would normally use `git add`
+and `git commit`, use the vcsh wrapper (like above):
 
     vcsh run foo git add -f bar baz quux
     vcsh run foo git commit
     vcsh run foo git push
 
-By the way, you'll have to use -f/--force flag with git-add because all files will be ignored by default. This is to show you only useful output when running git-status.
-A fix for this problem is being worked on.
+By the way, you'll have to use -f/--force flag with git-add because all files
+will be ignored by default. This is to show you only useful output when running
+git-status. A fix for this problem is being worked on.
 
 
 # 2. The steal-from-template way #
@@ -92,12 +96,14 @@ You're welcome to clone the example repository:
 
     git clone git://github.com/RichiH/vcsh_mr_template.git
 
-Look around in the clone. It should be reasonably simple to understand. If not, poke me, RichiH, on Freenode (query) or OFTC (#vcs-home).
+Look around in the clone. It should be reasonably simple to understand. If not,
+poke me, RichiH, on Freenode (query) or OFTC (#vcs-home).
 
 
 # 3. The manual way #
 
-This is how my old setup procedure looked like. Adapt it to your own style or copy mine verbatim, either is fine.
+This is how my old setup procedure looked like. Adapt it to your own style or
+copy mine verbatim, either is fine.
 
     # Create workspace
     mkdir -p ~/work/git
@@ -132,9 +138,10 @@ mr is used to actually retrieve configs, etc
 
 # 4. Using vcsh without mr #
 
-vcsh encourages you to use mr.
-It helps you manage a large number of repositories by running the necessary vcsh commands for you.
-You may choose not to use mr, in which case you will have to run those commands manually or by other means.
+vcsh encourages you to use mr. It helps you manage a large number of
+repositories by running the necessary vcsh commands for you. You may choose not
+to use mr, in which case you will have to run those commands manually or by
+other means.
 
 ## 4.1 A few examples ##
 
@@ -142,15 +149,15 @@ To initialize a new repository: `vcsh init zsh`
 
 To clone a repository: `vcsh clone ssh://<remote>/zsh.git`
 
-To interact with a repository, use the regular Git commands, but prepend them with `vcsh run $repository_name`.
-For example:
+To interact with a repository, use the regular Git commands, but prepend them
+with `vcsh run $repository_name`. For example:
 
     vcsh run zsh git status
     vcsh run zsh git add -f .zshrc
     vcsh run zsh git commit
 
-Obviously, without mr keeping repositories up-to-date, it will have to be done manually.
-Alternatively, you could try something like this:
+Obviously, without mr keeping repositories up-to-date, it will have to be done
+manually. Alternatively, you could try something like this:
 
     for repo in `vcsh list`; do
         vcsh run $repo git pull;
