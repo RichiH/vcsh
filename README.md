@@ -44,7 +44,7 @@ To illustrate, this is what a possible directory structure looks like.
         |   |   |   |-- tmux.vcsh
         |   |   |   |-- vim.vcsh
         |   |   |   |-- vimperator.vcsh
-        |   |   |   |-- snippets.git
+        |   |   |   `-- snippets.git
         |   |   `-- config.d
         |   |       |-- zsh.mrconfig        -> ../available.d/zsh.mrconfig
         |   |       |-- gitconfigs.mrconfig -> ../available.d/gitconfigs.mrconfig
