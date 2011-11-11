@@ -1,6 +1,6 @@
 # Getting started with vcsh #
 
-Below you will find a few different methods for setting up vcsh:
+Below, you will find a few different methods for setting up vcsh:
 
 1. The template way
 2. The steal-from-template way
