@@ -111,7 +111,7 @@ Optionally, merge your local and your global configs afterwards and push with
 To illustrate further, the following steps could move your desired
 configuration to a new host.
 
-1. Clone the mr repository (containing available.d, config.d etc.). For
+1. Clone the mr repository (containing available.d, config.d etc.); for
    example: `vcsh clone git://github.com/RichiH/vcsh_mr_template.git`
 2. Choose your repositories by linking them in config.d (or go with the default
    you may have already configured by adding symlinks to git).
