@@ -1,0 +1,12 @@
+vcsh (0.20111227-1) unstable; urgency=low
+
+  * Initial release.
+  * Closes: #653364
+
+ -- Richard Hartmann <richih.mailinglist@gmail.com>  Tue, 27 Dec 2011 19:13:42 +0100
+
+vcsh (0.20111111-1) UNRELEASED; urgency=low
+
+  * First pre-release.
+
+ -- Richard Hartmann <richih.mailinglist@gmail.com>  Fri, 11 Nov 2011 11:11:11 +0100
