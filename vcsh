@@ -144,6 +144,7 @@ elif [ "$1" = 'clone' ]; then
 	done
 	[ "$VCSH_CONFLICT" = '1' ] &&
 		echo "$SELF: fatal: will stop after fetching and not try to merge!\n" &&
+		echo "  Once this situation has been resolved, run 'vcsh run <foo> git pull' to finish cloning.\n" &&
 		exit 3
 	git merge origin/master
 #	vcsh use $REPO_NAME
