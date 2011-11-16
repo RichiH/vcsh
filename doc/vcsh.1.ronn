@@ -11,6 +11,8 @@ vcsh(1) - manage and sync config files via git
 
 `vcsh` list
 
+`vcsh` seed-gitignore
+
 `vcsh` help
 
 ## DESCRIPTION
@@ -34,20 +36,23 @@ A sample configuration for `vcsh` and `mr` can be found at
 ## OPTIONS
 
 * init:
-  Initialize an empty repository
+  Initialize an empty repository.
 
 * clone:
-  Clone an existing repository
+  Clone an existing repository.
 
 * run:
   Run command with <$GIT_DIR> and <$GIT_WORK_TREE> set. Allows you to run any
   and all commands without any restrictions. Use with care.
 
 * list:
-  List all local vcsh repositories
+  List all local vcsh repositories.
+
+* seed-gitignore:
+  Seed .gitignore.d/<repo> from git ls-files.
 
 * help:
-  Display help
+  Display help.
 
 ## ENVIRONMENT
 

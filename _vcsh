@@ -9,4 +9,5 @@ _arguments \
 		run\:"run command on repo"
 		init\:"init & clone from repo"
 		clone\:"clone from repo"
+		seed-gitignore\:"seed .gitignore.d/foo from git ls-files"
 	))'
