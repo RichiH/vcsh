@@ -92,11 +92,11 @@ access to my zshrc repo looks likes. I.e. in this specific example, push can
 not work.
 
     [$HOME/.config/vcsh/repo.d/zsh.git]
-    checkout = vcsh clone 'git://github.com/RichiH/zshrc.git'
-    update   = vcsh run bash git pull
-    push     = vcsh run bash git push
-    status   = vcsh run bash git status
-    gc       = vcsh run bash git gc
+    checkout = vcsh clone 'git://github.com/RichiH/zshrc.git' zsh
+    update   = vcsh run zsh git pull
+    push     = vcsh run zsh git push
+    status   = vcsh run zsh git status
+    gc       = vcsh run zsh git gc
 
 ### config.d ###
 
@@ -105,13 +105,6 @@ files/links present in mr/config.d, however, will be used by mr. That means
 that in this example, only the zsh, gitconfigs, tmux and vim repositories will
 be checked out. A simple `mr update` run in $HOME will clone or update those
 four repositories listed in config.d.
-
-### repo.d ###
-
-~/.config/vcsh/repo.d is the directory into which vcsh clones the git
-repositories. Since their working trees are configured to be in $HOME, the
-files contained in those repositories will be put in $HOME directly (see .zshrc
-above).
 
 ### ~/.mrconfig ###
 
@@ -122,6 +115,13 @@ this:
     [DEFAULT]
     jobs = 5
     include = cat ~/.config/mr/config.d/*
+
+### repo.d ###
+
+~/.config/vcsh/repo.d is the directory into which vcsh clones the git
+repositories. Since their working trees are configured to be in $HOME, the
+files contained in those repositories will be put in $HOME directly (see .zshrc
+above).
 
 
 vcsh will check if any file it would want to create exists. If it exists, vcsh
@@ -153,9 +153,9 @@ If you want to give vcsh a try, follow the instructions below.
 
 Below, you will find a few different methods for setting up vcsh:
 
-1. The Template Way
-2. The Steal-from-Template Way
-3. The Manual Way
+3.1. The Template Way
+3.2. The Steal-from-Template Way
+3.3. The Manual Way
 
 ### 3.1 The Template Way ###
 
@@ -174,7 +174,7 @@ Make sure none of the following files and directories exist for your test
 All of the files are part of the template repository, the directory is where
 the template will be stored.
 
-    apt-get install mr               # this is optional, but highly recommended
+    apt-get install mr
 
 #### 3.1.2 Clone the Template ####
 
