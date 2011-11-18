@@ -13,7 +13,7 @@ do
 			echo "$SELF: error: $check_directory exists but is not a directory" >&2
 			exit 2
 		else
-			echo "$SELF: attempting to create $check_directory"
+			echo "$SELF: info: attempting to create $check_directory"
 			mkdir -p "$check_directory" || (echo "$SELF: error: could not create $check_directory" >&2; exit 2)
 		fi
 	fi
@@ -156,7 +156,7 @@ elif [ "$1" = 'clone' ]; then
 
 elif [ "$1" = 'init' ]; then
 	verbose "init begin"
-	[ -z $2 ] && help && echo && echo "$SELF $1: please specify repository to work on" && return 0
+	[ -z $2 ] && help && echo && echo "$SELF $1: error: please specify repository to work on" && return 0
 	export REPO_NAME="$2"
 	export GIT_DIR="$VCSH_BASE/$REPO_NAME.git"
 	init
@@ -176,7 +176,7 @@ elif [ "$1" = 'init' ]; then
 
 elif [ "$1" = 'seed-gitignore' ]; then
 	verbose "seed-gitignore begin"
-	[ -z $2 ] && help && echo && echo "$SELF $1: please specify repository to work on" && return 0
+	[ -z $2 ] && help && echo && echo "$SELF $1: error: please specify repository to work on" && return 0
 	use "$2"
 	git config core.excludesfile ".gitignore.d/$REPO_NAME"
 	files=$(git ls-files)
@@ -188,7 +188,7 @@ elif [ "$1" = 'seed-gitignore' ]; then
 		done;
 	done | sort -u | sed 's/^/!/')
 	[ -e .gitignore.d/$2 ] &&
-	echo "$SELF: .gitignore.d/$2 exists, moving it to .gitignore.d/$2.bak" &&
+	echo "$SELF: info: .gitignore.d/$2 exists, moving it to .gitignore.d/$2.bak" &&
 	mv -f .gitignore.d/$2 .gitignore.d/$2.bak
 	echo '*' > .gitignore.d/$2
 	for gitignore in $gitignores; do
