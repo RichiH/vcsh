@@ -6,13 +6,14 @@ SELF=$(basename $0)
 
 [ -z "$XDG_CONFIG_HOME" ] && XDG_CONFIG_HOME="$HOME/.config"
 [ -z "$VCSH_BASE" ]       && VCSH_BASE="$XDG_CONFIG_HOME/vcsh/repo.d"
-for check_directory in "$VCSH_BASE"
+for check_directory in "$VCSH_BASE" "$HOME/.gitignore.d"
 do
 	if [ ! -d "$check_directory" ]; then
 		if [ -e "$check_directory" ]; then
 			echo "$SELF: error: $check_directory exists but is not a directory" >&2
 			exit 2
 		else
+			echo "$SELF: info: attempting to create $check_directory"
 			mkdir -p "$check_directory" || (echo "$SELF: error: could not create $check_directory" >&2; exit 2)
 		fi
 	fi
@@ -74,7 +75,8 @@ init() {
 		 exit 20) || exit 20
 	cd "$GIT_WORK_TREE"
 	git init
-	git config core.worktree "$GIT_WORK_TREE"
+	git config core.worktree     "$GIT_WORK_TREE"
+	git config core.excludesfile ".gitignore.d/$REPO_NAME"
 	verbose "init() end"
 }
 
@@ -137,6 +139,7 @@ elif [ "$1" = 'clone' ]; then
 	git remote add origin "$GIT_REMOTE"
 	git config branch.master.remote origin
 	git config branch.master.merge  refs/heads/master
+	git config core.excludesfile    ".gitignore.d/$REPO_NAME"
 	git fetch
 	for object in $(git ls-tree -r origin/master | awk '{print $4}'); do
 		[ -e "$object" ] &&
@@ -153,7 +156,7 @@ elif [ "$1" = 'clone' ]; then
 
 elif [ "$1" = 'init' ]; then
 	verbose "init begin"
-	[ -z $2 ] && help && echo && echo "$SELF $1: please specify repository to work on" && return 0
+	[ -z $2 ] && help && echo && echo "$SELF $1: error: please specify repository to work on" && return 0
 	export REPO_NAME="$2"
 	export GIT_DIR="$VCSH_BASE/$REPO_NAME.git"
 	init
@@ -173,8 +176,9 @@ elif [ "$1" = 'init' ]; then
 
 elif [ "$1" = 'seed-gitignore' ]; then
 	verbose "seed-gitignore begin"
-	[ -z $2 ] && help && echo && echo "$SELF $1: please specify repository to work on" && return 0
+	[ -z $2 ] && help && echo && echo "$SELF $1: error: please specify repository to work on" && return 0
 	use "$2"
+	git config core.excludesfile ".gitignore.d/$REPO_NAME"
 	files=$(git ls-files)
 	gitignores=$(for file in $(git ls-files); do
 		while true; do
@@ -184,7 +188,7 @@ elif [ "$1" = 'seed-gitignore' ]; then
 		done;
 	done | sort -u | sed 's/^/!/')
 	[ -e .gitignore.d/$2 ] &&
-	echo "$SELF: .gitignore.d/$2 exists, moving it to .gitignore.d/$2.bak" &&
+	echo "$SELF: info: .gitignore.d/$2 exists, moving it to .gitignore.d/$2.bak" &&
 	mv -f .gitignore.d/$2 .gitignore.d/$2.bak
 	echo '*' > .gitignore.d/$2
 	for gitignore in $gitignores; do
