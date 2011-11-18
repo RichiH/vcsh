@@ -118,11 +118,12 @@ this:
 
 ### repo.d ###
 
-$XDG_CONFIG_HOME/vcsh/repo.d is the directory into which vcsh clones the git
-repositories. Since their working trees are configured to be in $HOME, the
-files contained in those repositories will be put in $HOME directly (see .zshrc
-above).
-
+$XDG_CONFIG_HOME/vcsh/repo.d is the directory where all git repositories which
+are under vcsh's control are located. Since their working trees are configured
+to be in $HOME, the files contained in those repositories will be put in $HOME
+directly.
+Of course, [mr] [1] will work with this layout if configured according to this
+document (see above).
 
 vcsh will check if any file it would want to create exists. If it exists, vcsh
 will throw a warning and exit. Move away your old config and try again.
