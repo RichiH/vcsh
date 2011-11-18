@@ -74,7 +74,8 @@ init() {
 		 exit 20) || exit 20
 	cd "$GIT_WORK_TREE"
 	git init
-	git config core.worktree "$GIT_WORK_TREE"
+	git config core.worktree     "$GIT_WORK_TREE"
+	git config core.excludesfile ".gitignore.d/$REPO_NAME"
 	verbose "init() end"
 }
 
@@ -137,6 +138,7 @@ elif [ "$1" = 'clone' ]; then
 	git remote add origin "$GIT_REMOTE"
 	git config branch.master.remote origin
 	git config branch.master.merge  refs/heads/master
+	git config core.excludesfile    ".gitignore.d/$REPO_NAME"
 	git fetch
 	for object in $(git ls-tree -r origin/master | awk '{print $4}'); do
 		[ -e "$object" ] &&
@@ -175,6 +177,7 @@ elif [ "$1" = 'seed-gitignore' ]; then
 	verbose "seed-gitignore begin"
 	[ -z $2 ] && help && echo && echo "$SELF $1: please specify repository to work on" && return 0
 	use "$2"
+	git config core.excludesfile ".gitignore.d/$REPO_NAME"
 	files=$(git ls-files)
 	gitignores=$(for file in $(git ls-files); do
 		while true; do
