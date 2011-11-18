@@ -84,12 +84,14 @@ To illustrate, this is what a possible directory structure looks like.
 
 ### available.d ###
 
-The files you see in $XDG_CONFIG_HOME/mr/available.d are mr configuration files that
-contain the commands to manage (checkout, update etc.) a single repository.
-vcsh repo configs end in .vcsh, git configs end in .git, etc. This is optional
-and your preference. For example, this is what a zsh.mrconfig with read-only
-access to my zshrc repo looks likes. I.e. in this specific example, push can
-not work.
+The files you see in $XDG_CONFIG_HOME/mr/available.d are mr configuration files
+that contain the commands to manage (checkout, update etc.) a single
+repository. vcsh repo configs end in .vcsh, git configs end in .git, etc. This
+is optional and your preference. For example, this is what a zsh.vcsh
+with read-only access to my zshrc repo looks likes. I.e. in this specific
+example, push can not work as you will be using the author's repository. This
+is for demonstration, only. Of course, you are more than welcome to clone from
+this repository and fork your own.
 
     [$XDG_CONFIG_HOME/vcsh/repo.d/zsh.git]
     checkout = vcsh clone 'git://github.com/RichiH/zshrc.git' zsh
