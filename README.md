@@ -53,7 +53,7 @@ and clone a large number of repositories. The use of mr is technically optional
 To illustrate, this is what a possible directory structure looks like.
 
     $HOME
-        |-- .config
+        |-- $XDG_CONFIG_HOME (defaults to $HOME/.config)
         |   |-- mr
         |   |   |-- available.d
         |   |   |   |-- zsh.vcsh
@@ -84,14 +84,14 @@ To illustrate, this is what a possible directory structure looks like.
 
 ### available.d ###
 
-The files you see in ~/.config/mr/available.d are mr configuration files that
+The files you see in $XDG_CONFIG_HOME/mr/available.d are mr configuration files that
 contain the commands to manage (checkout, update etc.) a single repository.
 vcsh repo configs end in .vcsh, git configs end in .git, etc. This is optional
 and your preference. For example, this is what a zsh.mrconfig with read-only
 access to my zshrc repo looks likes. I.e. in this specific example, push can
 not work.
 
-    [$HOME/.config/vcsh/repo.d/zsh.git]
+    [$XDG_CONFIG_HOME/vcsh/repo.d/zsh.git]
     checkout = vcsh clone 'git://github.com/RichiH/zshrc.git' zsh
     update   = vcsh run zsh git pull
     push     = vcsh run zsh git push
@@ -100,7 +100,7 @@ not work.
 
 ### config.d ###
 
-~/.config/mr/available.d contains *all available* repositories. Only
+$XDG_CONFIG_HOME/mr/available.d contains *all available* repositories. Only
 files/links present in mr/config.d, however, will be used by mr. That means
 that in this example, only the zsh, gitconfigs, tmux and vim repositories will
 be checked out. A simple `mr update` run in $HOME will clone or update those
@@ -114,11 +114,11 @@ this:
 
     [DEFAULT]
     jobs = 5
-    include = cat ~/.config/mr/config.d/*
+    include = cat $XDG_CONFIG_HOME/mr/config.d/*
 
 ### repo.d ###
 
-~/.config/vcsh/repo.d is the directory into which vcsh clones the git
+$XDG_CONFIG_HOME/vcsh/repo.d is the directory into which vcsh clones the git
 repositories. Since their working trees are configured to be in $HOME, the
 files contained in those repositories will be put in $HOME directly (see .zshrc
 above).
@@ -166,10 +166,10 @@ Make sure none of the following files and directories exist for your test
 
 * ~/.gitignore
 * ~/.mrconfig
-* ~/.config/mr/available.d/mr.vcsh
-* ~/.config/mr/available.d/zsh.vcsh
-* ~/.config/mr/config.d/mr.vcsh
-* ~/.config/vcsh/repo.d/mr.git/
+* $XDG_CONFIG_HOME/mr/available.d/mr.vcsh
+* $XDG_CONFIG_HOME/mr/available.d/zsh.vcsh
+* $XDG_CONFIG_HOME/mr/config.d/mr.vcsh
+* $XDG_CONFIG_HOME/vcsh/repo.d/mr.git/
 
 All of the files are part of the template repository, the directory is where
 the template will be stored.
@@ -190,7 +190,7 @@ the template will be stored.
 
     mv ~/.zsh   ~/zsh.bak
     mv ~/.zshrc ~/zshrc.bak
-    cd ~/.config/mr/config.d/
+    cd $XDG_CONFIG_HOME/mr/config.d/
     ln -s ../available.d/zsh.vcsh .  # link, and thereby enable, the zsh repository
     cd
     mr up
@@ -199,8 +199,8 @@ the template will be stored.
 
 Now, it's time to edit the template config and fill it with your own remotes:
 
-    vim .config/mr/available.d/mr.vcsh
-    vim .config/mr/available.d/zsh.vcsh
+    vim $XDG_CONFIG_HOME/mr/available.d/mr.vcsh
+    vim $XDG_CONFIG_HOME/mr/available.d/zsh.vcsh
 
 And then create your own stuff:
 
@@ -210,8 +210,8 @@ And then create your own stuff:
     vcsh run foo git commit
     vcsh run foo git push
 
-    cp .config/mr/available.d/mr.vcsh .config/mr/available.d/foo.vcsh
-    vim .config/mr/available.d/foo.vcsh # add your own repo
+    cp $XDG_CONFIG_HOME/mr/available.d/mr.vcsh $XDG_CONFIG_HOME/mr/available.d/foo.vcsh
+    vim $XDG_CONFIG_HOME/mr/available.d/foo.vcsh # add your own repo
 
 Done!
 
@@ -242,7 +242,7 @@ copy mine verbatim, either is fine.
 Grab my mr config. see below for details on how I set this up
 
     vcsh clone ssh://<remote>/mr.git
-    cd ~/.config/mr/config.d/
+    cd $XDG_CONFIG_HOME/mr/config.d/
     ln -s ../available.d/* .
 
 
@@ -250,7 +250,7 @@ mr is used to actually retrieve configs, etc
 
     ~ % cat ~/.mrconfig
     [DEFAULT]
-    include = cat ~/.config/mr/config.d/*
+    include = cat $XDG_CONFIG_HOME/mr/config.d/*
     ~ % echo $XDG_CONFIG_HOME
     /home/richih/.config
     ~ % ls $XDG_CONFIG_HOME/mr/available.d # random selection of my repos
