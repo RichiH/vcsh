@@ -46,7 +46,7 @@ the **actual files right into $HOME**.
 
 Furthermore, by making use of [mr] [1], it makes it very easy to enable/disable
 and clone a large number of repositories. The use of mr is technically optional
-(see 3.4), but it will be an integral part of the proposed system that follows.
+(see 4.3), but it will be an integral part of the proposed system that follows.
 
 ## 2.2 Default Directory Layout ##
 
@@ -153,9 +153,9 @@ If you want to give vcsh a try, follow the instructions below.
 
 Below, you will find a few different methods for setting up vcsh:
 
-3.1. The Template Way
-3.2. The Steal-from-Template Way
-3.3. The Manual Way
+1. The Template Way
+2. The Steal-from-Template Way
+3. The Manual Way
 
 ### 3.1 The Template Way ###
 
@@ -287,7 +287,7 @@ git-status. A fix for this problem is being worked on.
 
 ### 4.3 Using vcsh without mr ###
 
-vcsh encourages you to use mr. It helps you manage a large number of
+vcsh encourages you to use [mr] [1]. It helps you manage a large number of
 repositories by running the necessary vcsh commands for you. You may choose not
 to use mr, in which case you will have to run those commands manually or by
 other means.
