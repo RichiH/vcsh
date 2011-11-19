@@ -185,7 +185,6 @@ elif [ "$1" = 'seed-gitignore' ]; then
 	old_dir="$PWD"
 	cd "$HOME"
 	git config core.excludesfile ".gitignore.d/$REPO_NAME"
-	files=$(git ls-files)
 	gitignores=$(for file in $(git ls-files); do
 		while true; do
 			echo $file; new="${file%/*}"
