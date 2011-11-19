@@ -180,6 +180,10 @@ elif [ "$1" = 'seed-gitignore' ]; then
 	verbose "seed-gitignore begin"
 	[ -z $2 ] && help && echo && echo "$SELF $1: error: please specify repository to work on" && return 0
 	use "$2"
+	# Switching directory as this has to be executed from $HOME to be of any use.
+	# Going back into old directory at the end in case `vcsh use` is reactivated.
+	old_dir="$PWD"
+	cd "$HOME"
 	git config core.excludesfile ".gitignore.d/$REPO_NAME"
 	files=$(git ls-files)
 	gitignores=$(for file in $(git ls-files); do
@@ -189,13 +193,14 @@ elif [ "$1" = 'seed-gitignore' ]; then
 			file="$new"
 		done;
 	done | sort -u | sed 's/^/!/')
-	[ -e .gitignore.d/$2 ] &&
-	echo "$SELF: info: .gitignore.d/$2 exists, moving it to .gitignore.d/$2.bak" &&
-	mv -f .gitignore.d/$2 .gitignore.d/$2.bak
-	echo '*' > .gitignore.d/$2
+	[ -e "$HOME/.gitignore.d/$2" ] &&
+	echo "$SELF: info: $HOME/.gitignore.d/$2 exists, moving it to $HOME/.gitignore.d/$2.bak" &&
+	mv -f "$HOME/.gitignore.d/$2" "$HOME/.gitignore.d/$2.bak"
+	echo '*' > "$HOME/.gitignore.d/$2"
 	for gitignore in $gitignores; do
-		echo $gitignore >> .gitignore.d/$2
+		echo "$gitignore" >> "$HOME/.gitignore.d/$2"
 	done
+	cd "$old_dir"
 
 else
 	verbose "defaulting to calling help()"
