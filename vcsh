@@ -54,7 +54,7 @@ use() {
 
 	if [ ! -d "$GIT_DIR" ]; then
 		echo E: no repository found for "$REPO_NAME" >&2
-		return 2
+		return 1
 	fi
 
 	export GIT_DIR
@@ -103,7 +103,7 @@ elif [ "$1" = 'list' ]; then
 
 elif [ "$1" = 'run' ]; then
 	verbose "run begin"
-	use "$2"
+	use "$2" || return 1
 	shift 2
 	"$@"
 	leave
@@ -124,7 +124,7 @@ elif [ "$1" = 'run' ]; then
 #		zle -N vcsh_exit
 #		bindkey '^d' 'vcsh_exit'
 #	fi
-#	use $2
+#	use "$2" || return 1
 #	[ -n "$ZSH_VERSION" ] && [ "$USER" = richih ] && buildPS1
 #	verbose "use end"
 #	exit 0
@@ -153,7 +153,7 @@ elif [ "$1" = 'clone' ]; then
 		echo "  Once this situation has been resolved, run 'vcsh run <foo> git pull' to finish cloning.\n" &&
 		exit 3
 	git merge origin/master
-#	vcsh use $REPO_NAME
+#	use $REPO_NAME || return 1
 	verbose "clone end"
 
 elif [ "$1" = 'init' ]; then
@@ -162,7 +162,7 @@ elif [ "$1" = 'init' ]; then
 	export REPO_NAME="$2"
 	export GIT_DIR="$VCSH_BASE/$REPO_NAME.git"
 	init
-#	vcsh use "$REPO_NAME"
+#	use "$REPO_NAME" || return 1
 	verbose "init end"
 
 #elif [ "$1" = 'exit' ]; then
@@ -179,7 +179,7 @@ elif [ "$1" = 'init' ]; then
 elif [ "$1" = 'seed-gitignore' ]; then
 	verbose "seed-gitignore begin"
 	[ -z $2 ] && help && echo && echo "$SELF $1: error: please specify repository to work on" && return 0
-	use "$2"
+	use $2 || return 1
 	# Switching directory as this has to be executed from $HOME to be of any use.
 	# Going back into old directory at the end in case `vcsh use` is reactivated.
 	old_dir="$PWD"
