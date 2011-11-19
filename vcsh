@@ -77,6 +77,8 @@ init() {
 	git init
 	git config core.worktree     "$GIT_WORK_TREE"
 	git config core.excludesfile ".gitignore.d/$REPO_NAME"
+	touch   "$HOME/.gitignore.d/$REPO_NAME"
+	git add "$HOME/.gitignore.d/$REPO_NAME"
 	verbose "init() end"
 }
 
