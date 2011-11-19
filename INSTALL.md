@@ -27,7 +27,7 @@ This is not in the default behaviour of `make uninstall` for obvious reasons.
 
 # Other stuff #
 
-To clean up the generated manpag, run
+To clean up the generated manpage, run
 
     make clean
 
