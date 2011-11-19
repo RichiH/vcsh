@@ -193,14 +193,24 @@ elif [ "$1" = 'seed-gitignore' ]; then
 			file="$new"
 		done;
 	done | sort -u | sed 's/^/!/')
-	[ -e "$HOME/.gitignore.d/$2" ] &&
-	echo "$SELF: info: $HOME/.gitignore.d/$2 exists, moving it to $HOME/.gitignore.d/$2.bak" &&
-	mv -f "$HOME/.gitignore.d/$2" "$HOME/.gitignore.d/$2.bak"
-	echo '*' > "$HOME/.gitignore.d/$2"
+	tempfile=$(mktemp) ||
+		(echo "$SELF: fatal: could not create tempfile" && exit 1) 
+	echo '*' > "$tempfile"
 	for gitignore in $gitignores; do
-		echo "$gitignore" >> "$HOME/.gitignore.d/$2"
+		echo "$gitignore" >> "$tempfile"
 	done
+	diff -N "$tempfile" "$HOME/.gitignore.d/$2" > /dev/null &&
+		rm -f "$tempfile" &&
+		return
+	if [ -e "$HOME/.gitignore.d/$2" ]; then
+		echo "$SELF: info: $HOME/.gitignore.d/$2 differs from new data, moving it to $HOME/.gitignore.d/$2.bak"
+		mv -f "$HOME/.gitignore.d/$2" "$HOME/.gitignore.d/$2.bak" ||
+			(echo "$SELF: fatal: could not move $HOME/.gitignore.d/$2 to $HOME/.gitignore.d/$2.bak" && exit 1)
+	fi
+	mv -f "$tempfile" "$HOME/.gitignore.d/$2" ||
+		(echo "$SELF: fatal: could not move $tempfile to $HOME/.gitignore.d/$2" && exit 1)
 	cd "$old_dir"
+	verbose "seed-gitignore end"
 
 else
 	verbose "defaulting to calling help()"
