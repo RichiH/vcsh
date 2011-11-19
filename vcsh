@@ -211,6 +211,31 @@ elif [ "$1" = 'seed-gitignore' ]; then
 	cd "$old_dir"
 	verbose "seed-gitignore end"
 
+elif [ "$1" = 'delete' ]; then
+	verbose "delete begin"
+	REPO_NAME=$2
+	[ -z $REPO_NAME ] && help && echo && echo "$SELF $1: error: please specify repository to work on" && return 0
+	use $REPO_NAME || return 1
+	echo "$SELF: info: This operation WILL DETROY DATA!"
+	echo -n "Continue? Anything other than 'y' will abort. "
+	read answer
+	[ x$answer = x"y" ] || exit
+	files=$(git ls-files)
+	echo "These files would be deleted:
+
+$files
+
+AGAIN, THIS WILL DELETE YOUR DATA!
+To continue, type \"Yes, do as I say\""
+	read answer
+	[ "x$answer" = "xYes, do as I say" ] || exit
+	for file in $files; do
+		rm -f $file || echo "$SELF: info: could not delete '$file', continuing with deletion"
+	done
+	rm -rf "$VCSH_BASE/$REPO_NAME.git" || echo "$SELF: info: could not delete '$VCSH_BASE/$REPO_NAME.git'"
+	verbose "delete end"
+
+
 else
 	verbose "defaulting to calling help()"
 	help
