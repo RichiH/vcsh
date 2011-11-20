@@ -9,13 +9,15 @@ vcsh(1) - manage and sync config files via git
 
 `vcsh` delete
 
-`vcsh` init <foo>
+`vcsh` init <repo>
 
 `vcsh` list
 
-`vcsh` run <foo> git command
+`vcsh` run <repo> <command>
 
 `vcsh` seed-gitignore
+
+`vcsh` <repo> <gitcommand>
 
 
 ## DESCRIPTION
@@ -59,6 +61,9 @@ A sample configuration for `vcsh` and `mr` can be found at
 
 * seed-gitignore:
   Seed .gitignore.d/<repo> from git ls-files.
+
+* <repo> <gitcommand>:
+  Shortcut to run `vcsh` on a repo. Will prepend `git` to <command> by itself.
 
 ## ENVIRONMENT
 
