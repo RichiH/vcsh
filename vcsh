@@ -33,16 +33,15 @@ verbose() {
 help() {
 	echo "usage: $SELF <args>
 
+   clone <remote> \\
+         [<repo>]    Clone from an existing repository
    help              Display this help
-
+   delete            Delete an existing repository
+   init <repo>       Initialize a new repository
    list              List all repos
-
    run <repo> \\
        <command>     Use this repository
 
-   init <repo>       Initialize a new repository
-   clone <remote> \\
-         [<repo>]    Clone from an existing repository
    seed-gitignore \\
    <repo>            Seed .gitignore.d/<repo> from git ls-files" >&2
 }

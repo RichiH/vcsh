@@ -3,17 +3,20 @@ vcsh(1) - manage and sync config files via git
 
 ## SYNOPSIS
 
-`vcsh` init <foo>
-
 `vcsh` clone <url> [<location>]
 
-`vcsh` run <foo> git command
+`vcsh` help
+
+`vcsh` delete
+
+`vcsh` init <foo>
 
 `vcsh` list
 
+`vcsh` run <foo> git command
+
 `vcsh` seed-gitignore
 
-`vcsh` help
 
 ## DESCRIPTION
 
@@ -35,24 +38,27 @@ A sample configuration for `vcsh` and `mr` can be found at
 
 ## OPTIONS
 
+* clone:
+  Clone an existing repository.
+
+* help:
+  Display help.
+
+* delete:
+  Delete an existing repository.
+
 * init:
   Initialize an empty repository.
 
-* clone:
-  Clone an existing repository.
+* list:
+  List all local vcsh repositories.
 
 * run:
   Run command with <$GIT_DIR> and <$GIT_WORK_TREE> set. Allows you to run any
   and all commands without any restrictions. Use with care.
 
-* list:
-  List all local vcsh repositories.
-
 * seed-gitignore:
   Seed .gitignore.d/<repo> from git ls-files.
-
-* help:
-  Display help.
 
 ## ENVIRONMENT
 

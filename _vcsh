@@ -4,10 +4,11 @@
 #		exit\:"exit repo"
 _arguments \
 	':subcommand:((
+		clone\:"clone from repo"
 		help\:"display help"
+		init\:"init & clone from repo"
+		delete\:"delete repo"
 		list\:"list all repos"
 		run\:"run command on repo"
-		init\:"init & clone from repo"
-		clone\:"clone from repo"
 		seed-gitignore\:"seed .gitignore.d/foo from git ls-files"
 	))'
