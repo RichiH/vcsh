@@ -1,3 +1,7 @@
+# generic #
+
+`vcsh rename`
+
 # zsh-specific #
 
 * Hack vcsh so it can be sourced by zsh, bash & dash
