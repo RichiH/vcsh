@@ -214,12 +214,13 @@ elif [ "$VCSH_COMMAND" = 'seed-gitignore' ]; then
 			[ "$file" = "$new" ] && break
 			file="$new"
 		done;
-	done | sort -u | sed 's/^/!/')
+	done | sort -u)
 	tempfile=$(mktemp) ||
 		(echo "$SELF: fatal: could not create tempfile" && exit 1) 
 	echo '*' > "$tempfile"
 	for gitignore in $gitignores; do
-		echo "$gitignore" >> "$tempfile"
+		echo "$gitignore" | sed 's/^/!/' >> "$tempfile"
+		[ -d "$gitignore" ] && echo "$gitignore/*" | sed 's/^/!/'>> "$tempfile"
 	done
 	diff -N "$tempfile" "$HOME/.gitignore.d/$VCSH_REPO_NAME" > /dev/null &&
 		rm -f "$tempfile" &&
