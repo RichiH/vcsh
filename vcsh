@@ -86,8 +86,8 @@ elif [ "$1" = 'delete' ] ||
      [ "$1" = 'init' ] ||
      [ "$1" = 'run' ] ||
      [ "$1" = 'seed-gitignore' ]; then
-	[ -z $2 ] && echo "$SELF $1: error: please specify repository to work on" && return 1
-	[ -z $3 ] && echo "$SELF $1 $2: error: please specify a command" && return 1
+	[ -z $2 ] && echo "$SELF $1: error: please specify repository to work on" && exit 1
+	[ -z $3 ] && echo "$SELF $1 $2: error: please specify a command" && exit 1
 	export VCSH_COMMAND="$1"
 	export VCSH_REPO_NAME="$2"
 	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
@@ -97,11 +97,11 @@ elif [ "$1" = 'help' ] ||
      [ "$1" = 'list' ]; then
 	export VCSH_COMMAND="$1"
 else
-	[ -z $1 ] && help && return 0
+	[ -z $1 ] && help && exit 0
 	export VCSH_COMMAND='run'
 	export VCSH_REPO_NAME="$1"
 	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
-	[ -d $GIT_DIR ] || (help && return 1) || return 0
+	[ -d $GIT_DIR ] || (help && exit 1)
 	shift 1
 	export VCSH_EXTERNAL_COMMAND="git $*"
 fi
@@ -148,7 +148,7 @@ elif [ "$VCSH_COMMAND" = 'delete' ]; then
 	verbose "delete begin"
 	old_dir="$PWD"
 	cd "$HOME"
-	use || return 1
+	use || exit 1
 	echo "$SELF: info: This operation WILL DETROY DATA!"
 	files=$(git ls-files)
 	echo "These files will be deleted:
@@ -192,14 +192,14 @@ elif [ "$VCSH_COMMAND" = 'list' ]; then
 
 elif [ "$VCSH_COMMAND" = 'run' ]; then
 	verbose "run begin"
-	use || return 1
+	use || exit 1
 	$VCSH_EXTERNAL_COMMAND
 	leave
 	verbose "run end"
 
 elif [ "$VCSH_COMMAND" = 'seed-gitignore' ]; then
 	verbose "seed-gitignore begin"
-	use || return 1
+	use || exit 1
 	# Switching directory as this has to be executed from $HOME to be of any use.
 	# Going back into old directory at the end in case `vcsh use` is reactivated.
 	old_dir="$PWD"
@@ -218,16 +218,17 @@ elif [ "$VCSH_COMMAND" = 'seed-gitignore' ]; then
 	for gitignore in $gitignores; do
 		echo "$gitignore" >> "$tempfile"
 	done
-	diff -N "$tempfile" "$HOME/.gitignore.d/$2" > /dev/null &&
-		rm -f "$tempfile" &&
-		return
-	if [ -e "$HOME/.gitignore.d/$2" ]; then
-		echo "$SELF: info: $HOME/.gitignore.d/$2 differs from new data, moving it to $HOME/.gitignore.d/$2.bak"
-		mv -f "$HOME/.gitignore.d/$2" "$HOME/.gitignore.d/$2.bak" ||
-			(echo "$SELF: fatal: could not move $HOME/.gitignore.d/$2 to $HOME/.gitignore.d/$2.bak" && exit 1)
+	if diff -Nq "$tempfile" "$HOME/.gitignore.d/$2" > /dev/null; then
+		rm -f "$tempfile"
+	else
+		if [ -e "$HOME/.gitignore.d/$2" ]; then
+			echo "$SELF: info: $HOME/.gitignore.d/$2 differs from new data, moving it to $HOME/.gitignore.d/$2.bak"
+			mv -f "$HOME/.gitignore.d/$2" "$HOME/.gitignore.d/$2.bak" ||
+				(echo "$SELF: fatal: could not move $HOME/.gitignore.d/$2 to $HOME/.gitignore.d/$2.bak" && exit 1)
+		fi
+		mv -f "$tempfile" "$HOME/.gitignore.d/$2" ||
+			(echo "$SELF: fatal: could not move $tempfile to $HOME/.gitignore.d/$2" && exit 1)
 	fi
-	mv -f "$tempfile" "$HOME/.gitignore.d/$2" ||
-		(echo "$SELF: fatal: could not move $tempfile to $HOME/.gitignore.d/$2" && exit 1)
 	cd "$old_dir"
 	verbose "seed-gitignore end"
 
