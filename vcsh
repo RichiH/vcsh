@@ -84,8 +84,7 @@ if [ "$1" = 'clone' ]; then
 	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
 elif [ "$1" = 'delete' ] ||
      [ "$1" = 'init' ] ||
-     [ "$1" = 'run' ] ||
-     [ "$1" = 'seed-gitignore' ]; then
+     [ "$1" = 'run' ]; then
 	[ -z $2 ] && echo "$SELF $1: error: please specify repository to work on" && return 1
 	[ -z $3 ] && echo "$SELF $1 $2: error: please specify a command" && return 1
 	export VCSH_COMMAND="$1"
@@ -93,6 +92,10 @@ elif [ "$1" = 'delete' ] ||
 	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
 	shift 2
 	export VCSH_EXTERNAL_COMMAND="$*"
+elif [ "$1" = 'seed-gitignore' ]; then
+	export VCSH_COMMAND="$1"
+	export VCSH_REPO_NAME="$2"
+	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
 elif [ "$1" = 'help' ] ||
      [ "$1" = 'list' ]; then
 	export VCSH_COMMAND="$1"
