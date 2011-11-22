@@ -14,19 +14,18 @@ help() {
          [<repo>]       Clone from an existing repository
    help                 Display this help text
    delete               Delete an existing repository
+   exit                 Exit repository; unset ENV
    init <repo>          Initialize a new repository
-   list                 List all repos
+   list                 List all repositories
    run <repo> \\
        <command>        Use this repository
 
    seed-gitignore \\
    <repo>               Seed .gitignore.d/<repo> from git ls-files
+   use <repo>           Use repository; set ENV
 
    <repo> <git command> Special command that allows you to run git commands
                         directly without having to type so much ;)" >&2
-#   use <repo>     Use this repository
-#
-#   exit              Exit vcsh mode" >&2
 }
 
 debug() {
@@ -85,7 +84,8 @@ if [ "$1" = 'clone' ]; then
 elif [ "$1" = 'delete' ] ||
      [ "$1" = 'init' ] ||
      [ "$1" = 'run' ] ||
-     [ "$1" = 'seed-gitignore' ]; then
+     [ "$1" = 'seed-gitignore' ] ||
+     [ "$1" = 'use' ]; then
 	[ -z $2 ] && echo "$SELF $1: error: please specify repository to work on" && return 1
 	export VCSH_COMMAND="$1"
 	export VCSH_REPO_NAME="$2"
@@ -95,7 +95,8 @@ elif [ "$1" = 'delete' ] ||
 	if [ "$VCSH_COMMAND" = 'run' ]; then
 		[ -z "$VCSH_EXTERNAL_COMMAND" ] && echo "$SELF $1 $2: error: please specify a command" && return 1
 	fi
-elif [ "$1" = 'help' ] ||
+elif [ "$1" = 'exit' ] ||
+     [ "$1" = 'help' ] ||
      [ "$1" = 'list' ]; then
 	export VCSH_COMMAND="$1"
 else
@@ -169,16 +170,16 @@ To continue, type \"Yes, do as I say\""
 	cd "$old_dir"
 	verbose "delete end"
 
-#elif [ "$VCSH_COMMAND" = 'exit' ]; then
-#	verbose "exit begin"
+elif [ "$VCSH_COMMAND" = 'exit' ]; then
+	verbose "exit begin"
 #	if [ -n "$ZSH_VERSION" ] && [ "$VCSH_NO_IGNORE_EOF" = '1' ]; then
 #		unset VCSH_NO_IGNORE_EOF
 #		setopt NO_IGNORE_EOF
 #	fi
-#	leave
+	leave
 #	[ -n "$ZSH_VERSION" ] && [ "$USER" = richih ] && buildPS1
-#	verbose "exit end"
-#	exit 0
+	verbose "exit end"
+	return 0
 
 elif [ "$VCSH_COMMAND" = 'init' ]; then
 	verbose "init begin"
@@ -236,8 +237,8 @@ elif [ "$VCSH_COMMAND" = 'seed-gitignore' ]; then
 	cd "$old_dir"
 	verbose "seed-gitignore end"
 
-#elif [ "$VCSH_COMMAND" = 'use' ]; then
-#	verbose "use begin"
+elif [ "$VCSH_COMMAND" = 'use' ]; then
+	verbose "use begin"
 #	if [ -n "$ZSH_VERSION" ]; then
 #		if [ -o NO_IGNORE_EOF ]; then
 #			export VCSH_NO_IGNORE_EOF=1
@@ -250,9 +251,9 @@ elif [ "$VCSH_COMMAND" = 'seed-gitignore' ]; then
 #		zle -N vcsh_exit
 #		bindkey '^d' 'vcsh_exit'
 #	fi
-#	use || return $?
+	use || return $?
 #	[ -n "$ZSH_VERSION" ] && [ "$USER" = richih ] && buildPS1
-#	verbose "use end"
+	verbose "use end"
 
 else
 	verbose "defaulting to calling help()"

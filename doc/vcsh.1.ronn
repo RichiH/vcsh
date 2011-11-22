@@ -5,9 +5,11 @@ vcsh(1) - manage and sync config files via git
 
 `vcsh` clone <url> [<location>]
 
-`vcsh` help
-
 `vcsh` delete
+
+`vcsh` exit
+
+`vcsh` help
 
 `vcsh` init <repo>
 
@@ -16,6 +18,8 @@ vcsh(1) - manage and sync config files via git
 `vcsh` run <repo> <command>
 
 `vcsh` seed-gitignore
+
+`vcsh` use <repo>
 
 `vcsh` <repo> <gitcommand>
 
@@ -43,11 +47,14 @@ A sample configuration for `vcsh` and `mr` can be found at
 * clone:
   Clone an existing repository.
 
-* help:
-  Display help.
-
 * delete:
   Delete an existing repository.
+
+* exit:
+  Exit repository; unset ENV
+
+* help:
+  Display help.
 
 * init:
   Initialize an empty repository.
@@ -61,6 +68,9 @@ A sample configuration for `vcsh` and `mr` can be found at
 
 * seed-gitignore:
   Seed .gitignore.d/<repo> from git ls-files.
+
+* use:
+  Use repository; set ENV
 
 * <repo> <gitcommand>:
   Shortcut to run `vcsh` on a repo. Will prepend `git` to <command> by itself.
