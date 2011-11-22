@@ -5,6 +5,13 @@
 [ -z "$VCSH_BASE" ]       && VCSH_BASE="$XDG_CONFIG_HOME/vcsh/repo.d"
 
 SELF=$(basename $0)
+if [ "$SELF" = 'bash' ] ||
+   [ "$SELF" = 'dash' ] ||
+   [ "$SELF" = 'sh' ] ||
+   [ "$SELF" = 'zsh' ]; then
+	SELF='vcsh'
+	VCSH_SOURCED=1
+fi
 
 
 help() {
@@ -176,6 +183,7 @@ elif [ "$VCSH_COMMAND" = 'exit' ]; then
 #		unset VCSH_NO_IGNORE_EOF
 #		setopt NO_IGNORE_EOF
 #	fi
+	[ -z "$VCSH_SOURCED" ] && echo "$SELF $VCSH_COMMAND: You need to source vcsh if you want to run in this mode" && return 10
 	leave
 #	[ -n "$ZSH_VERSION" ] && [ "$USER" = richih ] && buildPS1
 	verbose "exit end"
@@ -251,6 +259,7 @@ elif [ "$VCSH_COMMAND" = 'use' ]; then
 #		zle -N vcsh_exit
 #		bindkey '^d' 'vcsh_exit'
 #	fi
+	[ -z "$VCSH_SOURCED" ] && echo "$SELF $VCSH_COMMAND: You need to source vcsh if you want to run in this mode" && return 10
 	use || return $?
 #	[ -n "$ZSH_VERSION" ] && [ "$USER" = richih ] && buildPS1
 	verbose "use end"
