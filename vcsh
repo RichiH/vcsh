@@ -84,18 +84,17 @@ if [ "$1" = 'clone' ]; then
 	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
 elif [ "$1" = 'delete' ] ||
      [ "$1" = 'init' ] ||
-     [ "$1" = 'run' ]; then
+     [ "$1" = 'run' ] ||
+     [ "$1" = 'seed-gitignore' ]; then
 	[ -z $2 ] && echo "$SELF $1: error: please specify repository to work on" && return 1
-	[ -z $3 ] && echo "$SELF $1 $2: error: please specify a command" && return 1
 	export VCSH_COMMAND="$1"
 	export VCSH_REPO_NAME="$2"
 	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
 	shift 2
 	export VCSH_EXTERNAL_COMMAND="$*"
-elif [ "$1" = 'seed-gitignore' ]; then
-	export VCSH_COMMAND="$1"
-	export VCSH_REPO_NAME="$2"
-	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
+	if [ "$VCSH_COMMAND" = 'run' ]; then
+		[ -z "$VCSH_EXTERNAL_COMMAND" ] && echo "$SELF $1 $2: error: please specify a command" && return 1
+	fi
 elif [ "$1" = 'help' ] ||
      [ "$1" = 'list' ]; then
 	export VCSH_COMMAND="$1"
@@ -144,7 +143,8 @@ if [ "$VCSH_COMMAND" = 'clone' ]; then
 #	use || return 1
 	verbose "clone end"
 
-elif [ "$VCSH_COMMAND" = 'help' ] || [ "$#" -eq 0 ]; then
+#elif [ "$VCSH_COMMAND" = 'help' ] || [ "$#" -eq 0 ]; then
+elif [ "$VCSH_COMMAND" = 'help' ]; then
 	help
 
 elif [ "$VCSH_COMMAND" = 'delete' ]; then
@@ -221,16 +221,16 @@ elif [ "$VCSH_COMMAND" = 'seed-gitignore' ]; then
 	for gitignore in $gitignores; do
 		echo "$gitignore" >> "$tempfile"
 	done
-	diff -N "$tempfile" "$HOME/.gitignore.d/$2" > /dev/null &&
+	diff -N "$tempfile" "$HOME/.gitignore.d/$VCSH_REPO_NAME" > /dev/null &&
 		rm -f "$tempfile" &&
 		return
-	if [ -e "$HOME/.gitignore.d/$2" ]; then
-		echo "$SELF: info: $HOME/.gitignore.d/$2 differs from new data, moving it to $HOME/.gitignore.d/$2.bak"
-		mv -f "$HOME/.gitignore.d/$2" "$HOME/.gitignore.d/$2.bak" ||
-			(echo "$SELF: fatal: could not move $HOME/.gitignore.d/$2 to $HOME/.gitignore.d/$2.bak" && exit 1)
+	if [ -e "$HOME/.gitignore.d/$VCSH_REPO_NAME" ]; then
+		echo "$SELF: info: $HOME/.gitignore.d/$VCSH_REPO_NAME differs from new data, moving it to $HOME/.gitignore.d/$VCSH_REPO_NAME.bak"
+		mv -f "$HOME/.gitignore.d/$VCSH_REPO_NAME" "$HOME/.gitignore.d/$VCSH_REPO_NAME.bak" ||
+			(echo "$SELF: fatal: could not move $HOME/.gitignore.d/$VCSH_REPO_NAME to $HOME/.gitignore.d/$VCSH_REPO_NAME.bak" && exit 1)
 	fi
-	mv -f "$tempfile" "$HOME/.gitignore.d/$2" ||
-		(echo "$SELF: fatal: could not move $tempfile to $HOME/.gitignore.d/$2" && exit 1)
+	mv -f "$tempfile" "$HOME/.gitignore.d/$VCSH_REPO_NAME" ||
+		(echo "$SELF: fatal: could not move $tempfile to $HOME/.gitignore.d/$VCSH_REPO_NAME" && exit 1)
 	cd "$old_dir"
 	verbose "seed-gitignore end"
 
