@@ -5,7 +5,7 @@ vcsh(1) - manage and sync config files via git
 
 `vcsh` clone <url> [<location>]
 
-`vcsh` delete
+`vcsh` delete <repo>
 
 `vcsh` exit
 
@@ -17,7 +17,7 @@ vcsh(1) - manage and sync config files via git
 
 `vcsh` run <repo> <command>
 
-`vcsh` seed-gitignore
+`vcsh` seed-gitignore <repo>
 
 `vcsh` use <repo>
 
