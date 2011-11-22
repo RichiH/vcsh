@@ -1,15 +1,15 @@
 #compdef vcsh
 
-#		use\:"use/enter repo"
-#		exit\:"exit repo"
 _arguments \
 	':subcommand:((
 		clone\:"clone from repo"
 		help\:"display help"
-		init\:"init & clone from repo"
 		delete\:"delete repo"
+		exit\:"Exit repo; unset"
+		init\:"init & clone from repo"
 		list\:"list all repos"
 		run\:"run command on repo"
 		seed-gitignore\:"seed .gitignore.d/foo from git ls-files"
+		use\:"Use repo; set ENV"
 		\<REPO\>\:"Run git command directly"
 	))'
