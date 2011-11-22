@@ -7,6 +7,8 @@ vcsh(1) - manage and sync config files via git
 
 `vcsh` delete <repo>
 
+`vcsh` enter <repo>
+
 `vcsh` exit
 
 `vcsh` help
@@ -50,8 +52,11 @@ A sample configuration for `vcsh` and `mr` can be found at
 * delete:
   Delete an existing repository.
 
+* enter:
+  Enter repository; spawn new <$SHELL>.
+
 * exit:
-  Exit repository; unset ENV
+  Exit repository; unset ENV.
 
 * help:
   Display help.
@@ -70,7 +75,7 @@ A sample configuration for `vcsh` and `mr` can be found at
   Seed .gitignore.d/<repo> from git ls-files.
 
 * use:
-  Use repository; set ENV
+  Use repository; set ENV.
 
 * <repo> <gitcommand>:
   Shortcut to run `vcsh` on a repo. Will prepend `git` to <command> by itself.

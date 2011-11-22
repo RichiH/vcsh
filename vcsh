@@ -21,6 +21,7 @@ help() {
          [<repo>]       Clone from an existing repository
    help                 Display this help text
    delete               Delete an existing repository
+   enter                Enter repository; spawn new $SHELL
    exit                 Exit repository; unset ENV
    init <repo>          Initialize a new repository
    list                 List all repositories
@@ -89,6 +90,7 @@ if [ "$1" = 'clone' ]; then
 	export VCSH_REPO_NAME
 	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
 elif [ "$1" = 'delete' ] ||
+     [ "$1" = 'enter' ] ||
      [ "$1" = 'init' ] ||
      [ "$1" = 'run' ] ||
      [ "$1" = 'seed-gitignore' ] ||
@@ -176,6 +178,13 @@ To continue, type \"Yes, do as I say\""
 	rm -rf "$GIT_DIR" || echo "$SELF: info: could not delete '$GIT_DIR'"
 	cd "$old_dir"
 	verbose "delete end"
+
+elif [ "$VCSH_COMMAND" = 'enter' ]; then
+	verbose "enter begin"
+	use || return $?
+	$SHELL
+	leave
+	verbose "enter end"
 
 elif [ "$VCSH_COMMAND" = 'exit' ]; then
 	verbose "exit begin"

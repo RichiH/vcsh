@@ -5,6 +5,7 @@ _arguments \
 		clone\:"clone from repo"
 		help\:"display help"
 		delete\:"delete repo"
+		enter\:"Enter repo; spawn new \$SHELL"
 		exit\:"Exit repo; unset"
 		init\:"init & clone from repo"
 		list\:"list all repos"
