@@ -58,7 +58,7 @@ init() {
 	mkdir -p "$GIT_WORK_TREE"
 	cd "$GIT_WORK_TREE" ||
 		(echo "$SELF: fatal: could not enter $GIT_WORK_TREE" &&
-		 exit 20) || exit 20
+		 return 1) || return $?
 	cd "$GIT_WORK_TREE"
 	git init
 	git config core.worktree     "$GIT_WORK_TREE"
@@ -114,10 +114,10 @@ do
 	if [ ! -d "$check_directory" ]; then
 		if [ -e "$check_directory" ]; then
 			echo "$SELF: error: $check_directory exists but is not a directory" >&2
-			exit 2
+			return 2
 		else
 			echo "$SELF: info: attempting to create $check_directory"
-			mkdir -p "$check_directory" || (echo "$SELF: error: could not create $check_directory" >&2; exit 2)
+			mkdir -p "$check_directory" || (echo "$SELF: error: could not create $check_directory" >&2; return 2) || return $?
 		fi
 	fi
 done
@@ -138,9 +138,9 @@ if [ "$VCSH_COMMAND" = 'clone' ]; then
 	[ "$VCSH_CONFLICT" = '1' ] &&
 		echo "$SELF: fatal: will stop after fetching and not try to merge!\n" &&
 		echo "  Once this situation has been resolved, run 'vcsh run <foo> git pull' to finish cloning.\n" &&
-		exit 3
+		return 3
 	git merge origin/master
-#	use || return 1
+#	use || return $?
 	verbose "clone end"
 
 #elif [ "$VCSH_COMMAND" = 'help' ] || [ "$#" -eq 0 ]; then
@@ -151,7 +151,7 @@ elif [ "$VCSH_COMMAND" = 'delete' ]; then
 	verbose "delete begin"
 	old_dir="$PWD"
 	cd "$HOME"
-	use || return 1
+	use || return $?
 	echo "$SELF: info: This operation WILL DETROY DATA!"
 	files=$(git ls-files)
 	echo "These files will be deleted:
@@ -161,7 +161,7 @@ $files
 AGAIN, THIS WILL DELETE YOUR DATA!
 To continue, type \"Yes, do as I say\""
 	read answer
-	[ "x$answer" = "xYes, do as I say" ] || exit
+	[ "x$answer" = "xYes, do as I say" ] || return 1
 	for file in $files; do
 		rm -f $file || echo "$SELF: info: could not delete '$file', continuing with deletion"
 	done
@@ -183,7 +183,7 @@ To continue, type \"Yes, do as I say\""
 elif [ "$VCSH_COMMAND" = 'init' ]; then
 	verbose "init begin"
 	init
-#	use || return 1
+#	use || return $?
 	verbose "init end"
 
 elif [ "$VCSH_COMMAND" = 'list' ]; then
@@ -195,14 +195,14 @@ elif [ "$VCSH_COMMAND" = 'list' ]; then
 
 elif [ "$VCSH_COMMAND" = 'run' ]; then
 	verbose "run begin"
-	use || return 1
+	use || return $?
 	$VCSH_EXTERNAL_COMMAND
 	leave
 	verbose "run end"
 
 elif [ "$VCSH_COMMAND" = 'seed-gitignore' ]; then
 	verbose "seed-gitignore begin"
-	use || return 1
+	use || return $?
 	# Switching directory as this has to be executed from $HOME to be of any use.
 	# Going back into old directory at the end in case `vcsh use` is reactivated.
 	old_dir="$PWD"
@@ -216,7 +216,7 @@ elif [ "$VCSH_COMMAND" = 'seed-gitignore' ]; then
 		done;
 	done | sort -u)
 	tempfile=$(mktemp) ||
-		(echo "$SELF: fatal: could not create tempfile" && exit 1) 
+		(echo "$SELF: fatal: could not create tempfile" && return 1) || return $?
 	echo '*' > "$tempfile"
 	for gitignore in $gitignores; do
 		echo "$gitignore" | sed 's/^/!/' >> "$tempfile"
@@ -228,10 +228,11 @@ elif [ "$VCSH_COMMAND" = 'seed-gitignore' ]; then
 	if [ -e "$HOME/.gitignore.d/$VCSH_REPO_NAME" ]; then
 		echo "$SELF: info: $HOME/.gitignore.d/$VCSH_REPO_NAME differs from new data, moving it to $HOME/.gitignore.d/$VCSH_REPO_NAME.bak"
 		mv -f "$HOME/.gitignore.d/$VCSH_REPO_NAME" "$HOME/.gitignore.d/$VCSH_REPO_NAME.bak" ||
-			(echo "$SELF: fatal: could not move $HOME/.gitignore.d/$VCSH_REPO_NAME to $HOME/.gitignore.d/$VCSH_REPO_NAME.bak" && exit 1)
+			(echo "$SELF: fatal: could not move $HOME/.gitignore.d/$VCSH_REPO_NAME to $HOME/.gitignore.d/$VCSH_REPO_NAME.bak" &&
+			 return 1) || return $?
 	fi
 	mv -f "$tempfile" "$HOME/.gitignore.d/$VCSH_REPO_NAME" ||
-		(echo "$SELF: fatal: could not move $tempfile to $HOME/.gitignore.d/$VCSH_REPO_NAME" && exit 1)
+		(echo "$SELF: fatal: could not move $tempfile to $HOME/.gitignore.d/$VCSH_REPO_NAME" && return 1) || return $?
 	cd "$old_dir"
 	verbose "seed-gitignore end"
 
@@ -249,7 +250,7 @@ elif [ "$VCSH_COMMAND" = 'seed-gitignore' ]; then
 #		zle -N vcsh_exit
 #		bindkey '^d' 'vcsh_exit'
 #	fi
-#	use || return 1
+#	use || return $?
 #	[ -n "$ZSH_VERSION" ] && [ "$USER" = richih ] && buildPS1
 #	verbose "use end"
 
@@ -257,6 +258,6 @@ else
 	verbose "defaulting to calling help()"
 	help
 	echo "$SELF: fatal: You should never reach this code. File a bug, please."
-	exit 99
+	return 99
 
 fi
