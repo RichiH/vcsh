@@ -30,6 +30,7 @@ help() {
 
    seed-gitignore \\
    <repo>               Seed .gitignore.d/<repo> from git ls-files
+   setup                Set up repository with recommended settings
    use <repo>           Use repository; set ENV
 
    <repo> <git command> Special command that allows you to run git commands
@@ -44,6 +45,14 @@ verbose() {
 	if [ -n "$VCSH_DEBUG" ] || [ -n "$VCSH_VERBOSE" ]; then echo "$SELF: verbose: $@"; fi
 }
 
+setup() {
+	git config core.worktree     "$GIT_WORK_TREE"
+	git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
+	git config vcsh.vcsh         'true'
+	touch   "$HOME/.gitignore.d/$VCSH_REPO_NAME"
+	git add "$HOME/.gitignore.d/$VCSH_REPO_NAME"
+}
+
 init() {
 	verbose "init() begin"
 	[ -e "$GIT_DIR" ] &&
@@ -56,10 +65,7 @@ init() {
 		 return 1) || return $?
 	cd "$GIT_WORK_TREE"
 	git init
-	git config core.worktree     "$GIT_WORK_TREE"
-	git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
-	touch   "$HOME/.gitignore.d/$VCSH_REPO_NAME"
-	git add "$HOME/.gitignore.d/$VCSH_REPO_NAME"
+	setup
 	verbose "init() end"
 }
 
@@ -95,6 +101,7 @@ elif [ "$1" = 'delete' ] ||
      [ "$1" = 'init' ] ||
      [ "$1" = 'run' ] ||
      [ "$1" = 'seed-gitignore' ] ||
+     [ "$1" = 'setup' ] ||
      [ "$1" = 'use' ]; then
 	[ -z $2 ] && echo "$SELF $1: error: please specify repository to work on" && return 1
 	export VCSH_COMMAND="$1"
@@ -226,7 +233,6 @@ elif [ "$VCSH_COMMAND" = 'seed-gitignore' ]; then
 	# Going back into old directory at the end in case `vcsh use` is reactivated.
 	old_dir="$PWD"
 	cd "$HOME"
-	git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
 	gitignores=$(for file in $(git ls-files); do
 		while true; do
 			echo $file; new="${file%/*}"
@@ -253,6 +259,13 @@ elif [ "$VCSH_COMMAND" = 'seed-gitignore' ]; then
 	mv -f "$tempfile" "$HOME/.gitignore.d/$VCSH_REPO_NAME" ||
 		(echo "$SELF: fatal: could not move $tempfile to $HOME/.gitignore.d/$VCSH_REPO_NAME" && return 1) || return $?
 	cd "$old_dir"
+	verbose "seed-gitignore end"
+
+elif [ "$VCSH_COMMAND" = 'setup' ]; then
+	verbose "seed-gitignore begin"
+	use   || return $?
+	setup || return $?
+	leave
 	verbose "seed-gitignore end"
 
 elif [ "$VCSH_COMMAND" = 'use' ]; then

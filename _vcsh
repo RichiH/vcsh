@@ -11,6 +11,7 @@ _arguments \
 		list\:"list all repos"
 		run\:"run command on repo"
 		seed-gitignore\:"seed .gitignore.d/foo from git ls-files"
+		setup\:"set up repo with recommended settings"
 		use\:"Use repo; set ENV"
 		\<REPO\>\:"Run git command directly"
 	))'

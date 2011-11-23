@@ -21,6 +21,8 @@ vcsh(1) - manage and sync config files via git
 
 `vcsh` seed-gitignore <repo>
 
+`vcsh` setup <repo>
+
 `vcsh` use <repo>
 
 `vcsh` <repo> <gitcommand>
@@ -73,6 +75,9 @@ A sample configuration for `vcsh` and `mr` can be found at
 
 * seed-gitignore:
   Seed .gitignore.d/<repo> from git ls-files.
+
+* setup:
+  Set up repository with recommended settings.
 
 * use:
   Use repository; set ENV.
