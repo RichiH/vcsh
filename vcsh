@@ -44,18 +44,6 @@ verbose() {
 	if [ -n "$VCSH_DEBUG" ] || [ -n "$VCSH_VERBOSE" ]; then echo "$SELF: verbose: $@"; fi
 }
 
-use() {
-	verbose "use() begin"
-	if [ ! -d "$GIT_DIR" ]; then
-		echo E: no repository found for "$VCSH_REPO_NAME" >&2
-		return 1
-	fi
-	export GIT_DIR
-	export GIT_WORK_TREE="$(git config --get core.worktree)"
-	export VCSH_DIRECTORY="$VCSH_REPO_NAME"
-	verbose "use() end"
-}
-
 init() {
 	verbose "init() begin"
 	[ -e "$GIT_DIR" ] &&
@@ -79,6 +67,18 @@ leave() {
 	unset GIT_DIR
 	unset GIT_WORK_TREE
 	unset VCSH_DIRECTORY
+}
+
+use() {
+	verbose "use() begin"
+	if [ ! -d "$GIT_DIR" ]; then
+		echo E: no repository found for "$VCSH_REPO_NAME" >&2
+		return 1
+	fi
+	export GIT_DIR
+	export GIT_WORK_TREE="$(git config --get core.worktree)"
+	export VCSH_DIRECTORY="$VCSH_REPO_NAME"
+	verbose "use() end"
 }
 
 
