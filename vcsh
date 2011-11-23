@@ -83,6 +83,7 @@ leave() {
 
 
 if [ "$1" = 'clone' ]; then
+	export VCSH_COMMAND="$1"
 	GIT_REMOTE="$2"
 	export GIT_REMOTE
 	VCSH_REPO_NAME="$3"
