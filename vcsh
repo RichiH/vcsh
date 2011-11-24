@@ -48,91 +48,7 @@ info() {
 	echo "$SELF: info: $1"
 }
 
-setup() {
-	git config core.worktree     "$GIT_WORK_TREE"
-	git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
-	git config vcsh.vcsh         'true'
-	touch   "$HOME/.gitignore.d/$VCSH_REPO_NAME"
-	git add "$HOME/.gitignore.d/$VCSH_REPO_NAME"
-}
-
-init() {
-	verbose "init() begin"
-	[ ! -e "$GIT_DIR" ] || fatal "'$GIT_DIR' exists" 10
-	export GIT_WORK_TREE="$HOME"
-	mkdir -p "$GIT_WORK_TREE"
-	cd "$GIT_WORK_TREE" || fatal "could not enter '$GIT_WORK_TREE'" 11
-	cd "$GIT_WORK_TREE"
-	git init
-	setup
-	verbose "init() end"
-}
-
-use() {
-	verbose "use() begin"
-	if [ ! -d "$GIT_DIR" ]; then
-		error "no repository found for '$VCSH_REPO_NAME'"
-		return 12
-	fi
-	export GIT_DIR
-	export GIT_WORK_TREE="$(git config --get core.worktree)"
-	export VCSH_DIRECTORY="$VCSH_REPO_NAME"
-	verbose "use() end"
-}
-
-
-if [ "$1" = 'clone' ]; then
-	export VCSH_COMMAND="$1"
-	GIT_REMOTE="$2"
-	export GIT_REMOTE
-	VCSH_REPO_NAME="$3"
-	[ -z "$VCSH_REPO_NAME" ] && VCSH_REPO_NAME=$(basename "$GIT_REMOTE" .git)
-	export VCSH_REPO_NAME
-	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
-elif [ "$1" = 'delete' ] ||
-     [ "$1" = 'enter' ] ||
-     [ "$1" = 'init' ] ||
-     [ "$1" = 'run' ] ||
-     [ "$1" = 'seed-gitignore' ] ||
-     [ "$1" = 'setup' ]; then
-	[ -z $2 ] && fatal "$1: please specify repository to work on" 1
-	export VCSH_COMMAND="$1"
-	export VCSH_REPO_NAME="$2"
-	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
-	shift 2
-	export VCSH_EXTERNAL_COMMAND="$*"
-	if [ "$VCSH_COMMAND" = 'run' ]; then
-		[ -z "$VCSH_EXTERNAL_COMMAND" ] && fatal "$1 $2: please specify a command" 1
-	fi
-elif [ "$1" = 'help' ] ||
-     [ "$1" = 'list' ]; then
-	export VCSH_COMMAND="$1"
-else
-	[ -z $1 ] && help && exit 0
-	export VCSH_COMMAND='run'
-	export VCSH_REPO_NAME="$1"
-	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
-	[ -d $GIT_DIR ] || { help; exit 1; }
-	shift 1
-	export VCSH_EXTERNAL_COMMAND="git $*"
-fi
-
-
-for check_directory in "$VCSH_BASE" "$HOME/.gitignore.d"
-do
-	if [ ! -d "$check_directory" ]; then
-		if [ -e "$check_directory" ]; then
-			fatal "'$check_directory' exists but is not a directory" 13
-		else
-			info "attempting to create '$check_directory'"
-			mkdir -p "$check_directory" || fatal "could not create '$check_directory'" 50
-		fi
-	fi
-done
-
-
-if [ "$VCSH_COMMAND" = 'clone' ]; then
-	verbose "clone begin"
+clone () {
 	init
 	git remote add origin "$GIT_REMOTE"
 	git config branch.master.remote origin
@@ -147,14 +63,9 @@ if [ "$VCSH_COMMAND" = 'clone' ]; then
 		fatal "will stop after fetching and not try to merge!
   Once this situation has been resolved, run 'vcsh run $VCSH_REPO_NAME git pull' to finish cloning.\n" 17
 	git merge origin/master
-	verbose "clone end"
+}
 
-#elif [ "$VCSH_COMMAND" = 'help' ] || [ "$#" -eq 0 ]; then
-elif [ "$VCSH_COMMAND" = 'help' ]; then
-	help
-
-elif [ "$VCSH_COMMAND" = 'delete' ]; then
-	verbose "delete begin"
+delete () {
 	old_dir="$PWD"
 	cd "$HOME"
 	use || exit $?
@@ -173,34 +84,35 @@ To continue, type \"Yes, do as I say\""
 	done
 	rm -rf "$GIT_DIR" || info "could not delete '$GIT_DIR'"
 	cd "$old_dir"
-	verbose "delete end"
+}
 
-elif [ "$VCSH_COMMAND" = 'enter' ]; then
-	verbose "enter begin"
+enter () {
 	use || exit $?
 	$SHELL
-	verbose "enter end"
+}
 
-elif [ "$VCSH_COMMAND" = 'init' ]; then
-	verbose "init begin"
-	init
-	verbose "init end"
+init() {
+	[ ! -e "$GIT_DIR" ] || fatal "'$GIT_DIR' exists" 10
+	export GIT_WORK_TREE="$HOME"
+	mkdir -p "$GIT_WORK_TREE"
+	cd "$GIT_WORK_TREE" || fatal "could not enter '$GIT_WORK_TREE'" 11
+	cd "$GIT_WORK_TREE"
+	git init
+	setup
+}
 
-elif [ "$VCSH_COMMAND" = 'list' ]; then
-	verbose "list begin"
+list () {
 	for i in "$VCSH_BASE"/*.git; do
 		echo $(basename "$i" .git)
 	done
-	verbose "list end"
+}
 
-elif [ "$VCSH_COMMAND" = 'run' ]; then
-	verbose "run begin"
+run () {
 	use || exit $?
 	$VCSH_EXTERNAL_COMMAND
-	verbose "run end"
+}
 
-elif [ "$VCSH_COMMAND" = 'seed-gitignore' ]; then
-	verbose "seed-gitignore begin"
+seed_gitignore () {
 	use || exit $?
 	# Switching directory as this has to be executed from $HOME to be of any use.
 	# Going back into old directory at the end in case `vcsh use` is reactivated.
@@ -230,17 +142,72 @@ elif [ "$VCSH_COMMAND" = 'seed-gitignore' ]; then
 	mv -f "$tempfile" "$HOME/.gitignore.d/$VCSH_REPO_NAME" ||
 		fatal "could not move '$tempfile' to '$HOME/.gitignore.d/$VCSH_REPO_NAME'" 53
 	cd "$old_dir"
-	verbose "seed-gitignore end"
+}
 
-elif [ "$VCSH_COMMAND" = 'setup' ]; then
-	verbose "seed-gitignore begin"
-	use   || exit $?
-	setup || exit $?
-	verbose "seed-gitignore end"
+setup() {
+	use
+	git config core.worktree     "$GIT_WORK_TREE"
+	git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
+	git config vcsh.vcsh         'true'
+	touch   "$HOME/.gitignore.d/$VCSH_REPO_NAME"
+	git add "$HOME/.gitignore.d/$VCSH_REPO_NAME"
+}
 
+use() {
+	if [ ! -d "$GIT_DIR" ]; then
+		error "no repository found for '$VCSH_REPO_NAME'"
+		return 12
+	fi
+	export GIT_WORK_TREE="$(git config --get core.worktree)"
+	export VCSH_DIRECTORY="$VCSH_REPO_NAME"
+}
+
+if [ "$1" = 'clone' ]; then
+	[ -z $2 ] && fatal "$1: please specify a remote" 1
+	export VCSH_COMMAND="$1"
+	GIT_REMOTE="$2"
+	[ -n "$3" ] && VCSH_REPO_NAME="$3" || VCSH_REPO_NAME=$(basename "$GIT_REMOTE" .git)
+	export VCSH_REPO_NAME
+	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
+elif [ "$1" = 'delete' ] ||
+     [ "$1" = 'enter' ] ||
+     [ "$1" = 'init' ] ||
+     [ "$1" = 'run' ] ||
+     [ "$1" = 'seed-gitignore' ] ||
+     [ "$1" = 'setup' ]; then
+	[ -z $2 ] && fatal "$1: please specify repository to work on" 1
+	[ "$1" = 'run' -a -z "$3" ] && fatal "$1: please specify a command" 1
+	export VCSH_COMMAND="$1"
+	export VCSH_REPO_NAME="$2"
+	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
+	[ "$1" = 'run' ] && shift 2 && export VCSH_EXTERNAL_COMMAND="$@"
+	[ "$1" = 'seed-gitignore' ] && export VCSH_COMMAND=seed_gitignore
+elif [ "$1" = 'list' ]; then
+	export VCSH_COMMAND="$1"
+elif [ -n "$1" ]; then
+	export VCSH_COMMAND=run
+	export VCSH_REPO_NAME="$1"
+	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
+	[ -d $GIT_DIR ] || { help; exit 1; }
+	shift 1
+	export VCSH_EXTERNAL_COMMAND="git $*"
 else
-	verbose "defaulting to calling help()"
-	help
-	fatal "You should never reach this code. File a bug, please." 99
-
+	# $1 is empty, or 'help'
+	help && exit
 fi
+
+for check_directory in "$VCSH_BASE" "$HOME/.gitignore.d"
+do
+	if [ ! -d "$check_directory" ]; then
+		if [ -e "$check_directory" ]; then
+			fatal "'$check_directory' exists but is not a directory" 13
+		else
+			info "attempting to create '$check_directory'"
+			mkdir -p "$check_directory" || fatal "could not create '$check_directory'" 50
+		fi
+	fi
+done
+
+verbose "$VCSH_COMMAND begin"
+$VCSH_COMMAND
+verbose "$VCSH_COMMAND end, exiting"
