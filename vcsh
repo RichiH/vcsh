@@ -68,7 +68,7 @@ clone () {
 delete () {
 	old_dir="$PWD"
 	cd "$HOME"
-	use || exit $?
+	use
 	info "This operation WILL DETROY DATA!"
 	files=$(git ls-files)
 	echo "These files will be deleted:
@@ -87,7 +87,7 @@ To continue, type \"Yes, do as I say\""
 }
 
 enter () {
-	use || exit $?
+	use
 	$SHELL
 }
 
@@ -108,12 +108,12 @@ list () {
 }
 
 run () {
-	use || exit $?
+	use
 	$VCSH_EXTERNAL_COMMAND
 }
 
 seed_gitignore () {
-	use || exit $?
+	use
 	# Switching directory as this has to be executed from $HOME to be of any use.
 	# Going back into old directory at the end in case `vcsh use` is reactivated.
 	old_dir="$PWD"
@@ -155,8 +155,7 @@ setup() {
 
 use() {
 	if [ ! -d "$GIT_DIR" ]; then
-		error "no repository found for '$VCSH_REPO_NAME'"
-		return 12
+		fatal "no repository found for '$VCSH_REPO_NAME'" 12
 	fi
 	export GIT_WORK_TREE="$(git config --get core.worktree)"
 	export VCSH_DIRECTORY="$VCSH_REPO_NAME"
