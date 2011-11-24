@@ -35,6 +35,15 @@ verbose() {
 	if [ -n "$VCSH_DEBUG" ] || [ -n "$VCSH_VERBOSE" ]; then echo "$SELF: verbose: $@"; fi
 }
 
+error () {
+	echo "$SELF: error: $1" >&2
+}
+
+fatal () {
+	echo "$SELF: fatal error: $1" >&2
+	exit $2
+}
+
 setup() {
 	git config core.worktree     "$GIT_WORK_TREE"
 	git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
@@ -45,13 +54,10 @@ setup() {
 
 init() {
 	verbose "init() begin"
-	[ -e "$GIT_DIR" ] &&
-		echo "$SELF: fatal: $GIT_DIR exists" &&
-		return 10
+	[ ! -e "$GIT_DIR" ] || fatal "$GIT_DIR exists" 10
 	export GIT_WORK_TREE="$HOME"
 	mkdir -p "$GIT_WORK_TREE"
-	cd "$GIT_WORK_TREE" ||
-		{ echo "$SELF: fatal: could not enter $GIT_WORK_TREE"; return 11; }
+	cd "$GIT_WORK_TREE" || fatal "could not enter $GIT_WORK_TREE" 11
 	cd "$GIT_WORK_TREE"
 	git init
 	setup
@@ -61,7 +67,7 @@ init() {
 use() {
 	verbose "use() begin"
 	if [ ! -d "$GIT_DIR" ]; then
-		echo E: no repository found for "$VCSH_REPO_NAME" >&2
+		error "no repository found for '$VCSH_REPO_NAME'"
 		return 12
 	fi
 	export GIT_DIR
@@ -85,14 +91,14 @@ elif [ "$1" = 'delete' ] ||
      [ "$1" = 'run' ] ||
      [ "$1" = 'seed-gitignore' ] ||
      [ "$1" = 'setup' ]; then
-	[ -z $2 ] && echo "$SELF $1: error: please specify repository to work on" && exit 1
+	[ -z $2 ] && fatal "$1: please specify repository to work on" 1
 	export VCSH_COMMAND="$1"
 	export VCSH_REPO_NAME="$2"
 	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
 	shift 2
 	export VCSH_EXTERNAL_COMMAND="$*"
 	if [ "$VCSH_COMMAND" = 'run' ]; then
-		[ -z "$VCSH_EXTERNAL_COMMAND" ] && echo "$SELF $1 $2: error: please specify a command" && exit 1
+		[ -z "$VCSH_EXTERNAL_COMMAND" ] && fatal "$1 $2: please specify a command" 1
 	fi
 elif [ "$1" = 'help' ] ||
      [ "$1" = 'list' ]; then
@@ -112,11 +118,10 @@ for check_directory in "$VCSH_BASE" "$HOME/.gitignore.d"
 do
 	if [ ! -d "$check_directory" ]; then
 		if [ -e "$check_directory" ]; then
-			echo "$SELF: fatal: $check_directory exists but is not a directory" >&2
-			exit 13
+			fatal "$check_directory exists but is not a directory" 13
 		else
 			echo "$SELF: info: attempting to create $check_directory"
-			mkdir -p "$check_directory" || { echo "$SELF: fatal: could not create $check_directory" >&2; exit 50; }
+			mkdir -p "$check_directory" || fatal "could not create $check_directory" 50
 		fi
 	fi
 done
@@ -131,13 +136,12 @@ if [ "$VCSH_COMMAND" = 'clone' ]; then
 	git fetch
 	for object in $(git ls-tree -r origin/master | awk '{print $4}'); do
 		[ -e "$object" ] &&
-			echo "$SELF: error: $object exists." &&
+			error "$object exists." &&
 			VCSH_CONFLICT=1;
 	done
 	[ "$VCSH_CONFLICT" = '1' ] &&
-		echo "$SELF: fatal: will stop after fetching and not try to merge!\n" &&
-		echo "  Once this situation has been resolved, run 'vcsh run <foo> git pull' to finish cloning.\n" &&
-		exit 17
+		fatal "will stop after fetching and not try to merge!
+  Once this situation has been resolved, run 'vcsh run <foo> git pull' to finish cloning.\n" 17
 	git merge origin/master
 	verbose "clone end"
 
@@ -205,8 +209,7 @@ elif [ "$VCSH_COMMAND" = 'seed-gitignore' ]; then
 			file="$new"
 		done;
 	done | sort -u)
-	tempfile=$(mktemp) ||
-		{ echo "$SELF: fatal: could not create tempfile"; exit 51; }
+	tempfile=$(mktemp) || fatal "could not create tempfile" 51
 	echo '*' > "$tempfile"
 	for gitignore in $gitignores; do
 		echo "$gitignore" | sed 's/^/!/' >> "$tempfile"
@@ -218,10 +221,10 @@ elif [ "$VCSH_COMMAND" = 'seed-gitignore' ]; then
 	if [ -e "$HOME/.gitignore.d/$VCSH_REPO_NAME" ]; then
 		echo "$SELF: info: $HOME/.gitignore.d/$VCSH_REPO_NAME differs from new data, moving it to $HOME/.gitignore.d/$VCSH_REPO_NAME.bak"
 		mv -f "$HOME/.gitignore.d/$VCSH_REPO_NAME" "$HOME/.gitignore.d/$VCSH_REPO_NAME.bak" ||
-			{ echo "$SELF: fatal: could not move $HOME/.gitignore.d/$VCSH_REPO_NAME to $HOME/.gitignore.d/$VCSH_REPO_NAME.bak"; exit 53; }
+			fatal "could not move $HOME/.gitignore.d/$VCSH_REPO_NAME to $HOME/.gitignore.d/$VCSH_REPO_NAME.bak" 53
 	fi
 	mv -f "$tempfile" "$HOME/.gitignore.d/$VCSH_REPO_NAME" ||
-		{ echo "$SELF: fatal: could not move $tempfile to $HOME/.gitignore.d/$VCSH_REPO_NAME" && exit 53; }
+		fatal "could not move $tempfile to $HOME/.gitignore.d/$VCSH_REPO_NAME" 53
 	cd "$old_dir"
 	verbose "seed-gitignore end"
 
@@ -234,7 +237,6 @@ elif [ "$VCSH_COMMAND" = 'setup' ]; then
 else
 	verbose "defaulting to calling help()"
 	help
-	echo "$SELF: fatal: You should never reach this code. File a bug, please."
-	exit 99
+	fatal "You should never reach this code. File a bug, please." 99
 
 fi
