@@ -9,8 +9,6 @@ vcsh(1) - manage and sync config files via git
 
 `vcsh` enter <repo>
 
-`vcsh` exit
-
 `vcsh` help
 
 `vcsh` init <repo>
@@ -22,8 +20,6 @@ vcsh(1) - manage and sync config files via git
 `vcsh` seed-gitignore <repo>
 
 `vcsh` setup <repo>
-
-`vcsh` use <repo>
 
 `vcsh` <repo> <gitcommand>
 
@@ -57,9 +53,6 @@ A sample configuration for `vcsh` and `mr` can be found at
 * enter:
   Enter repository; spawn new <$SHELL>.
 
-* exit:
-  Exit repository; unset ENV.
-
 * help:
   Display help.
 
@@ -78,9 +71,6 @@ A sample configuration for `vcsh` and `mr` can be found at
 
 * setup:
   Set up repository with recommended settings.
-
-* use:
-  Use repository; set ENV.
 
 * <repo> <gitcommand>:
   Shortcut to run `vcsh` on a repo. Will prepend `git` to <command> by itself.

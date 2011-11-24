@@ -6,12 +6,10 @@ _arguments \
 		help\:"display help"
 		delete\:"delete repo"
 		enter\:"Enter repo; spawn new \$SHELL"
-		exit\:"Exit repo; unset ENV"
 		init\:"init & clone from repo"
 		list\:"list all repos"
 		run\:"run command on repo"
 		seed-gitignore\:"seed .gitignore.d/foo from git ls-files"
 		setup\:"set up repo with recommended settings"
-		use\:"Use repo; set ENV"
 		\<REPO\>\:"Run git command directly"
 	))'
