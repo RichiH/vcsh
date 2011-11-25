@@ -48,7 +48,7 @@ info() {
 	echo "$SELF: info: $1"
 }
 
-clone () {
+clone() {
 	init
 	git remote add origin "$GIT_REMOTE"
 	git config branch.master.remote origin
@@ -65,7 +65,7 @@ clone () {
 	git merge origin/master
 }
 
-delete () {
+delete() {
 	old_dir="$PWD"
 	cd "$HOME"
 	use
@@ -86,7 +86,7 @@ To continue, type \"Yes, do as I say\""
 	cd "$old_dir"
 }
 
-enter () {
+enter() {
 	use
 	$SHELL
 }
@@ -101,18 +101,18 @@ init() {
 	setup
 }
 
-list () {
+list() {
 	for i in "$VCSH_BASE"/*.git; do
 		echo $(basename "$i" .git)
 	done
 }
 
-run () {
+run() {
 	use
 	$VCSH_EXTERNAL_COMMAND
 }
 
-seed_gitignore () {
+seed_gitignore() {
 	use
 	# Switching directory as this has to be executed from $HOME to be of any use.
 	# Going back into old directory at the end in case `vcsh use` is reactivated.
