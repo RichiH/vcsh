@@ -11,8 +11,10 @@ _arguments \
 		list-tracked\:"list all files tracked by vcsh"
 		list-tracked-by\:"list files tracked by a repo"
 		rename\:"rename repo"
+		list-untracked\:"list all untracked files in \$HOME"
 		run\:"run command on repo"
 		setup\:"set up repo with recommended settings"
+		status\:"show status of all files in \$HOME"
 		write-gitignore\:"write .gitignore.d/foo via git ls-files"
 		\<REPO\>\:"Run git command directly"
 	))'
