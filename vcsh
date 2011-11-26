@@ -126,9 +126,6 @@ run() {
 
 seed_gitignore() {
 	use
-	# Switching directory as this has to be executed from $HOME to be of any use.
-	# Going back into old directory at the end in case `vcsh use` is reactivated.
-	old_dir="$PWD"
 	cd "$HOME"
 	gitignores=$(for file in $(git ls-files); do
 		while true; do
@@ -153,7 +150,6 @@ seed_gitignore() {
 	fi
 	mv -f "$tempfile" "$HOME/.gitignore.d/$VCSH_REPO_NAME" ||
 		fatal "could not move '$tempfile' to '$HOME/.gitignore.d/$VCSH_REPO_NAME'" 53
-	cd "$old_dir"
 }
 
 setup() {
