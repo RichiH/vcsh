@@ -68,8 +68,7 @@ clone() {
 }
 
 delete() {
-	old_dir="$PWD"
-	cd "$HOME"
+	cd "$HOME" || fatal "could not enter '$HOME'" 11
 	use
 	info "This operation WILL DETROY DATA!"
 	files=$(git ls-files)
@@ -84,8 +83,7 @@ To continue, type \"Yes, do as I say\""
 	for file in $files; do
 		rm -f $file || info "could not delete '$file', continuing with deletion"
 	done
-	rmdir "$GIT_DIR" || info "could not delete '$GIT_DIR'"
-	cd "$old_dir"
+	rmdir "$GIT_DIR" || error "could not delete '$GIT_DIR'"
 }
 
 enter() {
@@ -100,7 +98,7 @@ git_dir_exists() {
 init() {
 	[ ! -e "$GIT_DIR" ] || fatal "'$GIT_DIR' exists" 10
 	export GIT_WORK_TREE="$HOME"
-	mkdir -p "$GIT_WORK_TREE"
+	mkdir -p "$GIT_WORK_TREE" || fatal "could not create '$GIT_WORK_TREE'" 50
 	cd "$GIT_WORK_TREE" || fatal "could not enter '$GIT_WORK_TREE'" 11
 	git init
 	setup
@@ -126,7 +124,7 @@ run() {
 
 seed_gitignore() {
 	use
-	cd "$HOME"
+	cd "$HOME" || fatal "could not enter '$HOME'" 11
 	gitignores=$(for file in $(git ls-files); do
 		while true; do
 			echo $file; new="${file%/*}"
@@ -135,14 +133,15 @@ seed_gitignore() {
 		done;
 	done | sort -u)
 	tempfile=$(mktemp) || fatal "could not create tempfile" 51
-	echo '*' > "$tempfile"
+	echo '*' > "$tempfile" || fatal "could not write to '$tempfile'" 57
 	for gitignore in $gitignores; do
-		echo "$gitignore" | sed 's/^/!/' >> "$tempfile"
-		[ -d "$gitignore" ] && echo "$gitignore/*" | sed 's/^/!/'>> "$tempfile"
+		echo "$gitignore" | sed 's/^/!/' >> "$tempfile" || fatal "could not write to '$tempfile'" 57
+		[ -d "$gitignore" ] && echo "$gitignore/*" | sed 's/^/!/'>> "$tempfile" || fatal "could not write to '$tempfile'" 57
 	done
-	diff -N "$tempfile" "$HOME/.gitignore.d/$VCSH_REPO_NAME" > /dev/null &&
-		rm -f "$tempfile" &&
+	if [ diff -N "$tempfile" "$HOME/.gitignore.d/$VCSH_REPO_NAME" > /dev/null ]; then
+		rm -f "$tempfile" || error "could not delete '$tempfile'"
 		exit
+	fi
 	if [ -e "$HOME/.gitignore.d/$VCSH_REPO_NAME" ]; then
 		info "'$HOME/.gitignore.d/$VCSH_REPO_NAME' differs from new data, moving it to '$HOME/.gitignore.d/$VCSH_REPO_NAME.bak'"
 		mv -f "$HOME/.gitignore.d/$VCSH_REPO_NAME" "$HOME/.gitignore.d/$VCSH_REPO_NAME.bak" ||
@@ -157,7 +156,7 @@ setup() {
 	git config core.worktree     "$GIT_WORK_TREE"
 	git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
 	git config vcsh.vcsh         'true'
-	touch   "$HOME/.gitignore.d/$VCSH_REPO_NAME"
+	touch   "$HOME/.gitignore.d/$VCSH_REPO_NAME" || error "could not touch '$HOME/.gitignore.d/$VCSH_REPO_NAME'"
 	git add "$HOME/.gitignore.d/$VCSH_REPO_NAME"
 }
 

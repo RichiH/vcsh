@@ -13,5 +13,9 @@
 * 53: Could not move file
 * 54: Directory exists
 * 55: File exists
+* 56: 
+* 57: Could not write to file
+* 57: Could not delete directory
+* 59: Could not delete file
 
 * 99: Error code reserved for actions that should never happen
