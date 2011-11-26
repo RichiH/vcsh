@@ -8,8 +8,10 @@ _arguments \
 		enter\:"Enter repo; spawn new \$SHELL"
 		init\:"init & clone from repo"
 		list\:"list all repos"
+		newfiles\:"list all untracked files in \$HOME"
 		run\:"run command on repo"
 		seed-gitignore\:"seed .gitignore.d/foo from git ls-files"
 		setup\:"set up repo with recommended settings"
+		status\:"show status of all files in \$HOME"
 		\<REPO\>\:"Run git command directly"
 	))'

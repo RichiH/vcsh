@@ -16,12 +16,14 @@ help() {
    enter                Enter repository; spawn new $SHELL
    init <repo>          Initialize a new repository
    list                 List all repositories
+   newfiles             List all untracked files in \$HOME
    run <repo> \\
        <command>        Use this repository
 
    seed-gitignore \\
    <repo>               Seed .gitignore.d/<repo> from git ls-files
    setup                Set up repository with recommended settings
+   status               Show status of all files in \$HOME
 
    <repo> <git command> Special command that allows you to run git commands
                         directly without having to type so much ;)" >&2
@@ -107,6 +109,17 @@ list() {
 	done
 }
 
+newfiles() {
+	cd || fatal "could not cd" 1
+	[ ! -e .git ] || fatal "~/.git already exists?" 50
+	[ ! -e .gitignore ] || fatal "~/.gitignore already exists?" 51
+	git init >/dev/null
+	list | while read repo; do vcsh $repo ls-files; done > .gitignore
+	git status
+	rm -rf .git .gitignore
+	cd - || fatal "could not cd -" 1
+}
+
 run() {
 	use
 	$VCSH_EXTERNAL_COMMAND
@@ -153,6 +166,12 @@ setup() {
 	git add "$HOME/.gitignore.d/$VCSH_REPO_NAME"
 }
 
+status() {
+	echo " === $HOME === "
+	newfiles
+	list | while read repo; do echo " === $repo === " && vcsh run $repo git status; done
+}
+
 use() {
 	if [ ! -d "$GIT_DIR" ]; then
 		fatal "no repository found for '$VCSH_REPO_NAME'" 12
@@ -181,7 +200,9 @@ elif [ "$1" = 'delete' ] ||
 	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
 	[ "$1" = 'run' ] && shift 2 && export VCSH_EXTERNAL_COMMAND="$@"
 	[ "$1" = 'seed-gitignore' ] && export VCSH_COMMAND=seed_gitignore
-elif [ "$1" = 'list' ]; then
+elif [ "$1" = 'list' ] ||
+     [ "$1" = 'newfiles' ] ||
+     [ "$1" = 'status' ]; then
 	export VCSH_COMMAND="$1"
 elif [ -n "$1" ]; then
 	export VCSH_COMMAND=run
