@@ -179,8 +179,8 @@ elif [ "$1" = 'delete' ] ||
 	export VCSH_COMMAND="$1"
 	export VCSH_REPO_NAME="$2"
 	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
-	[ "$1" = 'run' ] && shift 2 && export VCSH_EXTERNAL_COMMAND="$@"
-	[ "$1" = 'seed-gitignore' ] && export VCSH_COMMAND=seed_gitignore
+	[ "$VCSH_COMMAND" = 'run' ] && shift 2 && export VCSH_EXTERNAL_COMMAND="$@"
+	[ "$VCSH_COMMAND" = 'seed-gitignore' ] && export VCSH_COMMAND='seed_gitignore'
 elif [ "$1" = 'list' ]; then
 	export VCSH_COMMAND="$1"
 elif [ -n "$1" ]; then
