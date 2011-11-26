@@ -1,7 +1,7 @@
 PREFIX=/usr
 
 manpages=vcsh.1
-all=manpages
+all=test manpages
 
 all: $(all)
 
@@ -36,6 +36,9 @@ purge: uninstall
 	rmdir -p --ignore-fail-on-non-empty $(DESTDIR)$(PREFIX)/share/man/man1/
 	rmdir -p --ignore-fail-on-non-empty $(DESTDIR)$(PREFIX)/share/doc/
 	rmdir -p --ignore-fail-on-non-empty $(DESTDIR)$(PREFIX)/share/zsh/vendor-completions/
+
+test:
+	if which git > /dev/null ; then :; else echo "'git' not found, exiting..."; exit 1; fi
 
 moo:
 	if [ -x /usr/games/cowsay ]; then /usr/games/cowsay "I hope you're happy now..."; fi
