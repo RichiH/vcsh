@@ -8,6 +8,7 @@ _arguments \
 		enter\:"Enter repo; spawn new \$SHELL"
 		init\:"init & clone from repo"
 		list\:"list all repos"
+		rename\:"rename repo"
 		run\:"run command on repo"
 		seed-gitignore\:"seed .gitignore.d/foo from git ls-files"
 		setup\:"set up repo with recommended settings"

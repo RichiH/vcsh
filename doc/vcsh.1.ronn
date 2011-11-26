@@ -15,6 +15,8 @@ vcsh(1) - manage and sync config files via git
 
 `vcsh` list
 
+`vcsh` rename <repo> <newname>
+
 `vcsh` run <repo> <command>
 
 `vcsh` seed-gitignore <repo>
@@ -61,6 +63,9 @@ A sample configuration for `vcsh` and `mr` can be found at
 
 * list:
   List all local vcsh repositories.
+
+* rename:
+  Rename a repository.
 
 * run:
   Run command with <$GIT_DIR> and <$GIT_WORK_TREE> set. Allows you to run any

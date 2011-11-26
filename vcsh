@@ -16,6 +16,8 @@ help() {
    enter                Enter repository; spawn new $SHELL
    init <repo>          Initialize a new repository
    list                 List all repositories
+   rename <repo> \\
+          <newname>     Rename repository
    run <repo> \\
        <command>        Use this repository
 
@@ -91,6 +93,10 @@ enter() {
 	$SHELL
 }
 
+git_dir_exists() {
+	[ -d "$GIT_DIR" ] || fatal "no repository found for '$VCSH_REPO_NAME'" 12
+}
+
 init() {
 	[ ! -e "$GIT_DIR" ] || fatal "'$GIT_DIR' exists" 10
 	export GIT_WORK_TREE="$HOME"
@@ -104,6 +110,13 @@ list() {
 	for i in "$VCSH_BASE"/*.git; do
 		echo $(basename "$i" .git)
 	done
+}
+
+rename() {
+	git_dir_exists
+	[ -d "$GIT_DIR_NEW" ] && fatal "'$GIT_DIR_NEW' exists" 54
+	mv -f "$GIT_DIR" "$GIT_DIR_NEW" || fatal "Could not mv '$GIT_DIR' '$GIT_DIR_NEW'" 52
+
 }
 
 run() {
@@ -153,9 +166,7 @@ setup() {
 }
 
 use() {
-	if [ ! -d "$GIT_DIR" ]; then
-		fatal "no repository found for '$VCSH_REPO_NAME'" 12
-	fi
+	git_dir_exists
 	export GIT_WORK_TREE="$(git config --get core.worktree)"
 	export VCSH_DIRECTORY="$VCSH_REPO_NAME"
 }
@@ -170,14 +181,17 @@ if [ "$1" = 'clone' ]; then
 elif [ "$1" = 'delete' ] ||
      [ "$1" = 'enter' ] ||
      [ "$1" = 'init' ] ||
+     [ "$1" = 'rename' ] ||
      [ "$1" = 'run' ] ||
      [ "$1" = 'seed-gitignore' ] ||
      [ "$1" = 'setup' ]; then
-	[ -z $2 ] && fatal "$1: please specify repository to work on" 1
-	[ "$1" = 'run' -a -z "$3" ] && fatal "$1: please specify a command" 1
+	[ -z $2 ]                      && fatal "$1: please specify repository to work on" 1
+	[ "$1" = 'rename' -a -z "$3" ] && fatal "$1: please specify a target name" 1
+	[ "$1" = 'run' -a -z "$3" ]    && fatal "$1: please specify a command" 1
 	export VCSH_COMMAND="$1"
 	export VCSH_REPO_NAME="$2"
 	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
+	[ "$VCSH_COMMAND" = 'rename' ]         && export GIT_DIR_NEW="$VCSH_BASE/$3.git"
 	[ "$VCSH_COMMAND" = 'run' ] && shift 2 && export VCSH_EXTERNAL_COMMAND="$@"
 	[ "$VCSH_COMMAND" = 'seed-gitignore' ] && export VCSH_COMMAND='seed_gitignore'
 elif [ "$1" = 'list' ]; then
