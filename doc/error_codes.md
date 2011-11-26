@@ -13,5 +13,3 @@
 * 51: Could not create file
 * 52: Could not move directory
 * 53: Could not move file
-
-* 99: Error code reserved for actions that should never happen
