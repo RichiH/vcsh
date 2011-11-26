@@ -84,7 +84,7 @@ To continue, type \"Yes, do as I say\""
 	for file in $files; do
 		rm -f $file || info "could not delete '$file', continuing with deletion"
 	done
-	rm -rf "$GIT_DIR" || info "could not delete '$GIT_DIR'"
+	rmdir "$GIT_DIR" || info "could not delete '$GIT_DIR'"
 	cd "$old_dir"
 }
 
