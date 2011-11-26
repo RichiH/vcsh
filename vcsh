@@ -96,7 +96,6 @@ init() {
 	export GIT_WORK_TREE="$HOME"
 	mkdir -p "$GIT_WORK_TREE"
 	cd "$GIT_WORK_TREE" || fatal "could not enter '$GIT_WORK_TREE'" 11
-	cd "$GIT_WORK_TREE"
 	git init
 	setup
 }
