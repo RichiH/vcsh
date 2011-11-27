@@ -110,6 +110,18 @@ list() {
 	done
 }
 
+#get_files() {
+#	return $(git ls-files)
+#}
+#
+#list_tracked_all() {
+#	use
+#	for repo in $(list); do
+#		files="$files $(get_files $repo)"
+#	done
+#	echo $files | sort -u
+#}
+
 rename() {
 	git_dir_exists
 	[ -d "$GIT_DIR_NEW" ] && fatal "'$GIT_DIR_NEW' exists" 54
@@ -136,9 +148,9 @@ seed_gitignore() {
 	echo '*' > "$tempfile" || fatal "could not write to '$tempfile'" 57
 	for gitignore in $gitignores; do
 		echo "$gitignore" | sed 's/^/!/' >> "$tempfile" || fatal "could not write to '$tempfile'" 57
-		[ -d "$gitignore" ] && echo "$gitignore/*" | sed 's/^/!/'>> "$tempfile" || fatal "could not write to '$tempfile'" 57
+		[ -d "$gitignore" ] && { echo "$gitignore/*" | sed 's/^/!/' >> "$tempfile" || fatal "could not write to '$tempfile'" 57; }
 	done
-	if [ diff -N "$tempfile" "$HOME/.gitignore.d/$VCSH_REPO_NAME" > /dev/null ]; then
+	if diff -N "$tempfile" "$HOME/.gitignore.d/$VCSH_REPO_NAME" > /dev/null; then
 		rm -f "$tempfile" || error "could not delete '$tempfile'"
 		exit
 	fi
@@ -176,6 +188,7 @@ if [ "$1" = 'clone' ]; then
 elif [ "$1" = 'delete' ] ||
      [ "$1" = 'enter' ] ||
      [ "$1" = 'init' ] ||
+     [ "$1" = 'list-tracked-all' ] ||
      [ "$1" = 'rename' ] ||
      [ "$1" = 'run' ] ||
      [ "$1" = 'seed-gitignore' ] ||
@@ -188,7 +201,8 @@ elif [ "$1" = 'delete' ] ||
 	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
 	[ "$VCSH_COMMAND" = 'rename' ]         && export GIT_DIR_NEW="$VCSH_BASE/$3.git"
 	[ "$VCSH_COMMAND" = 'run' ] && shift 2 && export VCSH_EXTERNAL_COMMAND="$@"
-	[ "$VCSH_COMMAND" = 'seed-gitignore' ] && export VCSH_COMMAND='seed_gitignore'
+	[ "$VCSH_COMMAND" = 'seed-gitignore' ]
+#	[ "$VCSH_COMMAND" = 'seed-gitignore' ] && export VCSH_COMMAND='seed_gitignore'
 elif [ "$1" = 'list' ]; then
 	export VCSH_COMMAND="$1"
 elif [ -n "$1" ]; then
@@ -216,5 +230,6 @@ do
 done
 
 verbose "$VCSH_COMMAND begin"
+export VCSH_COMMAND=$(echo $VCSH_COMMAND | sed 's/-/_/g')
 $VCSH_COMMAND
 verbose "$VCSH_COMMAND end, exiting"
