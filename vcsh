@@ -200,7 +200,11 @@ elif [ "$1" = 'delete' ] ||
 	export VCSH_REPO_NAME="$2"
 	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
 	[ "$VCSH_COMMAND" = 'rename' ]         && export GIT_DIR_NEW="$VCSH_BASE/$3.git"
-	[ "$VCSH_COMMAND" = 'run' ] && shift 2 && export VCSH_EXTERNAL_COMMAND="$*"
+	if [ "$VCSH_COMMAND" = 'run' ]; then
+		shift 2
+		export VCSH_EXTERNAL_COMMAND="$*"
+		echo $VCSH_REPO_NAME | grep -q '/' && export GIT_DIR=$VCSH_REPO_NAME
+	fi
 	[ "$VCSH_COMMAND" = 'seed-gitignore' ]
 #	[ "$VCSH_COMMAND" = 'seed-gitignore' ] && export VCSH_COMMAND='seed_gitignore'
 elif [ "$1" = 'list' ]; then
