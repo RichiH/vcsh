@@ -3,7 +3,7 @@ vcsh(1) - manage and sync config files via git
 
 ## SYNOPSIS
 
-`vcsh` clone <url> [<location>]
+`vcsh` clone <url> [<repo>]
 
 `vcsh` delete <repo>
 
@@ -43,6 +43,10 @@ vcsh. That being said, you can easily use `vcsh` without `mr` if you prefer.
 
 A sample configuration for `vcsh` and `mr` can be found at
 *https://github.com/RichiH/vcsh_mr_template*
+
+Please note that you can always use a path instead of a name for <repo>.
+This is needed to support mr and other scripts properly and of no concern to
+an interactive user.
 
 ## OPTIONS
 

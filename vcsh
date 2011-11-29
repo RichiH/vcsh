@@ -200,11 +200,7 @@ elif [ "$1" = 'delete' ] ||
 	export VCSH_REPO_NAME="$2"
 	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
 	[ "$VCSH_COMMAND" = 'rename' ]         && export GIT_DIR_NEW="$VCSH_BASE/$3.git"
-	if [ "$VCSH_COMMAND" = 'run' ]; then
-		shift 2
-		export VCSH_EXTERNAL_COMMAND="$*"
-		echo $VCSH_REPO_NAME | grep -q '/' && export GIT_DIR=$VCSH_REPO_NAME
-	fi
+	[ "$VCSH_COMMAND" = 'run' ] && shift 2 && export VCSH_EXTERNAL_COMMAND="$*"
 	[ "$VCSH_COMMAND" = 'seed-gitignore' ]
 #	[ "$VCSH_COMMAND" = 'seed-gitignore' ] && export VCSH_COMMAND='seed_gitignore'
 elif [ "$1" = 'list' ]; then
@@ -220,6 +216,14 @@ else
 	# $1 is empty, or 'help'
 	help && exit
 fi
+
+# Did we receive a directory instead of a name?
+# Mangle the input to fit normal operation.
+if echo $VCSH_REPO_NAME | grep -q '/'; then
+	export GIT_DIR=$VCSH_REPO_NAME
+	export VCSH_REPO_NAME=$(basename $VCSH_REPO_NAME .git)
+fi
+
 
 for check_directory in "$VCSH_BASE" "$HOME/.gitignore.d"
 do
