@@ -168,8 +168,7 @@ setup() {
 	git config core.worktree     "$GIT_WORK_TREE"
 	git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
 	git config vcsh.vcsh         'true'
-	touch   "$HOME/.gitignore.d/$VCSH_REPO_NAME" || error "could not touch '$HOME/.gitignore.d/$VCSH_REPO_NAME'"
-	git add "$HOME/.gitignore.d/$VCSH_REPO_NAME"
+	[ -e "$HOME/.gitignore.d/$VCSH_REPO_NAME" ] && git add -f "$HOME/.gitignore.d/$VCSH_REPO_NAME"
 }
 
 use() {
