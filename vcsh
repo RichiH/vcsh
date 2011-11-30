@@ -1,6 +1,6 @@
 #!/bin/sh
 
-[ -n "$VCSH_DEBUG" ]      && set -x
+[ -n "$VCSH_DEBUG" ]      && set -vx
 [ -z "$XDG_CONFIG_HOME" ] && XDG_CONFIG_HOME="$HOME/.config"
 [ -z "$VCSH_BASE" ]       && VCSH_BASE="$XDG_CONFIG_HOME/vcsh/repo.d"
 
