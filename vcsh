@@ -209,7 +209,6 @@ elif [ "$1" = 'delete' ] ||
 		fi
 	fi
 	[ "$VCSH_COMMAND" = 'seed-gitignore' ]
-#	[ "$VCSH_COMMAND" = 'seed-gitignore' ] && export VCSH_COMMAND='seed_gitignore'
 elif [ "$1" = 'list' ]; then
 	export VCSH_COMMAND="$1"
 elif [ -n "$1" ]; then
