@@ -15,6 +15,10 @@ vcsh(1) - manage and sync config files via git
 
 `vcsh` list
 
+`vcsh` list-tracked
+
+`vcsh` list-tracked-by <repo>
+
 `vcsh` rename <repo> <newname>
 
 `vcsh` run <repo> <command>
@@ -67,6 +71,12 @@ an interactive user.
 
 * list:
   List all local vcsh repositories.
+
+* list-tracked:
+  List all files tracked by vcsh.
+
+* list-tracked-by:
+  List files tracked by a repository.
 
 * rename:
   Rename a repository.

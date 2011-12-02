@@ -8,6 +8,8 @@ _arguments \
 		enter\:"Enter repo; spawn new \$SHELL"
 		init\:"init & clone from repo"
 		list\:"list all repos"
+		list-tracked\:"list all files tracked by vcsh"
+		list-tracked-by\:"list files tracked by a repo"
 		rename\:"rename repo"
 		run\:"run command on repo"
 		seed-gitignore\:"seed .gitignore.d/foo from git ls-files"

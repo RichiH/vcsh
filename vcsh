@@ -16,6 +16,9 @@ help() {
    enter                Enter repository; spawn new $SHELL
    init <repo>          Initialize a new repository
    list                 List all repositories
+   list-tracked         List all files tracked by vcsh
+   list-tracked-by \\
+        <repo>          List files tracked by a repository
    rename <repo> \\
           <newname>     Rename repository
    run <repo> \\
