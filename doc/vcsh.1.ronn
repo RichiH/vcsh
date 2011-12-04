@@ -29,6 +29,8 @@ vcsh(1) - manage and sync config files via git
 
 `vcsh` <repo> <gitcommand>
 
+`vcsh` <repo>
+
 
 ## DESCRIPTION
 
@@ -100,6 +102,9 @@ an interactive user.
 
 * <repo> <gitcommand>:
   Shortcut to run `vcsh` on a repo. Will prepend `git` to <command> by itself.
+
+* <repo>:
+  Shortcut to run `vcsh enter <repo>`.
 
 ## ENVIRONMENT
 
