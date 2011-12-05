@@ -1,5 +1,11 @@
 #!/bin/sh
 
+# This program is licensed under the GNU GPL version 2 or later.
+# (c) Richard "RichiH" Hartmann, 2011
+# For details, see LICENSE. To submit patches, you have to agree to
+# license your code under the GNU GPL version 2 or later.
+
+
 [ -n "$VCSH_DEBUG" ]      && set -vx
 [ -z "$XDG_CONFIG_HOME" ] && XDG_CONFIG_HOME="$HOME/.config"
 [ -z "$VCSH_BASE" ]       && VCSH_BASE="$XDG_CONFIG_HOME/vcsh/repo.d"
