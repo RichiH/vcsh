@@ -1,22 +1,4 @@
-# generic #
-
-`vcsh rename`
-
-# zsh-specific #
-
-* Hack vcsh so it can be sourced by zsh, bash & dash
-** bash & dash done
-** zsh will need some emulate sh
-* Use PROMPT_SUBST in my own prompt instead of calling buildPS1 again to make this work for everyone, not just me
-
-
-# Once `vcsh use` works again #
-
-* If we are within a vcsh already, only help, run and exit should be allowed
-* ^d re-binding does fail weirdly once i vcsh exit
-* Set git config core.worktree $HOME or ../../../.. ?
 * vcsh clone fails when remote is empty
-
 
 # Related #
 
@@ -25,6 +7,4 @@
 
 # Undecided #
 
-* Make sure `vcsh run foo` only runs for git & gitk (maybe?)
-* vcsh remove/delete
 * Have an aborted vcsh clone delete the repo it tried to clone?
