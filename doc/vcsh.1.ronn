@@ -23,9 +23,9 @@ vcsh(1) - manage and sync config files via git
 
 `vcsh` run <repo> <command>
 
-`vcsh` seed-gitignore <repo>
-
 `vcsh` setup <repo>
+
+`vcsh` write-gitignore <repo>
 
 `vcsh` <repo> <gitcommand>
 
@@ -94,11 +94,11 @@ an interactive user.
   This is needed to support mr and other scripts properly and of no concern to
   an interactive user.
 
-* seed-gitignore:
-  Seed .gitignore.d/<repo> from git ls-files.
-
 * setup:
   Set up repository with recommended settings.
+
+* write-gitignore:
+  Write .gitignore.d/<repo> via git ls-files.
 
 * <repo> <gitcommand>:
   Shortcut to run `vcsh` on a repo. Will prepend `git` to <command> by itself.

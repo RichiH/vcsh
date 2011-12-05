@@ -12,7 +12,7 @@ _arguments \
 		list-tracked-by\:"list files tracked by a repo"
 		rename\:"rename repo"
 		run\:"run command on repo"
-		seed-gitignore\:"seed .gitignore.d/foo from git ls-files"
 		setup\:"set up repo with recommended settings"
+		write-gitignore\:"write .gitignore.d/foo via git ls-files"
 		\<REPO\>\:"Run git command directly"
 	))'
