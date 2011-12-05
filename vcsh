@@ -217,7 +217,7 @@ elif [ "$1" = 'delete' ] ||
 elif [ "$1" = 'list' ] ||
      [ "$1" = 'list-tracked' ]; then
 	export VCSH_COMMAND="$1"
-elif [ -n "$1" -a -n "$2" ]; then
+elif [ -n "$2" ]; then
 	export VCSH_COMMAND='run'
 	export VCSH_REPO_NAME="$1"
 	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
