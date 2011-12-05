@@ -8,7 +8,8 @@
 
 [ -n "$VCSH_DEBUG" ]      && set -vx
 [ -z "$XDG_CONFIG_HOME" ] && XDG_CONFIG_HOME="$HOME/.config"
-[ -z "$VCSH_BASE" ]       && VCSH_BASE="$XDG_CONFIG_HOME/vcsh/repo.d"
+[ -z "$VCSH_REPO_D" ]     && VCSH_REPO_D="$XDG_CONFIG_HOME/vcsh/repo.d"
+[ -z "$VCSH_BASE" ]       && VCSH_BASE="$HOME"
 
 SELF=$(basename $0)
 
@@ -76,7 +77,7 @@ clone() {
 }
 
 delete() {
-	cd "$HOME" || fatal "could not enter '$HOME'" 11
+	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
 	use
 	info "This operation WILL DETROY DATA!"
 	files=$(git ls-files)
@@ -105,7 +106,7 @@ git_dir_exists() {
 
 init() {
 	[ ! -e "$GIT_DIR" ] || fatal "'$GIT_DIR' exists" 10
-	export GIT_WORK_TREE="$HOME"
+	export GIT_WORK_TREE="$VCSH_BASE"
 	mkdir -p "$GIT_WORK_TREE" || fatal "could not create '$GIT_WORK_TREE'" 50
 	cd "$GIT_WORK_TREE" || fatal "could not enter '$GIT_WORK_TREE'" 11
 	git init
@@ -113,13 +114,13 @@ init() {
 }
 
 list() {
-	for i in "$VCSH_BASE"/*.git; do
+	for i in "$VCSH_REPO_D"/*.git; do
 		echo $(basename "$i" .git)
 	done
 }
 
 get_files() {
-	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
+	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 	git ls-files
 }
 
@@ -151,7 +152,7 @@ setup() {
 	git config core.worktree     "$GIT_WORK_TREE"
 	git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
 	git config vcsh.vcsh         'true'
-	[ -e "$HOME/.gitignore.d/$VCSH_REPO_NAME" ] && git add -f "$HOME/.gitignore.d/$VCSH_REPO_NAME"
+	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME"
 }
 
 use() {
@@ -162,7 +163,7 @@ use() {
 
 write_gitignore() {
 	use
-	cd "$HOME" || fatal "could not enter '$HOME'" 11
+	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
 	gitignores=$(for file in $(git ls-files); do
 		while true; do
 			echo $file; new="${file%/*}"
@@ -176,17 +177,17 @@ write_gitignore() {
 		echo "$gitignore" | sed 's/^/!/' >> "$tempfile" || fatal "could not write to '$tempfile'" 57
 		[ -d "$gitignore" ] && { echo "$gitignore/*" | sed 's/^/!/' >> "$tempfile" || fatal "could not write to '$tempfile'" 57; }
 	done
-	if diff -N "$tempfile" "$HOME/.gitignore.d/$VCSH_REPO_NAME" > /dev/null; then
+	if diff -N "$tempfile" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" > /dev/null; then
 		rm -f "$tempfile" || error "could not delete '$tempfile'"
 		exit
 	fi
-	if [ -e "$HOME/.gitignore.d/$VCSH_REPO_NAME" ]; then
-		info "'$HOME/.gitignore.d/$VCSH_REPO_NAME' differs from new data, moving it to '$HOME/.gitignore.d/$VCSH_REPO_NAME.bak'"
-		mv -f "$HOME/.gitignore.d/$VCSH_REPO_NAME" "$HOME/.gitignore.d/$VCSH_REPO_NAME.bak" ||
-			fatal "could not move '$HOME/.gitignore.d/$VCSH_REPO_NAME' to '$HOME/.gitignore.d/$VCSH_REPO_NAME.bak'" 53
+	if [ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ]; then
+		info "'$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME' differs from new data, moving it to '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME.bak'"
+		mv -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME.bak" ||
+			fatal "could not move '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME' to '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME.bak'" 53
 	fi
-	mv -f "$tempfile" "$HOME/.gitignore.d/$VCSH_REPO_NAME" ||
-		fatal "could not move '$tempfile' to '$HOME/.gitignore.d/$VCSH_REPO_NAME'" 53
+	mv -f "$tempfile" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ||
+		fatal "could not move '$tempfile' to '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME'" 53
 }
 
 if [ "$1" = 'clone' ]; then
@@ -195,7 +196,7 @@ if [ "$1" = 'clone' ]; then
 	GIT_REMOTE="$2"
 	[ -n "$3" ] && VCSH_REPO_NAME="$3" || VCSH_REPO_NAME=$(basename "$GIT_REMOTE" .git)
 	export VCSH_REPO_NAME
-	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
+	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 elif [ "$1" = 'delete' ] ||
      [ "$1" = 'enter' ] ||
      [ "$1" = 'init' ] ||
@@ -209,8 +210,8 @@ elif [ "$1" = 'delete' ] ||
 	[ "$1" = 'run' -a -z "$3" ]    && fatal "$1: please specify a command" 1
 	export VCSH_COMMAND="$1"
 	export VCSH_REPO_NAME="$2"
-	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
-	[ "$VCSH_COMMAND" = 'rename' ]         && export GIT_DIR_NEW="$VCSH_BASE/$3.git"
+	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
+	[ "$VCSH_COMMAND" = 'rename' ]         && export GIT_DIR_NEW="$VCSH_REPO_D/$3.git"
 	[ "$VCSH_COMMAND" = 'run' ] && shift 2 && export VCSH_EXTERNAL_COMMAND="$*"
 	[ "$VCSH_COMMAND" = 'write-gitignore' ]
 elif [ "$1" = 'list' ] ||
@@ -219,14 +220,14 @@ elif [ "$1" = 'list' ] ||
 elif [ -n "$2" ]; then
 	export VCSH_COMMAND='run'
 	export VCSH_REPO_NAME="$1"
-	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
+	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 	[ -d $GIT_DIR ] || { help; exit 1; }
 	shift 1
 	export VCSH_EXTERNAL_COMMAND="git $*"
 elif [ -n "$1" ]; then
 	export VCSH_COMMAND='enter'
 	export VCSH_REPO_NAME="$1"
-	export GIT_DIR="$VCSH_BASE/$VCSH_REPO_NAME.git"
+	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 	[ -d $GIT_DIR ] || { help; exit 1; }
 else
 	# $1 is empty, or 'help'
@@ -241,7 +242,7 @@ if echo $VCSH_REPO_NAME | grep -q '/'; then
 fi
 
 
-for check_directory in "$VCSH_BASE" "$HOME/.gitignore.d"
+for check_directory in "$VCSH_REPO_D" "$VCSH_BASE/.gitignore.d"
 do
 	if [ ! -d "$check_directory" ]; then
 		if [ -e "$check_directory" ]; then
