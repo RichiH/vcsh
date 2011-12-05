@@ -19,7 +19,7 @@ help() {
          [<repo>]       Clone from an existing repository
    help                 Display this help text
    delete               Delete an existing repository
-   enter                Enter repository; spawn new $SHELL
+   enter                Enter repository; spawn new instance of \$SHELL
    init <repo>          Initialize a new repository
    list                 List all repositories
    list-tracked         List all files tracked by vcsh
@@ -33,9 +33,8 @@ help() {
    write-gitignore \\
    <repo>               Write .gitignore.d/<repo> via git ls-files
 
-   <repo> <git command> Special command that allows you to run git commands
-                        directly without having to type so much ;)" >&2
-   <repo>               Special command that enters a repository
+   <repo> <git command> Shortcut to run git commands directly
+   <repo>               Shortcut to enter repository" >&2
 }
 
 debug() {
