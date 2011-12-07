@@ -64,7 +64,7 @@ clone() {
 	git remote add origin "$GIT_REMOTE"
 	git config branch.master.remote origin
 	git config branch.master.merge  refs/heads/master
-	if [ -z $(git ls-remote 2> /dev/null) ]; then
+	if [ -z $(git ls-remote origin master 2> /dev/null) ]; then
 		info "remote is empty, not merging anything"
 		exit
 	fi
