@@ -2,12 +2,24 @@ vcsh - manage and sync config files via git
 
 # Index #
 
-1. Introduction
-2. Overview
-3. Getting Started
-4. Usage
+1. Contact
+2. Introduction
+3. Overview
+4. Getting Started
+5. Usage
 
-# 1 Introduction #
+# 1 Contact #
+
+There are several ways to get in touch with the author and a small but committed
+community around the general idea of version controlling your (digital) life.
+
+* IRC: #vcs-home on irc.oftc.net
+
+* Mailing list: vcs-home@lists.madduck.net
+
+* Pull requests or issues on https://github.com/RichiH/vcsh
+
+# 2 Introduction #
 
 vcsh allows you to have several git repositories, all maintaining their working
 trees in $HOME without clobbering each other. That, in turn, means you can have
@@ -23,9 +35,9 @@ The following overview will try to give you an idea of the use cases and
 advantages of vcsh. See sections 3 and 4 for detailed instructions and
 examples.
 
-# 2 Overview
+# 3 Overview
 
-## 2.1 Comparison to Other Solutions ##
+## 3.1 Comparison to Other Solutions ##
 
 Most people who decide to put their dotfiles under version control start with a
 **single repository in $HOME**, adding all their dotfiles (and possibly more)
@@ -48,7 +60,7 @@ Furthermore, by making use of [mr] [1], it makes it very easy to enable/disable
 and clone a large number of repositories. The use of mr is technically optional
 (see 4.3), but it will be an integral part of the proposed system that follows.
 
-## 2.2 Default Directory Layout ##
+## 3.2 Default Directory Layout ##
 
 To illustrate, this is what a possible directory structure looks like.
 
@@ -132,7 +144,7 @@ will throw a warning and exit. Move away your old config and try again.
 Optionally, merge your local and your global configs afterwards and push with
 `vcsh run foo git push`.
 
-## 2.3 Moving into a New Host ##
+## 3.3 Moving into a New Host ##
 
 To illustrate further, the following steps could move your desired
 configuration to a new host.
@@ -152,7 +164,7 @@ Hopefully the above could help explain how this approach saves time by
 
 If you want to give vcsh a try, follow the instructions below.
 
-# 3 Getting Started #
+# 4 Getting Started #
 
 Below, you will find a few different methods for setting up vcsh:
 
@@ -160,9 +172,9 @@ Below, you will find a few different methods for setting up vcsh:
 2. The Steal-from-Template Way
 3. The Manual Way
 
-### 3.1 The Template Way ###
+### 4.1 The Template Way ###
 
-#### 3.1.1 Prerequisites ####
+#### 4.1.1 Prerequisites ####
 
 Make sure none of the following files and directories exist for your test
 (user). If they do, move them away for now:
@@ -179,7 +191,7 @@ the template will be stored.
 
     apt-get install mr
 
-#### 3.1.2 Clone the Template ####
+#### 4.1.2 Clone the Template ####
 
     mkdir -p ~/work/git
     cd !$
@@ -189,7 +201,7 @@ the template will be stored.
     cd
     vcsh clone git://github.com/RichiH/vcsh_mr_template.git mr.vcsh
 
-#### 3.1.3 Enable Your Test Repository ####
+#### 4.1.3 Enable Your Test Repository ####
 
     mv ~/.zsh   ~/zsh.bak
     mv ~/.zshrc ~/zshrc.bak
@@ -198,7 +210,7 @@ the template will be stored.
     cd
     mr up
 
-#### 3.1.4 Set Up Your Own Repositories ####
+#### 4.1.4 Set Up Your Own Repositories ####
 
 Now, it's time to edit the template config and fill it with your own remotes:
 
@@ -218,7 +230,7 @@ And then create your own stuff:
 
 Done!
 
-### 3.2 The Steal-from-Template Way ###
+### 4.2 The Steal-from-Template Way ###
 
 You're welcome to clone the example repository:
 
@@ -228,7 +240,7 @@ Look around in the clone. It should be reasonably simple to understand. If not,
 poke me, RichiH, on Freenode (query) or OFTC (#vcs-home).
 
 
-### 3.3 The Manual Way ###
+### 4.3 The Manual Way ###
 
 This is how my old setup procedure looked like. Adapt it to your own style or
 copy mine verbatim, either is fine.
@@ -264,9 +276,9 @@ mr is used to actually retrieve configs, etc
     ~ % cd
     ~ % mr -j 5 up
 
-# 4 Usage #
+# 5 Usage #
 
-### 4.1 Keeping repositories Up-to-Date ###
+### 5.1 Keeping repositories Up-to-Date ###
 
 This is the beauty of it all. Once you are set up, just run:
 
@@ -275,7 +287,7 @@ This is the beauty of it all. Once you are set up, just run:
 
 Neat.
 
-### 4.1 Making Changes ###
+### 5.1 Making Changes ###
 
 After you have made some changes, for which you would normally use `git add`
 and `git commit`, use the vcsh wrapper (like above):
@@ -288,7 +300,7 @@ By the way, you'll have to use -f/--force flag with git-add because all files
 will be ignored by default. This is to show you only useful output when running
 git-status. A fix for this problem is being worked on.
 
-### 4.3 Using vcsh without mr ###
+### 5.3 Using vcsh without mr ###
 
 vcsh encourages you to use [mr] [1]. It helps you manage a large number of
 repositories by running the necessary vcsh commands for you. You may choose not
