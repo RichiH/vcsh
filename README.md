@@ -1,4 +1,4 @@
-vcsh - manage and sync config files via git
+vcsh - manage config files in $HOME via fake bare git repositories
 
 # Index #
 

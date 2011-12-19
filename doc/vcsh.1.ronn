@@ -1,5 +1,5 @@
-vcsh(1) - manage and sync config files via git
-==============================================
+vcsh(1) - manage config files in $HOME via fake bare git repositories
+=====================================================================
 
 ## SYNOPSIS
 
