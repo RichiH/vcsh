@@ -6,10 +6,13 @@
 # license your code under the GNU GPL version 2 or later.
 
 
-[ -n "$VCSH_DEBUG" ]      && set -vx
-[ -z "$XDG_CONFIG_HOME" ] && XDG_CONFIG_HOME="$HOME/.config"
-[ -z "$VCSH_REPO_D" ]     && VCSH_REPO_D="$XDG_CONFIG_HOME/vcsh/repo.d"
-[ -z "$VCSH_BASE" ]       && VCSH_BASE="$HOME"
+[ -n "$VCSH_DEBUG" ]                  && set -vx
+[ -z "$XDG_CONFIG_HOME" ]             && XDG_CONFIG_HOME="$HOME/.config"
+[ -r "$XDG_CONFIG_HOME/vcsh/config" ] && . "$XDG_CONFIG_HOME/vcsh/config"
+[ -n "$VCSH_DEBUG" ]                  && set -vx
+[ -z "$VCSH_REPO_D" ]                 && VCSH_REPO_D="$XDG_CONFIG_HOME/vcsh/repo.d"
+[ -z "$VCSH_BASE" ]                   && VCSH_BASE="$HOME"
+[ -z "$VCSH_GITIGNORE" ]              && VCSH_GITIGNORE='exact'
 
 SELF=$(basename $0)
 
@@ -179,7 +182,9 @@ write_gitignore() {
 	echo '*' > "$tempfile" || fatal "could not write to '$tempfile'" 57
 	for gitignore in $gitignores; do
 		echo "$gitignore" | sed 's/^/!/' >> "$tempfile" || fatal "could not write to '$tempfile'" 57
-		[ -d "$gitignore" ] && { echo "$gitignore/*" | sed 's/^/!/' >> "$tempfile" || fatal "could not write to '$tempfile'" 57; }
+		if [ x$VCSH_GITIGNORE = x'recursive' ] && [ -d "$gitignore" ]; then
+			{ echo "$gitignore/*" | sed 's/^/!/' >> "$tempfile" || fatal "could not write to '$tempfile'" 57; }
+		fi
 	done
 	if diff -N "$tempfile" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" > /dev/null; then
 		rm -f "$tempfile" || error "could not delete '$tempfile'"
@@ -193,6 +198,10 @@ write_gitignore() {
 	mv -f "$tempfile" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ||
 		fatal "could not move '$tempfile' to '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME'" 53
 }
+
+if [ ! x$VCSH_GITIGNORE = x'exact' ] && [ ! x$VCSH_GITIGNORE = x'recursive' ]; then
+	fatal "\$VCSH_GITIGNORE must be either 'exact' or 'recursive'" 1
+fi
 
 if [ "$1" = 'clone' ]; then
 	[ -z $2 ] && fatal "$1: please specify a remote" 1
