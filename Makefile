@@ -11,7 +11,7 @@ install: all
 	install -d $(DESTDIR)$(PREFIX)/share/man/man1
 	install -m 0644 $(manpages)  $(DESTDIR)$(PREFIX)/share/man/man1
 	install -d $(DESTDIR)$(PREFIX)/share/doc/vcsh
-	install -m 0644 INSTALL.md README.md $(DESTDIR)$(PREFIX)/share/doc/vcsh
+	install -m 0644 README.md $(DESTDIR)$(PREFIX)/share/doc/vcsh
 	install -d $(DESTDIR)$(PREFIX)/share/zsh/vendor-completions
 	install -m 0644 _vcsh $(DESTDIR)$(PREFIX)/share/zsh/vendor-completions
 
