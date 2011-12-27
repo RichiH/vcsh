@@ -111,10 +111,22 @@ an interactive user.
 As noted earlier, `vcsh` will set <$GIT_DIR> and <$GIT_WORK_TREE> to the
 appropriate values for fake bare git repositories.
 
+## DETAILED HOWTO AND FURTHER READING
+
+Man pages are intended to be short and thus often useless to glean best
+practices from. This software comes with a file called <README.md>. It contains
+various approaches to setting up and using vcsh. You can view the file it as
+plain text or render it into various other formats via Markdown.
+
+On Debian-based systems, this file can be found in </usr/share/doc/vcsh>.
+
 ## SECURITY CONSIDERATIONS
 
 `vcsh` allows you to execute arbitrary commands via `vcsh` run. For example,
-speaking, adding a `sudo`(8) rule for `vcsh` would be pretty stupid.
+adding a `sudo`(8) rule for `vcsh` would be pretty stupid.
+
+Additionally, vcsh will source, i.e. execute, <$XDG_CONFIG_HOME/vcsh/config>.
+You can put any and all commands into this config file and they will be executed.
 
 ## BUGS
 
