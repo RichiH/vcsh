@@ -236,7 +236,7 @@ Done!
 
 You're welcome to clone the example repository:
 
-    git clone git://github.com/RichiH/vcsh_mr_template.git
+    vcsh clone git://github.com/RichiH/vcsh_mr_template.git
 
 Look around in the clone. It should be reasonably simple to understand. If not,
 poke me, RichiH, on Freenode (query) or OFTC (#vcs-home).
