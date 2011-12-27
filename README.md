@@ -83,6 +83,7 @@ To illustrate, this is what a possible directory structure looks like.
         |   |       |-- tmux.vcsh       -> ../available.d/tmux.vcsh
         |   |       `-- vim.vcsh        -> ../available.d/vim.vcsh
         |   `-- vcsh
+        |       |-- config
         |       `-- repo.d
         |           |-- zsh.git  -----------+
         |           |-- gitconfigs.git      |
@@ -90,7 +91,8 @@ To illustrate, this is what a possible directory structure looks like.
         |           `-- vim.git             |
         |-- [...]                           |
         |-- .zshrc   <----------------------+
-        |-- .gitignore
+        |-- .gitignore.d
+        |   `-- zsh
         |-- .mrconfig
         `-- .mrtrust
 
@@ -179,7 +181,7 @@ Below, you will find a few different methods for setting up vcsh:
 Make sure none of the following files and directories exist for your test
 (user). If they do, move them away for now:
 
-* ~/.gitignore
+* ~/.gitignore.d
 * ~/.mrconfig
 * $XDG_CONFIG_HOME/mr/available.d/mr.vcsh
 * $XDG_CONFIG_HOME/mr/available.d/zsh.vcsh
