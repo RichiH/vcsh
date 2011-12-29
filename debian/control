@@ -3,7 +3,7 @@ Maintainer: Richard Hartmann <richih.mailinglist@gmail.com>
 Section: misc
 Priority: optional
 Standards-Version: 3.9.2
-Build-Depends: debhelper (>= 7), ruby-ronn (>= 0.7.3), git
+Build-Depends: debhelper (>= 7), git
 
 Package: vcsh
 Architecture: all

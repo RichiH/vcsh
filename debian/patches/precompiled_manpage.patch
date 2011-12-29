@@ -1,0 +1,194 @@
+Index: vcsh/Makefile
+===================================================================
+--- vcsh.orig/Makefile	2012-01-11 01:57:29.009626368 +0100
++++ vcsh/Makefile	2012-01-11 01:58:21.805627162 +0100
+@@ -17,11 +17,11 @@
+ 
+ manpages: $(manpages)
+ 
+-vcsh.1: doc/vcsh.1.ronn
+-	ronn < doc/vcsh.1.ronn > vcsh.1
++vcsh.1:
++	:
+ 
+ clean:
+-	rm -rf vcsh.1
++	:
+ 
+ uninstall:
+ 	rm -rf $(DESTDIR)$(PREFIX)/bin/vcsh
+Index: vcsh/vcsh.1
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ vcsh/vcsh.1	2012-01-11 01:58:55.637627669 +0100
+@@ -0,0 +1,170 @@
++.\" generated with Ronn/v0.7.3
++.\" http://github.com/rtomayko/ronn/tree/0.7.3
++.
++.TH "VCSH" "1" "December 2011" "" ""
++.
++.SH "NAME"
++\fBvcsh\fR \- manage config files in $HOME via fake bare git repositories
++.
++.SH "SYNOPSIS"
++\fBvcsh\fR clone \fIurl\fR [\fIrepo\fR]
++.
++.P
++\fBvcsh\fR delete \fIrepo\fR
++.
++.P
++\fBvcsh\fR enter \fIrepo\fR
++.
++.P
++\fBvcsh\fR help
++.
++.P
++\fBvcsh\fR init \fIrepo\fR
++.
++.P
++\fBvcsh\fR list
++.
++.P
++\fBvcsh\fR list\-tracked
++.
++.P
++\fBvcsh\fR list\-tracked\-by \fIrepo\fR
++.
++.P
++\fBvcsh\fR rename \fIrepo\fR \fInewname\fR
++.
++.P
++\fBvcsh\fR run \fIrepo\fR \fIcommand\fR
++.
++.P
++\fBvcsh\fR setup \fIrepo\fR
++.
++.P
++\fBvcsh\fR write\-gitignore \fIrepo\fR
++.
++.P
++\fBvcsh\fR \fIrepo\fR \fIgitcommand\fR
++.
++.P
++\fBvcsh\fR \fIrepo\fR
++.
++.SH "DESCRIPTION"
++\fBvcsh\fR allows you to have several \fBgit\fR(1) repositories, all maintaining their working trees in $HOME without clobbering each other\. That, in turn, means you can have one repository per config set (zsh, vim, ssh, etc), picking and choosing which configs you want to use on which machine\.
++.
++.P
++\fBvcsh\fR is using a technique called fake bare git repositories, keeping \fI$GIT_DIR\fR in a different directory from \fI$GIT_WORK_TREE\fR which is pointed to \fI$HOME\fR\.
++.
++.P
++The use of symlinks is not needed in this setup, making for a cleaner setup\.
++.
++.P
++\fBvcsh\fR was designed with \fBmr\fR(1) in mind so you might want to install it alongside vcsh\. That being said, you can easily use \fBvcsh\fR without \fBmr\fR if you prefer\.
++.
++.P
++A sample configuration for \fBvcsh\fR and \fBmr\fR can be found at \fIhttps://github\.com/RichiH/vcsh_mr_template\fR
++.
++.P
++Please note that you can always use a path instead of a name for \fIrepo\fR\. This is needed to support mr and other scripts properly and of no concern to an interactive user\.
++.
++.SH "OPTIONS"
++.
++.TP
++clone
++Clone an existing repository\.
++.
++.TP
++delete
++Delete an existing repository\.
++.
++.TP
++enter
++Enter repository; spawn new \fI$SHELL\fR\.
++.
++.TP
++help
++Display help\.
++.
++.TP
++init
++Initialize an empty repository\.
++.
++.TP
++list
++List all local vcsh repositories\.
++.
++.TP
++list\-tracked
++List all files tracked by vcsh\.
++.
++.TP
++list\-tracked\-by
++List files tracked by a repository\.
++.
++.TP
++rename
++Rename a repository\.
++.
++.TP
++run
++Run command with \fI$GIT_DIR\fR and \fI$GIT_WORK_TREE\fR set\. Allows you to run any and all commands without any restrictions\. Use with care\.
++.
++.IP
++Please note that there is a somewhat magic feature for run\. Instead of \fIrepo\fR it accepts \fIpath\fR, as well\. Anything that has a slash in it will be assumed to be a path\. \fBvcsh run\fR will then operate on this directory instead of the one normally generated from the repository\'s name\. This is needed to support mr and other scripts properly and of no concern to an interactive user\.
++.
++.TP
++setup
++Set up repository with recommended settings\.
++.
++.TP
++write\-gitignore
++Write \.gitignore\.d/\fIrepo\fR via git ls\-files\.
++.
++.TP
++\fIrepo\fR \fIgitcommand\fR
++Shortcut to run \fBvcsh\fR on a repo\. Will prepend \fBgit\fR to \fIcommand\fR by itself\.
++.
++.TP
++\fIrepo\fR
++Shortcut to run \fBvcsh enter <repo>\fR\.
++.
++.SH "ENVIRONMENT"
++As noted earlier, \fBvcsh\fR will set \fI$GIT_DIR\fR and \fI$GIT_WORK_TREE\fR to the appropriate values for fake bare git repositories\.
++.
++.SH "DETAILED HOWTO AND FURTHER READING"
++Man pages are intended to be short and thus often useless to glean best practices from\. This software comes with a file called <README\.md>\. It contains various approaches to setting up and using vcsh\. You can view the file it as plain text or render it into various other formats via Markdown\.
++.
++.P
++On Debian\-based systems, this file can be found in </usr/share/doc/vcsh>\.
++.
++.SH "SECURITY CONSIDERATIONS"
++\fBvcsh\fR allows you to execute arbitrary commands via \fBvcsh\fR run\. For example, adding a \fBsudo\fR(8) rule for \fBvcsh\fR would be pretty stupid\.
++.
++.P
++Additionally, vcsh will source, i\.e\. execute, <$XDG_CONFIG_HOME/vcsh/config>\. You can put any and all commands into this config file and they will be executed\.
++.
++.SH "BUGS"
++None are known at this time, but reports and/or patches are more than welcome\.
++.
++.SH "HISTORY"
++Like most people, the author initially made do with a single repository for all config files, all of which were soft\-linked into \fI$HOME\fR\.
++.
++.P
++Martin F\. Krafft aka madduck came up with the concept of fake bare git repositories\.
++.
++.P
++vcsh was initally written by madduck\. This version is a re\-implementation from scratch with a lot more features\. madduck graciously agreed to let the author take over the name\.
++.
++.SH "AUTHOR"
++This manpage and \fBvcsh\fR itself were written by Richard "RichiH" Hartmann\.
++.
++.SH "COPYRIGHT"
++Copyright 2011 Richard Hartmann \fIrichih\.mailinglist@gmail\.com\fR
++.
++.P
++Licensed under the GNU GPL version 3 or higher\.
++.
++.P
++https://github\.com/RichiH/vcsh
++.
++.SH "SEE ALSO"
++\fBgit\fR(1), \fBmr\fR(1)
