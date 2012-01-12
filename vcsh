@@ -144,7 +144,7 @@ list_tracked_by() {
 
 list_untracked() {
 	for VCSH_REPO_NAME in $(list); do
-		[ -n $ran_once ] && files_untracked=$(printf '%s\n' "$files_untracked" | grep -x "$files_other")
+		[ -n $ran_once ] && files_untracked=$(printf '%s\n' "$files_untracked" | grep -Fx "$files_other")
 		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 		files_other="$(git ls-files --others)"
 		[ -z $ran_once ] && { ran_once=1; files_untracked=$files_other; }
