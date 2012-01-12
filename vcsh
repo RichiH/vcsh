@@ -284,6 +284,16 @@ retire() {
 	unset VCSH_DIRECTORY
 }
 
+list_untracked() {
+	for VCSH_REPO_NAME in $(list); do
+		[ -n $ran_once ] && files_untracked=$(printf '%s\n' "$files_untracked" | grep -x "$files_other")
+		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
+		files_other="$(git ls-files --others)"
+		[ -z $ran_once ] && { ran_once=1; files_untracked=$files_other; }
+	done
+	echo "$files_untracked" | sort -u
+}
+
 rename() {
 	git_dir_exists
 	[ -d "$GIT_DIR_NEW" ] && fatal "'$GIT_DIR_NEW' exists" 54
@@ -463,6 +473,7 @@ elif [ x"$VCSH_COMMAND" = x'delete' ]           ||
 elif [ x"$VCSH_COMMAND" = x'commit' ] ||
      [ x"$VCSH_COMMAND" = x'list'   ] ||
      [ x"$VCSH_COMMAND" = x'list-tracked' ] ||
+     [ x"$VCSH_COMMAND" = x'list-untracked' ] ||
      [ x"$VCSH_COMMAND" = x'pull'   ] ||
      [ x"$VCSH_COMMAND" = x'push'   ]; then
 	:
