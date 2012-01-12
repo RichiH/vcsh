@@ -142,6 +142,16 @@ list_tracked_by() {
 	git ls-files | sort -u
 }
 
+list_untracked() {
+	for VCSH_REPO_NAME in $(list); do
+		[ -n $ran_once ] && files_untracked=$(printf '%s\n' "$files_untracked" | grep -x "$files_other")
+		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
+		files_other="$(git ls-files --others)"
+		[ -z $ran_once ] && { ran_once=1; files_untracked=$files_other; }
+	done
+	echo "$files_untracked" | sort -u
+}
+
 rename() {
 	git_dir_exists
 	[ -d "$GIT_DIR_NEW" ] && fatal "'$GIT_DIR_NEW' exists" 54
@@ -228,7 +238,8 @@ elif [ "$1" = 'delete' ] ||
 	[ "$VCSH_COMMAND" = 'run' ] && shift 2 && export VCSH_EXTERNAL_COMMAND="$*"
 	[ "$VCSH_COMMAND" = 'write-gitignore' ]
 elif [ "$1" = 'list' ] ||
-     [ "$1" = 'list-tracked' ]; then
+     [ "$1" = 'list-tracked' ] ||
+     [ "$1" = 'list-untracked' ]; then
 	export VCSH_COMMAND="$1"
 elif [ -n "$2" ]; then
 	export VCSH_COMMAND='run'
