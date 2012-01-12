@@ -11,6 +11,8 @@
 [ -r "$XDG_CONFIG_HOME/vcsh/config" ] && . "$XDG_CONFIG_HOME/vcsh/config"
 [ -n "$VCSH_DEBUG" ]                  && set -vx
 [ -z "$VCSH_REPO_D" ]                 && VCSH_REPO_D="$XDG_CONFIG_HOME/vcsh/repo.d"
+[ -z "$VCSH_HOOK_D" ]                 && VCSH_HOOK_D="$XDG_CONFIG_HOME/vcsh/hook/config.d"
+[ -z "$VCSH_AVAILABLE_HOOK_D" ]       && VCSH_AVAILABLE_HOOK_D="$XDG_CONFIG_HOME/vcsh/hook/config.d"
 [ -z "$VCSH_BASE" ]                   && VCSH_BASE="$HOME"
 [ -z "$VCSH_GITIGNORE" ]              && VCSH_GITIGNORE='exact'
 
@@ -62,7 +64,41 @@ info() {
 	echo "$SELF: info: $1"
 }
 
+run_hook() {
+	HOOK_NAME="global/$1"
+	LOCAL_HOOK_NAME="$VCSH_REPO_NAME/$1"
+	CUR_HOOK_DIR="$VCSH_HOOK_D/$HOOK_NAME"
+	CUR_LOCAL_HOOK_DIR="$VCSH_HOOK_D/$LOCAL_HOOK_NAME"
+	# Global hooks first
+	if [ -d $CUR_HOOK_DIR ]; then
+		# If folder is empty, no need to try finding hooks
+		# TODO Is -A an portable ls options ? (aka on non-gnu ls)
+		if [ "$(ls -A $CUR_HOOK_DIR)" ]; then
+			verbose "entering $HOOK_NAME hooks"
+			for hook in $CUR_HOOK_DIR/*; do
+				verbose "running $HOOK_NAME : $hook"
+				HOOK_OUTPUT=$($SHELL $hook 2>&1)
+				debug "$HOOK_NAME.$hook output : $HOOK_OUTPUT"
+			done
+		fi
+	fi
+	# then specific hooks if available
+	if [ -d $CUR_LOCAL_HOOK_DIR ]; then
+		# If folder is empty, no need to try finding hooks
+		# TODO Is -A an portable ls options ? (aka on non-gnu ls)
+		if [ "$(ls -A $CUR_LOCAL_HOOK_DIR)" ]; then
+			verbose "entering $LOCAL_HOOK_NAME hooks"
+			for hook in $CUR_LOCAL_HOOK_DIR/*; do
+				verbose "running $LOCAL_HOOK_NAME : $hook"
+				HOOK_OUTPUT=$($SHELL $hook 2>&1)
+				debug "$LOCAL_HOOK_NAME.$hook output : $HOOK_OUTPUT"
+			done
+		fi
+	fi
+}
+
 clone() {
+	run_hook pre-clone
 	init
 	git remote add origin "$GIT_REMOTE"
 	git config branch.master.remote origin
@@ -81,9 +117,11 @@ clone() {
 		fatal "will stop after fetching and not try to merge!
   Once this situation has been resolved, run 'vcsh run $VCSH_REPO_NAME git pull' to finish cloning.\n" 17
 	git merge origin/master
+	run_hook post-clone
 }
 
 delete() {
+	run_hook pre-delete
 	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
 	use
 	info "This operation WILL DETROY DATA!"
@@ -100,11 +138,14 @@ To continue, type \"Yes, do as I say\""
 		rm -f $file || info "could not delete '$file', continuing with deletion"
 	done
 	rmdir "$GIT_DIR" || error "could not delete '$GIT_DIR'"
+	run_hook post-delete
 }
 
 enter() {
+	run_hook pre-enter
 	use
 	$SHELL
+	run_hook post-enter
 }
 
 git_dir_exists() {
@@ -112,18 +153,22 @@ git_dir_exists() {
 }
 
 init() {
+	run_hook pre-init
 	[ ! -e "$GIT_DIR" ] || fatal "'$GIT_DIR' exists" 10
 	export GIT_WORK_TREE="$VCSH_BASE"
 	mkdir -p "$GIT_WORK_TREE" || fatal "could not create '$GIT_WORK_TREE'" 50
 	cd "$GIT_WORK_TREE" || fatal "could not enter '$GIT_WORK_TREE'" 11
 	git init
 	setup
+	run_hook post-init
 }
 
 list() {
+	run_hook pre-list
 	for i in "$VCSH_REPO_D"/*.git; do
 		echo $(basename "$i" .git)
 	done
+	run_hook post-list
 }
 
 get_files() {
@@ -143,29 +188,36 @@ list_tracked_by() {
 }
 
 rename() {
+	run_hook pre-rename
 	git_dir_exists
 	[ -d "$GIT_DIR_NEW" ] && fatal "'$GIT_DIR_NEW' exists" 54
 	mv -f "$GIT_DIR" "$GIT_DIR_NEW" || fatal "Could not mv '$GIT_DIR' '$GIT_DIR_NEW'" 52
-
+	run_hook post_rename
 }
 
 run() {
+	run_hook pre-run
 	use
 	$VCSH_EXTERNAL_COMMAND
+	run_hook post-run
 }
 
 setup() {
+	run_hook pre-setup
 	use
 	git config core.worktree     "$GIT_WORK_TREE"
 	git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
 	git config vcsh.vcsh         'true'
 	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME"
+	run_hook post-setup
 }
 
 use() {
+	run_hook pre-use
 	git_dir_exists
 	export GIT_WORK_TREE="$(git config --get core.worktree)"
 	export VCSH_DIRECTORY="$VCSH_REPO_NAME"
+	run_hook post-use
 }
 
 write_gitignore() {
@@ -255,7 +307,7 @@ if echo $VCSH_REPO_NAME | grep -q '/'; then
 fi
 
 
-for check_directory in "$VCSH_REPO_D" "$VCSH_BASE/.gitignore.d"
+for check_directory in "$VCSH_REPO_D" "$VCSH_BASE/.gitignore.d" "$VCSH_HOOK_D" "$VCSH_AVAILABLE_HOOK_D"
 do
 	if [ ! -d "$check_directory" ]; then
 		if [ -e "$check_directory" ]; then
@@ -271,3 +323,4 @@ verbose "$VCSH_COMMAND begin"
 export VCSH_COMMAND=$(echo $VCSH_COMMAND | sed 's/-/_/g')
 $VCSH_COMMAND
 verbose "$VCSH_COMMAND end, exiting"
+# vim: noexpandtab
