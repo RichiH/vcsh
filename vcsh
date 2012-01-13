@@ -285,13 +285,18 @@ retire() {
 }
 
 list_untracked() {
+	temp_file_others=$(mktemp) || fatal 'Could not create temp file'
+	temp_file_untracked=$(mktemp) || fatal 'Could not create temp file'
 	for VCSH_REPO_NAME in $(list); do
-		[ -n $ran_once ] && files_untracked=$(printf '%s\n' "$files_untracked" | grep -Fx "$files_other")
+		[ -n $ran_once ] && foo="$(comm -12 --nocheck-order $temp_file_others $temp_file_untracked)"
+		echo "$foo" > $temp_file_untracked
+#		[ -n $ran_once ] && files_untracked=$(printf '%s\n' "$files_untracked" | grep -Fx "$files_other")
 		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
-		files_other="$(git ls-files --others)"
-		[ -z $ran_once ] && { ran_once=1; files_untracked=$files_other; }
+		git ls-files --others | sort -u > $temp_file_others
+		[ -z "$ran_once" ] && { ran_once=1; cp $temp_file_others $temp_file_untracked; }
 	done
-	echo "$files_untracked" | sort -u
+	cat $temp_file_untracked
+	rm $temp_file_others $temp_file_untracked || fatal 'Could not delete temp file'
 }
 
 rename() {
