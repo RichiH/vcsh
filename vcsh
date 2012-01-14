@@ -11,6 +11,7 @@
 [ -r "$XDG_CONFIG_HOME/vcsh/config" ] && . "$XDG_CONFIG_HOME/vcsh/config"
 [ -n "$VCSH_DEBUG" ]                  && set -vx
 [ -z "$VCSH_REPO_D" ]                 && VCSH_REPO_D="$XDG_CONFIG_HOME/vcsh/repo.d"
+[ -z "$VCSH_HOOK_D" ]                 && VCSH_HOOK_D="$XDG_CONFIG_HOME/vcsh/hooks-enabled"
 [ -z "$VCSH_BASE" ]                   && VCSH_BASE="$HOME"
 [ -z "$VCSH_GITIGNORE" ]              && VCSH_GITIGNORE='exact'
 
@@ -103,12 +104,21 @@ To continue, type \"Yes, do as I say\""
 }
 
 enter() {
+	hook pre-enter
 	use
 	$SHELL
+	hook post-enter
 }
 
 git_dir_exists() {
 	[ -d "$GIT_DIR" ] || fatal "no repository found for '$VCSH_REPO_NAME'" 12
+}
+
+hook() {
+	for hook in $VCSH_HOOK_D/$1* $VCSH_HOOK_D/$VCSH_REPO_NAME.$1*; do
+		[ -x "$hook" ] || continue
+		"$hook"
+	done
 }
 
 init() {
@@ -150,16 +160,20 @@ rename() {
 }
 
 run() {
+	hook pre-run
 	use
 	$VCSH_EXTERNAL_COMMAND
+	hook post-run
 }
 
 setup() {
+	hook pre-setup
 	use
 	git config core.worktree     "$GIT_WORK_TREE"
 	git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
 	git config vcsh.vcsh         'true'
 	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME"
+	hook post-setup
 }
 
 use() {
