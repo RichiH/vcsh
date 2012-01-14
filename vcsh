@@ -115,9 +115,9 @@ git_dir_exists() {
 }
 
 hook() {
-	for f in $VCSH_HOOK_D/$1* $VCSH_HOOK_D/$VCSH_REPO_NAME.$1*; do
-		[ -x "$f" ] || continue
-		"$f"
+	for hook in $VCSH_HOOK_D/$1* $VCSH_HOOK_D/$VCSH_REPO_NAME.$1*; do
+		[ -x "$hook" ] || continue
+		"$hook"
 	done
 }
 
