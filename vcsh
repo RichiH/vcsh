@@ -167,11 +167,13 @@ run() {
 }
 
 setup() {
+	hook pre-setup
 	use
 	git config core.worktree     "$GIT_WORK_TREE"
 	git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
 	git config vcsh.vcsh         'true'
 	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME"
+	hook post-setup
 }
 
 use() {
