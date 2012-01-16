@@ -1,3 +1,10 @@
+vcsh (v0.20120116-1) unstable; urgency=low
+
+  * New upstream release.
+  * Updated copyright dates.
+
+ -- Richard Hartmann <richih.mailinglist@gmail.com>  Mon, 16 Jan 2012 03:31:13 +0100
+
 vcsh (0.20111227-1) unstable; urgency=low
 
   * Initial release.

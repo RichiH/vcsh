@@ -3,14 +3,14 @@ Upstream-Name: vcsh
 Upstream-Contact: <richih.mailinglist@gmail.com>
 Source: https://github.com/RichiH/vcsh
 License: GPL-2+
-Copyright: 2011 Richard Hartmann
+Copyright: 2011-2012 Richard Hartmann
 
 Files: *
-Copyright: 2011 Richard Hartmann <richih.mailinglist@gmail.com>
+Copyright: 2011-2012 Richard Hartmann <richih.mailinglist@gmail.com>
 License: GPL-2+
 
 Files: debian/*
-Copyright: 2011 Richard Hartmann <richih.mailinglist@gmail.com>
+Copyright: 2011-2012 Richard Hartmann <richih.mailinglist@gmail.com>
 License: GPL-2+
 
 License: GPL-2+
