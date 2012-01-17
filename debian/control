@@ -4,6 +4,9 @@ Section: misc
 Priority: optional
 Standards-Version: 3.9.2
 Build-Depends: debhelper (>= 7), ruby-ronn (>= 0.7.3), git
+Vcs-Git: git://github.com/RichiH/vcsh.git
+Vcs-Browser: https://github.com/RichiH/vcsh
+Homepage: https://github.com/RichiH/vcsh/blob/master/README.md
 
 Package: vcsh
 Architecture: all
