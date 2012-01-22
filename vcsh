@@ -96,7 +96,7 @@ $files
 AGAIN, THIS WILL DELETE YOUR DATA!
 To continue, type 'Yes, do as I say'"
 	read answer
-	[ "x$answer" = "xYes, do as I say" ] || exit 16
+	[ "x$answer" = 'xYes, do as I say' ] || exit 16
 	for file in $files; do
 		rm -f $file || info "could not delete '$file', continuing with deletion"
 	done
