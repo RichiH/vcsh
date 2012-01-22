@@ -265,7 +265,7 @@ fi
 # Mangle the input to fit normal operation.
 if echo $VCSH_REPO_NAME | grep -q '/'; then
 	export GIT_DIR=$VCSH_REPO_NAME
-	export VCSH_REPO_NAME=$(basename $VCSH_REPO_NAME .git)
+	export VCSH_REPO_NAME=$(basename "$VCSH_REPO_NAME" .git)
 fi
 
 
