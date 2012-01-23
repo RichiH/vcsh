@@ -213,8 +213,8 @@ write_gitignore() {
 		fatal "could not move '$tempfile' to '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME'" 53
 }
 
-if [ ! x$VCSH_GITIGNORE = x'exact' ] && [ ! x$VCSH_GITIGNORE = x'recursive' ]; then
-	fatal "\$VCSH_GITIGNORE must be either 'exact' or 'recursive'" 1
+if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xrecursive' ]; then
+	fatal "'\$VCSH_GITIGNORE' must be either 'exact' or 'recursive'" 1
 fi
 
 if [ "$1" = 'clone' ]; then
