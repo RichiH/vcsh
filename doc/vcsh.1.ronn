@@ -111,6 +111,28 @@ an interactive user.
 As noted earlier, `vcsh` will set <$GIT_DIR> and <$GIT_WORK_TREE> to the
 appropriate values for fake bare git repositories.
 
+## HOOK SYSTEM
+
+`vcsh` provides a hook system. Hook scripts must be executable and should be
+placed in <$XDG_CONFIG_HOME/vcsh/hooks-available>. From there, they can be
+soft-linked into <$XDG_CONFIG_HOME/vcsh/hooks-enabled>; `vcsh` will only
+execute hooks that are in this directory.
+
+Hooks follow a simple format. <pre-run> will be run before anything is run.
+If you want to have more than one script for a certain hook, just append
+any kind of string to order them. A system of <pre-run>, <pre-run.10>,
+<pre-run.20> etc is suggested; other options would be <pre-run-10> or
+<pre-run.sh>. A dot after the hook name is optional.
+
+If you want to create hooks for a specific <vcsh> repository, simply prepend
+the repository's name, followed by a dot, i.e. <zsh.pre-run>. Otherwise, the
+same rules as above apply. The dot between the repository's name and the hook
+is mandatory, though.
+
+Available hooks are <pre-enter>, <post-enter>, <pre-run>, <post-run>,
+<pre-setup>, and <post-setup>. If you need more, vcsh is trivial to patch,
+but please let upstream know so we can ship them by default.
+
 ## DETAILED HOWTO AND FURTHER READING
 
 Man pages are intended to be short and thus often useless to glean best
@@ -150,7 +172,7 @@ This manpage and `vcsh` itself were written by Richard "RichiH" Hartmann.
 
 ## COPYRIGHT
 
-Copyright 2011 Richard Hartmann <richih.mailinglist@gmail.com>
+Copyright 2011-2012 Richard Hartmann <richih.mailinglist@gmail.com>
 
 Licensed under the GNU GPL version 3 or higher.
 

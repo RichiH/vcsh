@@ -1,0 +1,7 @@
+Available hooks are:
+pre-enter
+post-enter
+pre-run
+post-run
+pre-setup
+post-setup
