@@ -1,8 +1,8 @@
 Index: vcsh/Makefile
 ===================================================================
---- vcsh.orig/Makefile	2012-01-11 01:57:29.009626368 +0100
-+++ vcsh/Makefile	2012-01-11 01:58:21.805627162 +0100
-@@ -17,11 +17,11 @@
+--- vcsh.orig/Makefile	2012-01-28 01:50:45.000000000 +0100
++++ vcsh/Makefile	2012-01-28 01:57:12.668274213 +0100
+@@ -18,11 +18,11 @@
  
  manpages: $(manpages)
  
@@ -20,12 +20,12 @@ Index: vcsh/Makefile
 Index: vcsh/vcsh.1
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ vcsh/vcsh.1	2012-01-11 01:58:55.637627669 +0100
-@@ -0,0 +1,170 @@
++++ vcsh/vcsh.1	2012-01-28 01:59:48.512276552 +0100
+@@ -0,0 +1,182 @@
 +.\" generated with Ronn/v0.7.3
 +.\" http://github.com/rtomayko/ronn/tree/0.7.3
 +.
-+.TH "VCSH" "1" "December 2011" "" ""
++.TH "VCSH" "1" "January 2012" "" ""
 +.
 +.SH "NAME"
 +\fBvcsh\fR \- manage config files in $HOME via fake bare git repositories
@@ -154,6 +154,18 @@ Index: vcsh/vcsh.1
 +.SH "ENVIRONMENT"
 +As noted earlier, \fBvcsh\fR will set \fI$GIT_DIR\fR and \fI$GIT_WORK_TREE\fR to the appropriate values for fake bare git repositories\.
 +.
++.SH "HOOK SYSTEM"
++\fBvcsh\fR provides a hook system\. Hook scripts must be executable and should be placed in <$XDG_CONFIG_HOME/vcsh/hooks\-available>\. From there, they can be soft\-linked into <$XDG_CONFIG_HOME/vcsh/hooks\-enabled>; \fBvcsh\fR will only execute hooks that are in this directory\.
++.
++.P
++Hooks follow a simple format\. \fIpre\-run\fR will be run before anything is run\. If you want to have more than one script for a certain hook, just append any kind of string to order them\. A system of \fIpre\-run\fR, <pre\-run\.10>, <pre\-run\.20> etc is suggested; other options would be \fIpre\-run\-10\fR or <pre\-run\.sh>\. A dot after the hook name is optional\.
++.
++.P
++If you want to create hooks for a specific \fIvcsh\fR repository, simply prepend the repository\'s name, followed by a dot, i\.e\. <zsh\.pre\-run>\. Otherwise, the same rules as above apply\. The dot between the repository\'s name and the hook is mandatory, though\.
++.
++.P
++Available hooks are \fIpre\-enter\fR, \fIpost\-enter\fR, \fIpre\-run\fR, \fIpost\-run\fR, \fIpre\-setup\fR, and \fIpost\-setup\fR\. If you need more, vcsh is trivial to patch, but please let upstream know so we can ship them by default\.
++.
 +.SH "DETAILED HOWTO AND FURTHER READING"
 +Man pages are intended to be short and thus often useless to glean best practices from\. This software comes with a file called <README\.md>\. It contains various approaches to setting up and using vcsh\. You can view the file it as plain text or render it into various other formats via Markdown\.
 +.
@@ -182,7 +194,7 @@ Index: vcsh/vcsh.1
 +This manpage and \fBvcsh\fR itself were written by Richard "RichiH" Hartmann\.
 +.
 +.SH "COPYRIGHT"
-+Copyright 2011 Richard Hartmann \fIrichih\.mailinglist@gmail\.com\fR
++Copyright 2011\-2012 Richard Hartmann \fIrichih\.mailinglist@gmail\.com\fR
 +.
 +.P
 +Licensed under the GNU GPL version 3 or higher\.
