@@ -1,3 +1,10 @@
+vcsh (0.20120116-2~bpo60+1) squeeze-backports; urgency=low
+
+  * Rebuild for squeeze-backports.
+  * Update vcsh.1
+
+ -- Richard Hartmann <richih@rockhopper.hartmann.local>  Sat, 28 Jan 2012 02:05:32 +0100
+
 vcsh (0.20120116-2) unstable; urgency=low
 
   * Add Vcs-Git, Vcs-Browser, and Homepage to debian/control
