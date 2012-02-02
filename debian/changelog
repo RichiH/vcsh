@@ -1,9 +1,15 @@
+vcsh (0.20120116-2~bpo60+2) squeeze-backports; urgency=low
+
+  * Rebuild for squeeze-backports.
+
+ -- Richard Hartmann <richih.mailinglist@gmail.com>  Thu, 02 Feb 2012 01:29:32 +0100
+
 vcsh (0.20120116-2~bpo60+1) squeeze-backports; urgency=low
 
   * Rebuild for squeeze-backports.
   * Update vcsh.1
 
- -- Richard Hartmann <richih@rockhopper.hartmann.local>  Sat, 28 Jan 2012 02:05:32 +0100
+ -- Richard Hartmann <richih.mailinglist@gmail.com>  Sat, 28 Jan 2012 02:05:32 +0100
 
 vcsh (0.20120116-2) unstable; urgency=low
 
