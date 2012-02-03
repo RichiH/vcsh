@@ -1,3 +1,10 @@
+vcsh (0.20120203-1) unstable; urgency=low
+
+  * New upstream release
+  * Fix documentation
+
+ -- Richard Hartmann <richih.mailinglist@gmail.com>  Fri, 03 Feb 2012 02:40:12 +0100
+
 vcsh (0.20120116-2) unstable; urgency=low
 
   * Add Vcs-Git, Vcs-Browser, and Homepage to debian/control
