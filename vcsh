@@ -94,9 +94,9 @@ delete() {
 $files
 
 AGAIN, THIS WILL DELETE YOUR DATA!
-To continue, type \"Yes, do as I say\""
+To continue, type 'Yes, do as I say'"
 	read answer
-	[ "x$answer" = "xYes, do as I say" ] || exit 16
+	[ "x$answer" = 'xYes, do as I say' ] || exit 16
 	for file in $files; do
 		rm -f $file || info "could not delete '$file', continuing with deletion"
 	done
@@ -117,6 +117,7 @@ git_dir_exists() {
 hook() {
 	for hook in $VCSH_HOOK_D/$1* $VCSH_HOOK_D/$VCSH_REPO_NAME.$1*; do
 		[ -x "$hook" ] || continue
+		info "executing '$hook'"
 		"$hook"
 	done
 }
@@ -213,8 +214,8 @@ write_gitignore() {
 		fatal "could not move '$tempfile' to '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME'" 53
 }
 
-if [ ! x$VCSH_GITIGNORE = x'exact' ] && [ ! x$VCSH_GITIGNORE = x'recursive' ]; then
-	fatal "\$VCSH_GITIGNORE must be either 'exact' or 'recursive'" 1
+if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xrecursive' ]; then
+	fatal "'\$VCSH_GITIGNORE' must be either 'exact' or 'recursive'" 1
 fi
 
 if [ "$1" = 'clone' ]; then
@@ -224,13 +225,13 @@ if [ "$1" = 'clone' ]; then
 	[ -n "$3" ] && VCSH_REPO_NAME="$3" || VCSH_REPO_NAME=$(basename "$GIT_REMOTE" .git)
 	export VCSH_REPO_NAME
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
-elif [ "$1" = 'delete' ] ||
-     [ "$1" = 'enter' ] ||
-     [ "$1" = 'init' ] ||
+elif [ "$1" = 'delete' ]          ||
+     [ "$1" = 'enter' ]           ||
+     [ "$1" = 'init' ]            ||
      [ "$1" = 'list-tracked-by' ] ||
-     [ "$1" = 'rename' ] ||
-     [ "$1" = 'run' ] ||
-     [ "$1" = 'setup' ] ||
+     [ "$1" = 'rename' ]          ||
+     [ "$1" = 'run' ]             ||
+     [ "$1" = 'setup' ]           ||
      [ "$1" = 'write-gitignore' ]; then
 	[ -z $2 ]                      && fatal "$1: please specify repository to work on" 1
 	[ "$1" = 'rename' -a -z "$3" ] && fatal "$1: please specify a target name" 1
@@ -265,7 +266,7 @@ fi
 # Mangle the input to fit normal operation.
 if echo $VCSH_REPO_NAME | grep -q '/'; then
 	export GIT_DIR=$VCSH_REPO_NAME
-	export VCSH_REPO_NAME=$(basename $VCSH_REPO_NAME .git)
+	export VCSH_REPO_NAME=$(basename "$VCSH_REPO_NAME" .git)
 fi
 
 
