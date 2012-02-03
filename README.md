@@ -152,7 +152,7 @@ To illustrate further, the following steps could move your desired
 configuration to a new host.
 
 1. Clone the mr repository (containing available.d, config.d etc.); for
-   example: `vcsh clone git://github.com/RichiH/vcsh_mr_template.git`
+   example: `vcsh clone git://github.com/RichiH/vcsh_mr_template.git mr`
 2. Choose your repositories by linking them in config.d (or go with the default
    you may have already configured by adding symlinks to git).
 3. Run mr to clone the repositories: `cd; mr update`.
@@ -201,7 +201,7 @@ the template will be stored.
     cd vcsh
     ln -s vcsh /usr/local/bin        # or add it to your PATH
     cd
-    vcsh clone git://github.com/RichiH/vcsh_mr_template.git mr.vcsh
+    vcsh clone git://github.com/RichiH/vcsh_mr_template.git mr
 
 #### 4.1.3 Enable Your Test Repository ####
 
@@ -236,7 +236,7 @@ Done!
 
 You're welcome to clone the example repository:
 
-    vcsh clone git://github.com/RichiH/vcsh_mr_template.git
+    vcsh clone git://github.com/RichiH/vcsh_mr_template.git mr
 
 Look around in the clone. It should be reasonably simple to understand. If not,
 poke me, RichiH, on Freenode (query) or OFTC (#vcs-home).

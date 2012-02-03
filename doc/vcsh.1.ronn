@@ -48,7 +48,8 @@ The use of symlinks is not needed in this setup, making for a cleaner setup.
 vcsh. That being said, you can easily use `vcsh` without `mr` if you prefer.
 
 A sample configuration for `vcsh` and `mr` can be found at
-*https://github.com/RichiH/vcsh_mr_template*
+*https://github.com/RichiH/vcsh_mr_template* and used with `vcsh clone
+https://github.com/RichiH/vcsh_mr_template mr`.
 
 Please note that you can always use a path instead of a name for <repo>.
 This is needed to support mr and other scripts properly and of no concern to
