@@ -15,7 +15,7 @@ community around the general idea of version controlling your (digital) life.
 
 * IRC: #vcs-home on irc.oftc.net
 
-* Mailing list: vcs-home@lists.madduck.net
+* Mailing list: http://lists.madduck.net/listinfo/vcs-home
 
 * Pull requests or issues on https://github.com/RichiH/vcsh
 
