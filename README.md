@@ -98,7 +98,7 @@ To illustrate, this is what a possible directory structure looks like.
 
 ### available.d ###
 
-The files you see in $XDG_CONFIG_HOME/mr/available.d are mr configuration files
+The files you see in $XDG\_CONFIG\_HOME/mr/available.d are mr configuration files
 that contain the commands to manage (checkout, update etc.) a single
 repository. vcsh repo configs end in .vcsh, git configs end in .git, etc. This
 is optional and your preference. For example, this is what a zsh.vcsh
@@ -116,7 +116,7 @@ this repository and fork your own.
 
 ### config.d ###
 
-$XDG_CONFIG_HOME/mr/available.d contains *all available* repositories. Only
+$XDG\_CONFIG\_HOME/mr/available.d contains *all available* repositories. Only
 files/links present in mr/config.d, however, will be used by mr. That means
 that in this example, only the zsh, gitconfigs, tmux and vim repositories will
 be checked out. A simple `mr update` run in $HOME will clone or update those
@@ -130,11 +130,11 @@ this:
 
     [DEFAULT]
     jobs = 5
-    include = cat $XDG_CONFIG_HOME/mr/config.d/*
+    include = cat ${XDG_CONFIG_HOME:-$HOME/.config}/mr/config.d/*
 
 ### repo.d ###
 
-$XDG_CONFIG_HOME/vcsh/repo.d is the directory where all git repositories which
+$XDG\_CONFIG\_HOME/vcsh/repo.d is the directory where all git repositories which
 are under vcsh's control are located. Since their working trees are configured
 to be in $HOME, the files contained in those repositories will be put in $HOME
 directly.
@@ -185,10 +185,10 @@ Make sure none of the following files and directories exist for your test
 
 * ~/.gitignore.d
 * ~/.mrconfig
-* $XDG_CONFIG_HOME/mr/available.d/mr.vcsh
-* $XDG_CONFIG_HOME/mr/available.d/zsh.vcsh
-* $XDG_CONFIG_HOME/mr/config.d/mr.vcsh
-* $XDG_CONFIG_HOME/vcsh/repo.d/mr.git/
+* $XDG\_CONFIG\_HOME/mr/available.d/mr.vcsh
+* $XDG\_CONFIG\_HOME/mr/available.d/zsh.vcsh
+* $XDG\_CONFIG\_HOME/mr/config.d/mr.vcsh
+* $XDG\_CONFIG\_HOME/vcsh/repo.d/mr.git/
 
 All of the files are part of the template repository, the directory is where
 the template will be stored.
