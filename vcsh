@@ -225,13 +225,13 @@ if [ "$1" = 'clone' ]; then
 	[ -n "$3" ] && VCSH_REPO_NAME="$3" || VCSH_REPO_NAME=$(basename "$GIT_REMOTE" .git)
 	export VCSH_REPO_NAME
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
-elif [ "$1" = 'delete' ]          ||
-     [ "$1" = 'enter' ]           ||
-     [ "$1" = 'init' ]            ||
-     [ "$1" = 'list-tracked-by' ] ||
-     [ "$1" = 'rename' ]          ||
-     [ "$1" = 'run' ]             ||
-     [ "$1" = 'setup' ]           ||
+elif [ "$1" = 'delete' ]           ||
+     [ "$1" = 'enter' ]            ||
+     [ "$1" = 'init' ]             ||
+     [ "$1" = 'list-tracked-by' ]  ||
+     [ "$1" = 'rename' ]           ||
+     [ "$1" = 'run' ]              ||
+     [ "$1" = 'setup' ]            ||
      [ "$1" = 'write-gitignore' ]; then
 	[ -z $2 ]                      && fatal "$1: please specify repository to work on" 1
 	[ "$1" = 'rename' -a -z "$3" ] && fatal "$1: please specify a target name" 1
