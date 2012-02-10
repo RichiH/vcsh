@@ -186,7 +186,7 @@ use() {
 which() {
 	for VCSH_REPO_NAME in $(list); do
 		for VCSH_FILE in $(get_files); do
-			echo $VCSH_FILE | grep $VCSH_COMMAND_PARAMETER > /dev/null && echo "$VCSH_REPO_NAME: $VCSH_FILE"
+			echo $VCSH_FILE | grep -q "$VCSH_COMMAND_PARAMETER" && echo "$VCSH_REPO_NAME: $VCSH_FILE"
 		done
 	done | sort -u
 }
