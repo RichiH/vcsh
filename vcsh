@@ -27,6 +27,7 @@ help() {
    enter                Enter repository; spawn new instance of \$SHELL
    init <repo>          Initialize a new repository
    list                 List all repositories
+   list-untracked       List all untracked files in \$HOME
    list-tracked         List all files tracked by vcsh
    list-tracked-by \\
         <repo>          List files tracked by a repository
@@ -35,6 +36,7 @@ help() {
    run <repo> \\
        <command>        Use this repository
    setup                Set up repository with recommended settings
+   status               Show status of all files in \$HOME
    write-gitignore \\
    <repo>               Write .gitignore.d/<repo> via git ls-files
 
@@ -157,7 +159,17 @@ rename() {
 	git_dir_exists
 	[ -d "$GIT_DIR_NEW" ] && fatal "'$GIT_DIR_NEW' exists" 54
 	mv -f "$GIT_DIR" "$GIT_DIR_NEW" || fatal "Could not mv '$GIT_DIR' '$GIT_DIR_NEW'" 52
+}
 
+list_untracked() {
+	cd || fatal "could not cd" 1
+	[ ! -e .git ] || fatal "~/.git already exists?" 50
+	[ ! -e .gitignore ] || fatal "~/.gitignore already exists?" 51
+	git init >/dev/null
+	list | while read repo; do vcsh $repo ls-files; done > .gitignore
+	git status
+	rm -rf .git .gitignore
+	cd - || fatal "could not cd -" 1
 }
 
 run() {
@@ -175,6 +187,12 @@ setup() {
 	git config vcsh.vcsh         'true'
 	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME"
 	hook post-setup
+}
+
+status() {
+	echo " === $HOME === "
+	list_untracked
+	list | while read repo; do echo " === $repo === " && vcsh run $repo git status; done
 }
 
 use() {
@@ -243,7 +261,9 @@ elif [ "$1" = 'delete' ]           ||
 	[ "$VCSH_COMMAND" = 'run' ] && shift 2 && export VCSH_EXTERNAL_COMMAND="$*"
 	[ "$VCSH_COMMAND" = 'write-gitignore' ]
 elif [ "$1" = 'list' ] ||
-     [ "$1" = 'list-tracked' ]; then
+     [ "$1" = 'list-untracked' ] ||
+     [ "$1" = 'list-tracked' ] ||
+     [ "$1" = 'status' ]; then
 	export VCSH_COMMAND="$1"
 elif [ -n "$2" ]; then
 	export VCSH_COMMAND='run'
