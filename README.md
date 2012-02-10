@@ -130,6 +130,8 @@ this:
 
     [DEFAULT]
     jobs = 5
+    # Use if your mr does not have vcsh support in mainline, yet
+    include = cat /usr/share/mr/vcsh
     include = cat ${XDG_CONFIG_HOME:-$HOME/.config}/mr/config.d/*
 
 ### repo.d ###
