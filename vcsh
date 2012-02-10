@@ -219,7 +219,7 @@ if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xrecursive' 
 fi
 
 if [ "$1" = 'clone' ]; then
-	[ -z $2 ] && fatal "$1: please specify a remote" 1
+	[ -z "$2" ] && fatal "$1: please specify a remote" 1
 	export VCSH_COMMAND="$1"
 	GIT_REMOTE="$2"
 	[ -n "$3" ] && VCSH_REPO_NAME="$3" || VCSH_REPO_NAME=$(basename "$GIT_REMOTE" .git)
