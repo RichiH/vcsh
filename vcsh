@@ -35,7 +35,7 @@ help() {
    run <repo> \\
        <command>        Use this repository
    setup                Set up repository with recommended settings
-   which <substring>    Find substring in any tracked file name
+   which <substring>    Find substring in name of any tracked file
    write-gitignore \\
    <repo>               Write .gitignore.d/<repo> via git ls-files
 

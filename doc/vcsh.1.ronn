@@ -101,7 +101,7 @@ an interactive user.
   Set up repository with recommended settings.
 
 * which <substring>:
-  Find <substring> in any tracked file name.
+  Find <substring> in name of any tracked file.
 
 * write-gitignore:
   Write .gitignore.d/<repo> via git ls-files.
