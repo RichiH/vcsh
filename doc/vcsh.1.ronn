@@ -102,7 +102,7 @@ an interactive user.
   Write .gitignore.d/<repo> via git ls-files.
 
 * <repo> <gitcommand>:
-  Shortcut to run `vcsh` on a repo. Will prepend `git` to <command> by itself.
+  Shortcut to run `vcsh` on a repo. Will prepend `git` to <command>.
 
 * <repo>:
   Shortcut to run `vcsh enter <repo>`.
