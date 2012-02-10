@@ -35,6 +35,7 @@ help() {
    run <repo> \\
        <command>        Use this repository
    setup                Set up repository with recommended settings
+   which <substring>    Find substring in name of any tracked file
    write-gitignore \\
    <repo>               Write .gitignore.d/<repo> via git ls-files
 
@@ -183,6 +184,14 @@ use() {
 	export VCSH_DIRECTORY="$VCSH_REPO_NAME"
 }
 
+which() {
+	for VCSH_REPO_NAME in $(list); do
+		for VCSH_FILE in $(get_files); do
+			echo $VCSH_FILE | grep -q "$VCSH_COMMAND_PARAMETER" && echo "$VCSH_REPO_NAME: $VCSH_FILE"
+		done
+	done | sort -u
+}
+
 write_gitignore() {
 	use
 	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
@@ -225,6 +234,11 @@ if [ "$1" = 'clone' ]; then
 	[ -n "$3" ] && VCSH_REPO_NAME="$3" || VCSH_REPO_NAME=$(basename "$GIT_REMOTE" .git)
 	export VCSH_REPO_NAME
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
+elif [ "$1" = 'which' ]; then
+	[ -z "$2" ] && fatal "$1: please specify a filename" 1
+	[ -n "$3" ] && fatal "$1: too many parameters" 1
+	export VCSH_COMMAND="$1"
+	export VCSH_COMMAND_PARAMETER="$2"
 elif [ "$1" = 'delete' ]           ||
      [ "$1" = 'enter' ]            ||
      [ "$1" = 'init' ]             ||
