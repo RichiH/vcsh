@@ -1,0 +1,3 @@
+# The Debian package is just a branch in the upstream repo.
+# At the moment, I don't see a need for debian/watch.
+# This file exists solely to make lintian happy.
