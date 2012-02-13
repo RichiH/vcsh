@@ -298,5 +298,7 @@ done
 
 verbose "$VCSH_COMMAND begin"
 export VCSH_COMMAND=$(echo $VCSH_COMMAND | sed 's/-/_/g')
+hook pre-command
 $VCSH_COMMAND
+hook post-command
 verbose "$VCSH_COMMAND end, exiting"
