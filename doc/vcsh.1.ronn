@@ -25,6 +25,8 @@ vcsh(1) - manage config files in $HOME via fake bare git repositories
 
 `vcsh` setup <repo>
 
+`vcsh` which <substring>
+
 `vcsh` write-gitignore <repo>
 
 `vcsh` <repo> <gitcommand>
@@ -98,11 +100,14 @@ an interactive user.
 * setup:
   Set up repository with recommended settings.
 
+* which <substring>:
+  Find <substring> in name of any tracked file.
+
 * write-gitignore:
   Write .gitignore.d/<repo> via git ls-files.
 
 * <repo> <gitcommand>:
-  Shortcut to run `vcsh` on a repo. Will prepend `git` to <command> by itself.
+  Shortcut to run `vcsh` on a repo. Will prepend `git` to <command>.
 
 * <repo>:
   Shortcut to run `vcsh enter <repo>`.

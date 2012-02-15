@@ -1,4 +1,6 @@
 Available hooks are:
+pre-command
+post-command
 pre-enter
 post-enter
 pre-run
