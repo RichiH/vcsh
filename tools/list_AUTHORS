@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo 'Alphabetical list of everyone who ever committed to this repository
+'
+git log --all --format='%an <%ae>' | sort -u -k2

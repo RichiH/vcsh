@@ -152,11 +152,13 @@ To illustrate further, the following steps could move your desired
 configuration to a new host.
 
 1. Clone the mr repository (containing available.d, config.d etc.); for
-   example: `vcsh clone git://github.com/RichiH/vcsh_mr_template.git`
+   example: `vcsh clone git://github.com/RichiH/vcsh_mr_template.git mr`
 2. Choose your repositories by linking them in config.d (or go with the default
    you may have already configured by adding symlinks to git).
-3. Run mr to clone the repositories: `cd; mr update`.
-4. Done.
+3. Make sure the line 'include = cat /usr/share/mr/vcsh' in .mrconfig points
+   to an existing file
+4. Run mr to clone the repositories: `cd; mr update`.
+5. Done.
 
 Hopefully the above could help explain how this approach saves time by
 
@@ -195,13 +197,15 @@ the template will be stored.
 
 #### 4.1.2 Clone the Template ####
 
+    cd $HOME
     mkdir -p ~/work/git
-    cd !$
     git clone git://github.com/RichiH/vcsh.git vcsh
+    # make sure 'include = cat /usr/share/mr/vcsh' points to an exiting file
+    vim .mrconfig
     cd vcsh
-    ln -s vcsh /usr/local/bin        # or add it to your PATH
+    ln -s vcsh /usr/local/bin                       # or add it to your PATH
     cd
-    vcsh clone git://github.com/RichiH/vcsh_mr_template.git mr.vcsh
+    vcsh clone git://github.com/RichiH/vcsh_mr_template.git mr
 
 #### 4.1.3 Enable Your Test Repository ####
 
@@ -236,7 +240,9 @@ Done!
 
 You're welcome to clone the example repository:
 
-    vcsh clone git://github.com/RichiH/vcsh_mr_template.git
+    vcsh clone git://github.com/RichiH/vcsh_mr_template.git mr
+    # make sure 'include = cat /usr/share/mr/vcsh' points to an exiting file
+    vim .mrconfig
 
 Look around in the clone. It should be reasonably simple to understand. If not,
 poke me, RichiH, on Freenode (query) or OFTC (#vcs-home).
@@ -267,6 +273,8 @@ mr is used to actually retrieve configs, etc
 
     ~ % cat ~/.mrconfig
     [DEFAULT]
+    # adapt /usr/share/mr/vcsh to your system if needed
+    include = cat /usr/share/mr/vcsh
     include = cat $XDG_CONFIG_HOME/mr/config.d/*
     ~ % echo $XDG_CONFIG_HOME
     /home/richih/.config
