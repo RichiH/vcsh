@@ -1,3 +1,12 @@
+vcsh (0.20120215-1) unstable; urgency=low
+
+  * New upstream release
+  * Introduce `vcsh which`
+  * hooks will tell you when they are being executed
+  * Formatting & resilience improvements
+
+ -- Richard Hartmann <richih.mailinglist@gmail.com>  Wed, 15 Feb 2012 21:16:45 +0100
+
 vcsh (0.20120203-1) unstable; urgency=low
 
   * New upstream release
