@@ -9,7 +9,7 @@ install: all
 	install -d $(DESTDIR)$(PREFIX)/bin
 	install -m 0755 vcsh $(DESTDIR)$(PREFIX)/bin
 	install -d $(DESTDIR)$(PREFIX)/share/man/man1
-	install -m 0644 $(manpages)  $(DESTDIR)$(PREFIX)/share/man/man1
+	install -m 0644 $(manpages) $(DESTDIR)$(PREFIX)/share/man/man1
 	install -d $(DESTDIR)$(PREFIX)/share/doc/vcsh
 	install -m 0644 README.md $(DESTDIR)$(PREFIX)/share/doc/vcsh
 	install -m 0644 doc/hooks $(DESTDIR)$(PREFIX)/share/doc/vcsh
