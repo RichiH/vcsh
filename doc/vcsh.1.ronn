@@ -180,7 +180,7 @@ This manpage and `vcsh` itself were written by Richard "RichiH" Hartmann.
 
 Copyright 2011-2012 Richard Hartmann <richih.mailinglist@gmail.com>
 
-Licensed under the GNU GPL version 3 or higher.
+Licensed under the GNU GPL version 2 or higher.
 
 https://github.com/RichiH/vcsh
 
