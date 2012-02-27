@@ -1,3 +1,13 @@
+vcsh (0.20120227-1) unstable; urgency=low
+
+  * New upstream release
+    + Refactor Makefile
+    + Fix license information in manpage
+  * Packaging changes
+    + Bump Standards-Version to 3.9.3 (no changes)
+
+ -- Richard Hartmann <richih.mailinglist@gmail.com>  Mon, 27 Feb 2012 22:38:24 +0100
+
 vcsh (0.20120215-1) unstable; urgency=low
 
   * New upstream release
