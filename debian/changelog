@@ -1,3 +1,22 @@
+vcsh (0.20120227-1) unstable; urgency=low
+
+  * New upstream release
+    + Refactor Makefile
+    + Fix license information in manpage
+  * Packaging changes
+    + Bump Standards-Version to 3.9.3 (no changes)
+
+ -- Richard Hartmann <richih.mailinglist@gmail.com>  Mon, 27 Feb 2012 22:38:24 +0100
+
+vcsh (0.20120215-1) unstable; urgency=low
+
+  * New upstream release
+  * Introduce `vcsh which`
+  * hooks will tell you when they are being executed
+  * Formatting & resilience improvements
+
+ -- Richard Hartmann <richih.mailinglist@gmail.com>  Wed, 15 Feb 2012 21:16:45 +0100
+
 vcsh (0.20120203-1~bpo60+1) squeeze-backports; urgency=low
 
   * Rebuild for squeeze-backports.

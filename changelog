@@ -1,0 +1,88 @@
+2012-02-27  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Refactor Makefile
+	* Fix license information in manpage
+
+2012-02-15  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Introduce `vcsh which`
+	* hooks will tell you when they are being executed
+	* Formatting & resilience improvements
+	* We have a changelog, now! (yay)
+
+2012-02-03  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Improve documentation
+	* More resilient error handling
+	* Add AUTHORS
+
+2012-01-16  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Introduce hook support
+
+2011-12-27  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Improve documentation
+
+2011-12-26  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Introduce and use .config/vcsh/config
+	* More verbose error handling
+	* Introduce `vcsh {list-tracked,list-tracked-by}`
+	* Introduce repo shortcuts (`vcsh zsh commit`)
+	* Rename `vcsh seed-gitignore` to `vcsh write-gitignore`
+	* Add license information
+
+2011-11-29  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Bugfixes
+	* Refactor error handling
+	* Make code more resilient
+	* Make vcsh play nice with mr
+	* Introduce vcsh mv and setup
+
+2011-11-23  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Bugfixes
+	* Minor refactoring of code
+
+2011-11-22  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Bugfixes
+
+2011-11-20  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Major refactoring of code
+	* Rewrite help files
+	* Bugfixes
+
+2011-11-19  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Bugfixes
+	* Improve XDG compability
+
+2011-11-18  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Yet more documentation improvements
+	* Makefile
+	* Heed already-defined ENV variables within vcsh
+	* Handle .gitignore.d/$repo automagically
+
+2011-11-11  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Major rewrite of all help files
+	* Addition of manpage
+
+2011-10-27  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Bugfixes
+	* Make help more verbose
+	* Improve INSTALL
+
+2011-10-18  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Fixed bug in vcsh clone & init
+
+2011-10-17  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Initial release
