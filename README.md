@@ -35,6 +35,11 @@ The following overview will try to give you an idea of the use cases and
 advantages of vcsh. See sections 3 and 4 for detailed instructions and
 examples.
 
+## 2.1 Talks ##
+
+People found it useful to look at slides and videos explaining how vcsh works.
+They can all be found at [here](http://richardhartmann.de/talks/).
+
 # 3 Overview
 
 ## 3.1 Comparison to Other Solutions ##
