@@ -37,7 +37,7 @@ examples.
 
 ## 2.1 Talks ##
 
-People found it useful to look at slides and videos explaining how vcsh works.
+Some people found it useful to look at slides and videos explaining how vcsh works.
 They can all be found at [here](http://richardhartmann.de/talks/).
 
 # 3 Overview
