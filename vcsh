@@ -22,9 +22,9 @@ help() {
 
    clone <remote> \\
          [<repo>]       Clone from an existing repository
-   help                 Display this help text
    delete               Delete an existing repository
    enter                Enter repository; spawn new instance of \$SHELL
+   help                 Display this help text
    init <repo>          Initialize a new repository
    list                 List all repositories
    list-tracked         List all files tracked by vcsh
