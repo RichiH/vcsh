@@ -202,19 +202,46 @@ the template will be stored.
 
     apt-get install mr
 
-#### 4.1.2 Clone the Template ####
+#### 4.1.2 Install vcsh ####
 
+#### 4.1.2.1 Debian ####
+
+If you are using Debian Squeeze, you will need to enable backports
+
+    apt-get install vcsh
+
+#### 4.1.2.2 Arch Linux ####
+
+vcsh is availabe via [AUR](https://aur.archlinux.org/packages.php?ID=54164)
+
+    cd /var/abs/local/
+    wget https://aur.archlinux.org/packages/vc/vcsh-git/vcsh-git.tar.gz
+    tar xfz vcsh-git.tar.gz
+    cd vcsh-git
+    makepkg --asroot
+    pacman -U vcsh*.pkg.tar.xz
+
+#### 4.1.2.3 From source ####
+
+If your version of mr is older than version 1.07, make sure to put
+
+    include = cat /usr/share/mr/vcsh
+
+into your .mrconfig .
+
+    # choose a location for your checkout
     cd $HOME
     mkdir -p ~/work/git
-    git clone git://github.com/RichiH/vcsh.git vcsh
-    # make sure 'include = cat /usr/share/mr/vcsh' points to an exiting file
-    vim .mrconfig
+    git clone git://github.com/RichiH/vcsh.git
     cd vcsh
     ln -s vcsh /usr/local/bin                       # or add it to your PATH
     cd
+
+#### 4.1.3 Clone the Template ####
+
     vcsh clone git://github.com/RichiH/vcsh_mr_template.git mr
 
-#### 4.1.3 Enable Your Test Repository ####
+#### 4.1.4 Enable Your Test Repository ####
 
     mv ~/.zsh   ~/zsh.bak
     mv ~/.zshrc ~/zshrc.bak
@@ -223,7 +250,7 @@ the template will be stored.
     cd
     mr up
 
-#### 4.1.4 Set Up Your Own Repositories ####
+#### 4.1.5 Set Up Your Own Repositories ####
 
 Now, it's time to edit the template config and fill it with your own remotes:
 
