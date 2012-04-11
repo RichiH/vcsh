@@ -213,12 +213,14 @@ If you are using Debian Squeeze, you will need to enable backports
 #### 4.1.2.2 Arch Linux ####
 
 vcsh is availabe via [AUR](https://aur.archlinux.org/packages.php?ID=54164)
+and further documentation about the use of AUR is available
+[on Arch's wiki](https://wiki.archlinux.org/index.php/Arch_User_Repository).
 
     cd /var/abs/local/
     wget https://aur.archlinux.org/packages/vc/vcsh-git/vcsh-git.tar.gz
     tar xfz vcsh-git.tar.gz
     cd vcsh-git
-    makepkg --asroot
+    makepkg -s
     pacman -U vcsh*.pkg.tar.xz
 
 #### 4.1.2.3 From source ####
