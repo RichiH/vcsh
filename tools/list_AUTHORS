@@ -2,4 +2,4 @@
 
 echo 'Alphabetical list of everyone who ever committed to this repository
 '
-git log --all --format='%an <%ae>' | sort -u -k2
+git shortlog -se --all | cut -f1 --complement | sort -u -k2
