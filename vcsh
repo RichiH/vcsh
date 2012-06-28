@@ -5,6 +5,11 @@
 # For details, see LICENSE. To submit patches, you have to agree to
 # license your code under the GNU GPL version 2 or later.
 
+# While the following is not legally binding, the author would like to
+# explain the choice of GPLv2+ over GPLv3+.
+# The author prefers GPLv3+ over GPLv2+ but feels it's better to maintain
+# full compability with git. In case git ever changes its licensing terms,
+# this software will most likely follow suit.
 
 [ -n "$VCSH_DEBUG" ]                  && set -vx
 [ -z "$XDG_CONFIG_HOME" ]             && XDG_CONFIG_HOME="$HOME/.config"
