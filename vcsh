@@ -139,7 +139,7 @@ init() {
 
 list() {
 	for repo in "$VCSH_REPO_D"/*.git; do
-		[ -r "$repo" ] && echo $(basename "$repo" .git)
+		[ -d "$repo" ] && [ -r "$repo" ] && echo $(basename "$repo" .git)
 	done
 }
 
