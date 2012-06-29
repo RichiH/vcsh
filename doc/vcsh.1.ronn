@@ -160,6 +160,12 @@ You can put any and all commands into this config file and they will be executed
 
 None are known at this time, but reports and/or patches are more than welcome.
 
+## KNOWN ISSUES
+
+As of this writing (June 2012), `vcsh` does not work with `git submodule` due
+to limitations within `git`. Depending on when you are reading this, you might
+want to consider upgrading.
+
 ## HISTORY
 
 Like most people, the author initially made do with a single repository for all

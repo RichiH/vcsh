@@ -1,0 +1,18 @@
+# Archlinux
+
+AUR does not require any packaging information within this repository.
+
+# Debian
+
+Debian packages are provided by the author in separate branches, maintained in
+the upstream repository
+
+## Ubuntu
+
+Ubuntu imports Debian's package automagically.
+
+# Anything else
+
+If you are maintaining a package for a different distribution, please get
+in touch so your work can be included in another branch, thus allowing others
+to adapt it to their needs or to improve it.
