@@ -3,15 +3,20 @@ Maintainer: Richard Hartmann <richih.mailinglist@gmail.com>
 Section: misc
 Priority: optional
 Standards-Version: 3.9.3
-Build-Depends: debhelper (>= 7), ruby-ronn (>= 0.7.3), git
+Build-Depends: debhelper (>= 7),
+               git,
+               ruby-ronn (>= 0.7.3)
 Vcs-Git: git://github.com/RichiH/vcsh.git
 Vcs-Browser: https://github.com/RichiH/vcsh
 Homepage: https://github.com/RichiH/vcsh/blob/master/README.md
 
 Package: vcsh
 Architecture: all
-Depends: ${misc:Depends}, ${shlibs:Depends}, git
-Recommends: mr (>= 1.07), ssh-client
+Depends: git,
+         ${misc:Depends},
+         ${shlibs:Depends}
+Recommends: mr (>= 1.07),
+            ssh-client
 Description: manage config files in $HOME via fake bare git repositories
  vcsh allows you to have several git repositories, all maintaining their working
  trees in $HOME without clobbering each other. That, in turn, means you can have
