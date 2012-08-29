@@ -11,6 +11,35 @@
 # full compability with git. In case git ever changes its licensing terms,
 # this software will most likely follow suit.
 
+SELF=$(basename $0)
+
+fatal() {
+	echo "$SELF: fatal: $1" >&2
+	exit $2
+}
+
+# We need to run getops as soon as possible so we catch -d and other
+# options that will modify our behaviour.
+# Commands are handled at the end of this script.
+while getopts  "c:dv" flag; do
+	if [ "$1" = '-d' ] || [ "$1" = '--debug' ]; then
+		set -vx
+		VCSH_DEBUG=1
+		shift 1
+	elif [ "$1" = '-v' ];then
+		VCSH_VERBOSE=1
+	elif [ "$1" = '-c' ];then
+		# Source $OPTARG if it can be read and has an absolute or relative
+		# path or is in $PATH
+		if [ -r "$OPTARG" ]; then
+			. "$OPTARG"
+		else
+			fatal "Can not read configuration file '$OPTARG'" 1
+		fi
+	fi
+done
+
+
 [ -n "$VCSH_DEBUG" ]                  && set -vx
 [ -z "$XDG_CONFIG_HOME" ]             && XDG_CONFIG_HOME="$HOME/.config"
 [ -r "$XDG_CONFIG_HOME/vcsh/config" ] && . "$XDG_CONFIG_HOME/vcsh/config"
@@ -20,11 +49,15 @@
 [ -z "$VCSH_BASE" ]                   && VCSH_BASE="$HOME"
 [ -z "$VCSH_GITIGNORE" ]              && VCSH_GITIGNORE='exact'
 
-SELF=$(basename $0)
-
 help() {
-	echo "usage: $SELF <args>
+	echo "usage: $SELF <options> <command>
 
+   options:
+   -c <file>            Source file prior to other configuration files
+   -d                   Enable debug mode
+   -d                   Enable verbose mode
+
+   commands:
    clone <remote> \\
          [<repo>]       Clone from an existing repository
    delete               Delete an existing repository
@@ -54,11 +87,6 @@ debug() {
 
 verbose() {
 	if [ -n "$VCSH_DEBUG" ] || [ -n "$VCSH_VERBOSE" ]; then echo "$SELF: verbose: $@"; fi
-}
-
-fatal() {
-	echo "$SELF: fatal: $1" >&2
-	exit $2
 }
 
 error() {

@@ -3,6 +3,8 @@ vcsh(1) - manage config files in $HOME via fake bare git repositories
 
 ## SYNOPSIS
 
+`vcsh` [<options>] <command>
+
 `vcsh` clone <url> [<repo>]
 
 `vcsh` delete <repo>
@@ -21,7 +23,7 @@ vcsh(1) - manage config files in $HOME via fake bare git repositories
 
 `vcsh` rename <repo> <newname>
 
-`vcsh` run <repo> <command>
+`vcsh` run <repo> <shell command>
 
 `vcsh` setup <repo>
 
@@ -29,7 +31,7 @@ vcsh(1) - manage config files in $HOME via fake bare git repositories
 
 `vcsh` write-gitignore <repo>
 
-`vcsh` <repo> <gitcommand>
+`vcsh` <repo> <git command>
 
 `vcsh` <repo>
 
@@ -58,6 +60,17 @@ This is needed to support mr and other scripts properly and of no concern to
 an interactive user.
 
 ## OPTIONS
+
+* -c:
+  Source <file> prior to other configuration files
+
+* -d:
+  Enable debug mode
+
+* -v:
+  Enable verbose mode
+
+## COMMANDS
 
 * clone:
   Clone an existing repository.
