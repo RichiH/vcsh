@@ -207,9 +207,12 @@ but please let upstream know so we can ship them by default.
 
 ## DETAILED HOWTO AND FURTHER READING
 
-Man pages are intended to be short and thus often useless to glean best
-practices from. This software comes with a file called <README.md>. It contains
-various approaches to setting up and using vcsh. You can view the file it as
+Manpages are often short and sometimes useless to glean best practices from.
+While the author tried to avoid this in this case, manpages can not cover
+detailed howtos.
+
+This software also comes with a file called <README.md>. It contains various
+approaches to setting up and using vcsh. You can view the file it as
 plain text or render it into various other formats via Markdown.
 
 On Debian-based systems, this file can be found in </usr/share/doc/vcsh>.
