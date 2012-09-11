@@ -173,11 +173,10 @@ You can put any and all commands into this config file and they will be executed
 
 None are known at this time, but reports and/or patches are more than welcome.
 
-## KNOWN ISSUES
+## INTEROPERABILITY
 
-As of this writing (June 2012), `vcsh` does not work with `git submodule` due
-to limitations within `git`. Depending on when you are reading this, you might
-want to consider upgrading.
+If you rely on `git submodule`, use `git` 1.7.12 or later. Earlier versions
+do not clean internal variables properly before descending into a submodule.
 
 ## HISTORY
 
