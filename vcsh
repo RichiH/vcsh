@@ -29,31 +29,48 @@ while getopts  "c:dv" flag; do
 	elif [ "$1" = '-v' ];then
 		VCSH_VERBOSE=1
 	elif [ "$1" = '-c' ];then
-		# Source $OPTARG if it can be read and has an absolute or relative
-		# path or is in $PATH
-		if [ -r "$OPTARG" ]; then
-			. "$OPTARG"
-		else
-			fatal "Can not read configuration file '$OPTARG'" 1
-		fi
+		VCSH_OPTION_CONFIG=$OPTARG
 	fi
 done
 
+source_all() {
+	# Source file even if it's in $PWD and does not have any slashes in it
+	case "$1" in
+		*/*) . "$1";;
+		*)   . "$PWD/$1";;
+	esac;
+}
 
+
+# Read configuration and set defaults if anything's not set
 [ -n "$VCSH_DEBUG" ]                  && set -vx
 [ -z "$XDG_CONFIG_HOME" ]             && XDG_CONFIG_HOME="$HOME/.config"
+
+# Read configuration files if there are any
+[ -r "/etc/vcsh/config" ]             && . "/etc/vcsh/config"
 [ -r "$XDG_CONFIG_HOME/vcsh/config" ] && . "$XDG_CONFIG_HOME/vcsh/config"
+if [ -n "$VCSH_OPTION_CONFIG" ]; then
+	# Source $VCSH_OPTION_CONFIG if it can be read and is in $PWD of $PATH
+	if [ -r "$VCSH_OPTION_CONFIG" ]; then
+		source_all "$VCSH_OPTION_CONFIG"
+	else
+		fatal "Can not read configuration file '$VCSH_OPTION_CONFIG'" 1
+	fi
+fi
 [ -n "$VCSH_DEBUG" ]                  && set -vx
+
+# Read defaults
 [ -z "$VCSH_REPO_D" ]                 && VCSH_REPO_D="$XDG_CONFIG_HOME/vcsh/repo.d"
 [ -z "$VCSH_HOOK_D" ]                 && VCSH_HOOK_D="$XDG_CONFIG_HOME/vcsh/hooks-enabled"
 [ -z "$VCSH_BASE" ]                   && VCSH_BASE="$HOME"
 [ -z "$VCSH_GITIGNORE" ]              && VCSH_GITIGNORE='exact'
 
+
 help() {
 	echo "usage: $SELF <options> <command>
 
    options:
-   -c <file>            Source file prior to other configuration files
+   -c <file>            Source file
    -d                   Enable debug mode
    -d                   Enable verbose mode
 
