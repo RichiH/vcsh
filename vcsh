@@ -72,13 +72,13 @@ help() {
    options:
    -c <file>            Source file
    -d                   Enable debug mode
-   -d                   Enable verbose mode
+   -v                   Enable verbose mode
 
    commands:
    clone <remote> \\
          [<repo>]       Clone from an existing repository
-   delete               Delete an existing repository
-   enter                Enter repository; spawn new instance of \$SHELL
+   delete <repo>        Delete an existing repository
+   enter <repo>         Enter repository; spawn new instance of \$SHELL
    help                 Display this help text
    init <repo>          Initialize a new repository
    list                 List all repositories
@@ -89,7 +89,7 @@ help() {
           <newname>     Rename repository
    run <repo> \\
        <command>        Use this repository
-   setup                Set up repository with recommended settings
+   setup <repo>         Set up repository with recommended settings
    which <substring>    Find substring in name of any tracked file
    write-gitignore \\
    <repo>               Write .gitignore.d/<repo> via git ls-files
