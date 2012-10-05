@@ -99,11 +99,11 @@ help() {
 }
 
 debug() {
-	[ -n "$VCSH_DEBUG" ] && echo "$SELF: debug: $@"
+	[ -n "$VCSH_DEBUG" ] && echo "$SELF: debug: $@" >&2
 }
 
 verbose() {
-	if [ -n "$VCSH_DEBUG" ] || [ -n "$VCSH_VERBOSE" ]; then echo "$SELF: verbose: $@"; fi
+	if [ -n "$VCSH_DEBUG" ] || [ -n "$VCSH_VERBOSE" ]; then echo "$SELF: verbose: $@"; fi >&2
 }
 
 error() {
@@ -111,7 +111,7 @@ error() {
 }
 
 info() {
-	echo "$SELF: info: $1"
+	echo "$SELF: info: $1" >&2
 }
 
 clone() {
