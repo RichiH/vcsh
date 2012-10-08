@@ -6,6 +6,8 @@
 * 13: Required directory exists but is not a directory
 * 16: Potentially harmful operation aborted
 * 17: Files that would be overwritten exist; fix manually
+* 19: 
+* 20: Could not parse arguments correctly
 
 * 50: Could not create directory
 * 51: Could not create file
