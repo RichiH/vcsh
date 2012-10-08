@@ -114,7 +114,7 @@ error() {
 }
 
 info() {
-	[-z "$VCSH_QUIET" ] && echo "$SELF: info: $1"
+	[ -z "$VCSH_QUIET" ] && echo "$SELF: info: $1"
 }
 
 clone() {
