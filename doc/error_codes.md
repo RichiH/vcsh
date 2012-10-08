@@ -1,7 +1,7 @@
 * 0: OK
 * 1: Generic error
-* 10: Init failed because $GIT_DIR exists
-* 11: Could not enter $GIT_WORK_TREE
+* 10: Init failed because $GIT\_DIR exists
+* 11: Could not enter $GIT\_WORK\_TREE
 * 12: No repository found
 * 13: Required directory exists but is not a directory
 * 16: Potentially harmful operation aborted
