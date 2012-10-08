@@ -21,12 +21,14 @@ fatal() {
 # We need to run getops as soon as possible so we catch -d and other
 # options that will modify our behaviour.
 # Commands are handled at the end of this script.
-while getopts  "c:dv" flag; do
+while getopts  "c:dqv" flag; do
 	if [ "$1" = '-d' ] || [ "$1" = '--debug' ]; then
 		set -vx
 		VCSH_DEBUG=1
 	elif [ "$1" = '-v' ];then
 		VCSH_VERBOSE=1
+	elif [ "$1" = '-q' ];then
+		VCSH_QUIET=1
 	elif [ "$1" = '-c' ];then
 		VCSH_OPTION_CONFIG=$OPTARG
 	fi
@@ -72,6 +74,7 @@ help() {
    options:
    -c <file>            Source file
    -d                   Enable debug mode
+   -q                   Enable quiet mode
    -v                   Enable verbose mode
 
    commands:
@@ -111,7 +114,7 @@ error() {
 }
 
 info() {
-	echo "$SELF: info: $1"
+	[-z "$VCSH_QUIET" ] && echo "$SELF: info: $1"
 }
 
 clone() {
