@@ -69,7 +69,8 @@ fi
 
 
 help() {
-	echo "usage: $SELF <options> <command>
+	# Print info message if `help 0` is called; exit with an error otherwise
+	help_text="usage: $SELF <options> <command>
 
    options:
    -c <file>            Source file
@@ -98,7 +99,13 @@ help() {
    <repo>               Write .gitignore.d/<repo> via git ls-files
 
    <repo> <git command> Shortcut to run git commands directly
-   <repo>               Shortcut to enter repository" >&2
+   <repo>               Shortcut to enter repository"
+
+	if [ "x$@" = 'x0' ]; then
+		info "$help_text"
+	else
+		fatal "$help_text" $@
+	fi
 }
 
 debug() {
@@ -312,21 +319,23 @@ elif [ "$1" = 'delete' ]           ||
 elif [ "$1" = 'list' ] ||
      [ "$1" = 'list-tracked' ]; then
 	export VCSH_COMMAND="$1"
+elif [ "$1" = 'help' ]; then
+	help 0 && exit
 elif [ -n "$2" ]; then
 	export VCSH_COMMAND='run'
 	export VCSH_REPO_NAME="$1"
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
-	[ -d $GIT_DIR ] || { help; exit 1; }
+	[ -d $GIT_DIR ] || { help 20; }
 	shift 1
 	export VCSH_EXTERNAL_COMMAND="git $*"
 elif [ -n "$1" ]; then
 	export VCSH_COMMAND='enter'
 	export VCSH_REPO_NAME="$1"
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
-	[ -d $GIT_DIR ] || { help; exit 1; }
+	[ -d $GIT_DIR ] || { help 20; }
 else
-	# $1 is empty, or 'help'
-	help && exit
+	# $1 is empty or unknown
+	help 20 && exit
 fi
 
 # Did we receive a directory instead of a name?
