@@ -25,12 +25,12 @@ while getopts  "c:dv" flag; do
 	if [ "$1" = '-d' ] || [ "$1" = '--debug' ]; then
 		set -vx
 		VCSH_DEBUG=1
-		shift 1
 	elif [ "$1" = '-v' ];then
 		VCSH_VERBOSE=1
 	elif [ "$1" = '-c' ];then
 		VCSH_OPTION_CONFIG=$OPTARG
 	fi
+	shift 1
 done
 
 source_all() {
