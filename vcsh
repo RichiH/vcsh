@@ -138,7 +138,7 @@ clone() {
 delete() {
 	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
 	use
-	info "This operation WILL DETROY DATA!"
+	info "This operation WILL DESTROY DATA!"
 	files=$(git ls-files)
 	echo "These files will be deleted:
 
