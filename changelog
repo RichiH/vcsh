@@ -1,3 +1,10 @@
+2013-03-31  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.1
+	* Documentation fixes
+	* Use rm -f when removing a git repo
+	* Fix quoting bug (Debian #699093)
+
 2013-02-13  Richard Hartmann <richih.mailinglist@gmail.com>
 
 	* Release 1.0.1
