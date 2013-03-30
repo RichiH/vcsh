@@ -11,24 +11,74 @@
 # full compability with git. In case git ever changes its licensing terms,
 # this software will most likely follow suit.
 
+SELF=$(basename $0)
+
+fatal() {
+	echo "$SELF: fatal: $1" >&2
+	exit $2
+}
+
+# We need to run getops as soon as possible so we catch -d and other
+# options that will modify our behaviour.
+# Commands are handled at the end of this script.
+while getopts  "c:dv" flag; do
+	if [ "$1" = '-d' ] || [ "$1" = '--debug' ]; then
+		set -vx
+		VCSH_DEBUG=1
+	elif [ "$1" = '-v' ];then
+		VCSH_VERBOSE=1
+	elif [ "$1" = '-c' ];then
+		VCSH_OPTION_CONFIG=$OPTARG
+	fi
+	shift 1
+done
+
+source_all() {
+	# Source file even if it's in $PWD and does not have any slashes in it
+	case "$1" in
+		*/*) . "$1";;
+		*)   . "$PWD/$1";;
+	esac;
+}
+
+
+# Read configuration and set defaults if anything's not set
 [ -n "$VCSH_DEBUG" ]                  && set -vx
 [ -z "$XDG_CONFIG_HOME" ]             && XDG_CONFIG_HOME="$HOME/.config"
+
+# Read configuration files if there are any
+[ -r "/etc/vcsh/config" ]             && . "/etc/vcsh/config"
 [ -r "$XDG_CONFIG_HOME/vcsh/config" ] && . "$XDG_CONFIG_HOME/vcsh/config"
+if [ -n "$VCSH_OPTION_CONFIG" ]; then
+	# Source $VCSH_OPTION_CONFIG if it can be read and is in $PWD of $PATH
+	if [ -r "$VCSH_OPTION_CONFIG" ]; then
+		source_all "$VCSH_OPTION_CONFIG"
+	else
+		fatal "Can not read configuration file '$VCSH_OPTION_CONFIG'" 1
+	fi
+fi
 [ -n "$VCSH_DEBUG" ]                  && set -vx
+
+# Read defaults
 [ -z "$VCSH_REPO_D" ]                 && VCSH_REPO_D="$XDG_CONFIG_HOME/vcsh/repo.d"
 [ -z "$VCSH_HOOK_D" ]                 && VCSH_HOOK_D="$XDG_CONFIG_HOME/vcsh/hooks-enabled"
 [ -z "$VCSH_BASE" ]                   && VCSH_BASE="$HOME"
 [ -z "$VCSH_GITIGNORE" ]              && VCSH_GITIGNORE='exact'
 
-SELF=$(basename $0)
 
 help() {
-	echo "usage: $SELF <args>
+	echo "usage: $SELF <options> <command>
 
+   options:
+   -c <file>            Source file
+   -d                   Enable debug mode
+   -v                   Enable verbose mode
+
+   commands:
    clone <remote> \\
          [<repo>]       Clone from an existing repository
-   delete               Delete an existing repository
-   enter                Enter repository; spawn new instance of \$SHELL
+   delete <repo>        Delete an existing repository
+   enter <repo>         Enter repository; spawn new instance of \$SHELL
    help                 Display this help text
    init <repo>          Initialize a new repository
    list                 List all repositories
@@ -39,7 +89,7 @@ help() {
           <newname>     Rename repository
    run <repo> \\
        <command>        Use this repository
-   setup                Set up repository with recommended settings
+   setup <repo>         Set up repository with recommended settings
    which <substring>    Find substring in name of any tracked file
    write-gitignore \\
    <repo>               Write .gitignore.d/<repo> via git ls-files
@@ -54,11 +104,6 @@ debug() {
 
 verbose() {
 	if [ -n "$VCSH_DEBUG" ] || [ -n "$VCSH_VERBOSE" ]; then echo "$SELF: verbose: $@"; fi
-}
-
-fatal() {
-	echo "$SELF: fatal: $1" >&2
-	exit $2
 }
 
 error() {
@@ -93,7 +138,7 @@ clone() {
 delete() {
 	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
 	use
-	info "This operation WILL DETROY DATA!"
+	info "This operation WILL DESTROY DATA!"
 	files=$(git ls-files)
 	echo "These files will be deleted:
 
@@ -106,7 +151,7 @@ To continue, type 'Yes, do as I say'"
 	for file in $files; do
 		rm -f $file || info "could not delete '$file', continuing with deletion"
 	done
-	rm -r "$GIT_DIR" || error "could not delete '$GIT_DIR'"
+	rm -rf "$GIT_DIR" || error "could not delete '$GIT_DIR'"
 }
 
 enter() {
@@ -169,7 +214,7 @@ rename() {
 run() {
 	hook pre-run
 	use
-	$VCSH_EXTERNAL_COMMAND
+	"$@"
 	hook post-run
 }
 
@@ -259,7 +304,7 @@ elif [ "$1" = 'delete' ]           ||
 	export VCSH_REPO_NAME="$2"
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 	[ "$VCSH_COMMAND" = 'rename' ]         && export GIT_DIR_NEW="$VCSH_REPO_D/$3.git"
-	[ "$VCSH_COMMAND" = 'run' ] && shift 2 && export VCSH_EXTERNAL_COMMAND="$*"
+	[ "$VCSH_COMMAND" = 'run' ] && shift 2
 	[ "$VCSH_COMMAND" = 'write-gitignore' ]
 elif [ "$1" = 'list' ] ||
      [ "$1" = 'list-tracked' ]; then
@@ -270,7 +315,7 @@ elif [ -n "$2" ]; then
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 	[ -d $GIT_DIR ] || { help; exit 1; }
 	shift 1
-	export VCSH_EXTERNAL_COMMAND="git $*"
+	set -- "git" "$@"
 elif [ -n "$1" ]; then
 	export VCSH_COMMAND='enter'
 	export VCSH_REPO_NAME="$1"
@@ -304,6 +349,6 @@ done
 verbose "$VCSH_COMMAND begin"
 export VCSH_COMMAND=$(echo $VCSH_COMMAND | sed 's/-/_/g')
 hook pre-command
-$VCSH_COMMAND
+$VCSH_COMMAND "$@"
 hook post-command
 verbose "$VCSH_COMMAND end, exiting"

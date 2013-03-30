@@ -3,6 +3,8 @@ vcsh(1) - manage config files in $HOME via fake bare git repositories
 
 ## SYNOPSIS
 
+`vcsh` [<options>] <command>
+
 `vcsh` clone <url> [<repo>]
 
 `vcsh` delete <repo>
@@ -21,7 +23,7 @@ vcsh(1) - manage config files in $HOME via fake bare git repositories
 
 `vcsh` rename <repo> <newname>
 
-`vcsh` run <repo> <command>
+`vcsh` run <repo> <shell command>
 
 `vcsh` setup <repo>
 
@@ -29,7 +31,7 @@ vcsh(1) - manage config files in $HOME via fake bare git repositories
 
 `vcsh` write-gitignore <repo>
 
-`vcsh` <repo> <gitcommand>
+`vcsh` <repo> <git command>
 
 `vcsh` <repo>
 
@@ -58,6 +60,17 @@ This is needed to support mr and other scripts properly and of no concern to
 an interactive user.
 
 ## OPTIONS
+
+* -c:
+  Source <file> prior to other configuration files
+
+* -d:
+  Enable debug mode
+
+* -v:
+  Enable verbose mode
+
+## COMMANDS
 
 * clone:
   Clone an existing repository.
@@ -117,6 +130,59 @@ an interactive user.
 As noted earlier, `vcsh` will set <$GIT_DIR> and <$GIT_WORK_TREE> to the
 appropriate values for fake bare git repositories.
 
+## CONFIG
+
+There are several ways to turn the various knobs on `vcsh`. In order of
+ascending precedence, they are:
+
+* `VARIABLE=foo vcsh`
+* </etc/vcsh/config>
+* <$XDG_CONFIG_HOME/vcsh/config>
+* `vcsh -c <file>`
+
+Please note that those files are sourced. Any and all commands will be
+executed in the context of your shell.
+
+Interesting knobs you can turn:
+
+* <$VCSH_GITIGNORE>:
+  Can be either <exact> or <recursive>.
+
+  <exact> will seed the repo-specific <.gitignore> with all file and directory
+  names which `git ls-files` returns.
+
+  <recursive> will descend through all directories recursively additionally to
+  the above.
+
+  Defaults to <exact>.
+
+Less interesting knobs you could turn:
+
+* <$VCSH_DEBUG>:
+  Enter debug mode.
+
+* <$XDG_CONFIG_HOME>:
+  As specified in the 'XDG Base Directory Specification', see
+  <http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html>
+
+  Defaults to <$HOME/.config>.
+
+* <$VCSH_REPO_D>:
+  The directory where repositories are read from and stored.
+
+  Defaults to <$XDG_CONFIG_HOME/vcsh/repo.d>.
+
+* <$VCSH_HOOK_D>:
+  The directory where hooks are read from.
+
+  Defaults to <$XDG_CONFIG_HOME/vcsh/hooks-enabled>.
+
+* <$VCSH_BASE>:
+  The directory where repositories are checked out to.
+
+  Defaults to <$HOME>.
+
+
 ## HOOK SYSTEM
 
 `vcsh` provides a hook system. Hook scripts must be executable and should be
@@ -141,30 +207,33 @@ but please let upstream know so we can ship them by default.
 
 ## DETAILED HOWTO AND FURTHER READING
 
-Man pages are intended to be short and thus often useless to glean best
-practices from. This software comes with a file called <README.md>. It contains
-various approaches to setting up and using vcsh. You can view the file it as
+Manpages are often short and sometimes useless to glean best practices from.
+While the author tried to avoid this in this case, manpages can not cover
+detailed howtos.
+
+This software also comes with a file called <README.md>. It contains various
+approaches to setting up and using vcsh. You can view the file it as
 plain text or render it into various other formats via Markdown.
 
 On Debian-based systems, this file can be found in </usr/share/doc/vcsh>.
 
 ## SECURITY CONSIDERATIONS
 
-`vcsh` allows you to execute arbitrary commands via `vcsh` run. For example,
+`vcsh` allows you to execute arbitrary commands via `vcsh run`. For example,
 adding a `sudo`(8) rule for `vcsh` would be pretty stupid.
 
-Additionally, vcsh will source, i.e. execute, <$XDG_CONFIG_HOME/vcsh/config>.
-You can put any and all commands into this config file and they will be executed.
+Additionally, vcsh will source, i.e. execute, all files listed in <CONFIG>.
+You can put any and all commands into these config files and they will be
+executed.
 
 ## BUGS
 
 None are known at this time, but reports and/or patches are more than welcome.
 
-## KNOWN ISSUES
+## INTEROPERABILITY
 
-As of this writing (June 2012), `vcsh` does not work with `git submodule` due
-to limitations within `git`. Depending on when you are reading this, you might
-want to consider upgrading.
+If you rely on `git submodule`, use `git` 1.7.12 or later. Earlier versions
+do not clean internal variables properly before descending into a submodule.
 
 ## HISTORY
 
