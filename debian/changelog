@@ -1,3 +1,11 @@
+vcsh (1.2-1) experimental; urgency=low
+
+  * New upstream release
+    + Documentation fixes
+    + Introduce `vcsh version` Closes: #694584
+
+ -- Richard Hartmann <richih.mailinglist@gmail.com>  Sun, 21 Apr 2013 01:17:27 +0200
+
 vcsh (1.1-1) experimental; urgency=low
 
   * New upstream release
