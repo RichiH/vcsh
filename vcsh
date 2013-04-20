@@ -12,6 +12,7 @@
 # this software will most likely follow suit.
 
 SELF=$(basename $0)
+VERSION='1.2'
 
 fatal() {
 	echo "$SELF: fatal: $1" >&2
@@ -90,6 +91,7 @@ help() {
    run <repo> \\
        <command>        Use this repository
    setup <repo>         Set up repository with recommended settings
+   version              Print version information
    which <substring>    Find substring in name of any tracked file
    write-gitignore \\
    <repo>               Write .gitignore.d/<repo> via git ls-files
@@ -284,6 +286,9 @@ if [ "$1" = 'clone' ]; then
 	[ -n "$3" ] && VCSH_REPO_NAME="$3" || VCSH_REPO_NAME=$(basename "$GIT_REMOTE" .git)
 	export VCSH_REPO_NAME
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
+elif [ "$1" = 'version' ]; then
+	echo "$SELF $VERSION"
+	exit
 elif [ "$1" = 'which' ]; then
 	[ -z "$2" ] && fatal "$1: please specify a filename" 1
 	[ -n "$3" ] && fatal "$1: too many parameters" 1
