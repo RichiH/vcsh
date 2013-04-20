@@ -232,8 +232,9 @@ None are known at this time, but reports and/or patches are more than welcome.
 
 ## INTEROPERABILITY
 
-If you rely on `git submodule`, use `git` 1.7.12 or later. Earlier versions
-do not clean internal variables properly before descending into a submodule.
+If you rely on `git submodule` use `git` 1.7.12 or later. Earlier versions
+do not clean internal variables properly before descending into submodules,
+resulting in unhappy end users.
 
 ## HISTORY
 
