@@ -27,6 +27,8 @@ vcsh(1) - manage config files in $HOME via fake bare git repositories
 
 `vcsh` setup <repo>
 
+`vcsh` version
+
 `vcsh` which <substring>
 
 `vcsh` write-gitignore <repo>
@@ -112,6 +114,9 @@ an interactive user.
 
 * setup:
   Set up repository with recommended settings.
+
+* version:
+  Print version information.
 
 * which <substring>:
   Find <substring> in name of any tracked file.
