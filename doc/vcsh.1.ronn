@@ -27,6 +27,8 @@ vcsh(1) - manage config files in $HOME via fake bare git repositories
 
 `vcsh` setup <repo>
 
+`vcsh` version
+
 `vcsh` which <substring>
 
 `vcsh` write-gitignore <repo>
@@ -112,6 +114,9 @@ an interactive user.
 
 * setup:
   Set up repository with recommended settings.
+
+* version:
+  Print version information.
 
 * which <substring>:
   Find <substring> in name of any tracked file.
@@ -232,8 +237,9 @@ None are known at this time, but reports and/or patches are more than welcome.
 
 ## INTEROPERABILITY
 
-If you rely on `git submodule`, use `git` 1.7.12 or later. Earlier versions
-do not clean internal variables properly before descending into a submodule.
+If you rely on `git submodule` use `git` 1.7.12 or later. Earlier versions
+do not clean internal variables properly before descending into submodules,
+resulting in unhappy end users.
 
 ## HISTORY
 
