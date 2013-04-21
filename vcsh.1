@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "VCSH" "1" "February 2013" "" ""
+.TH "VCSH" "1" "April 2013" "" ""
 .
 .SH "NAME"
 \fBvcsh\fR \- manage config files in $HOME via fake bare git repositories
@@ -41,6 +41,9 @@
 .
 .P
 \fBvcsh\fR setup \fIrepo\fR
+.
+.P
+\fBvcsh\fR version
 .
 .P
 \fBvcsh\fR which \fIsubstring\fR
@@ -134,6 +137,10 @@ Please note that there is a somewhat magic feature for run\. Instead of \fIrepo\
 .TP
 setup
 Set up repository with recommended settings\.
+.
+.TP
+version
+Print version information\.
 .
 .TP
 which \fIsubstring\fR
@@ -256,7 +263,7 @@ Additionally, vcsh will source, i\.e\. execute, all files listed in \fICONFIG\fR
 None are known at this time, but reports and/or patches are more than welcome\.
 .
 .SH "INTEROPERABILITY"
-If you rely on \fBgit submodule\fR, use \fBgit\fR 1\.7\.12 or later\. Earlier versions do not clean internal variables properly before descending into a submodule\.
+If you rely on \fBgit submodule\fR use \fBgit\fR 1\.7\.12 or later\. Earlier versions do not clean internal variables properly before descending into submodules, resulting in unhappy end users\.
 .
 .SH "HISTORY"
 Like most people, the author initially made do with a single repository for all config files, all of which were soft\-linked into \fI$HOME\fR\.
