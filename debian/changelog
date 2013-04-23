@@ -1,3 +1,10 @@
+vcsh (1.2-1~bpo60+1) squeeze-backports-sloppy; urgency=low
+
+  * Rebuild for squeeze-backports-sloppy
+  * Update vcsh.1
+
+ -- Richard Hartmann <richih.mailinglist@gmail.com>  Tue, 23 Apr 2013 22:59:15 +0200
+
 vcsh (1.2-1) experimental; urgency=low
 
   * New upstream release
