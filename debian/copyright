@@ -2,8 +2,8 @@ Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: vcsh
 Upstream-Contact: <richih.mailinglist@gmail.com>
 Source: https://github.com/RichiH/vcsh
-License: GPL-2+
 Copyright: 2011-2012 Richard Hartmann
+License: GPL-2+
 
 Files: *
 Copyright: 2011-2012 Richard Hartmann <richih.mailinglist@gmail.com>

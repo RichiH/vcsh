@@ -35,6 +35,11 @@ The following overview will try to give you an idea of the use cases and
 advantages of vcsh. See sections 3 and 4 for detailed instructions and
 examples.
 
+## 2.1 Talks ##
+
+Some people found it useful to look at slides and videos explaining how vcsh works.
+They can all be found at [here](http://richardhartmann.de/talks/).
+
 # 3 Overview
 
 ## 3.1 Comparison to Other Solutions ##
@@ -197,19 +202,48 @@ the template will be stored.
 
     apt-get install mr
 
-#### 4.1.2 Clone the Template ####
+#### 4.1.2 Install vcsh ####
 
+#### 4.1.2.1 Debian ####
+
+If you are using Debian Squeeze, you will need to enable backports
+
+    apt-get install vcsh
+
+#### 4.1.2.2 Arch Linux ####
+
+vcsh is availabe via [AUR](https://aur.archlinux.org/packages.php?ID=54164)
+and further documentation about the use of AUR is available
+[on Arch's wiki](https://wiki.archlinux.org/index.php/Arch_User_Repository).
+
+    cd /var/abs/local/
+    wget https://aur.archlinux.org/packages/vc/vcsh-git/vcsh-git.tar.gz
+    tar xfz vcsh-git.tar.gz
+    cd vcsh-git
+    makepkg -s
+    pacman -U vcsh*.pkg.tar.xz
+
+#### 4.1.2.3 From source ####
+
+If your version of mr is older than version 1.07, make sure to put
+
+    include = cat /usr/share/mr/vcsh
+
+into your .mrconfig .
+
+    # choose a location for your checkout
     cd $HOME
     mkdir -p ~/work/git
-    git clone git://github.com/RichiH/vcsh.git vcsh
-    # make sure 'include = cat /usr/share/mr/vcsh' points to an exiting file
-    vim .mrconfig
+    git clone git://github.com/RichiH/vcsh.git
     cd vcsh
     ln -s vcsh /usr/local/bin                       # or add it to your PATH
     cd
+
+#### 4.1.3 Clone the Template ####
+
     vcsh clone git://github.com/RichiH/vcsh_mr_template.git mr
 
-#### 4.1.3 Enable Your Test Repository ####
+#### 4.1.4 Enable Your Test Repository ####
 
     mv ~/.zsh   ~/zsh.bak
     mv ~/.zshrc ~/zshrc.bak
@@ -218,7 +252,7 @@ the template will be stored.
     cd
     mr up
 
-#### 4.1.4 Set Up Your Own Repositories ####
+#### 4.1.5 Set Up Your Own Repositories ####
 
 Now, it's time to edit the template config and fill it with your own remotes:
 

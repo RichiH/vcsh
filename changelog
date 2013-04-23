@@ -1,3 +1,28 @@
+2013-04-21  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.2
+	* Introduce `vcsh version`
+
+2013-03-31  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.1
+	* Documentation fixes
+	* Use rm -f when removing a git repo
+	* Fix quoting bug (Debian #699093)
+
+2013-02-13  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.0.1
+	* Improve documentation
+	* Fix parameter bug
+
+2012-06-30  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.0
+	* Make `vcsh list` more resilient
+	* Lots of doc improvements
+
+
 2012-02-27  Richard Hartmann <richih.mailinglist@gmail.com>
 
 	* Refactor Makefile
