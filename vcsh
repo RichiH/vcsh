@@ -256,11 +256,11 @@ write_gitignore() {
 		done;
 	done | sort -u)
 	tempfile=$(mktemp) || fatal "could not create tempfile" 51
-	echo '*' > "$tempfile" || fatal "could not write to '$tempfile'" 57
+	echo '/*' > "$tempfile" || fatal "could not write to '$tempfile'" 57
 	for gitignore in $gitignores; do
-		echo "$gitignore" | sed 's/^/!/' >> "$tempfile" || fatal "could not write to '$tempfile'" 57
+		echo "$gitignore" | sed 's@^@!/@' >> "$tempfile" || fatal "could not write to '$tempfile'" 57
 		if [ x$VCSH_GITIGNORE = x'recursive' ] && [ -d "$gitignore" ]; then
-			{ echo "$gitignore/*" | sed 's/^/!/' >> "$tempfile" || fatal "could not write to '$tempfile'" 57; }
+			{ echo "$gitignore/*" | sed 's@^@!/@' >> "$tempfile" || fatal "could not write to '$tempfile'" 57; }
 		fi
 	done
 	if diff -N "$tempfile" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" > /dev/null; then
