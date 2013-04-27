@@ -1,7 +1,6 @@
 #compdef vcsh
 
 function __vcsh_repositories () {
-	#TODO list only one repo and stop
 	local expl
 	local -a repos
 	repos=( ${(f)"$(command vcsh list)"} )
@@ -17,11 +16,11 @@ function _vcsh-clone () {
 }
 
 function _vcsh-delete () {
-	__vcsh_repositories
+	(( CURRENT == 2 )) && __vcsh_repositories
 }
 
 function _vcsh-enter () {
-	__vcsh_repositories
+	(( CURRENT == 2 )) && __vcsh_repositories
 }
 
 function _vcsh-help () {
@@ -41,33 +40,33 @@ function _vcsh-list-tracked () {
 }
 
 function _vcsh-list-tracked-by () {
-	__vcsh_repositories
+	(( CURRENT == 2 )) && __vcsh_repositories
 }
 
 function _vcsh-rename () {
-	__vcsh_repositories
-	#TODO tell the user to write new stuff
+	(( CURRENT == 2 )) && __vcsh_repositories
+	#TODO tell the user to add a new name
 }
 
 function _vcsh-run () {
-	__vcsh_repositories
-	_commands
+	(( CURRENT == 2 )) && __vcsh_repositories
 	#TODO normal commands
 }
 
 function _vcsh-setup () {
-	__vcsh_repositories
+	(( CURRENT == 2 )) && __vcsh_repositories
 }
 
 function _vcsh-version () {
+	_nothing
 }
 
 function _vcsh-which () {
-	__vcsh_not_implemented_yet "$0" #TODO
+	_files
 }
 
 function _vcsh-write-gitignore () {
-	__vcsh_repositories
+	(( CURRENT == 2 )) && __vcsh_repositories
 }
 
 function _vcsh () {
