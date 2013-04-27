@@ -108,12 +108,13 @@ if [ -n "$VCSH_OPTION_CONFIG" ]; then
 fi
 [ -n "$VCSH_DEBUG" ]                  && set -vx
 
+[ -z "$VCSH_RUN_FIXUPS" ]             && VCSH_RUN_FIXUPS="rel_worktree"
+
 # Read defaults
 [ -z "$VCSH_REPO_D" ]                 && VCSH_REPO_D="$XDG_CONFIG_HOME/vcsh/repo.d"
 [ -z "$VCSH_HOOK_D" ]                 && VCSH_HOOK_D="$XDG_CONFIG_HOME/vcsh/hooks-enabled"
 [ -z "$VCSH_BASE" ]                   && VCSH_BASE="$HOME"
 [ -z "$VCSH_GITIGNORE" ]              && VCSH_GITIGNORE='exact'
-
 
 help() {
 	echo "usage: $SELF <options> <command>
@@ -278,8 +279,18 @@ setup() {
 	hook post-setup
 }
 
+vcsh_fixups() {
+	case "$VCSH_RUN_FIXUPS::$(git config --get core.worktree)" in
+		(*rel_worktree*::/*)
+			info "Changing core.worktree to relative path for repository $VCSH_REPO_NAME..."
+			git config core.worktree $(relpath $VCSH_REPO_D $VCSH_BASE/);;
+		(*) :;;
+	esac
+}
+
 use() {
 	git_dir_exists
+	vcsh_fixups
 	export GIT_WORK_TREE="$(git config --get core.worktree)"
 	export VCSH_DIRECTORY="$VCSH_REPO_NAME"
 }
