@@ -12,6 +12,12 @@
 # which is admittedly extremely unlikely to the point of being impossible,
 # this software will most likely follow suit.
 
+basename() {
+	local f; f="${1##*/}"
+	[ -z "$2" ] || f="${f%$2}"
+	echo "$f"
+}
+
 SELF=$(basename $0)
 VERSION='1.2'
 
