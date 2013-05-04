@@ -1,3 +1,9 @@
+vcsh (1.2-2) unstable; urgency=low
+
+  * Bump version and upload to unstable
+
+ -- Richard Hartmann <richih.mailinglist@gmail.com>  Sat, 04 May 2013 02:58:18 +0200
+
 vcsh (1.2-1) experimental; urgency=low
 
   * New upstream release
