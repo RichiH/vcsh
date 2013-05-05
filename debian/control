@@ -2,7 +2,7 @@ Source: vcsh
 Maintainer: Richard Hartmann <richih.mailinglist@gmail.com>
 Section: misc
 Priority: optional
-Standards-Version: 3.9.3
+Standards-Version: 3.9.4
 Build-Depends: debhelper (>= 7),
                git
 Vcs-Git: git://github.com/RichiH/vcsh.git

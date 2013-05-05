@@ -1,3 +1,16 @@
+vcsh (1.2-3) unstable; urgency=low
+
+  * Packaging changes
+    + Increase Standards-Version from 3.9.3 to 3.9.4 (no changes)
+
+ -- Richard Hartmann <richih.mailinglist@gmail.com>  Sun, 05 May 2013 23:55:59 +0200
+
+vcsh (1.2-2) unstable; urgency=low
+
+  * Bump version and upload to unstable
+
+ -- Richard Hartmann <richih.mailinglist@gmail.com>  Sat, 04 May 2013 02:58:18 +0200
+
 vcsh (1.2-1~bpo60+1) squeeze-backports-sloppy; urgency=low
 
   * Rebuild for squeeze-backports-sloppy
