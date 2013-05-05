@@ -1,3 +1,9 @@
+vcsh (1.2-3~bpo70+1) wheezy-backports; urgency=low
+
+  * Rebuild for wheezy-backports.
+
+ -- Richard Hartmann <richih.mailinglist@gmail.com>  Mon, 06 May 2013 00:59:48 +0200
+
 vcsh (1.2-3) unstable; urgency=low
 
   * Packaging changes
