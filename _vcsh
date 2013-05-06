@@ -45,12 +45,17 @@ function _vcsh-list-tracked-by () {
 
 function _vcsh-rename () {
 	(( CURRENT == 2 )) && __vcsh_repositories
-	#TODO tell the user to add a new name
+	(( CURRENT == 3 )) && _message "new repository name"
+	(( CURRENT > 3 )) && _nothing
 }
 
 function _vcsh-run () {
 	(( CURRENT == 2 )) && __vcsh_repositories
-	#TODO normal commands
+	if (( CURRENT >= 3 )); then
+		words=( "${(@)words[3,-1]}" )
+		(( CURRENT -= 2 ))
+		_complete
+	fi
 }
 
 function _vcsh-setup () {
