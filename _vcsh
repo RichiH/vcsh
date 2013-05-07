@@ -58,7 +58,7 @@ function _vcsh-run () {
 	fi
 }
 
-function _vcsh-setup () {
+function _vcsh-upgrade () {
 	(( CURRENT == 2 )) && __vcsh_repositories
 }
 
@@ -90,7 +90,7 @@ function _vcsh () {
 		"list-tracked-by:list files tracked by a repository"
 		"rename:rename a repository"
 		"run:run command with <\$GIT_DIR> and <\$GIT_WORK_TREE> set"
-		"setup:set up repository with recommended settings"
+		"upgrade:upgrade repository to currently recommended settings"
 		"version:print version information"
 		"which:find <substring> in name of any tracked file"
 		"write-gitignore:write .gitignore.d/<repo> via git ls-files"

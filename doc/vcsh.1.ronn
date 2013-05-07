@@ -25,7 +25,7 @@ vcsh(1) - manage config files in $HOME via fake bare git repositories
 
 `vcsh` run <repo> <shell command>
 
-`vcsh` setup <repo>
+`vcsh` upgrade <repo>
 
 `vcsh` version
 
@@ -112,8 +112,8 @@ an interactive user.
   This is needed to support mr and other scripts properly and of no concern to
   an interactive user.
 
-* setup:
-  Set up repository with recommended settings.
+* upgrade:
+  Upgrade repository to currently recommended settings.
 
 * version:
   Print version information.
@@ -207,7 +207,7 @@ same rules as above apply. The dot between the repository's name and the hook
 is mandatory, though.
 
 Available hooks are <pre-enter>, <post-enter>, <pre-run>, <post-run>,
-<pre-setup>, and <post-setup>. If you need more, vcsh is trivial to patch,
+<pre-upgrade>, and <post-upgrade>. If you need more, vcsh is trivial to patch,
 but please let upstream know so we can ship them by default.
 
 ## DETAILED HOWTO AND FURTHER READING

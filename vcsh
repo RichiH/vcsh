@@ -99,7 +99,7 @@ help() {
           <newname>     Rename repository
    run <repo> \\
        <command>        Use this repository
-   setup <repo>         Set up repository with recommended settings
+   upgrade <repo>       Upgrade repository to currently recommended settings
    version              Print version information
    which <substring>    Find substring in name of any tracked file
    write-gitignore \\
@@ -190,7 +190,7 @@ init() {
 	mkdir -p "$GIT_WORK_TREE" || fatal "could not create '$GIT_WORK_TREE'" 50
 	cd "$GIT_WORK_TREE" || fatal "could not enter '$GIT_WORK_TREE'" 11
 	git init
-	setup
+	upgrade
 }
 
 list() {
@@ -229,14 +229,14 @@ run() {
 	hook post-run
 }
 
-setup() {
-	hook pre-setup
+upgrade() {
+	hook pre-upgrade
 	use
 	git config core.worktree     "$GIT_WORK_TREE"
 	git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
 	git config vcsh.vcsh         'true'
 	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME"
-	hook post-setup
+	hook post-upgrade
 }
 
 use() {
@@ -309,7 +309,7 @@ elif [ "$1" = 'delete' ]           ||
      [ "$1" = 'list-tracked-by' ]  ||
      [ "$1" = 'rename' ]           ||
      [ "$1" = 'run' ]              ||
-     [ "$1" = 'setup' ]            ||
+     [ "$1" = 'upgrade' ]          ||
      [ "$1" = 'write-gitignore' ]; then
 	[ -z $2 ]                      && fatal "$1: please specify repository to work on" 1
 	[ "$1" = 'rename' -a -z "$3" ] && fatal "$1: please specify a target name" 1
