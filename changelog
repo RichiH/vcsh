@@ -22,7 +22,6 @@
 	* Make `vcsh list` more resilient
 	* Lots of doc improvements
 
-
 2012-02-27  Richard Hartmann <richih.mailinglist@gmail.com>
 
 	* Refactor Makefile
