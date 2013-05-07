@@ -1,5 +1,5 @@
 version=3
-opts=uversionmangle=s/^((?:\d+\.)*\d+-\d+-bpo\d+\+\d+)$/0.0.$1/;s/^(1\.2-homebrew)$/0.0.$1/ \
+opts=uversionmangle=s/^((?:\d+\.)*\d+-\d+-bpo\d+\+\d+)$/0.0.$1/;s/^(1\.2-homebrew)$/0.0.$1/;s/^((?:\d+\.)*\d+-\d+)$/0.0.$1/ \
 https://github.com/RichiH/vcsh/tags \
 .*/archive/(?:upstream/)?(?:v||version-|release-|X|R|r)(\d\S*)\.tar\.gz
-# Bart Martens <bartm@debian.org>  Mon, 06 May 2013 20:13:05 +0000
+# Bart Martens <bartm@debian.org>  Tue, 07 May 2013 19:38:25 +0000
