@@ -15,21 +15,31 @@ community around the general idea of version controlling your (digital) life.
 
 * IRC: #vcs-home on irc.oftc.net
 
-* Mailing list: http://lists.madduck.net/listinfo/vcs-home
+* Mailing list: [http://lists.madduck.net/listinfo/vcs-home][vcs-home-list]
 
-* Pull requests or issues on https://github.com/RichiH/vcsh
+* Pull requests or issues on [https://github.com/RichiH/vcsh][vcsh]
 
 # 2 Introduction #
 
-vcsh allows you to have several git repositories, all maintaining their working
-trees in $HOME without clobbering each other. That, in turn, means you can have
-one repository per config set (zsh, vim, ssh, etc), picking and choosing which
-configs you want to use on which machine.
+vcsh allows you to maintain several git repositories in one single directory.
+They all maintain their working trees without clobbering each other or
+interfering otherwise.
+By default, all git repositories maintained via vcsh are stored in $HOME but
+you can override this setting if you want to.
+All that means that you can have one repository per application or application
+family, i.e. zsh, vim, ssh, mr, etc.
+This, in turn, allows you to clone different sets of configurations onto
+different machines or even for different users; picking and mixing which
+configurations you want to use on which machine.
+For example, you may not need to have your mplayer configuration on a server or
+for root and you may want to maintain different configuration for ssh on your
+personal and your work machines.
 
-vcsh was designed with [mr] [1] in mind so you might want to install that, as
+vcsh was designed with [mr][mr] in mind so you might want to install that, as
 well.
 
-Read INSTALL.md for detailed setup instructions.
+Read INSTALL.md and PACKAGING for instructions specific to your operating
+system.
 
 The following overview will try to give you an idea of the use cases and
 advantages of vcsh. See sections 3 and 4 for detailed instructions and
@@ -37,8 +47,9 @@ examples.
 
 ## 2.1 Talks ##
 
-Some people found it useful to look at slides and videos explaining how vcsh works.
-They can all be found at [here](http://richardhartmann.de/talks/).
+Some people found it useful to look at slides and videos explaining how vcsh
+works.
+They can all be found [on the author's talk page][talks].
 
 # 3 Overview
 
@@ -373,8 +384,8 @@ manually. Alternatively, you could try something like this:
         vcsh run $repo git pull;
     done
 
-----------
 
-mr can be found at: [http://kitenet.net/~joey/code/mr/][1]
-
-[1]: http://kitenet.net/~joey/code/mr/ (http://kitenet.net/~joey/code/mr/)
+[mr]: http://kitenet.net/~joey/code/mr/
+[talks]: http://richardhartmann.de/talks/
+[vcsh]: https://github.com/RichiH/vcsh
+[vcs-home-list]: http://lists.madduck.net/listinfo/vcs-home
