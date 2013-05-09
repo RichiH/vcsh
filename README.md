@@ -21,33 +21,31 @@ community around the general idea of version controlling your (digital) life.
 
 # 2 Introduction #
 
-vcsh allows you to maintain several git repositories in one single directory.
-They all maintain their working trees without clobbering each other or
-interfering otherwise.
-By default, all git repositories maintained via vcsh are stored in $HOME but
-you can override this setting if you want to.
+[vcsh][vcsh] allows you to maintain several git repositories in one single
+directory. They all maintain their working trees without clobbering each other
+or interfering otherwise. By default, all git repositories maintained via
+`vcsh` are stored in `$HOME` but you can override this setting if you want to.
 All that means that you can have one repository per application or application
-family, i.e. zsh, vim, ssh, mr, etc.
-This, in turn, allows you to clone different sets of configurations onto
-different machines or even for different users; picking and mixing which
-configurations you want to use on which machine.
-For example, you may not need to have your mplayer configuration on a server or
-for root and you may want to maintain different configuration for ssh on your
-personal and your work machines.
+family, i.e. `zsh`, `vim`, `ssh`, etc. This, in turn, allows you to clone
+custom sets of configurations onto different machines or even for different
+users; picking and mixing which configurations you want to use where.
+For example, you may not need to have your `mplayer` configuration on a server
+or available to root and you may want to maintain different configuration for
+`ssh` on your personal and your work machines.
 
-vcsh was designed with [mr][mr] in mind so you might want to install that, as
+`vcsh` was designed with [mr][mr] in mind so you might want to install that, as
 well.
 
-Read INSTALL.md and PACKAGING for instructions specific to your operating
+Read `INSTALL.md` and `PACKAGING` for instructions specific to your operating
 system.
 
 The following overview will try to give you an idea of the use cases and
-advantages of vcsh. See sections 3 and 4 for detailed instructions and
+advantages of `vcsh`. See sections 3 and 4 for detailed instructions and
 examples.
 
 ## 2.1 Talks ##
 
-Some people found it useful to look at slides and videos explaining how vcsh
+Some people found it useful to look at slides and videos explaining how `vcsh`
 works.
 They can all be found [on the author's talk page][talks].
 
