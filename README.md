@@ -54,21 +54,21 @@ They can all be found [on the author's talk page][talks].
 ## 3.1 Comparison to Other Solutions ##
 
 Most people who decide to put their dotfiles under version control start with a
-**single repository in $HOME**, adding all their dotfiles (and possibly more)
+single repository in $HOME, adding all their dotfiles (and possibly more)
 to it. This works, of course, but can become a nuisance as soon as you try to
 manage more than one host.
 
 The next logical step is to create single-purpose repositories in, for example,
-~/.dotfiles and to create **symbolic links in $HOME**. This gives you the
+~/.dotfiles and to create symbolic links in $HOME. This gives you the
 flexibility to check out only certain repositories on different hosts. The
 downsides of this approach are the necessary manual steps of cloning and
 symlinking the individual repositories. It will probably become a nuisance when
 you try to manage more than two hosts.
 
-**vcsh** takes this second approach one step further. It expects
-**single-purpose repositories** and stores them in a hidden directory (similar
+vcsh takes this second approach one step further. It expects
+single-purpose repositories and stores them in a hidden directory (similar
 to ~/.dotfiles). However, it does not create symbolic links in $HOME; it puts
-the **actual files right into $HOME**.
+the actual files right into $HOME.
 
 Furthermore, by making use of [mr] [1], it makes it very easy to enable/disable
 and clone a large number of repositories. The use of mr is technically optional
