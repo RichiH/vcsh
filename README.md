@@ -36,7 +36,7 @@ or available to root and you may want to maintain different configuration for
 `vcsh` was designed with [mr][mr] in mind so you might want to install that, as
 well.
 
-Read `INSTALL.md` and `PACKAGING` for instructions specific to your operating
+Read `INSTALL.md` and `PACKAGING.md` for instructions specific to your operating
 system.
 
 The following overview will try to give you an idea of the use cases and
