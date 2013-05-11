@@ -12,6 +12,9 @@
 # which is admittedly extremely unlikely to the point of being impossible,
 # this software will most likely follow suit.
 
+# This should always be the first line of code to facilitate debugging
+[ -n "$VCSH_DEBUG" ] && set -vx
+
 basename() {
 	# Implemented in shell to avoid spawning another process
 	local file
@@ -35,8 +38,10 @@ while getopts "c:dv" flag; do
 	if [ "$1" = '-d' ] || [ "$1" = '--debug' ]; then
 		set -vx
 		VCSH_DEBUG=1
+		echo "$SELF $VERSION"
 	elif [ "$1" = '-v' ];then
 		VCSH_VERBOSE=1
+		echo "$SELF $VERSION"
 	elif [ "$1" = '-c' ];then
 		VCSH_OPTION_CONFIG=$OPTARG
 	fi
