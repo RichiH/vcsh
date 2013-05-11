@@ -8,7 +8,7 @@
 # While the following is not legally binding, the author would like to
 # explain the choice of GPLv2+ over GPLv3+.
 # The author prefers GPLv3+ over GPLv2+ but feels it's better to maintain
-# full compability with git. In case git ever changes its licensing terms,
+# full compatibility's with git. In case git ever changes its licensing terms,
 # which is admittedly extremely unlikely to the point of being impossible,
 # this software will most likely follow suit.
 
