@@ -238,7 +238,7 @@ upgrade() {
 	hook pre-upgrade
 	use
 	git config core.worktree     "$GIT_WORK_TREE"
-	git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
+	[ ! "x$VCSH_GITIGNORE" = 'xnone' ] && git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
 	git config vcsh.vcsh         'true'
 	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME"
 	hook post-upgrade
@@ -259,6 +259,12 @@ which() {
 }
 
 write_gitignore() {
+	# Don't do anything if the user does not want to write gitignore
+	if [ "x$VCSH_GITIGNORE" = 'xnone' ] then
+		info "Not writing gitignore as '\$VCSH_GITIGNORE' is set to 'none'"
+		exit
+	fi
+
 	use
 	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
 	gitignores=$(for file in $(git ls-files); do
@@ -272,7 +278,7 @@ write_gitignore() {
 	echo '*' > "$tempfile" || fatal "could not write to '$tempfile'" 57
 	for gitignore in $gitignores; do
 		echo "$gitignore" | sed 's@^@!/@' >> "$tempfile" || fatal "could not write to '$tempfile'" 57
-		if [ x$VCSH_GITIGNORE = x'recursive' ] && [ -d "$gitignore" ]; then
+		if [ "x$VCSH_GITIGNORE" = 'xrecursive' ] && [ -d "$gitignore" ]; then
 			{ echo "$gitignore/*" | sed 's@^@!/@' >> "$tempfile" || fatal "could not write to '$tempfile'" 57; }
 		fi
 	done
@@ -289,8 +295,8 @@ write_gitignore() {
 		fatal "could not move '$tempfile' to '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME'" 53
 }
 
-if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xrecursive' ]; then
-	fatal "'\$VCSH_GITIGNORE' must be either 'exact' or 'recursive'" 1
+if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xrecursive' ] && [ ! "x$VCSH_GITIGNORE" = 'xnone' ]; then
+	fatal "'\$VCSH_GITIGNORE' must equal 'exact', 'recursive', or 'none'" 1
 fi
 
 if [ "$1" = 'clone' ]; then
