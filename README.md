@@ -24,7 +24,7 @@ community around the general idea of version controlling your (digital) life.
 [vcsh][vcsh] allows you to maintain several git repositories in one single
 directory. They all maintain their working trees without clobbering each other
 or interfering otherwise. By default, all git repositories maintained via
-`vcsh` are stored in `$HOME` but you can override this setting if you want to.
+`vcsh` are stored in <$HOME> but you can override this setting if you want to.
 All that means that you can have one repository per application or application
 family, i.e. `zsh`, `vim`, `ssh`, etc. This, in turn, allows you to clone
 custom sets of configurations onto different machines or even for different
@@ -36,7 +36,7 @@ or available to root and you may want to maintain different configuration for
 `vcsh` was designed with [mr][mr] in mind so you might want to install that, as
 well.
 
-Read `INSTALL.md` and `PACKAGING.md` for instructions specific to your operating
+Read <INSTALL.md> and <PACKAGING.md> for instructions specific to your operating
 system.
 
 The following overview will try to give you an idea of the use cases and
@@ -54,25 +54,25 @@ They can all be found [on the author's talk page][talks].
 ## 3.1 Comparison to Other Solutions ##
 
 Most people who decide to put their dotfiles under version control start with a
-single repository in $HOME, adding all their dotfiles (and possibly more)
+single repository in <$HOME>, adding all their dotfiles (and possibly more)
 to it. This works, of course, but can become a nuisance as soon as you try to
 manage more than one host.
 
 The next logical step is to create single-purpose repositories in, for example,
-~/.dotfiles and to create symbolic links in $HOME. This gives you the
+<~/.dotfiles> and to create symbolic links into <$HOME>. This gives you the
 flexibility to check out only certain repositories on different hosts. The
 downsides of this approach are the necessary manual steps of cloning and
-symlinking the individual repositories. It will probably become a nuisance when
-you try to manage more than two hosts.
+symlinking the individual repositories.
 
-vcsh takes this second approach one step further. It expects
+`vcsh` takes this second approach one step further. It expects
 single-purpose repositories and stores them in a hidden directory (similar
-to ~/.dotfiles). However, it does not create symbolic links in $HOME; it puts
-the actual files right into $HOME.
+to <~/.dotfiles>). However, it does not create symbolic links in <$HOME>; it
+puts the actual files right into <$HOME>.
 
-Furthermore, by making use of [mr] [1], it makes it very easy to enable/disable
-and clone a large number of repositories. The use of mr is technically optional
-(see 4.3), but it will be an integral part of the proposed system that follows.
+Furthermore, by making use of [mr][mr], it makes it very easy to enable/disable
+and clone a large number of repositories. The use of `mr` is technically
+optional (see section 4.3), but it will be an integral part of the proposed
+system that follows.
 
 ## 3.2 Default Directory Layout ##
 
