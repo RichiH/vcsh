@@ -1,4 +1,4 @@
-vcsh(1) - manage config files in $HOME via fake bare git repositories
+vcsh(1) - manage config files in $HOME via fake bare Git repositories
 =====================================================================
 
 ## SYNOPSIS
@@ -45,7 +45,7 @@ working trees in $HOME without clobbering each other. That, in turn, means you
 can have one repository per config set (zsh, vim, ssh, etc), picking and
 choosing which configs you want to use on which machine.
 
-`vcsh` is using a technique called fake bare git repositories, keeping <$GIT_DIR>
+`vcsh` is using a technique called fake bare Git repositories, keeping <$GIT_DIR>
 in a different directory from <$GIT_WORK_TREE> which is pointed to <$HOME>.
 
 The use of symlinks is not needed in this setup, making for a cleaner setup.
@@ -122,7 +122,7 @@ an interactive user.
   Find <substring> in name of any tracked file.
 
 * write-gitignore:
-  Write .gitignore.d/<repo> via git ls-files.
+  Write .gitignore.d/<repo> via `git ls-files`.
 
 * <repo> <gitcommand>:
   Shortcut to run `vcsh` on a repo. Will prepend `git` to <command>.
@@ -133,7 +133,7 @@ an interactive user.
 ## ENVIRONMENT
 
 As noted earlier, `vcsh` will set <$GIT_DIR> and <$GIT_WORK_TREE> to the
-appropriate values for fake bare git repositories.
+appropriate values for fake bare Git repositories.
 
 ## CONFIG
 
@@ -246,7 +246,7 @@ resulting in unhappy end users.
 Like most people, the author initially made do with a single repository for all
 config files, all of which were soft-linked into <$HOME>.
 
-Martin F. Krafft aka madduck came up with the concept of fake bare git
+Martin F. Krafft aka madduck came up with the concept of fake bare Git
 repositories.
 
 vcsh was initally written by madduck. This version is a re-implementation from
