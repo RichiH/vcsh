@@ -140,15 +140,16 @@ clone() {
 		exit
 	fi
 	git fetch
+	# TODO: find a way to do this with less tool dependencies and cludges, possibly
+	# utilizing `git stash` to store local changes before merging (stash can't be 
+	# used on a fresh clone without at least one commit)
 	for object in $(git ls-tree -r origin/master | awk '{print $4}'); do
 		[ -e "$object" ] &&
-			error "'$object' exists." &&
+			mv "$object" "$object.vcsh-unclobber"
 			VCSH_CONFLICT=1;
 	done
-	[ "$VCSH_CONFLICT" = '1' ] &&
-		fatal "will stop after fetching and not try to merge!
-  Once this situation has been resolved, run 'vcsh run $VCSH_REPO_NAME git pull' to finish cloning.\n" 17
 	git merge origin/master
+	[ "$VCSH_CONFLICT" = '1' ] && find -name '*.vcsh-unclobber' -execdir rename .vcsh-unclobber '' {} \;
 }
 
 delete() {
