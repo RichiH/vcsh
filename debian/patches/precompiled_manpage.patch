@@ -1,7 +1,7 @@
 Index: vcsh/Makefile
 ===================================================================
---- vcsh.orig/Makefile	2012-03-19 00:56:14.000000000 +0100
-+++ vcsh/Makefile	2012-03-19 01:01:46.602210421 +0100
+--- vcsh.orig/Makefile	2013-05-26 19:22:36.991848960 +0200
++++ vcsh/Makefile	2013-05-26 19:22:36.987846960 +0200
 @@ -19,11 +19,11 @@
  
  manpages: $(manpages)
@@ -20,12 +20,12 @@ Index: vcsh/Makefile
 Index: vcsh/vcsh.1
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ vcsh/vcsh.1	2012-03-19 01:02:17.326210882 +0100
-@@ -0,0 +1,189 @@
++++ vcsh/vcsh.1	2013-05-26 19:23:12.977833500 +0200
+@@ -0,0 +1,192 @@
 +.\" generated with Ronn/v0.7.3
 +.\" http://github.com/rtomayko/ronn/tree/0.7.3
 +.
-+.TH "VCSH" "1" "March 2012" "" ""
++.TH "VCSH" "1" "May 2013" "" ""
 +.
 +.SH "NAME"
 +\fBvcsh\fR \- manage config files in $HOME via fake bare git repositories
@@ -187,6 +187,9 @@ Index: vcsh/vcsh.1
 +.
 +.SH "BUGS"
 +None are known at this time, but reports and/or patches are more than welcome\.
++.
++.SH "KNOWN ISSUES"
++As of this writing (June 2012), \fBvcsh\fR does not work with \fBgit submodule\fR due to limitations within \fBgit\fR\. Depending on when you are reading this, you might want to consider upgrading\.
 +.
 +.SH "HISTORY"
 +Like most people, the author initially made do with a single repository for all config files, all of which were soft\-linked into \fI$HOME\fR\.
