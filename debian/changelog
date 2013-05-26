@@ -1,3 +1,10 @@
+vcsh (1.0-1~bpo60+1) squeeze-backports; urgency=low
+
+  * Rebuild for squeeze-backports.
+  * Update vcsh.1
+
+ -- Richard Hartmann <richih.mailinglist@gmail.com>  Sun, 26 May 2013 19:24:41 +0200
+
 vcsh (1.0-1) unstable; urgency=low
 
   * New upstream release
