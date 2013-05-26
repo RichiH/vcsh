@@ -5,6 +5,11 @@
 # For details, see LICENSE. To submit patches, you have to agree to
 # license your code under the GNU GPL version 2 or later.
 
+# While the following is not legally binding, the author would like to
+# explain the choice of GPLv2+ over GPLv3+.
+# The author prefers GPLv3+ over GPLv2+ but feels it's better to maintain
+# full compability with git. In case git ever changes its licensing terms,
+# this software will most likely follow suit.
 
 [ -n "$VCSH_DEBUG" ]                  && set -vx
 [ -z "$XDG_CONFIG_HOME" ]             && XDG_CONFIG_HOME="$HOME/.config"
@@ -22,9 +27,9 @@ help() {
 
    clone <remote> \\
          [<repo>]       Clone from an existing repository
-   help                 Display this help text
    delete               Delete an existing repository
    enter                Enter repository; spawn new instance of \$SHELL
+   help                 Display this help text
    init <repo>          Initialize a new repository
    list                 List all repositories
    list-tracked         List all files tracked by vcsh
@@ -133,8 +138,8 @@ init() {
 }
 
 list() {
-	for i in "$VCSH_REPO_D"/*.git; do
-		echo $(basename "$i" .git)
+	for repo in "$VCSH_REPO_D"/*.git; do
+		[ -d "$repo" ] && [ -r "$repo" ] && echo $(basename "$repo" .git)
 	done
 }
 

@@ -10,7 +10,7 @@ Homepage: https://github.com/RichiH/vcsh/blob/master/README.md
 
 Package: vcsh
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, git
+Depends: ${misc:Depends}, ${shlibs:Depends}, git
 Recommends: mr (>= 1.07), ssh-client
 Description: manage config files in $HOME via fake bare git repositories
  vcsh allows you to have several git repositories, all maintaining their working
