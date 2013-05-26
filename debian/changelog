@@ -1,3 +1,9 @@
+vcsh (1.2-3~bpo60+3) squeeze-backports-sloppy; urgency=low
+
+  * Bump version number due to mistaken upload (see #709517)
+
+ -- Richard Hartmann <richih.mailinglist@gmail.com>  Sun, 26 May 2013 19:29:52 +0200
+
 vcsh (1.2-3~bpo60+2) squeeze-backports-sloppy; urgency=low
 
   * Rebuild for squeeze-backports-sloppy.
