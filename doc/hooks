@@ -5,5 +5,5 @@ pre-enter
 post-enter
 pre-run
 post-run
-pre-setup
-post-setup
+pre-upgrade
+post-upgrade

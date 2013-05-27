@@ -1,18 +1,30 @@
 #!/bin/sh
 
 # This program is licensed under the GNU GPL version 2 or later.
-# (c) Richard "RichiH" Hartmann <richih.mailinglist@gmail.com>, 2011-2012
+# (c) Richard "RichiH" Hartmann <richih.mailinglist@gmail.com>, 2011-2013
 # For details, see LICENSE. To submit patches, you have to agree to
 # license your code under the GNU GPL version 2 or later.
 
 # While the following is not legally binding, the author would like to
 # explain the choice of GPLv2+ over GPLv3+.
 # The author prefers GPLv3+ over GPLv2+ but feels it's better to maintain
-# full compability with git. In case git ever changes its licensing terms,
+# full compatibility's with git. In case git ever changes its licensing terms,
+# which is admittedly extremely unlikely to the point of being impossible,
 # this software will most likely follow suit.
 
+# This should always be the first line of code to facilitate debugging
+[ -n "$VCSH_DEBUG" ] && set -vx
+
+basename() {
+	# Implemented in shell to avoid spawning another process
+	local file
+	file="${1##*/}"
+	[ -z "$2" ] || file="${file%$2}"
+	echo "$file"
+}
+
 SELF=$(basename $0)
-VERSION='1.2'
+VERSION='1.3'
 
 fatal() {
 	echo "$SELF: fatal: $1" >&2
@@ -22,12 +34,14 @@ fatal() {
 # We need to run getops as soon as possible so we catch -d and other
 # options that will modify our behaviour.
 # Commands are handled at the end of this script.
-while getopts  "c:dv" flag; do
+while getopts "c:dv" flag; do
 	if [ "$1" = '-d' ] || [ "$1" = '--debug' ]; then
 		set -vx
 		VCSH_DEBUG=1
+		echo "$SELF $VERSION"
 	elif [ "$1" = '-v' ];then
 		VCSH_VERBOSE=1
+		echo "$SELF $VERSION"
 	elif [ "$1" = '-c' ];then
 		VCSH_OPTION_CONFIG=$OPTARG
 	fi
@@ -90,7 +104,7 @@ help() {
           <newname>     Rename repository
    run <repo> \\
        <command>        Use this repository
-   setup <repo>         Set up repository with recommended settings
+   upgrade <repo>       Upgrade repository to currently recommended settings
    version              Print version information
    which <substring>    Find substring in name of any tracked file
    write-gitignore \\
@@ -170,7 +184,7 @@ git_dir_exists() {
 hook() {
 	for hook in $VCSH_HOOK_D/$1* $VCSH_HOOK_D/$VCSH_REPO_NAME.$1*; do
 		[ -x "$hook" ] || continue
-		info "executing '$hook'"
+		verbose "executing '$hook'"
 		"$hook"
 	done
 }
@@ -181,7 +195,7 @@ init() {
 	mkdir -p "$GIT_WORK_TREE" || fatal "could not create '$GIT_WORK_TREE'" 50
 	cd "$GIT_WORK_TREE" || fatal "could not enter '$GIT_WORK_TREE'" 11
 	git init
-	setup
+	upgrade
 }
 
 list() {
@@ -220,14 +234,14 @@ run() {
 	hook post-run
 }
 
-setup() {
-	hook pre-setup
+upgrade() {
+	hook pre-upgrade
 	use
 	git config core.worktree     "$GIT_WORK_TREE"
 	git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
 	git config vcsh.vcsh         'true'
 	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME"
-	hook post-setup
+	hook post-upgrade
 }
 
 use() {
@@ -257,9 +271,9 @@ write_gitignore() {
 	tempfile=$(mktemp) || fatal "could not create tempfile" 51
 	echo '*' > "$tempfile" || fatal "could not write to '$tempfile'" 57
 	for gitignore in $gitignores; do
-		echo "$gitignore" | sed 's/^/!/' >> "$tempfile" || fatal "could not write to '$tempfile'" 57
+		echo "$gitignore" | sed 's@^@!/@' >> "$tempfile" || fatal "could not write to '$tempfile'" 57
 		if [ x$VCSH_GITIGNORE = x'recursive' ] && [ -d "$gitignore" ]; then
-			{ echo "$gitignore/*" | sed 's/^/!/' >> "$tempfile" || fatal "could not write to '$tempfile'" 57; }
+			{ echo "$gitignore/*" | sed 's@^@!/@' >> "$tempfile" || fatal "could not write to '$tempfile'" 57; }
 		fi
 	done
 	if diff -N "$tempfile" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" > /dev/null; then
@@ -300,7 +314,7 @@ elif [ "$1" = 'delete' ]           ||
      [ "$1" = 'list-tracked-by' ]  ||
      [ "$1" = 'rename' ]           ||
      [ "$1" = 'run' ]              ||
-     [ "$1" = 'setup' ]            ||
+     [ "$1" = 'upgrade' ]          ||
      [ "$1" = 'write-gitignore' ]; then
 	[ -z $2 ]                      && fatal "$1: please specify repository to work on" 1
 	[ "$1" = 'rename' -a -z "$3" ] && fatal "$1: please specify a target name" 1
