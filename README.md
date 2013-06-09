@@ -36,6 +36,12 @@ does not read `INSTALL.md` for install instructions or `PACKAGING.md` to create
 a package, yourself. If you do end up packaging `vcsh` please let us know so we
 can give you your own packaging branch in the upstream repository.
 
+## Talks ##
+
+Some people found it useful to look at slides and videos explaining how `vcsh`
+works instead of working through the docs, first.
+They can all be found [on the author's talk page][talks].
+
 
 # 30 second howto #
 
@@ -54,13 +60,6 @@ Let's say you want to version control your `vim` configuration:
 
 If all that looks a _lot_ like standard `git`, that's no coincidence; it's
 a design feature.
-
-
-## Talks ##
-
-Some people found it useful to look at slides and videos explaining how `vcsh`
-works instead of working through the docs, first.
-They can all be found [on the author's talk page][talks].
 
 
 # Overview
