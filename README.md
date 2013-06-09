@@ -4,11 +4,11 @@ vcsh - Version Control System for $HOME (based on git)
 # Index #
 
 1. [30 second howto](#30-second-howto)
-2. [Contact](#contact)
-3. [Introduction](#introduction)
-4. [Overview](#overview)
-5. [Getting Started](#getting-started)
-6. [Usage](#usage)
+2. [Introduction](#introduction)
+3. [Overview](#overview)
+4. [Getting Started](#getting-started)
+5. [Usage](#usage)
+6. [Contact](#contact)
 
 
 # 30 second howto #
@@ -32,18 +32,6 @@ a design feature.
 Once you get familiar with `vcsh`, it's strongly suggested that you look
 into more advanced usage scenarios, especially on how to manage your
 `vcsh` and other repositories with [mr][mr].
-
-
-# Contact #
-
-There are several ways to get in touch with the author and a small but committed
-community around the general idea of version controlling your (digital) life.
-
-* IRC: #vcs-home on irc.oftc.net
-
-* Mailing list: [http://lists.madduck.net/listinfo/vcs-home][vcs-home-list]
-
-* Pull requests or issues on [https://github.com/RichiH/vcsh][vcsh]
 
 
 # Introduction #
@@ -411,6 +399,18 @@ manually. Alternatively, you could try something like this:
     for repo in `vcsh list`; do
         vcsh run $repo git pull;
     done
+
+
+# Contact #
+
+There are several ways to get in touch with the author and a small but committed
+community around the general idea of version controlling your (digital) life.
+
+* IRC: #vcs-home on irc.oftc.net
+
+* Mailing list: [http://lists.madduck.net/listinfo/vcs-home][vcs-home-list]
+
+* Pull requests or issues on [https://github.com/RichiH/vcsh][vcsh]
 
 
 [mr]: http://kitenet.net/~joey/code/mr/
