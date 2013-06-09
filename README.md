@@ -3,35 +3,12 @@ vcsh - Version Control System for $HOME (based on git)
 
 # Index #
 
-1. [30 second howto](#30-second-howto)
-2. [Introduction](#introduction)
+1. [Introduction](#introduction)
+2. [30 second howto](#30-second-howto)
 3. [Overview](#overview)
 4. [Getting Started](#getting-started)
 5. [Usage](#usage)
 6. [Contact](#contact)
-
-
-# 30 second howto #
-
-While it may appear that there's an overwhelming amount of documentation and
-while the explanation of the concepts behind `vcsh` needs to touch a few gory
-details of `git` internals, getting started with `vcsh` is extremely simple.
-
-Let's say you want to version control your `vim` configuration:
-
-    vcsh init vim
-    vcsh vim add ~/.vimrc ~/.vim
-    vcsh vim commit -m 'Initial commit of my Vim configuration'
-    # optionally push your files to a remote
-    vcsh vim remote add origin REMOTE
-    vcsh vim push origin master:master
-
-If all that looks a _lot_ like standard `git`, that's no coincidence; it's
-a design feature.
-
-Once you get familiar with `vcsh`, it's strongly suggested that you look
-into more advanced usage scenarios, especially on how to manage your
-`vcsh` and other repositories with [mr][mr].
 
 
 # Introduction #
@@ -58,6 +35,29 @@ A lot of modern UNIX-based systems offer pacakges for `vcsh`. In case yours
 does not read `INSTALL.md` for install instructions or `PACKAGING.md` to create
 a package, yourself. If you do end up packaging `vcsh` please let us know so we
 can give you your own packaging branch in the upstream repository.
+
+
+# 30 second howto #
+
+While it may appear that there's an overwhelming amount of documentation and
+while the explanation of the concepts behind `vcsh` needs to touch a few gory
+details of `git` internals, getting started with `vcsh` is extremely simple.
+
+Let's say you want to version control your `vim` configuration:
+
+    vcsh init vim
+    vcsh vim add ~/.vimrc ~/.vim
+    vcsh vim commit -m 'Initial commit of my Vim configuration'
+    # optionally push your files to a remote
+    vcsh vim remote add origin REMOTE
+    vcsh vim push origin master:master
+
+If all that looks a _lot_ like standard `git`, that's no coincidence; it's
+a design feature.
+
+Once you get familiar with `vcsh`, it's strongly suggested that you look
+into more advanced usage scenarios, especially on how to manage your
+`vcsh` and other repositories with [mr][mr].
 
 
 ## Talks ##
