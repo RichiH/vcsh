@@ -48,11 +48,16 @@ For example, you may not need to have your `mplayer` configuration on a server
 or available to root and you may want to maintain different configuration for
 `ssh` on your personal and your work machines.
 
-`vcsh` was designed with [mr][mr] in mind so you might want to install that, as
-well.
+`vcsh` was designed with [mr][mr], a tool to manage Multiple Repositories, in
+mind and the two integrate very nicely. `mr` has native support for `vcsh`
+repositories and to `vcsh`, `mr` is just another configuration to track.
+This make setting up any new machine a breeze. It takes literally less than
+five minutes to go from standard installation to fully set up system
 
-Read `INSTALL.md` and `PACKAGING.md` for instructions specific to your operating
-system.
+A lot of modern UNIX-based systems offer pacakges for `vcsh`. In case yours
+does not read `INSTALL.md` for install instructions or `PACKAGING.md` to create
+a package, yourself. If you do end up packaging `vcsh` please let us know so we
+can give you your own packaging branch in the upstream repository.
 
 
 ## Talks ##
