@@ -54,14 +54,11 @@ well.
 Read `INSTALL.md` and `PACKAGING.md` for instructions specific to your operating
 system.
 
-The following overview will try to give you an idea of the use cases and
-advantages of `vcsh`. See sections 3 and 4 for detailed instructions and
-examples.
 
 ## Talks ##
 
 Some people found it useful to look at slides and videos explaining how `vcsh`
-works.
+works instead of working through the docs, first.
 They can all be found [on the author's talk page][talks].
 
 
