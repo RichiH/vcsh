@@ -52,7 +52,7 @@ community around the general idea of version controlling your (digital) life.
 directory. They all maintain their working trees without clobbering each other
 or interfering otherwise. By default, all git repositories maintained via
 `vcsh` are stored in `$HOME` but you can override this setting if you want to.
-All that means that you can have one repository per application or application
+All this means that you can have one repository per application or application
 family, i.e. `zsh`, `vim`, `ssh`, etc. This, in turn, allows you to clone
 custom sets of configurations onto different machines or even for different
 users; picking and mixing which configurations you want to use where.
