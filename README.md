@@ -26,7 +26,7 @@ Let's say you want to version control your `vim` configuration:
     vcsh vim remote add origin REMOTE
     vcsh vim push origin master:master
 
-If all that looks a _lot_ like standard `git`, that's no coincidence, but
+If all that looks a _lot_ like standard `git`, that's no coincidence; it's
 a design feature.
 
 Once you get familiar with `vcsh`, it's strongly suggested that you look
