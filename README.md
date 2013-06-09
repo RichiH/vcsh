@@ -55,10 +55,6 @@ Let's say you want to version control your `vim` configuration:
 If all that looks a _lot_ like standard `git`, that's no coincidence; it's
 a design feature.
 
-Once you get familiar with `vcsh`, it's strongly suggested that you look
-into more advanced usage scenarios, especially on how to manage your
-`vcsh` and other repositories with [mr][mr].
-
 
 ## Talks ##
 
