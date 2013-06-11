@@ -64,7 +64,10 @@ a design feature.
 
 # Overview
 
-## Comparison to Other Solutions
+## From zero to vcsh
+
+You put a lot of effort into your configuration and want to both protect and
+distribute this configuration.
 
 Most people who decide to put their dotfiles under version control start with a
 single repository in `$HOME`, adding all their dotfiles (and possibly more)
@@ -77,15 +80,22 @@ flexibility to check out only certain repositories on different hosts. The
 downsides of this approach are the necessary manual steps of cloning and
 symlinking the individual repositories.
 
-`vcsh` takes this second approach one step further. It expects
-single-purpose repositories and stores them in a hidden directory (similar
-to `~/.dotfiles`). However, it does not create symbolic links in `$HOME`; it
-puts the actual files right into `$HOME`.
+`vcsh` takes this approach one step further. It enables single-purpose
+repositories and stores them in a hidden directory. However, it does not create
+symbolic links in `$HOME`; it puts the actual files right into `$HOME`.
 
-Furthermore, by making use of [mr][mr], it makes it very easy to enable/disable
-and clone a large number of repositories. The use of `mr` is technically
-optional (see section 4.3), but it will be an integral part of the proposed
-system that follows.
+As `vcsh` allows you to put an arbitrary number of distinct repositories into
+your `$HOME`, you will end up with a lot of repositories very quickly.
+
+To manage both `vcsh` and other repositories, we suggest using [mr](mr). `mr`
+takes care of pulling in and pushing out new data for a variety of version
+control systems.
+
+
+The last logical step is to maintain all those new repositores with an automated
+tool instead of tracking them by hand.
+This is where `mr` comes in. While the use of `mr` is technically
+optional, but it will be an integral part of the proposed system that follows.
 
 ## Default Directory Layout
 
