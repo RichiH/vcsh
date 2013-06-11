@@ -1,4 +1,4 @@
-vcsh - Version Control System for $HOME (based on git)
+vcsh - Version Control System for $HOME - multiple Git repositories in $HOME
 
 
 # Index

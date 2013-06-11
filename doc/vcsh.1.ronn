@@ -1,5 +1,5 @@
-vcsh(1) - Version Control System for $HOME (based on git)
-=========================================================
+vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
+===============================================================================
 
 ## SYNOPSIS
 
