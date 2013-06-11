@@ -177,7 +177,7 @@ $XDG\_CONFIG\_HOME/vcsh/repo.d is the directory where all git repositories which
 are under vcsh's control are located. Since their working trees are configured
 to be in $HOME, the files contained in those repositories will be put in $HOME
 directly.
-Of course, [mr] [1] will work with this layout if configured according to this
+Of course, [mr] [mr] will work with this layout if configured according to this
 document (see above).
 
 vcsh will check if any file it would want to create exists. If it exists, vcsh
@@ -382,7 +382,7 @@ git-status. A fix for this problem is being worked on.
 
 ### Using vcsh without mr
 
-vcsh encourages you to use [mr] [1]. It helps you manage a large number of
+vcsh encourages you to use [mr][mr]. It helps you manage a large number of
 repositories by running the necessary vcsh commands for you. You may choose not
 to use mr, in which case you will have to run those commands manually or by
 other means.
