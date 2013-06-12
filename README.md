@@ -55,8 +55,9 @@ Let's say you want to version control your `vim` configuration:
     vcsh vim add ~/.vimrc ~/.vim
     vcsh vim commit -m 'Initial commit of my Vim configuration'
     # optionally push your files to a remote
-    vcsh vim <remote> add origin REMOTE
+    vcsh vim remote add origin <remote>
     vcsh vim push origin master:master
+    vcsh vim branch --track master origin/master
 
 If all that looks a _lot_ like standard `git`, that's no coincidence; it's
 a design feature.
