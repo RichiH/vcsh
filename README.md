@@ -7,7 +7,7 @@ vcsh - Version Control System for $HOME - multiple Git repositories in $HOME
 2. [30 second howto](#30-second-howto)
 3. [Overview](#overview)
 4. [Getting Started](#getting-started)
-5. [Usage](#usage)
+5. [Usage Exmaples](#usage-examples)
 6. [Contact](#contact)
 
 
@@ -357,7 +357,41 @@ mr is used to actually retrieve configs, etc
     ~ % mr -j 5 up
 
 
-# Usage
+# Usage Examples
+
+All examples in this section will use the short form of `vcsh` which is the
+simplest way to interface with it. If you don't know what that means simply
+ignore this fact for now and follow the examples.
+
+## Initialize a new repository "vim"
+
+    vcsh init vcsh
+
+## Clone an existing repository
+
+    vcsh clone <remote> <repository_name>
+
+## Add files to repository "vim"
+
+    vcsh vim add ~/.vimrc ~/.vim
+    vcsh vim commit -m 'Update Vim configuration'
+
+## Add a remote for repository "vim"
+
+    vcsh vim remote add origin <remote>
+    vcsh vim push origin master:master
+    vcsh vim branch --track master origin/master
+
+## Push to remote of repository "vim"
+
+    vcsh vim push
+
+## Pull from remote of repository "vim"
+
+    vcsh vim pull
+
+
+# mr usage ; will be factored out & rewritten
 
 ### Keeping repositories Up-to-Date
 
@@ -388,7 +422,6 @@ repositories by running the necessary vcsh commands for you. You may choose not
 to use mr, in which case you will have to run those commands manually or by
 other means.
 
-#### A Few Examples
 
 To initialize a new repository: `vcsh init zsh`
 
