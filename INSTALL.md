@@ -1,26 +1,33 @@
 # Pre-requisites #
 
-If you want to build the manpage, you will need ronn. Newer versions of Debian come with a package:
+If you want to build the manpage, you will need [ronn] [1].
+Debian 7.0 and above come with a package, so do most Debian clones.
 
-    apt-get install ruby-ronn
+To install ronn on your Debian-based system, simply run
+
+	apt-get install ruby-ronn
+
+There are no other dependencies other than `git`, `ronn` and a POSIX shell.
 
 
 # Installing #
 
-    sudo make install
+	sudo make install
 
 
 # Uninstalling #
 
-    sudo make uninstall
+	sudo make uninstall
 
-There is another, more thorough, version. Just make sure you are not running this when you have installed to an important directory which is empty, otherwise.
+There is another, more thorough, version. Just make sure you are not running
+this when you have installed to an important directory which is empty,
+otherwise.
 
-**THIS WILL DELETE /usr/local IF YOU INSTALLED THERE AND IT'S EMPTY, OTHERWISE**
+**THIS WILL DELETE /usr/local IF YOU INSTALLED THERE AND IT BECOMES EMPTY**
 
-    sudo make purge
+	sudo make purge
 
-**THIS WILL DELETE /usr/local IF YOU INSTALLED THERE AND IT'S EMPTY, OTHERWISE**
+**THIS WILL DELETE /usr/local IF YOU INSTALLED THERE AND IT BECOMES EMPTY**
 
 This is not in the default behaviour of `make uninstall` for obvious reasons.
 
@@ -29,8 +36,10 @@ This is not in the default behaviour of `make uninstall` for obvious reasons.
 
 To clean up the generated manpage, run
 
-    make clean
+	make clean
 
 and if you are bored, I suggest
 
-    make moo
+	make moo
+
+[1]: http://rtomayko.github.io/ronn/
