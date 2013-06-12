@@ -1,3 +1,5 @@
-# The Debian package is just a branch in the upstream repo.
-# At the moment, I don't see a need for debian/watch.
-# This file exists solely to make lintian happy.
+version=3
+opts=uversionmangle=s/^((?:\d+\.)*\d+-\d+-bpo\d+\+\d+)$/0.0.$1/;s/^(1\.2-homebrew)$/0.0.$1/;s/^((?:\d+\.)*\d+-\d+)$/0.0.$1/ \
+https://github.com/RichiH/vcsh/tags \
+.*/archive/(?:upstream/)?(?:v||version-|release-|X|R|r)(\d\S*)\.tar\.gz
+# Bart Martens <bartm@debian.org>  Tue, 07 May 2013 19:38:25 +0000
