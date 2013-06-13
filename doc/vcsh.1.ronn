@@ -1,5 +1,5 @@
-vcsh(1) - manage config files in $HOME via fake bare Git repositories
-=====================================================================
+vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
+===============================================================================
 
 ## SYNOPSIS
 
