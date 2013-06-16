@@ -56,6 +56,53 @@ source_all() {
 	esac;
 }
 
+relpath() {
+  local source target common_path result forward_part
+
+  # from
+  # http://stackoverflow.com/questions/2564634/bash-convert-absolute-path-into-relative-path-given-a-current-directory/12498485#12498485
+  # (with extra quoting added for POSIX shell and several other enhancements
+  # by madduck 2013-04-27)
+
+  # both $1 and $2 are absolute paths beginning with /
+  # returns relative path to $2/$target from $1/$source
+  source="$1"
+  target="$2"
+
+  common_part="$source"
+
+  while [ "${target#$common_part}" = "${target}" ]; do
+      # no match, means that candidate common part is not correct
+      # go up one level (reduce common part)
+      common_part="${common_part%/*}"
+
+      # and record that we went back, with correct / handling
+      if [ -z "$result" ]; then
+          result=".."
+      else
+          result="../$result"
+      fi
+  done
+
+  if [ "$common_part" = / ]; then
+      # special case for root (no common path)
+      result="$result/"
+  fi
+
+  # since we now have identified the common part,
+  # compute the non-common part
+  forward_part="${target#$common_part}"
+
+  # and now stick all parts together
+  if [ -n "$result" ] && [ -n "$forward_part" ]; then
+      result="$result$forward_part"
+  elif [ -n "$forward_part" ]; then
+      # extra slash removal
+      result="${forward_part#/}"
+  fi
+
+  echo "$result"
+}
 
 # Read configuration and set defaults if anything's not set
 [ -n "$VCSH_DEBUG" ]                  && set -vx
@@ -237,7 +284,7 @@ run() {
 upgrade() {
 	hook pre-upgrade
 	use
-	git config core.worktree     "$GIT_WORK_TREE"
+	git config core.worktree     $(relpath $VCSH_REPO_D $VCSH_BASE)
 	git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
 	git config vcsh.vcsh         'true'
 	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME"
