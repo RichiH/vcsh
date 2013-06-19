@@ -366,7 +366,7 @@ ignore this fact for now and follow the examples.
 
 ## Initialize a new repository "vim"
 
-    vcsh init vcsh
+    vcsh init vim
 
 ## Clone an existing repository
 
