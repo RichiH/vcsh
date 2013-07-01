@@ -246,6 +246,11 @@ push() {
 	hook post-push
 }
 
+retire() {
+	unset GIT_WORK_TREE
+	unset VCSH_DIRECTORY
+}
+
 rename() {
 	git_dir_exists
 	[ -d "$GIT_DIR_NEW" ] && fatal "'$GIT_DIR_NEW' exists" 54
