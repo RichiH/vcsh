@@ -131,6 +131,7 @@ info() {
 }
 
 clone() {
+	hook pre-clone
 	init
 	git remote add origin "$GIT_REMOTE"
 	git config branch.master.remote origin
@@ -149,6 +150,7 @@ clone() {
 		fatal "will stop after fetching and not try to merge!
   Once this situation has been resolved, run 'vcsh run $VCSH_REPO_NAME git pull' to finish cloning.\n" 17
 	git merge origin/master
+	hook post-clone
 }
 
 delete() {
