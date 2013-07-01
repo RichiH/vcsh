@@ -252,6 +252,11 @@ use() {
 	export VCSH_DIRECTORY="$VCSH_REPO_NAME"
 }
 
+unuse() {
+	unset GIT_WORK_TREE
+	unset VCSH_DIRECTORY
+}
+
 which() {
 	for VCSH_REPO_NAME in $(list); do
 		for VCSH_FILE in $(get_files); do
