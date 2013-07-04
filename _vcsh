@@ -114,8 +114,7 @@ function _vcsh () {
 			if ! (( ${+functions[_vcsh-$vcshcommand]} )); then
 				# There is no handler function, so this is probably the name
 				# of a repository. Act accordingly.
-				_message "git sub-command"
-				#TODO and now we need to complete on git subcommands
+				_dispatch git git
 			else
 				curcontext="${curcontext%:*:*}:vcsh-${vcshcommand}:"
 				_call_function ret _vcsh-${vcshcommand}
