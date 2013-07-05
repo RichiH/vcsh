@@ -21,6 +21,8 @@ vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
 
 `vcsh` list-tracked-by <repo>
 
+`vcsh` pull
+
 `vcsh` rename <repo> <newname>
 
 `vcsh` run <repo> <shell command>
@@ -97,6 +99,9 @@ an interactive user.
 
 * list-tracked-by:
   List files tracked by a repository.
+
+* pull:
+  Pull from all vcsh remotes.
 
 * rename:
   Rename a repository.

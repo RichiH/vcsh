@@ -100,6 +100,7 @@ help() {
    list-tracked         List all files tracked by vcsh
    list-tracked-by \\
         <repo>          List files tracked by a repository
+   pull                 Pull from all vcsh remotes
    rename <repo> \\
           <newname>     Rename repository
    run <repo> \\
@@ -222,6 +223,17 @@ list_tracked_by() {
 	git ls-files | sort -u
 }
 
+pull() {
+	hook pre-pull
+	for VCSH_REPO_NAME in $(list); do
+		echo -n "$VCSH_REPO_NAME: "
+		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
+		use
+		git pull
+	done
+	hook post-pull
+}
+
 rename() {
 	git_dir_exists
 	[ -d "$GIT_DIR_NEW" ] && fatal "'$GIT_DIR_NEW' exists" 54
@@ -328,7 +340,8 @@ elif [ "$1" = 'delete' ]           ||
 	[ "$VCSH_COMMAND" = 'run' ] && shift 2
 	[ "$VCSH_COMMAND" = 'write-gitignore' ]
 elif [ "$1" = 'list' ] ||
-     [ "$1" = 'list-tracked' ]; then
+     [ "$1" = 'list-tracked' ] ||
+     [ "$1" = 'pull' ]; then
 	export VCSH_COMMAND="$1"
 elif [ -n "$2" ]; then
 	export VCSH_COMMAND='run'

@@ -43,6 +43,10 @@ function _vcsh-list-tracked-by () {
 	(( CURRENT == 2 )) && __vcsh_repositories
 }
 
+function _vcsh-pull () {
+	_nothing
+}
+
 function _vcsh-rename () {
 	(( CURRENT == 2 )) && __vcsh_repositories
 	(( CURRENT == 3 )) && _message "new repository name"
@@ -88,6 +92,7 @@ function _vcsh () {
 		"list:list all local vcsh repositories"
 		"list-tracked:list all files tracked by vcsh"
 		"list-tracked-by:list files tracked by a repository"
+		"pull:pull from all vcsh remotes"
 		"rename:rename a repository"
 		"run:run command with <\$GIT_DIR> and <\$GIT_WORK_TREE> set"
 		"upgrade:upgrade repository to currently recommended settings"
