@@ -47,6 +47,10 @@ function _vcsh-pull () {
 	_nothing
 }
 
+function _vcsh-push () {
+	_nothing
+}
+
 function _vcsh-rename () {
 	(( CURRENT == 2 )) && __vcsh_repositories
 	(( CURRENT == 3 )) && _message "new repository name"

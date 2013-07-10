@@ -23,6 +23,8 @@ vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
 
 `vcsh` pull
 
+`vcsh` push
+
 `vcsh` rename <repo> <newname>
 
 `vcsh` run <repo> <shell command>
@@ -102,6 +104,9 @@ an interactive user.
 
 * pull:
   Pull from all vcsh remotes.
+
+* push:
+  Push to all vcsh remotes.
 
 * rename:
   Rename a repository.
