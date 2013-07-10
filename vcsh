@@ -155,6 +155,17 @@ clone() {
 	hook post-clone
 }
 
+commit() {
+	for VCSH_REPO_NAME in $(list); do
+		for VCSH_FILE in $(get_files); do
+#			echo $VCSH_FILE | grep -q "$VCSH_COMMAND_PARAMETER" && echo "$VCSH_REPO_NAME: $VCSH_FILE"
+			echo $VCSH_FILE - $VCSH_COMMAND_PARAMETER
+#			echo $VCSH_COMMAND_PARAMETER
+		done
+	done | sort -u
+}
+
+
 delete() {
 	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
 	use
@@ -329,6 +340,11 @@ if [ "$1" = 'clone' ]; then
 elif [ "$1" = 'version' ]; then
 	echo "$SELF $VERSION"
 	exit
+elif [ "$1" = 'commit' ]; then
+	[ -z "$2" ] && fatal "$1: please specify a filename" 1
+	export VCSH_COMMAND="$1"
+	shift
+	export VCSH_COMMAND_PARAMETER="$*"
 elif [ "$1" = 'which' ]; then
 	[ -z "$2" ] && fatal "$1: please specify a filename" 1
 	[ -n "$3" ] && fatal "$1: too many parameters" 1
