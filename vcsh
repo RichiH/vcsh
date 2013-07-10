@@ -153,6 +153,8 @@ clone() {
   Once this situation has been resolved, run 'vcsh run $VCSH_REPO_NAME git pull' to finish cloning.\n" 17
 	git merge origin/master
 	hook post-clone
+	retire
+	hook post-clone-retired
 }
 
 delete() {
