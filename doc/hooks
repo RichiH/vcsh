@@ -3,6 +3,10 @@ pre-command
 post-command
 pre-enter
 post-enter
+pre-pull
+post-pull
+pre-push
+post-push
 pre-run
 post-run
 pre-upgrade
