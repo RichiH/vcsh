@@ -260,7 +260,7 @@ which() {
 
 write_gitignore() {
 	# Don't do anything if the user does not want to write gitignore
-	if [ "x$VCSH_GITIGNORE" = 'xnone' ] then
+	if [ "x$VCSH_GITIGNORE" = 'xnone' ]; then
 		info "Not writing gitignore as '\$VCSH_GITIGNORE' is set to 'none'"
 		exit
 	fi
