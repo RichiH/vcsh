@@ -359,7 +359,7 @@ if echo $VCSH_REPO_NAME | grep -q '/'; then
 fi
 
 check_dir() {
-	check_directory=$1
+	check_directory="$1"
 	if [ ! -d "$check_directory" ]; then
 		if [ -e "$check_directory" ]; then
 			fatal "'$check_directory' exists but is not a directory" 13
