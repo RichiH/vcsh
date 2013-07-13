@@ -23,12 +23,12 @@ basename() {
 	echo "$file"
 }
 
-SELF=$(basename $0)
+SELF="$(basename $0)"
 VERSION='1.20130614'
 
 fatal() {
 	echo "$SELF: fatal: $1" >&2
-	exit $2
+	exit "$2"
 }
 
 # We need to run getops as soon as possible so we catch -d and other
@@ -43,7 +43,7 @@ while getopts "c:dv" flag; do
 		VCSH_VERBOSE=1
 		echo "$SELF $VERSION"
 	elif [ "$1" = '-c' ];then
-		VCSH_OPTION_CONFIG=$OPTARG
+		VCSH_OPTION_CONFIG="$OPTARG"
 	fi
 	shift 1
 done
@@ -138,7 +138,7 @@ clone() {
 	git remote add origin "$GIT_REMOTE"
 	git config branch.master.remote origin
 	git config branch.master.merge  refs/heads/master
-	if [ $(git ls-remote origin master 2> /dev/null | wc -l ) -lt 1 ]; then
+	if [ "$(git ls-remote origin master 2> /dev/null | wc -l )" -lt 1 ]; then
 		info "remote is empty, not merging anything"
 		exit
 	fi
@@ -169,7 +169,7 @@ To continue, type 'Yes, do as I say'"
 	read answer
 	[ "x$answer" = 'xYes, do as I say' ] || exit 16
 	for file in $files; do
-		rm -f $file || info "could not delete '$file', continuing with deletion"
+		rm -f "$file" || info "could not delete '$file', continuing with deletion"
 	done
 	rm -rf "$GIT_DIR" || error "could not delete '$GIT_DIR'"
 }
@@ -279,7 +279,7 @@ use() {
 which() {
 	for VCSH_REPO_NAME in $(list); do
 		for VCSH_FILE in $(get_files); do
-			echo $VCSH_FILE | grep -q "$VCSH_COMMAND_PARAMETER" && echo "$VCSH_REPO_NAME: $VCSH_FILE"
+			echo "$VCSH_FILE" | grep -q "$VCSH_COMMAND_PARAMETER" && echo "$VCSH_REPO_NAME: $VCSH_FILE"
 		done
 	done | sort -u
 }
@@ -289,16 +289,16 @@ write_gitignore() {
 	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
 	gitignores=$(for file in $(git ls-files); do
 		while true; do
-			echo $file; new="${file%/*}"
+			echo "$file"; new="${file%/*}"
 			[ "$file" = "$new" ] && break
 			file="$new"
 		done;
 	done | sort -u)
-	tempfile=$(mktemp) || fatal "could not create tempfile" 51
+	tempfile="$(mktemp)" || fatal "could not create tempfile" 51
 	echo '*' > "$tempfile" || fatal "could not write to '$tempfile'" 57
 	for gitignore in $gitignores; do
 		echo "$gitignore" | sed 's@^@!/@' >> "$tempfile" || fatal "could not write to '$tempfile'" 57
-		if [ x$VCSH_GITIGNORE = x'recursive' ] && [ -d "$gitignore" ]; then
+		if [ "x$VCSH_GITIGNORE" = 'xrecursive' ] && [ -d "$gitignore" ]; then
 			{ echo "$gitignore/*" | sed 's@^@!/@' >> "$tempfile" || fatal "could not write to '$tempfile'" 57; }
 		fi
 	done
@@ -323,7 +323,7 @@ if [ "$1" = 'clone' ]; then
 	[ -z "$2" ] && fatal "$1: please specify a remote" 1
 	export VCSH_COMMAND="$1"
 	GIT_REMOTE="$2"
-	[ -n "$3" ] && VCSH_REPO_NAME="$3" || VCSH_REPO_NAME=$(basename "$GIT_REMOTE" .git)
+	[ -n "$3" ] && VCSH_REPO_NAME="$3" || VCSH_REPO_NAME="$(basename "$GIT_REMOTE" .git)"
 	export VCSH_REPO_NAME
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 elif [ "$1" = 'version' ]; then
@@ -360,14 +360,14 @@ elif [ -n "$2" ]; then
 	export VCSH_COMMAND='run'
 	export VCSH_REPO_NAME="$1"
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
-	[ -d $GIT_DIR ] || { help; exit 1; }
+	[ -d "$GIT_DIR" ] || { help; exit 1; }
 	shift 1
 	set -- "git" "$@"
 elif [ -n "$1" ]; then
 	export VCSH_COMMAND='enter'
 	export VCSH_REPO_NAME="$1"
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
-	[ -d $GIT_DIR ] || { help; exit 1; }
+	[ -d "$GIT_DIR" ] || { help; exit 1; }
 else
 	# $1 is empty, or 'help'
 	help && exit
@@ -375,9 +375,9 @@ fi
 
 # Did we receive a directory instead of a name?
 # Mangle the input to fit normal operation.
-if echo $VCSH_REPO_NAME | grep -q '/'; then
-	export GIT_DIR=$VCSH_REPO_NAME
-	export VCSH_REPO_NAME=$(basename "$VCSH_REPO_NAME" .git)
+if echo "$VCSH_REPO_NAME" | grep -q '/'; then
+	export GIT_DIR="$VCSH_REPO_NAME"
+	export VCSH_REPO_NAME="$(basename "$VCSH_REPO_NAME" .git)"
 fi
 
 
@@ -394,7 +394,7 @@ do
 done
 
 verbose "$VCSH_COMMAND begin"
-export VCSH_COMMAND=$(echo $VCSH_COMMAND | sed 's/-/_/g')
+export VCSH_COMMAND="$(echo $VCSH_COMMAND | sed 's/-/_/g')"
 hook pre-command
 $VCSH_COMMAND "$@"
 hook post-command
