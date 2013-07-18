@@ -3,8 +3,8 @@ Available hooks are:
 * pre-command
 * post-command
 * pre-hook
-* post-hook
-* post-hook-cleared
+* post-clone
+* post-clone-retired
 	use this if you need to operate on different git repositories after cloning
 * pre-enter
 * post-enter
