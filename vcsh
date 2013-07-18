@@ -152,6 +152,7 @@ clone() {
 		fatal "will stop after fetching and not try to merge!
   Once this situation has been resolved, run 'vcsh run $VCSH_REPO_NAME git pull' to finish cloning.\n" 17
 	git merge origin/master
+	unuse
 	hook post-clone
 }
 
@@ -274,6 +275,11 @@ use() {
 	git_dir_exists
 	export GIT_WORK_TREE="$(git config --get core.worktree)"
 	export VCSH_DIRECTORY="$VCSH_REPO_NAME"
+}
+
+unuse() {
+	unset GIT_WORK_TREE
+	unset VCSH_DIRECTORY
 }
 
 which() {
