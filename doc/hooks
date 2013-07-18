@@ -2,7 +2,7 @@ Available hooks are:
 
 * pre-command
 * post-command
-* pre-hook
+* pre-clone
 * post-clone
 * post-clone-retired
 	Use this if you need to operate on different git repositories after cloning.
