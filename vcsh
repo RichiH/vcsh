@@ -368,7 +368,7 @@ elif [ "$1" = 'delete' ]           ||
 	export VCSH_REPO_NAME="$2"
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 	[ "$VCSH_COMMAND" = 'rename' ] && { export VCSH_REPO_NAME_NEW="$3";
-	                                    export GIT_DIR_NEW="$VCSH_REPO_D/$VCSH_REPO_NAME_NEW.git" }
+	                                    export GIT_DIR_NEW="$VCSH_REPO_D/$VCSH_REPO_NAME_NEW.git"; }
 	[ "$VCSH_COMMAND" = 'run' ]    && shift 2
 	[ "$VCSH_COMMAND" = 'write-gitignore' ]
 elif [ "$1" = 'list' ] ||
