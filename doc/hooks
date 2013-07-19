@@ -1,4 +1,13 @@
 Available hooks are:
+
+* pre-clone
+* post-clone
+* post-clone-retired
+	Use this if you need to operate on different git repositories after cloning.
+	This hook can be useful if your configuration needs some remote
+	repositories, but you do not want to include it into your vcsh
+	repository. For instance, if you use vim plugins manager (vundle,
+	NeoBundle), zsh configuration frameworks (oh-my-zsh, prezto), etc.
 * pre-command
 * post-command
 * pre-enter
