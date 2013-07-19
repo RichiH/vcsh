@@ -258,6 +258,12 @@ rename() {
 	[ -d "$GIT_DIR_NEW" ] && fatal "'$GIT_DIR_NEW' exists" 54
 	mv -f "$GIT_DIR" "$GIT_DIR_NEW" || fatal "Could not mv '$GIT_DIR' '$GIT_DIR_NEW'" 52
 
+	# Now that the repository has been renamed, we need to fix up its configuration
+	# Overwrite old name..
+	GIT_DIR="$GIT_DIR_NEW"
+	$VCSH_REPO_NAME="$VCSH_REPO_NAME_NEW"
+	# ..and clobber all old configuration
+	upgrade
 }
 
 run() {
@@ -361,7 +367,8 @@ elif [ "$1" = 'delete' ]           ||
 	export VCSH_COMMAND="$1"
 	export VCSH_REPO_NAME="$2"
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
-	[ "$VCSH_COMMAND" = 'rename' ] && export GIT_DIR_NEW="$VCSH_REPO_D/$3.git"
+	[ "$VCSH_COMMAND" = 'rename' ] && { export VCSH_REPO_NAME_NEW="$3";
+	                                    export GIT_DIR_NEW="$VCSH_REPO_D/$VCSH_REPO_NAME_NEW.git" }
 	[ "$VCSH_COMMAND" = 'run' ]    && shift 2
 	[ "$VCSH_COMMAND" = 'write-gitignore' ]
 elif [ "$1" = 'list' ] ||
