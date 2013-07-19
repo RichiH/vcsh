@@ -248,7 +248,6 @@ push() {
 }
 
 retire() {
-	unset GIT_WORK_TREE
 	unset VCSH_DIRECTORY
 }
 
@@ -289,7 +288,6 @@ upgrade() {
 
 use() {
 	git_dir_exists
-	export GIT_WORK_TREE="$(git rev-parse --show-toplevel)"
 	export VCSH_DIRECTORY="$VCSH_REPO_NAME"
 }
 
