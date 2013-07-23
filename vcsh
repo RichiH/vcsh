@@ -8,7 +8,7 @@
 # While the following is not legally binding, the author would like to
 # explain the choice of GPLv2+ over GPLv3+.
 # The author prefers GPLv3+ over GPLv2+ but feels it's better to maintain
-# full compatibility's with git. In case git ever changes its licensing terms,
+# full compatibility's with Git. In case Git ever changes its licensing terms,
 # which is admittedly extremely unlikely to the point of being impossible,
 # this software will most likely follow suit.
 
@@ -24,7 +24,7 @@ basename() {
 }
 
 SELF=$(basename $0)
-VERSION='1.20130614'
+VERSION='1.20130723'
 
 fatal() {
 	echo "$SELF: fatal: $1" >&2
@@ -100,6 +100,8 @@ help() {
    list-tracked         List all files tracked by vcsh
    list-tracked-by \\
         <repo>          List files tracked by a repository
+   pull                 Pull from all vcsh remotes
+   push                 Push to vcsh remotes
    rename <repo> \\
           <newname>     Rename repository
    run <repo> \\
@@ -131,6 +133,7 @@ info() {
 }
 
 clone() {
+	hook pre-clone
 	init
 	git remote add origin "$GIT_REMOTE"
 	git config branch.master.remote origin
@@ -149,6 +152,9 @@ clone() {
 		fatal "will stop after fetching and not try to merge!
   Once this situation has been resolved, run 'vcsh run $VCSH_REPO_NAME git pull' to finish cloning.\n" 17
 	git merge origin/master
+	hook post-clone
+	retire
+	hook post-clone-retired
 }
 
 delete() {
@@ -220,11 +226,44 @@ list_tracked_by() {
 	git ls-files | sort -u
 }
 
+pull() {
+	hook pre-pull
+	for VCSH_REPO_NAME in $(list); do
+		echo -n "$VCSH_REPO_NAME: "
+		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
+		use
+		git pull
+	done
+	hook post-pull
+}
+
+push() {
+	hook pre-push
+	for VCSH_REPO_NAME in $(list); do
+		echo -n "$VCSH_REPO_NAME: "
+		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
+		use
+		git push
+	done
+	hook post-push
+}
+
+retire() {
+	unset GIT_WORK_TREE
+	unset VCSH_DIRECTORY
+}
+
 rename() {
 	git_dir_exists
 	[ -d "$GIT_DIR_NEW" ] && fatal "'$GIT_DIR_NEW' exists" 54
 	mv -f "$GIT_DIR" "$GIT_DIR_NEW" || fatal "Could not mv '$GIT_DIR' '$GIT_DIR_NEW'" 52
 
+	# Now that the repository has been renamed, we need to fix up its configuration
+	# Overwrite old name..
+	GIT_DIR="$GIT_DIR_NEW"
+	$VCSH_REPO_NAME="$VCSH_REPO_NAME_NEW"
+	# ..and clobber all old configuration
+	upgrade
 }
 
 run() {
@@ -238,7 +277,7 @@ upgrade() {
 	hook pre-upgrade
 	use
 	git config core.worktree     "$GIT_WORK_TREE"
-	git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
+	[ ! "x$VCSH_GITIGNORE" = 'xnone' ] && git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
 	git config vcsh.vcsh         'true'
 	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME"
 	hook post-upgrade
@@ -259,6 +298,12 @@ which() {
 }
 
 write_gitignore() {
+	# Don't do anything if the user does not want to write gitignore
+	if [ "x$VCSH_GITIGNORE" = 'xnone' ]; then
+		info "Not writing gitignore as '\$VCSH_GITIGNORE' is set to 'none'"
+		exit
+	fi
+
 	use
 	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
 	gitignores=$(for file in $(git ls-files); do
@@ -272,7 +317,7 @@ write_gitignore() {
 	echo '*' > "$tempfile" || fatal "could not write to '$tempfile'" 57
 	for gitignore in $gitignores; do
 		echo "$gitignore" | sed 's@^@!/@' >> "$tempfile" || fatal "could not write to '$tempfile'" 57
-		if [ x$VCSH_GITIGNORE = x'recursive' ] && [ -d "$gitignore" ]; then
+		if [ "x$VCSH_GITIGNORE" = 'xrecursive' ] && [ -d "$gitignore" ]; then
 			{ echo "$gitignore/*" | sed 's@^@!/@' >> "$tempfile" || fatal "could not write to '$tempfile'" 57; }
 		fi
 	done
@@ -289,8 +334,8 @@ write_gitignore() {
 		fatal "could not move '$tempfile' to '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME'" 53
 }
 
-if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xrecursive' ]; then
-	fatal "'\$VCSH_GITIGNORE' must be either 'exact' or 'recursive'" 1
+if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xnone' ] && [ ! "x$VCSH_GITIGNORE" = 'xrecursive' ]; then
+	fatal "'\$VCSH_GITIGNORE' must equal 'exact', 'none', or 'recursive'" 1
 fi
 
 if [ "$1" = 'clone' ]; then
@@ -318,15 +363,17 @@ elif [ "$1" = 'delete' ]           ||
      [ "$1" = 'write-gitignore' ]; then
 	[ -z $2 ]                      && fatal "$1: please specify repository to work on" 1
 	[ "$1" = 'rename' -a -z "$3" ] && fatal "$1: please specify a target name" 1
-	[ "$1" = 'run' -a -z "$3" ]    && fatal "$1: please specify a command" 1
+	[ "$1" = 'run'    -a -z "$3" ] && fatal "$1: please specify a command" 1
 	export VCSH_COMMAND="$1"
 	export VCSH_REPO_NAME="$2"
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
-	[ "$VCSH_COMMAND" = 'rename' ]         && export GIT_DIR_NEW="$VCSH_REPO_D/$3.git"
-	[ "$VCSH_COMMAND" = 'run' ] && shift 2
-	[ "$VCSH_COMMAND" = 'write-gitignore' ]
+	[ "$VCSH_COMMAND" = 'rename' ] && { export VCSH_REPO_NAME_NEW="$3";
+	                                    export GIT_DIR_NEW="$VCSH_REPO_D/$VCSH_REPO_NAME_NEW.git"; }
+	[ "$VCSH_COMMAND" = 'run' ]    && shift 2
 elif [ "$1" = 'list' ] ||
-     [ "$1" = 'list-tracked' ]; then
+     [ "$1" = 'list-tracked' ] ||
+     [ "$1" = 'pull' ] ||
+     [ "$1" = 'push' ]; then
 	export VCSH_COMMAND="$1"
 elif [ -n "$2" ]; then
 	export VCSH_COMMAND='run'
@@ -352,9 +399,8 @@ if echo $VCSH_REPO_NAME | grep -q '/'; then
 	export VCSH_REPO_NAME=$(basename "$VCSH_REPO_NAME" .git)
 fi
 
-
-for check_directory in "$VCSH_REPO_D" "$VCSH_BASE/.gitignore.d"
-do
+check_dir() {
+	check_directory="$1"
 	if [ ! -d "$check_directory" ]; then
 		if [ -e "$check_directory" ]; then
 			fatal "'$check_directory' exists but is not a directory" 13
@@ -363,7 +409,10 @@ do
 			mkdir -p "$check_directory" || fatal "could not create '$check_directory'" 50
 		fi
 	fi
-done
+}
+
+check_dir "$VCSH_REPO_D"
+[ ! "x$VCSH_GITIGNORE" = 'xnone' ] && check_dir "$VCSH_BASE/.gitignore.d"
 
 verbose "$VCSH_COMMAND begin"
 export VCSH_COMMAND=$(echo $VCSH_COMMAND | sed 's/-/_/g')
