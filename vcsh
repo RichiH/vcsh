@@ -8,7 +8,7 @@
 # While the following is not legally binding, the author would like to
 # explain the choice of GPLv2+ over GPLv3+.
 # The author prefers GPLv3+ over GPLv2+ but feels it's better to maintain
-# full compatibility's with git. In case git ever changes its licensing terms,
+# full compatibility's with Git. In case Git ever changes its licensing terms,
 # which is admittedly extremely unlikely to the point of being impossible,
 # this software will most likely follow suit.
 
@@ -153,6 +153,8 @@ clone() {
   Once this situation has been resolved, run 'vcsh run $VCSH_REPO_NAME git pull' to finish cloning.\n" 17
 	git merge origin/master
 	hook post-clone
+	retire
+	hook post-clone-retired
 }
 
 delete() {
@@ -246,11 +248,22 @@ push() {
 	hook post-push
 }
 
+retire() {
+	unset GIT_WORK_TREE
+	unset VCSH_DIRECTORY
+}
+
 rename() {
 	git_dir_exists
 	[ -d "$GIT_DIR_NEW" ] && fatal "'$GIT_DIR_NEW' exists" 54
 	mv -f "$GIT_DIR" "$GIT_DIR_NEW" || fatal "Could not mv '$GIT_DIR' '$GIT_DIR_NEW'" 52
 
+	# Now that the repository has been renamed, we need to fix up its configuration
+	# Overwrite old name..
+	GIT_DIR="$GIT_DIR_NEW"
+	$VCSH_REPO_NAME="$VCSH_REPO_NAME_NEW"
+	# ..and clobber all old configuration
+	upgrade
 }
 
 run() {
@@ -321,8 +334,8 @@ write_gitignore() {
 		fatal "could not move '$tempfile' to '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME'" 53
 }
 
-if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xrecursive' ] && [ ! "x$VCSH_GITIGNORE" = 'xnone' ]; then
-	fatal "'\$VCSH_GITIGNORE' must equal 'exact', 'recursive', or 'none'" 1
+if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xnone' ] && [ ! "x$VCSH_GITIGNORE" = 'xrecursive' ]; then
+	fatal "'\$VCSH_GITIGNORE' must equal 'exact', 'none', or 'recursive'" 1
 fi
 
 if [ "$1" = 'clone' ]; then
@@ -354,9 +367,9 @@ elif [ "$1" = 'delete' ]           ||
 	export VCSH_COMMAND="$1"
 	export VCSH_REPO_NAME="$2"
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
-	[ "$VCSH_COMMAND" = 'rename' ] && export GIT_DIR_NEW="$VCSH_REPO_D/$3.git"
+	[ "$VCSH_COMMAND" = 'rename' ] && { export VCSH_REPO_NAME_NEW="$3";
+	                                    export GIT_DIR_NEW="$VCSH_REPO_D/$VCSH_REPO_NAME_NEW.git"; }
 	[ "$VCSH_COMMAND" = 'run' ]    && shift 2
-	[ "$VCSH_COMMAND" = 'write-gitignore' ]
 elif [ "$1" = 'list' ] ||
      [ "$1" = 'list-tracked' ] ||
      [ "$1" = 'pull' ] ||

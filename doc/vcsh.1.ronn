@@ -81,6 +81,9 @@ an interactive user.
 * clone:
   Clone an existing repository.
 
+  If you need to clone a bundle of repositories, look into the
+  `post-clone-retired` hook.
+
 * delete:
   Delete an existing repository.
 
