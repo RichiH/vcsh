@@ -106,6 +106,7 @@ help() {
           <newname>     Rename repository
    run <repo> \\
        <command>        Use this repository
+   status               Show statuses of all vcsh repositories
    upgrade <repo>       Upgrade repository to currently recommended settings
    version              Print version information
    which <substring>    Find substring in name of any tracked file
@@ -273,6 +274,16 @@ run() {
 	hook post-run
 }
 
+status() {
+	for VCSH_REPO_NAME in $(list); do
+		echo "$VCSH_REPO_NAME:"
+		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
+		use
+		git status --short --untracked-files='no'
+		echo
+	done
+}
+
 upgrade() {
 	hook pre-upgrade
 	use
@@ -373,7 +384,8 @@ elif [ "$1" = 'delete' ]           ||
 elif [ "$1" = 'list' ] ||
      [ "$1" = 'list-tracked' ] ||
      [ "$1" = 'pull' ] ||
-     [ "$1" = 'push' ]; then
+     [ "$1" = 'push' ] ||
+     [ "$1" = 'status' ]; then
 	export VCSH_COMMAND="$1"
 elif [ -n "$2" ]; then
 	export VCSH_COMMAND='run'
