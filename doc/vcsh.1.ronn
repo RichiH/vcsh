@@ -164,15 +164,15 @@ executed in the context of your shell.
 Interesting knobs you can turn:
 
 * <$VCSH_GITIGNORE>:
-  Can be <exact>, <recursive>, or <none>.
+  Can be <exact>, <none>, or <recursive>.
 
   <exact> will seed the repo-specific ignore file with all file and directory
   names which `git ls-files` returns.
 
+  <none> will not write any ignore file.
+
   <recursive> will descend through all directories recursively additionally to
   the above.
-
-  <none> will not write any ignore file.
 
   Defaults to <exact>.
 
