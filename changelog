@@ -1,3 +1,17 @@
+2013-07-23  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20130723
+	* Support $VCSH_GITIGNORE == none
+	* Documentation improvements,
+	* Improved zsh completion
+	* Add support for `vcsh pull`
+	* Add support for `vcsh push`
+	* Add retire() to tear down vcsh ENV
+	* Add clone hooks, including one witout vcsh ENV to
+	  allow subsequent cloning of other repos
+	* Fix `vcsh rename`
+	* Improve general code robustness
+
 2013-06-14  Richard Hartmann <richih.mailinglist@gmail.com>
 
 	* Release 1.20130614
