@@ -29,6 +29,8 @@ vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
 
 `vcsh` run <repo> <shell command>
 
+`vcsh` status
+
 `vcsh` upgrade <repo>
 
 `vcsh` version
@@ -124,6 +126,9 @@ an interactive user.
   normally generated from the repository's name.
   This is needed to support mr and other scripts properly and of no concern to
   an interactive user.
+
+* status:
+  Show statuses of all vcsh repositories.
 
 * upgrade:
   Upgrade repository to currently recommended settings.
