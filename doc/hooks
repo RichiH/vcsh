@@ -11,3 +11,6 @@ Available hooks are:
 * post-run
 * pre-upgrade
 * post-upgrade
+
+If you write any interesting or useful hooks, please send them upstream
+so they can be included in an examples section.
