@@ -46,6 +46,9 @@
 \fBvcsh\fR run \fIrepo\fR \fIshell command\fR
 .
 .P
+\fBvcsh\fR status
+.
+.P
 \fBvcsh\fR upgrade \fIrepo\fR
 .
 .P
@@ -152,6 +155,10 @@ Run command with \fI$GIT_DIR\fR and \fI$GIT_WORK_TREE\fR set\. Allows you to run
 Please note that there is a somewhat magic feature for run\. Instead of \fIrepo\fR it accepts \fIpath\fR, as well\. Anything that has a slash in it will be assumed to be a path\. \fBvcsh run\fR will then operate on this directory instead of the one normally generated from the repository\'s name\. This is needed to support mr and other scripts properly and of no concern to an interactive user\.
 .
 .TP
+status
+Show statuses of all vcsh repositories\.
+.
+.TP
 upgrade
 Upgrade repository to currently recommended settings\.
 .
@@ -203,16 +210,16 @@ Interesting knobs you can turn:
 .
 .TP
 \fI$VCSH_GITIGNORE\fR
-Can be \fIexact\fR, \fIrecursive\fR, or \fInone\fR\.
+Can be \fIexact\fR, \fInone\fR, or \fIrecursive\fR\.
 .
 .IP
 \fIexact\fR will seed the repo\-specific ignore file with all file and directory names which \fBgit ls\-files\fR returns\.
 .
 .IP
-\fIrecursive\fR will descend through all directories recursively additionally to the above\.
+\fInone\fR will not write any ignore file\.
 .
 .IP
-\fInone\fR will not write any ignore file\.
+\fIrecursive\fR will descend through all directories recursively additionally to the above\.
 .
 .IP
 Defaults to \fIexact\fR\.
