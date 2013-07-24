@@ -16,7 +16,7 @@ Depends: git,
          ${shlibs:Depends}
 Recommends: mr (>= 1.07),
             ssh-client
-Description: manage config files in $HOME via fake bare git repositories
+Description: Version Control System for $HOME - multiple Git repositories in $HOME
  vcsh allows you to have several git repositories, all maintaining their working
  trees in $HOME without clobbering each other. That, in turn, means you can have
  one repository per config set (zsh, vim, ssh, etc), picking and choosing which
