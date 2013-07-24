@@ -1,3 +1,11 @@
+2013-07-24  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20130724
+	* Add support for `vcsh status`
+	* Improve output of `vcsh pull`
+	* Improve output of `vcsh push`
+	* Minor documentation improvements
+
 2013-07-23  Richard Hartmann <richih.mailinglist@gmail.com>
 
 	* Release 1.20130723
