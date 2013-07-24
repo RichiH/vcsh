@@ -1,7 +1,7 @@
 Index: vcsh/Makefile
 ===================================================================
---- vcsh.orig/Makefile	2013-06-13 01:04:52.208799344 +0200
-+++ vcsh/Makefile	2013-06-13 01:04:52.200799344 +0200
+--- vcsh.orig/Makefile	2013-07-25 01:11:30.548476071 +0200
++++ vcsh/Makefile	2013-07-25 01:11:30.548476071 +0200
 @@ -19,11 +19,11 @@
  
  manpages: $(manpages)
@@ -20,15 +20,15 @@ Index: vcsh/Makefile
 Index: vcsh/vcsh.1
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ vcsh/vcsh.1	2013-06-13 01:05:00.200799059 +0200
++++ vcsh/vcsh.1	2013-07-25 00:56:18.624466544 +0200
 @@ -0,0 +1,290 @@
 +.\" generated with Ronn/v0.7.3
 +.\" http://github.com/rtomayko/ronn/tree/0.7.3
 +.
-+.TH "VCSH" "1" "June 2013" "" ""
++.TH "VCSH" "1" "July 2013" "" ""
 +.
 +.SH "NAME"
-+\fBvcsh\fR \- manage config files in $HOME via fake bare Git repositories
++\fBvcsh\fR \- Version Control System for $HOME \- multiple Git repositories in $HOME
 +.
 +.SH "SYNOPSIS"
 +\fBvcsh\fR [\fIoptions\fR] \fIcommand\fR
