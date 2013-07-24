@@ -1,3 +1,13 @@
+vcsh (1.20130724-1) unstable; urgency=low
+
+  * New upstream release
+    + Add support for `vcsh status`
+    + Improve output of `vcsh pull`
+    + Improve output of `vcsh push`
+    + Minor documentation improvements
+
+ -- Richard Hartmann <richih.mailinglist@gmail.com>  Wed, 24 Jul 2013 22:19:50 +0200
+
 vcsh (1.20130723-1) unstable; urgency=low
 
   * New upstream release
