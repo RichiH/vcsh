@@ -81,6 +81,9 @@ an interactive user.
 * clone:
   Clone an existing repository.
 
+* commit:
+  Commit in all repositories
+
 * delete:
   Delete an existing repository.
 

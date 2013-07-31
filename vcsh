@@ -92,6 +92,7 @@ help() {
    commands:
    clone <remote> \\
          [<repo>]       Clone from an existing repository
+   commit               Commit in all repositories
    delete <repo>        Delete an existing repository
    enter <repo>         Enter repository; spawn new instance of \$SHELL
    help                 Display this help text
@@ -153,6 +154,18 @@ clone() {
   Once this situation has been resolved, run 'vcsh run $VCSH_REPO_NAME git pull' to finish cloning.\n" 17
 	git merge origin/master
 	hook post-clone
+}
+
+commit() {
+	hook pre-commit
+	for VCSH_REPO_NAME in $(list); do
+		echo "$VCSH_REPO_NAME: "
+		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
+		use
+		git commit --untracked-files=no --quiet
+		echo
+	done
+	hook post-commit
 }
 
 delete() {
@@ -351,7 +364,8 @@ elif [ "$1" = 'delete' ]           ||
 	[ "$VCSH_COMMAND" = 'rename' ]         && export GIT_DIR_NEW="$VCSH_REPO_D/$3.git"
 	[ "$VCSH_COMMAND" = 'run' ] && shift 2
 	[ "$VCSH_COMMAND" = 'write-gitignore' ]
-elif [ "$1" = 'list' ] ||
+elif [ "$1" = 'commit' ] ||
+     [ "$1" = 'list' ] ||
      [ "$1" = 'list-tracked' ] ||
      [ "$1" = 'pull' ] ||
      [ "$1" = 'push' ]; then
