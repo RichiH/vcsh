@@ -86,6 +86,9 @@ an interactive user.
   If you need to clone a bundle of repositories, look into the
   `post-clone-retired` hook.
 
+* commit:
+  Commit in all repositories
+
 * delete:
   Delete an existing repository.
 
