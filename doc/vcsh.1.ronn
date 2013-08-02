@@ -282,7 +282,7 @@ This manpage and `vcsh` itself were written by Richard "RichiH" Hartmann.
 
 ## COPYRIGHT
 
-Copyright 2011-2013 Richard Hartmann <richih.mailinglist@gmail.com>
+Copyright 2011-2013 Richard Hartmann <richih@debian.org>
 
 Licensed under the GNU GPL version 2 or higher.
 
