@@ -39,11 +39,14 @@ while getopts "c:dv" flag; do
 		set -vx
 		VCSH_DEBUG=1
 		echo "$SELF $VERSION"
-	elif [ "$1" = '-v' ];then
+	elif [ "$1" = '-v' ] ||  [ "$1" = '--verbose' ];then
 		VCSH_VERBOSE=1
 		echo "$SELF $VERSION"
 	elif [ "$1" = '-c' ];then
 		VCSH_OPTION_CONFIG=$OPTARG
+	elif [ "$1" = '--version' ]; then
+		echo "$SELF $VERSION"
+		exit 0
 	fi
 	shift 1
 done
