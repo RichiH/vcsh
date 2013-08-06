@@ -1,3 +1,9 @@
+vcsh (1.20130724-1~bpo70+1) wheezy-backports; urgency=low
+
+  * Rebuild for wheezy-backports.
+
+ -- Richard Hartmann <richih@debian.org>  Tue, 06 Aug 2013 22:14:30 +0200
+
 vcsh (1.20130724-1) unstable; urgency=low
 
   * New upstream release
