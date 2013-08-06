@@ -56,8 +56,9 @@ Let's say you want to version control your `vim` configuration:
     vcsh vim commit -m 'Initial commit of my Vim configuration'
     # optionally push your files to a remote
     vcsh vim remote add origin <remote>
-    vcsh vim push origin master:master
-    vcsh vim branch --track master origin/master
+    vcsh vim push -u origin master
+    # from now on you can push additional commits like this
+    vcsh vim push
 
 If all that looks a _lot_ like standard `git`, that's no coincidence; it's
 a design feature.
@@ -365,7 +366,7 @@ ignore this fact for now and follow the examples.
 
 ## Initialize a new repository "vim"
 
-    vcsh init vcsh
+    vcsh init vim
 
 ## Clone an existing repository
 

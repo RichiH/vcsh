@@ -21,9 +21,15 @@ vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
 
 `vcsh` list-tracked-by <repo>
 
+`vcsh` pull
+
+`vcsh` push
+
 `vcsh` rename <repo> <newname>
 
 `vcsh` run <repo> <shell command>
+
+`vcsh` status
 
 `vcsh` upgrade <repo>
 
@@ -77,6 +83,9 @@ an interactive user.
 * clone:
   Clone an existing repository.
 
+  If you need to clone a bundle of repositories, look into the
+  `post-clone-retired` hook.
+
 * delete:
   Delete an existing repository.
 
@@ -98,6 +107,12 @@ an interactive user.
 * list-tracked-by:
   List files tracked by a repository.
 
+* pull:
+  Pull from all vcsh remotes.
+
+* push:
+  Push to all vcsh remotes.
+
 * rename:
   Rename a repository.
 
@@ -111,6 +126,9 @@ an interactive user.
   normally generated from the repository's name.
   This is needed to support mr and other scripts properly and of no concern to
   an interactive user.
+
+* status:
+  Show statuses of all vcsh repositories.
 
 * upgrade:
   Upgrade repository to currently recommended settings.
@@ -151,10 +169,12 @@ executed in the context of your shell.
 Interesting knobs you can turn:
 
 * <$VCSH_GITIGNORE>:
-  Can be either <exact> or <recursive>.
+  Can be <exact>, <none>, or <recursive>.
 
-  <exact> will seed the repo-specific <.gitignore> with all file and directory
+  <exact> will seed the repo-specific ignore file with all file and directory
   names which `git ls-files` returns.
+
+  <none> will not write any ignore file.
 
   <recursive> will descend through all directories recursively additionally to
   the above.
@@ -259,7 +279,7 @@ This manpage and `vcsh` itself were written by Richard "RichiH" Hartmann.
 
 ## COPYRIGHT
 
-Copyright 2011-2012 Richard Hartmann <richih.mailinglist@gmail.com>
+Copyright 2011-2013 Richard Hartmann <richih.mailinglist@gmail.com>
 
 Licensed under the GNU GPL version 2 or higher.
 
