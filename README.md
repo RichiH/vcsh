@@ -3,12 +3,33 @@ vcsh - Version Control System for $HOME - multiple Git repositories in $HOME
 
 # Index
 
-1. [Introduction](#introduction)
-2. [30 second howto](#30-second-howto)
-3. [Overview](#overview)
-4. [Getting Started](#getting-started)
-5. [Usage Exmaples](#usage-examples)
+1. [30 second howto](#30-second-howto)
+2. [Introduction](#introduction)
+3. [Usage Exmaples](#usage-examples)
+4. [Overview](#overview)
+5. [Getting Started](#getting-started)
 6. [Contact](#contact)
+
+
+# 30 second howto
+
+While it may appear that there's an overwhelming amount of documentation and
+while the explanation of the concepts behind `vcsh` needs to touch a few gory
+details of `git` internals, getting started with `vcsh` is extremely simple.
+
+Let's say you want to version control your `vim` configuration:
+
+    vcsh init vim
+    vcsh vim add ~/.vimrc ~/.vim
+    vcsh vim commit -m 'Initial commit of my Vim configuration'
+    # optionally push your files to a remote
+    vcsh vim remote add origin <remote>
+    vcsh vim push -u origin master
+    # from now on you can push additional commits like this
+    vcsh vim push
+
+If all that looks a _lot_ like standard `git`, that's no coincidence; it's
+a design feature.
 
 
 # Introduction
@@ -34,29 +55,45 @@ can give you your own packaging branch in the upstream repository.
 ## Talks
 
 Some people found it useful to look at slides and videos explaining how `vcsh`
-works instead of working through the docs, first.
-They can all be found [on the author's talk page][talks].
+works instead of working through the docs.
+All slides, videos, and further information can be found
+[on the author's talk page][talks].
 
 
-# 30 second howto
+# Usage Examples
 
-While it may appear that there's an overwhelming amount of documentation and
-while the explanation of the concepts behind `vcsh` needs to touch a few gory
-details of `git` internals, getting started with `vcsh` is extremely simple.
+There are three different ways to interact with `vcsh` repositories; this
+section will only show the simplest and easiest way.
+Certain more advanced use cases require the other two ways, but don't worry
+about this for now. This will be covered in the advanced sections.
 
-Let's say you want to version control your `vim` configuration:
+## Initialize a new repository "vim"
 
     vcsh init vim
+
+## Clone an existing repository
+
+    vcsh clone <remote> <repository_name>
+
+## Add files to repository "vim"
+
     vcsh vim add ~/.vimrc ~/.vim
-    vcsh vim commit -m 'Initial commit of my Vim configuration'
-    # optionally push your files to a remote
+    vcsh vim commit -m 'Update Vim configuration'
+
+## Add a remote for repository "vim"
+
     vcsh vim remote add origin <remote>
-    vcsh vim push -u origin master
-    # from now on you can push additional commits like this
+    vcsh vim push origin master:master
+    vcsh vim branch --track master origin/master
+
+## Push to remote of repository "vim"
+
     vcsh vim push
 
-If all that looks a _lot_ like standard `git`, that's no coincidence; it's
-a design feature.
+## Pull from remote of repository "vim"
+
+    vcsh vim pull
+
 
 
 # Overview
@@ -354,40 +391,6 @@ mr is used to actually retrieve configs, etc
     # $XDG_CONFIG_HOME/mr/available.d to $XDG_CONFIG_HOME/mr/config.d
     ~ % cd
     ~ % mr -j 5 up
-
-
-# Usage Examples
-
-All examples in this section will use the short form of `vcsh` which is the
-simplest way to interface with it. If you don't know what that means simply
-ignore this fact for now and follow the examples.
-
-## Initialize a new repository "vim"
-
-    vcsh init vim
-
-## Clone an existing repository
-
-    vcsh clone <remote> <repository_name>
-
-## Add files to repository "vim"
-
-    vcsh vim add ~/.vimrc ~/.vim
-    vcsh vim commit -m 'Update Vim configuration'
-
-## Add a remote for repository "vim"
-
-    vcsh vim remote add origin <remote>
-    vcsh vim push origin master:master
-    vcsh vim branch --track master origin/master
-
-## Push to remote of repository "vim"
-
-    vcsh vim push
-
-## Pull from remote of repository "vim"
-
-    vcsh vim pull
 
 
 # mr usage ; will be factored out & rewritten
