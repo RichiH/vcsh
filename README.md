@@ -65,7 +65,10 @@ All slides, videos, and further information can be found
 There are three different ways to interact with `vcsh` repositories; this
 section will only show the simplest and easiest way.
 Certain more advanced use cases require the other two ways, but don't worry
-about this for now. This will be covered in the advanced sections.
+about this for now. If you never ewen bother playing with the other two
+modes you will still be fine.
+`vcsh enter` and `vcsh run`  will be covered in later sections.
+
 
 ## Initialize a new repository "vim"
 
