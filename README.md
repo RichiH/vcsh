@@ -13,10 +13,11 @@ vcsh - Version Control System for $HOME - multiple Git repositories in $HOME
 
 # Introduction
 
-[vcsh][vcsh] allows you to maintain several git repositories in one single
+[vcsh][vcsh] allows you to maintain several Git repositories in one single
 directory. They all maintain their working trees without clobbering each other
-or interfering otherwise. By default, all git repositories maintained via
-`vcsh` are stored in `$HOME` but you can override this setting if you want to.
+or interfering otherwise. By default, all Git repositories maintained via
+`vcsh` store the actual files in `$HOME` but you can override this setting if
+you want to.
 All this means that you can have one repository per application or application
 family, i.e. `zsh`, `vim`, `ssh`, etc. This, in turn, allows you to clone
 custom sets of configurations onto different machines or even for different
@@ -24,12 +25,6 @@ users; picking and mixing which configurations you want to use where.
 For example, you may not need to have your `mplayer` configuration on a server
 or available to root and you may want to maintain different configuration for
 `ssh` on your personal and your work machines.
-
-`vcsh` was designed with [mr][mr], a tool to manage Multiple Repositories, in
-mind and the two integrate very nicely. `mr` has native support for `vcsh`
-repositories and to `vcsh`, `mr` is just another configuration to track.
-This make setting up any new machine a breeze. It takes literally less than
-five minutes to go from standard installation to fully set up system
 
 A lot of modern UNIX-based systems offer pacakges for `vcsh`. In case yours
 does not read `INSTALL.md` for install instructions or `PACKAGING.md` to create
@@ -93,9 +88,12 @@ To manage both `vcsh` and other repositories, we suggest using [mr](mr). `mr`
 takes care of pulling in and pushing out new data for a variety of version
 control systems.
 
+`vcsh` was designed with [mr][mr], a tool to manage Multiple Repositories, in
+mind and the two integrate very nicely. `mr` has native support for `vcsh`
+repositories and to `vcsh`, `mr` is just another configuration to track.
+This make setting up any new machine a breeze. It takes literally less than
+five minutes to go from standard installation to fully set up system
 
-The last logical step is to maintain all those new repositores with an automated
-tool instead of tracking them by hand.
 This is where `mr` comes in. While the use of `mr` is technically
 optional, but it will be an integral part of the proposed system that follows.
 
