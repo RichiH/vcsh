@@ -70,7 +70,7 @@ modes you will still be fine.
 `vcsh enter` and `vcsh run`  will be covered in later sections.
 
 
-## Initialize a new repository "vim"
+## Initialize a new repository called "vim"
 
     vcsh init vim
 
@@ -97,7 +97,17 @@ modes you will still be fine.
 
     vcsh vim pull
 
+## Show status of changed files in all repositories
 
+    vcsh status
+
+## Pull from all repositories
+
+    vcsh pull
+
+## Push to all repositories
+
+    vcsh push
 
 # Overview
 
