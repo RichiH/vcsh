@@ -47,7 +47,7 @@ For example, you may not need to have your `mplayer` configuration on a server
 or available to root and you may want to maintain different configuration for
 `ssh` on your personal and your work machines.
 
-A lot of modern UNIX-based systems offer pacakges for `vcsh`. In case yours
+A lot of modern UNIX-based systems offer packages for `vcsh`. In case yours
 does not read `INSTALL.md` for install instructions or `PACKAGING.md` to create
 a package, yourself. If you do end up packaging `vcsh` please let us know so we
 can give you your own packaging branch in the upstream repository.
@@ -65,7 +65,7 @@ All slides, videos, and further information can be found
 There are three different ways to interact with `vcsh` repositories; this
 section will only show the simplest and easiest way.
 Certain more advanced use cases require the other two ways, but don't worry
-about this for now. If you never ewen bother playing with the other two
+about this for now. If you never even bother playing with the other two
 modes you will still be fine.
 `vcsh enter` and `vcsh run`  will be covered in later sections.
 
