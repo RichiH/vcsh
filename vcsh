@@ -212,12 +212,14 @@ hook() {
 }
 
 init() {
+	hook pre-init
 	[ ! -e "$GIT_DIR" ] || fatal "'$GIT_DIR' exists" 10
 	export GIT_WORK_TREE="$VCSH_BASE"
 	mkdir -p "$GIT_WORK_TREE" || fatal "could not create '$GIT_WORK_TREE'" 50
 	cd "$GIT_WORK_TREE" || fatal "could not enter '$GIT_WORK_TREE'" 11
 	git init
 	upgrade
+	hook post-init
 }
 
 list() {

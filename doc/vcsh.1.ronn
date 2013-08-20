@@ -229,9 +229,12 @@ the repository's name, followed by a dot, i.e. <zsh.pre-run>. Otherwise, the
 same rules as above apply. The dot between the repository's name and the hook
 is mandatory, though.
 
-Available hooks are <pre-enter>, <post-enter>, <pre-run>, <post-run>,
-<pre-upgrade>, and <post-upgrade>. If you need more, vcsh is trivial to patch,
-but please let upstream know so we can ship them by default.
+Available hooks are <pre-clone>, <post-clone>, <post-clone-retired>,
+<pre-command>, <post-command>, <pre-enter>, <post-enter>, <pre-init>,
+<post-init>, <pre-pull>, <post-pull>, <pre-push>, <post-push>, <pre-run>,
+<post-run>, <pre-upgrade>, and <post-upgrade>.
+If you need more, vcsh is trivial to patch, but please let upstream know so
+we can ship them by default.
 
 ## DETAILED HOWTO AND FURTHER READING
 
