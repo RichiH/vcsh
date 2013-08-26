@@ -238,9 +238,9 @@ we can ship them by default.
 
 ## DETAILED HOWTO AND FURTHER READING
 
-Manpages are often short and sometimes useless to glean best practices from.
-While the author tried to avoid this in this case, manpages can not cover
-detailed howtos.
+Manpages are often short and sometimes useless from which to glean best
+practices. While the author tried to avoid this in this case, manpages can
+not cover detailed howtos.
 
 This software also comes with a file called <README.md>. It contains various
 approaches to setting up and using vcsh. You can view the file it as
