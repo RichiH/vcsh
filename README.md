@@ -216,9 +216,6 @@ you to conveniently run `mr up` etc. to manage all repositories. It looks like
 this:
 
     [DEFAULT]
-    jobs = 5
-    # Use if your mr does not have vcsh support in mainline, yet
-    include = cat /usr/share/mr/vcsh
     include = cat ${XDG_CONFIG_HOME:-$HOME/.config}/mr/config.d/*
 
 ### repo.d
@@ -244,10 +241,8 @@ configuration to a new host.
    example: `vcsh clone git://github.com/RichiH/vcsh_mr_template.git mr`
 2. Choose your repositories by linking them in config.d (or go with the default
    you may have already configured by adding symlinks to git).
-3. Make sure the line 'include = cat /usr/share/mr/vcsh' in .mrconfig points
-   to an existing file
-4. Run mr to clone the repositories: `cd; mr update`.
-5. Done.
+3. Run mr to clone the repositories: `cd; mr update`.
+4. Done.
 
 Hopefully the above could help explain how this approach saves time by
 
@@ -308,18 +303,12 @@ and further documentation about the use of AUR is available
 
 #### From source
 
-If your version of mr is older than version 1.07, make sure to put
-
-    include = cat /usr/share/mr/vcsh
-
-into your .mrconfig .
-
     # choose a location for your checkout
-    cd $HOME
     mkdir -p ~/work/git
+    cd ~/work/git
     git clone git://github.com/RichiH/vcsh.git
     cd vcsh
-    ln -s vcsh /usr/local/bin                       # or add it to your PATH
+    sudo ln -s vcsh /usr/local/bin                       # or add it to your PATH
     cd
 
 #### Clone the Template
