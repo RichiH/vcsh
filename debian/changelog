@@ -1,3 +1,14 @@
+vcsh (1.20130829-1) unstable; urgency=low
+
+  * New upstream release
+    + Add support for `vcsh commit`
+    + Add support for `vcsh status <repo>`
+    + Add pre-/post-init hooks
+    + Documentation improvements
+    + Minor cleanups
+
+ -- Richard Hartmann <richih@debian.org>  Thu, 29 Aug 2013 22:45:56 +0200
+
 vcsh (1.20130724-1) unstable; urgency=low
 
   * New upstream release
