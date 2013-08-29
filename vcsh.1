@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "VCSH" "1" "July 2013" "" ""
+.TH "VCSH" "1" "August 2013" "" ""
 .
 .SH "NAME"
 \fBvcsh\fR \- Version Control System for $HOME \- multiple Git repositories in $HOME
@@ -46,7 +46,7 @@
 \fBvcsh\fR run \fIrepo\fR \fIshell command\fR
 .
 .P
-\fBvcsh\fR status
+\fBvcsh\fR status [\fIrepo\fR]
 .
 .P
 \fBvcsh\fR upgrade \fIrepo\fR
@@ -108,6 +108,10 @@ Clone an existing repository\.
 If you need to clone a bundle of repositories, look into the \fBpost\-clone\-retired\fR hook\.
 .
 .TP
+commit
+Commit in all repositories
+.
+.TP
 delete
 Delete an existing repository\.
 .
@@ -156,7 +160,7 @@ Please note that there is a somewhat magic feature for run\. Instead of \fIrepo\
 .
 .TP
 status
-Show statuses of all vcsh repositories\.
+Show statuses of all/one vcsh repositories\.
 .
 .TP
 upgrade
@@ -269,7 +273,7 @@ Hooks follow a simple format\. \fIpre\-run\fR will be run before anything is run
 If you want to create hooks for a specific \fIvcsh\fR repository, simply prepend the repository\'s name, followed by a dot, i\.e\. <zsh\.pre\-run>\. Otherwise, the same rules as above apply\. The dot between the repository\'s name and the hook is mandatory, though\.
 .
 .P
-Available hooks are \fIpre\-enter\fR, \fIpost\-enter\fR, \fIpre\-run\fR, \fIpost\-run\fR, \fIpre\-upgrade\fR, and \fIpost\-upgrade\fR\. If you need more, vcsh is trivial to patch, but please let upstream know so we can ship them by default\.
+Available hooks are \fIpre\-clone\fR, \fIpost\-clone\fR, \fIpost\-clone\-retired\fR, \fIpre\-command\fR, \fIpost\-command\fR, \fIpre\-enter\fR, \fIpost\-enter\fR, \fIpre\-init\fR, \fIpost\-init\fR, \fIpre\-pull\fR, \fIpost\-pull\fR, \fIpre\-push\fR, \fIpost\-push\fR, \fIpre\-run\fR, \fIpost\-run\fR, \fIpre\-upgrade\fR, and \fIpost\-upgrade\fR\. If you need more, vcsh is trivial to patch, but please let upstream know so we can ship them by default\.
 .
 .SH "DETAILED HOWTO AND FURTHER READING"
 Manpages are often short and sometimes useless to glean best practices from\. While the author tried to avoid this in this case, manpages can not cover detailed howtos\.
@@ -305,7 +309,7 @@ vcsh was initally written by madduck\. This version is a re\-implementation from
 This manpage and \fBvcsh\fR itself were written by Richard "RichiH" Hartmann\.
 .
 .SH "COPYRIGHT"
-Copyright 2011\-2013 Richard Hartmann \fIrichih\.mailinglist@gmail\.com\fR
+Copyright 2011\-2013 Richard Hartmann \fIrichih@debian\.org\fR
 .
 .P
 Licensed under the GNU GPL version 2 or higher\.
