@@ -3,44 +3,12 @@ vcsh - Version Control System for $HOME - multiple Git repositories in $HOME
 
 # Index
 
-1. [Introduction](#introduction)
-2. [30 second howto](#30-second-howto)
-3. [Overview](#overview)
-4. [Getting Started](#getting-started)
-5. [Usage Exmaples](#usage-examples)
+1. [30 second howto](#30-second-howto)
+2. [Introduction](#introduction)
+3. [Usage Exmaples](#usage-examples)
+4. [Overview](#overview)
+5. [Getting Started](#getting-started)
 6. [Contact](#contact)
-
-
-# Introduction
-
-[vcsh][vcsh] allows you to maintain several git repositories in one single
-directory. They all maintain their working trees without clobbering each other
-or interfering otherwise. By default, all git repositories maintained via
-`vcsh` are stored in `$HOME` but you can override this setting if you want to.
-All this means that you can have one repository per application or application
-family, i.e. `zsh`, `vim`, `ssh`, etc. This, in turn, allows you to clone
-custom sets of configurations onto different machines or even for different
-users; picking and mixing which configurations you want to use where.
-For example, you may not need to have your `mplayer` configuration on a server
-or available to root and you may want to maintain different configuration for
-`ssh` on your personal and your work machines.
-
-`vcsh` was designed with [mr][mr], a tool to manage Multiple Repositories, in
-mind and the two integrate very nicely. `mr` has native support for `vcsh`
-repositories and to `vcsh`, `mr` is just another configuration to track.
-This make setting up any new machine a breeze. It takes literally less than
-five minutes to go from standard installation to fully set up system
-
-A lot of modern UNIX-based systems offer pacakges for `vcsh`. In case yours
-does not read `INSTALL.md` for install instructions or `PACKAGING.md` to create
-a package, yourself. If you do end up packaging `vcsh` please let us know so we
-can give you your own packaging branch in the upstream repository.
-
-## Talks
-
-Some people found it useful to look at slides and videos explaining how `vcsh`
-works instead of working through the docs, first.
-They can all be found [on the author's talk page][talks].
 
 
 # 30 second howto
@@ -63,6 +31,83 @@ Let's say you want to version control your `vim` configuration:
 If all that looks a _lot_ like standard `git`, that's no coincidence; it's
 a design feature.
 
+
+# Introduction
+
+[vcsh][vcsh] allows you to maintain several Git repositories in one single
+directory. They all maintain their working trees without clobbering each other
+or interfering otherwise. By default, all Git repositories maintained via
+`vcsh` store the actual files in `$HOME` but you can override this setting if
+you want to.
+All this means that you can have one repository per application or application
+family, i.e. `zsh`, `vim`, `ssh`, etc. This, in turn, allows you to clone
+custom sets of configurations onto different machines or even for different
+users; picking and mixing which configurations you want to use where.
+For example, you may not need to have your `mplayer` configuration on a server
+or available to root and you may want to maintain different configuration for
+`ssh` on your personal and your work machines.
+
+A lot of modern UNIX-based systems offer packages for `vcsh`. In case yours
+does not read `INSTALL.md` for install instructions or `PACKAGING.md` to create
+a package, yourself. If you do end up packaging `vcsh` please let us know so we
+can give you your own packaging branch in the upstream repository.
+
+## Talks
+
+Some people found it useful to look at slides and videos explaining how `vcsh`
+works instead of working through the docs.
+All slides, videos, and further information can be found
+[on the author's talk page][talks].
+
+
+# Usage Examples
+
+There are three different ways to interact with `vcsh` repositories; this
+section will only show the simplest and easiest way.
+Certain more advanced use cases require the other two ways, but don't worry
+about this for now. If you never even bother playing with the other two
+modes you will still be fine.
+`vcsh enter` and `vcsh run`  will be covered in later sections.
+
+
+## Initialize a new repository called "vim"
+
+    vcsh init vim
+
+## Clone an existing repository
+
+    vcsh clone <remote> <repository_name>
+
+## Add files to repository "vim"
+
+    vcsh vim add ~/.vimrc ~/.vim
+    vcsh vim commit -m 'Update Vim configuration'
+
+## Add a remote for repository "vim"
+
+    vcsh vim remote add origin <remote>
+    vcsh vim push origin master:master
+    vcsh vim branch --track master origin/master
+
+## Push to remote of repository "vim"
+
+    vcsh vim push
+
+## Pull from remote of repository "vim"
+
+    vcsh vim pull
+
+## Show status of changed files in all repositories
+
+    vcsh status
+
+## Pull from all repositories
+
+    vcsh pull
+
+## Push to all repositories
+
+    vcsh push
 
 # Overview
 
@@ -93,9 +138,12 @@ To manage both `vcsh` and other repositories, we suggest using [mr](mr). `mr`
 takes care of pulling in and pushing out new data for a variety of version
 control systems.
 
+`vcsh` was designed with [mr][mr], a tool to manage Multiple Repositories, in
+mind and the two integrate very nicely. `mr` has native support for `vcsh`
+repositories and to `vcsh`, `mr` is just another configuration to track.
+This make setting up any new machine a breeze. It takes literally less than
+five minutes to go from standard installation to fully set up system
 
-The last logical step is to maintain all those new repositores with an automated
-tool instead of tracking them by hand.
 This is where `mr` comes in. While the use of `mr` is technically
 optional, but it will be an integral part of the proposed system that follows.
 
@@ -168,9 +216,6 @@ you to conveniently run `mr up` etc. to manage all repositories. It looks like
 this:
 
     [DEFAULT]
-    jobs = 5
-    # Use if your mr does not have vcsh support in mainline, yet
-    include = cat /usr/share/mr/vcsh
     include = cat ${XDG_CONFIG_HOME:-$HOME/.config}/mr/config.d/*
 
 ### repo.d
@@ -196,10 +241,8 @@ configuration to a new host.
    example: `vcsh clone git://github.com/RichiH/vcsh_mr_template.git mr`
 2. Choose your repositories by linking them in config.d (or go with the default
    you may have already configured by adding symlinks to git).
-3. Make sure the line 'include = cat /usr/share/mr/vcsh' in .mrconfig points
-   to an existing file
-4. Run mr to clone the repositories: `cd; mr update`.
-5. Done.
+3. Run mr to clone the repositories: `cd; mr update`.
+4. Done.
 
 Hopefully the above could help explain how this approach saves time by
 
@@ -260,18 +303,12 @@ and further documentation about the use of AUR is available
 
 #### From source
 
-If your version of mr is older than version 1.07, make sure to put
-
-    include = cat /usr/share/mr/vcsh
-
-into your .mrconfig .
-
     # choose a location for your checkout
-    cd $HOME
     mkdir -p ~/work/git
+    cd ~/work/git
     git clone git://github.com/RichiH/vcsh.git
     cd vcsh
-    ln -s vcsh /usr/local/bin                       # or add it to your PATH
+    sudo ln -s vcsh /usr/local/bin                       # or add it to your PATH
     cd
 
 #### Clone the Template
@@ -356,40 +393,6 @@ mr is used to actually retrieve configs, etc
     # $XDG_CONFIG_HOME/mr/available.d to $XDG_CONFIG_HOME/mr/config.d
     ~ % cd
     ~ % mr -j 5 up
-
-
-# Usage Examples
-
-All examples in this section will use the short form of `vcsh` which is the
-simplest way to interface with it. If you don't know what that means simply
-ignore this fact for now and follow the examples.
-
-## Initialize a new repository "vim"
-
-    vcsh init vim
-
-## Clone an existing repository
-
-    vcsh clone <remote> <repository_name>
-
-## Add files to repository "vim"
-
-    vcsh vim add ~/.vimrc ~/.vim
-    vcsh vim commit -m 'Update Vim configuration'
-
-## Add a remote for repository "vim"
-
-    vcsh vim remote add origin <remote>
-    vcsh vim push origin master:master
-    vcsh vim branch --track master origin/master
-
-## Push to remote of repository "vim"
-
-    vcsh vim push
-
-## Pull from remote of repository "vim"
-
-    vcsh vim pull
 
 
 # mr usage ; will be factored out & rewritten

@@ -1,3 +1,12 @@
+2013-08-29  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20130829
+	* Add support for `vcsh commit`
+	* Add support for `vcsh status <repo>`
+	* Add pre-/post-init hooks
+	* Documentation improvements
+	* Minor cleanups
+
 2013-07-24  Richard Hartmann <richih.mailinglist@gmail.com>
 
 	* Release 1.20130724
