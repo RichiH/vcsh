@@ -109,7 +109,7 @@ help() {
           <newname>     Rename repository
    run <repo> \\
        <command>        Use this repository
-   status               Show statuses of all vcsh repositories
+   status [<repo>]      Show statuses of all/one vcsh repositories
    upgrade <repo>       Upgrade repository to currently recommended settings
    version              Print version information
    which <substring>    Find substring in name of any tracked file
@@ -294,13 +294,19 @@ run() {
 }
 
 status() {
-	for VCSH_REPO_NAME in $(list); do
-		echo "$VCSH_REPO_NAME:"
+	if [ ! "x$VCSH_REPO_NAME" = "x" ]; then
 		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 		use
 		git status --short --untracked-files='no'
-		echo
-	done
+	else
+		for VCSH_REPO_NAME in $(list); do
+			echo "$VCSH_REPO_NAME:"
+			export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
+			use
+			git status --short --untracked-files='no'
+			echo
+		done
+	fi
 }
 
 upgrade() {
@@ -404,9 +410,11 @@ elif [ "$1" = 'commit' ] ||
      [ "$1" = 'list' ] ||
      [ "$1" = 'list-tracked' ] ||
      [ "$1" = 'pull' ] ||
-     [ "$1" = 'push' ] ||
-     [ "$1" = 'status' ]; then
+     [ "$1" = 'push' ]; then
 	export VCSH_COMMAND="$1"
+elif [ "$1" = 'status' ]; then
+	export VCSH_COMMAND="$1"
+	export VCSH_REPO_NAME="$2"
 elif [ -n "$2" ]; then
 	export VCSH_COMMAND='run'
 	export VCSH_REPO_NAME="$1"
