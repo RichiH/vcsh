@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # This program is licensed under the GNU GPL version 2 or later.
-# (c) Richard "RichiH" Hartmann <richih.mailinglist@gmail.com>, 2011-2013
+# (c) Richard "RichiH" Hartmann <richih@debian.org>, 2011-2013
 # For details, see LICENSE. To submit patches, you have to agree to
 # license your code under the GNU GPL version 2 or later.
 
@@ -24,7 +24,7 @@ basename() {
 }
 
 SELF=$(basename $0)
-VERSION='1.20130724'
+VERSION='1.20130829'
 
 fatal() {
 	echo "$SELF: fatal: $1" >&2
@@ -38,9 +38,11 @@ while getopts "c:dv" flag; do
 	if [ "$1" = '-d' ] || [ "$1" = '--debug' ]; then
 		set -vx
 		VCSH_DEBUG=1
+		echo "debug mode on"
 		echo "$SELF $VERSION"
 	elif [ "$1" = '-v' ];then
 		VCSH_VERBOSE=1
+		echo "verbose mode on"
 		echo "$SELF $VERSION"
 	elif [ "$1" = '-c' ];then
 		VCSH_OPTION_CONFIG=$OPTARG
@@ -92,6 +94,7 @@ help() {
    commands:
    clone <remote> \\
          [<repo>]       Clone from an existing repository
+   commit               Commit in all repositories
    delete <repo>        Delete an existing repository
    enter <repo>         Enter repository; spawn new instance of \$SHELL
    help                 Display this help text
@@ -106,7 +109,7 @@ help() {
           <newname>     Rename repository
    run <repo> \\
        <command>        Use this repository
-   status               Show statuses of all vcsh repositories
+   status [<repo>]      Show statuses of all/one vcsh repositories
    upgrade <repo>       Upgrade repository to currently recommended settings
    version              Print version information
    which <substring>    Find substring in name of any tracked file
@@ -158,6 +161,18 @@ clone() {
 	hook post-clone-retired
 }
 
+commit() {
+	hook pre-commit
+	for VCSH_REPO_NAME in $(list); do
+		echo "$VCSH_REPO_NAME: "
+		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
+		use
+		git commit --untracked-files=no --quiet
+		echo
+	done
+	hook post-commit
+}
+
 delete() {
 	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
 	use
@@ -197,12 +212,14 @@ hook() {
 }
 
 init() {
+	hook pre-init
 	[ ! -e "$GIT_DIR" ] || fatal "'$GIT_DIR' exists" 10
 	export GIT_WORK_TREE="$VCSH_BASE"
 	mkdir -p "$GIT_WORK_TREE" || fatal "could not create '$GIT_WORK_TREE'" 50
 	cd "$GIT_WORK_TREE" || fatal "could not enter '$GIT_WORK_TREE'" 11
 	git init
 	upgrade
+	hook post-init
 }
 
 list() {
@@ -277,13 +294,19 @@ run() {
 }
 
 status() {
-	for VCSH_REPO_NAME in $(list); do
-		echo "$VCSH_REPO_NAME:"
+	if [ ! "x$VCSH_REPO_NAME" = "x" ]; then
 		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 		use
 		git status --short --untracked-files='no'
-		echo
-	done
+	else
+		for VCSH_REPO_NAME in $(list); do
+			echo "$VCSH_REPO_NAME:"
+			export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
+			use
+			git status --short --untracked-files='no'
+			echo
+		done
+	fi
 }
 
 upgrade() {
@@ -383,12 +406,15 @@ elif [ "$1" = 'delete' ]           ||
 	[ "$VCSH_COMMAND" = 'rename' ] && { export VCSH_REPO_NAME_NEW="$3";
 	                                    export GIT_DIR_NEW="$VCSH_REPO_D/$VCSH_REPO_NAME_NEW.git"; }
 	[ "$VCSH_COMMAND" = 'run' ]    && shift 2
-elif [ "$1" = 'list' ] ||
+elif [ "$1" = 'commit' ] ||
+     [ "$1" = 'list' ] ||
      [ "$1" = 'list-tracked' ] ||
      [ "$1" = 'pull' ] ||
-     [ "$1" = 'push' ] ||
-     [ "$1" = 'status' ]; then
+     [ "$1" = 'push' ]; then
 	export VCSH_COMMAND="$1"
+elif [ "$1" = 'status' ]; then
+	export VCSH_COMMAND="$1"
+	export VCSH_REPO_NAME="$2"
 elif [ -n "$2" ]; then
 	export VCSH_COMMAND='run'
 	export VCSH_REPO_NAME="$1"
@@ -419,7 +445,7 @@ check_dir() {
 		if [ -e "$check_directory" ]; then
 			fatal "'$check_directory' exists but is not a directory" 13
 		else
-			info "attempting to create '$check_directory'"
+			verbose "attempting to create '$check_directory'"
 			mkdir -p "$check_directory" || fatal "could not create '$check_directory'" 50
 		fi
 	fi
