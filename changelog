@@ -1,0 +1,158 @@
+2013-08-29  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20130829
+	* Add support for `vcsh commit`
+	* Add support for `vcsh status <repo>`
+	* Add pre-/post-init hooks
+	* Documentation improvements
+	* Minor cleanups
+
+2013-07-24  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20130724
+	* Add support for `vcsh status`
+	* Improve output of `vcsh pull`
+	* Improve output of `vcsh push`
+	* Minor documentation improvements
+
+2013-07-23  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20130723
+	* Support $VCSH_GITIGNORE == none
+	* Documentation improvements,
+	* Improved zsh completion
+	* Add support for `vcsh pull`
+	* Add support for `vcsh push`
+	* Add retire() to tear down vcsh ENV
+	* Add clone hooks, including one witout vcsh ENV to
+	  allow subsequent cloning of other repos
+	* Fix `vcsh rename`
+	* Improve general code robustness
+
+2013-06-14  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20130614
+	* Lots of documentation improvements, major rewrite
+
+2013-05-27  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.3
+	* Hide hook execution unless verbose is set
+	* Ancher ignore file to root of Git repo
+	* Implemented basename() to save one process spawn
+	* Improve packaged Zsh completion
+	* Renamed `vcsh setup` to `vcsh upgrade`
+	* Various documentation and spelling improvements
+
+2013-04-21  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.2
+	* Introduce `vcsh version`
+
+2013-03-31  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.1
+	* Documentation fixes
+	* Use rm -f when removing a git repo
+	* Fix quoting bug (Debian #699093)
+
+2013-02-13  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.0.1
+	* Improve documentation
+	* Fix parameter bug
+
+2012-06-30  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.0
+	* Make `vcsh list` more resilient
+	* Lots of doc improvements
+
+2012-02-27  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Refactor Makefile
+	* Fix license information in manpage
+
+2012-02-15  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Introduce `vcsh which`
+	* hooks will tell you when they are being executed
+	* Formatting & resilience improvements
+	* We have a changelog, now! (yay)
+
+2012-02-03  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Improve documentation
+	* More resilient error handling
+	* Add AUTHORS
+
+2012-01-16  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Introduce hook support
+
+2011-12-27  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Improve documentation
+
+2011-12-26  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Introduce and use .config/vcsh/config
+	* More verbose error handling
+	* Introduce `vcsh {list-tracked,list-tracked-by}`
+	* Introduce repo shortcuts (`vcsh zsh commit`)
+	* Rename `vcsh seed-gitignore` to `vcsh write-gitignore`
+	* Add license information
+
+2011-11-29  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Bugfixes
+	* Refactor error handling
+	* Make code more resilient
+	* Make vcsh play nice with mr
+	* Introduce vcsh mv and setup
+
+2011-11-23  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Bugfixes
+	* Minor refactoring of code
+
+2011-11-22  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Bugfixes
+
+2011-11-20  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Major refactoring of code
+	* Rewrite help files
+	* Bugfixes
+
+2011-11-19  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Bugfixes
+	* Improve XDG compability
+
+2011-11-18  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Yet more documentation improvements
+	* Makefile
+	* Heed already-defined ENV variables within vcsh
+	* Handle .gitignore.d/$repo automagically
+
+2011-11-11  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Major rewrite of all help files
+	* Addition of manpage
+
+2011-10-27  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Bugfixes
+	* Make help more verbose
+	* Improve INSTALL
+
+2011-10-18  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Fixed bug in vcsh clone & init
+
+2011-10-17  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Initial release

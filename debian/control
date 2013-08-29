@@ -1,0 +1,24 @@
+Source: vcsh
+Maintainer: Richard Hartmann <richih@debian.org>
+Section: misc
+Priority: optional
+Standards-Version: 3.9.4
+Build-Depends: debhelper (>= 7),
+               git,
+               ruby-ronn (>= 0.7.3)
+Vcs-Git: git://github.com/RichiH/vcsh.git
+Vcs-Browser: https://github.com/RichiH/vcsh
+Homepage: https://github.com/RichiH/vcsh/blob/master/README.md
+
+Package: vcsh
+Architecture: all
+Depends: git,
+         ${misc:Depends},
+         ${shlibs:Depends}
+Recommends: mr (>= 1.07),
+            ssh-client
+Description: Version Control System for $HOME - multiple Git repositories in $HOME
+ vcsh allows you to have several git repositories, all maintaining their working
+ trees in $HOME without clobbering each other. That, in turn, means you can have
+ one repository per config set (zsh, vim, ssh, etc), picking and choosing which
+ configs you want to use on which machine.

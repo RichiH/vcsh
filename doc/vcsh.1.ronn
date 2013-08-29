@@ -1,0 +1,296 @@
+vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
+===============================================================================
+
+## SYNOPSIS
+
+`vcsh` [<options>] <command>
+
+`vcsh` clone <url> [<repo>]
+
+`vcsh` delete <repo>
+
+`vcsh` enter <repo>
+
+`vcsh` help
+
+`vcsh` init <repo>
+
+`vcsh` list
+
+`vcsh` list-tracked
+
+`vcsh` list-tracked-by <repo>
+
+`vcsh` pull
+
+`vcsh` push
+
+`vcsh` rename <repo> <newname>
+
+`vcsh` run <repo> <shell command>
+
+`vcsh` status [<repo>]
+
+`vcsh` upgrade <repo>
+
+`vcsh` version
+
+`vcsh` which <substring>
+
+`vcsh` write-gitignore <repo>
+
+`vcsh` <repo> <git command>
+
+`vcsh` <repo>
+
+
+## DESCRIPTION
+
+`vcsh` allows you to have several `git`(1) repositories, all maintaining their
+working trees in $HOME without clobbering each other. That, in turn, means you
+can have one repository per config set (zsh, vim, ssh, etc), picking and
+choosing which configs you want to use on which machine.
+
+`vcsh` is using a technique called fake bare Git repositories, keeping <$GIT_DIR>
+in a different directory from <$GIT_WORK_TREE> which is pointed to <$HOME>.
+
+The use of symlinks is not needed in this setup, making for a cleaner setup.
+
+`vcsh` was designed with `mr`(1) in mind so you might want to install it alongside
+vcsh. That being said, you can easily use `vcsh` without `mr` if you prefer.
+
+A sample configuration for `vcsh` and `mr` can be found at
+*https://github.com/RichiH/vcsh_mr_template* and used with `vcsh clone
+https://github.com/RichiH/vcsh_mr_template mr`.
+
+Please note that you can always use a path instead of a name for <repo>.
+This is needed to support mr and other scripts properly and of no concern to
+an interactive user.
+
+## OPTIONS
+
+* -c:
+  Source <file> prior to other configuration files
+
+* -d:
+  Enable debug mode
+
+* -v:
+  Enable verbose mode
+
+## COMMANDS
+
+* clone:
+  Clone an existing repository.
+
+  If you need to clone a bundle of repositories, look into the
+  `post-clone-retired` hook.
+
+* commit:
+  Commit in all repositories
+
+* delete:
+  Delete an existing repository.
+
+* enter:
+  Enter repository; spawn new <$SHELL>.
+
+* help:
+  Display help.
+
+* init:
+  Initialize an empty repository.
+
+* list:
+  List all local vcsh repositories.
+
+* list-tracked:
+  List all files tracked by vcsh.
+
+* list-tracked-by:
+  List files tracked by a repository.
+
+* pull:
+  Pull from all vcsh remotes.
+
+* push:
+  Push to all vcsh remotes.
+
+* rename:
+  Rename a repository.
+
+* run:
+  Run command with <$GIT_DIR> and <$GIT_WORK_TREE> set. Allows you to run any
+  and all commands without any restrictions. Use with care.
+
+  Please note that there is a somewhat magic feature for run. Instead of <repo>
+  it accepts <path>, as well. Anything that has a slash in it will be assumed to
+  be a path. `vcsh run` will then operate on this directory instead of the one
+  normally generated from the repository's name.
+  This is needed to support mr and other scripts properly and of no concern to
+  an interactive user.
+
+* status:
+  Show statuses of all/one vcsh repositories.
+
+* upgrade:
+  Upgrade repository to currently recommended settings.
+
+* version:
+  Print version information.
+
+* which <substring>:
+  Find <substring> in name of any tracked file.
+
+* write-gitignore:
+  Write .gitignore.d/<repo> via `git ls-files`.
+
+* <repo> <gitcommand>:
+  Shortcut to run `vcsh` on a repo. Will prepend `git` to <command>.
+
+* <repo>:
+  Shortcut to run `vcsh enter <repo>`.
+
+## ENVIRONMENT
+
+As noted earlier, `vcsh` will set <$GIT_DIR> and <$GIT_WORK_TREE> to the
+appropriate values for fake bare Git repositories.
+
+## CONFIG
+
+There are several ways to turn the various knobs on `vcsh`. In order of
+ascending precedence, they are:
+
+* `VARIABLE=foo vcsh`
+* </etc/vcsh/config>
+* <$XDG_CONFIG_HOME/vcsh/config>
+* `vcsh -c <file>`
+
+Please note that those files are sourced. Any and all commands will be
+executed in the context of your shell.
+
+Interesting knobs you can turn:
+
+* <$VCSH_GITIGNORE>:
+  Can be <exact>, <none>, or <recursive>.
+
+  <exact> will seed the repo-specific ignore file with all file and directory
+  names which `git ls-files` returns.
+
+  <none> will not write any ignore file.
+
+  <recursive> will descend through all directories recursively additionally to
+  the above.
+
+  Defaults to <exact>.
+
+Less interesting knobs you could turn:
+
+* <$VCSH_DEBUG>:
+  Enter debug mode.
+
+* <$XDG_CONFIG_HOME>:
+  As specified in the 'XDG Base Directory Specification', see
+  <http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html>
+
+  Defaults to <$HOME/.config>.
+
+* <$VCSH_REPO_D>:
+  The directory where repositories are read from and stored.
+
+  Defaults to <$XDG_CONFIG_HOME/vcsh/repo.d>.
+
+* <$VCSH_HOOK_D>:
+  The directory where hooks are read from.
+
+  Defaults to <$XDG_CONFIG_HOME/vcsh/hooks-enabled>.
+
+* <$VCSH_BASE>:
+  The directory where repositories are checked out to.
+
+  Defaults to <$HOME>.
+
+
+## HOOK SYSTEM
+
+`vcsh` provides a hook system. Hook scripts must be executable and should be
+placed in <$XDG_CONFIG_HOME/vcsh/hooks-available>. From there, they can be
+soft-linked into <$XDG_CONFIG_HOME/vcsh/hooks-enabled>; `vcsh` will only
+execute hooks that are in this directory.
+
+Hooks follow a simple format. <pre-run> will be run before anything is run.
+If you want to have more than one script for a certain hook, just append
+any kind of string to order them. A system of <pre-run>, <pre-run.10>,
+<pre-run.20> etc is suggested; other options would be <pre-run-10> or
+<pre-run.sh>. A dot after the hook name is optional.
+
+If you want to create hooks for a specific <vcsh> repository, simply prepend
+the repository's name, followed by a dot, i.e. <zsh.pre-run>. Otherwise, the
+same rules as above apply. The dot between the repository's name and the hook
+is mandatory, though.
+
+Available hooks are <pre-clone>, <post-clone>, <post-clone-retired>,
+<pre-command>, <post-command>, <pre-enter>, <post-enter>, <pre-init>,
+<post-init>, <pre-pull>, <post-pull>, <pre-push>, <post-push>, <pre-run>,
+<post-run>, <pre-upgrade>, and <post-upgrade>.
+If you need more, vcsh is trivial to patch, but please let upstream know so
+we can ship them by default.
+
+## DETAILED HOWTO AND FURTHER READING
+
+Manpages are often short and sometimes useless to glean best practices from.
+While the author tried to avoid this in this case, manpages can not cover
+detailed howtos.
+
+This software also comes with a file called <README.md>. It contains various
+approaches to setting up and using vcsh. You can view the file it as
+plain text or render it into various other formats via Markdown.
+
+On Debian-based systems, this file can be found in </usr/share/doc/vcsh>.
+
+## SECURITY CONSIDERATIONS
+
+`vcsh` allows you to execute arbitrary commands via `vcsh run`. For example,
+adding a `sudo`(8) rule for `vcsh` would be pretty stupid.
+
+Additionally, vcsh will source, i.e. execute, all files listed in <CONFIG>.
+You can put any and all commands into these config files and they will be
+executed.
+
+## BUGS
+
+None are known at this time, but reports and/or patches are more than welcome.
+
+## INTEROPERABILITY
+
+If you rely on `git submodule` use `git` 1.7.12 or later. Earlier versions
+do not clean internal variables properly before descending into submodules,
+resulting in unhappy end users.
+
+## HISTORY
+
+Like most people, the author initially made do with a single repository for all
+config files, all of which were soft-linked into <$HOME>.
+
+Martin F. Krafft aka madduck came up with the concept of fake bare Git
+repositories.
+
+vcsh was initally written by madduck. This version is a re-implementation from
+scratch with a lot more features. madduck graciously agreed to let the author
+take over the name.
+
+## AUTHOR
+
+This manpage and `vcsh` itself were written by Richard "RichiH" Hartmann.
+
+## COPYRIGHT
+
+Copyright 2011-2013 Richard Hartmann <richih@debian.org>
+
+Licensed under the GNU GPL version 2 or higher.
+
+https://github.com/RichiH/vcsh
+
+## SEE ALSO
+
+`git`(1), `mr`(1)

@@ -1,0 +1,4 @@
+vcsh.1
+*.patch
+*.swp
+*.bak

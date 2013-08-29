@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo 'Alphabetical list of everyone who ever committed to this repository
+'
+git shortlog -se --all | cut -f1 --complement | sort -u -k2
