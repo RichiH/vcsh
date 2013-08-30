@@ -1,7 +1,7 @@
 Index: vcsh/Makefile
 ===================================================================
---- vcsh.orig/Makefile	2013-07-25 01:11:30.548476071 +0200
-+++ vcsh/Makefile	2013-07-25 01:11:30.548476071 +0200
+--- vcsh.orig/Makefile	2013-08-30 21:19:01.292144100 +0200
++++ vcsh/Makefile	2013-08-30 21:19:01.288144100 +0200
 @@ -19,11 +19,11 @@
  
  manpages: $(manpages)
@@ -20,12 +20,12 @@ Index: vcsh/Makefile
 Index: vcsh/vcsh.1
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ vcsh/vcsh.1	2013-07-25 00:56:18.624466544 +0200
-@@ -0,0 +1,290 @@
++++ vcsh/vcsh.1	2013-08-30 21:18:32.700145472 +0200
+@@ -0,0 +1,317 @@
 +.\" generated with Ronn/v0.7.3
 +.\" http://github.com/rtomayko/ronn/tree/0.7.3
 +.
-+.TH "VCSH" "1" "July 2013" "" ""
++.TH "VCSH" "1" "August 2013" "" ""
 +.
 +.SH "NAME"
 +\fBvcsh\fR \- Version Control System for $HOME \- multiple Git repositories in $HOME
@@ -58,10 +58,19 @@ Index: vcsh/vcsh.1
 +\fBvcsh\fR list\-tracked\-by \fIrepo\fR
 +.
 +.P
++\fBvcsh\fR pull
++.
++.P
++\fBvcsh\fR push
++.
++.P
 +\fBvcsh\fR rename \fIrepo\fR \fInewname\fR
 +.
 +.P
 +\fBvcsh\fR run \fIrepo\fR \fIshell command\fR
++.
++.P
++\fBvcsh\fR status
 +.
 +.P
 +\fBvcsh\fR upgrade \fIrepo\fR
@@ -119,6 +128,9 @@ Index: vcsh/vcsh.1
 +clone
 +Clone an existing repository\.
 +.
++.IP
++If you need to clone a bundle of repositories, look into the \fBpost\-clone\-retired\fR hook\.
++.
 +.TP
 +delete
 +Delete an existing repository\.
@@ -148,6 +160,14 @@ Index: vcsh/vcsh.1
 +List files tracked by a repository\.
 +.
 +.TP
++pull
++Pull from all vcsh remotes\.
++.
++.TP
++push
++Push to all vcsh remotes\.
++.
++.TP
 +rename
 +Rename a repository\.
 +.
@@ -157,6 +177,10 @@ Index: vcsh/vcsh.1
 +.
 +.IP
 +Please note that there is a somewhat magic feature for run\. Instead of \fIrepo\fR it accepts \fIpath\fR, as well\. Anything that has a slash in it will be assumed to be a path\. \fBvcsh run\fR will then operate on this directory instead of the one normally generated from the repository\'s name\. This is needed to support mr and other scripts properly and of no concern to an interactive user\.
++.
++.TP
++status
++Show statuses of all vcsh repositories\.
 +.
 +.TP
 +upgrade
@@ -210,10 +234,13 @@ Index: vcsh/vcsh.1
 +.
 +.TP
 +\fI$VCSH_GITIGNORE\fR
-+Can be either \fIexact\fR or \fIrecursive\fR\.
++Can be \fIexact\fR, \fInone\fR, or \fIrecursive\fR\.
 +.
 +.IP
-+\fIexact\fR will seed the repo\-specific <\.gitignore> with all file and directory names which \fBgit ls\-files\fR returns\.
++\fIexact\fR will seed the repo\-specific ignore file with all file and directory names which \fBgit ls\-files\fR returns\.
++.
++.IP
++\fInone\fR will not write any ignore file\.
 +.
 +.IP
 +\fIrecursive\fR will descend through all directories recursively additionally to the above\.
@@ -302,7 +329,7 @@ Index: vcsh/vcsh.1
 +This manpage and \fBvcsh\fR itself were written by Richard "RichiH" Hartmann\.
 +.
 +.SH "COPYRIGHT"
-+Copyright 2011\-2012 Richard Hartmann \fIrichih\.mailinglist@gmail\.com\fR
++Copyright 2011\-2013 Richard Hartmann \fIrichih\.mailinglist@gmail\.com\fR
 +.
 +.P
 +Licensed under the GNU GPL version 2 or higher\.
