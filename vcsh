@@ -83,6 +83,10 @@ fi
 [ -z "$VCSH_GITIGNORE" ]              && VCSH_GITIGNORE='exact'
 [ -z "$VCSH_WORKTREE" ]               && VCSH_WORKTREE='absolute'
 
+if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xnone' ] && [ ! "x$VCSH_GITIGNORE" = 'xrecursive' ]; then
+	fatal "'\$VCSH_GITIGNORE' must equal 'exact', 'none', or 'recursive'" 1
+fi
+
 if [ ! "x$VCSH_WORKTREE" = 'xabsolute' ] && [ ! "x$VCSH_WORKTREE" = 'xrelative' ]; then
 	fatal "'\$VCSH_WORKTREE' must equal 'absolute', or 'relative'" 1
 fi
@@ -381,10 +385,6 @@ write_gitignore() {
 	mv -f "$tempfile" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ||
 		fatal "could not move '$tempfile' to '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME'" 53
 }
-
-if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xnone' ] && [ ! "x$VCSH_GITIGNORE" = 'xrecursive' ]; then
-	fatal "'\$VCSH_GITIGNORE' must equal 'exact', 'none', or 'recursive'" 1
-fi
 
 if [ "$1" = 'clone' ]; then
 	[ -z "$2" ] && fatal "$1: please specify a remote" 1
