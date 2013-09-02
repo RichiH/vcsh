@@ -214,9 +214,8 @@ hook() {
 init() {
 	hook pre-init
 	[ ! -e "$GIT_DIR" ] || fatal "'$GIT_DIR' exists" 10
-	export GIT_WORK_TREE="$VCSH_BASE"
-	mkdir -p "$GIT_WORK_TREE" || fatal "could not create '$GIT_WORK_TREE'" 50
-	cd "$GIT_WORK_TREE" || fatal "could not enter '$GIT_WORK_TREE'" 11
+	mkdir -p "$VCSH_BASE" || fatal "could not create '$VCSH_BASE'" 50
+	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
 	git init
 	upgrade
 	hook post-init
@@ -269,7 +268,6 @@ push() {
 }
 
 retire() {
-	unset GIT_WORK_TREE
 	unset VCSH_DIRECTORY
 }
 
@@ -311,17 +309,21 @@ status() {
 
 upgrade() {
 	hook pre-upgrade
-	use
-	git config core.worktree     "$GIT_WORK_TREE"
+	# fake-bare repositories are not bare, actually. Set this to false
+	# because otherwise Git complains "fatal: core.bare and core.worktree
+	# do not make sense"
+	git config core.bare false
+	# in core.worktree, keep a relative reference to the base directory
+	git config core.worktree $(cd $GIT_DIR && GIT_WORK_TREE="$VCSH_BASE" git rev-parse --show-cdup)
 	[ ! "x$VCSH_GITIGNORE" = 'xnone' ] && git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
 	git config vcsh.vcsh         'true'
+	use
 	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME"
 	hook post-upgrade
 }
 
 use() {
 	git_dir_exists
-	export GIT_WORK_TREE="$(git config --get core.worktree)"
 	export VCSH_DIRECTORY="$VCSH_REPO_NAME"
 }
 
