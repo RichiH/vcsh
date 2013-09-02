@@ -81,6 +81,11 @@ fi
 [ -z "$VCSH_HOOK_D" ]                 && VCSH_HOOK_D="$XDG_CONFIG_HOME/vcsh/hooks-enabled"
 [ -z "$VCSH_BASE" ]                   && VCSH_BASE="$HOME"
 [ -z "$VCSH_GITIGNORE" ]              && VCSH_GITIGNORE='exact'
+[ -z "$VCSH_WORKTREE" ]               && VCSH_WORKTREE='absolute'
+
+if [ ! "x$VCSH_WORKTREE" = 'xabsolute' ] && [ ! "x$VCSH_WORKTREE" = 'xrelative' ]; then
+	fatal "'\$VCSH_WORKTREE' must equal 'absolute', or 'relative'" 1
+fi
 
 
 help() {
@@ -313,8 +318,13 @@ upgrade() {
 	# because otherwise Git complains "fatal: core.bare and core.worktree
 	# do not make sense"
 	git config core.bare false
-	# in core.worktree, keep a relative reference to the base directory
-	git config core.worktree $(cd $GIT_DIR && GIT_WORK_TREE="$VCSH_BASE" git rev-parse --show-cdup)
+	# core.worktree may be absolute or relative to $GIT_DIR, depending on
+	# user preference
+	if [ ! "x$VCSH_WORKTREE" = 'xabsolute' ]; then
+		git config core.worktree $(cd $GIT_DIR && GIT_WORK_TREE="$VCSH_BASE" git rev-parse --show-cdup)
+	elif [ ! "x$VCSH_WORKTREE" = 'xrelative' ]; then
+		git config core.worktree "$VCSH_BASE"
+	fi
 	[ ! "x$VCSH_GITIGNORE" = 'xnone' ] && git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
 	git config vcsh.vcsh         'true'
 	use
