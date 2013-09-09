@@ -24,7 +24,7 @@ basename() {
 }
 
 SELF=$(basename $0)
-VERSION='1.20130829'
+VERSION='1.20130909'
 
 fatal() {
 	echo "$SELF: fatal: $1" >&2
