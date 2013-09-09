@@ -365,7 +365,7 @@ write_gitignore() {
 			file="$new"
 		done;
 	done | sort -u)
-	tempfile=$(mktemp) || fatal "could not create tempfile" 51
+	tempfile=$(mktemp tmp.XXXXXXXXXX) || fatal "could not create tempfile" 51
 	echo '*' > "$tempfile" || fatal "could not write to '$tempfile'" 57
 	for gitignore in $gitignores; do
 		echo "$gitignore" | sed 's@^@!/@' >> "$tempfile" || fatal "could not write to '$tempfile'" 57
