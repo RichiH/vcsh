@@ -1,3 +1,12 @@
+vcsh (1.20130909-1) unstable; urgency=low
+
+  * New upstream release
+    + Add support for relative worktrees
+  * Packaging changes
+    + Start using dgit for actual releases
+
+ -- Richard Hartmann <richih@debian.org>  Mon, 09 Sep 2013 09:20:15 +0200
+
 vcsh (1.20130829-1) unstable; urgency=low
 
   * New upstream release
