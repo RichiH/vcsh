@@ -184,6 +184,15 @@ Interesting knobs you can turn:
 
   Defaults to <exact>.
 
+* <$VCSH_VCSH_WORKTREE>:
+  Can be <absolute>, or <relative>.
+
+  <absolute> will set an absolute path; defaulting to <$HOME>.
+
+  <relative> will set a path relative to <$GIT_DIR>.
+
+  Defaults to <absolute>.
+
 Less interesting knobs you could turn:
 
 * <$VCSH_DEBUG>:

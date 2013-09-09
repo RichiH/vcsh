@@ -24,7 +24,7 @@ basename() {
 }
 
 SELF=$(basename $0)
-VERSION='1.20130829'
+VERSION='1.20130909'
 
 fatal() {
 	echo "$SELF: fatal: $1" >&2
@@ -81,6 +81,15 @@ fi
 [ -z "$VCSH_HOOK_D" ]                 && VCSH_HOOK_D="$XDG_CONFIG_HOME/vcsh/hooks-enabled"
 [ -z "$VCSH_BASE" ]                   && VCSH_BASE="$HOME"
 [ -z "$VCSH_GITIGNORE" ]              && VCSH_GITIGNORE='exact'
+[ -z "$VCSH_WORKTREE" ]               && VCSH_WORKTREE='absolute'
+
+if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xnone' ] && [ ! "x$VCSH_GITIGNORE" = 'xrecursive' ]; then
+	fatal "'\$VCSH_GITIGNORE' must equal 'exact', 'none', or 'recursive'" 1
+fi
+
+if [ ! "x$VCSH_WORKTREE" = 'xabsolute' ] && [ ! "x$VCSH_WORKTREE" = 'xrelative' ]; then
+	fatal "'\$VCSH_WORKTREE' must equal 'absolute', or 'relative'" 1
+fi
 
 
 help() {
@@ -214,9 +223,8 @@ hook() {
 init() {
 	hook pre-init
 	[ ! -e "$GIT_DIR" ] || fatal "'$GIT_DIR' exists" 10
-	export GIT_WORK_TREE="$VCSH_BASE"
-	mkdir -p "$GIT_WORK_TREE" || fatal "could not create '$GIT_WORK_TREE'" 50
-	cd "$GIT_WORK_TREE" || fatal "could not enter '$GIT_WORK_TREE'" 11
+	mkdir -p "$VCSH_BASE" || fatal "could not create '$VCSH_BASE'" 50
+	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
 	git init
 	upgrade
 	hook post-init
@@ -269,7 +277,6 @@ push() {
 }
 
 retire() {
-	unset GIT_WORK_TREE
 	unset VCSH_DIRECTORY
 }
 
@@ -311,17 +318,26 @@ status() {
 
 upgrade() {
 	hook pre-upgrade
-	use
-	git config core.worktree     "$GIT_WORK_TREE"
+	# fake-bare repositories are not bare, actually. Set this to false
+	# because otherwise Git complains "fatal: core.bare and core.worktree
+	# do not make sense"
+	git config core.bare false
+	# core.worktree may be absolute or relative to $GIT_DIR, depending on
+	# user preference
+	if [ ! "x$VCSH_WORKTREE" = 'xabsolute' ]; then
+		git config core.worktree $(cd $GIT_DIR && GIT_WORK_TREE="$VCSH_BASE" git rev-parse --show-cdup)
+	elif [ ! "x$VCSH_WORKTREE" = 'xrelative' ]; then
+		git config core.worktree "$VCSH_BASE"
+	fi
 	[ ! "x$VCSH_GITIGNORE" = 'xnone' ] && git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
 	git config vcsh.vcsh         'true'
+	use
 	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME"
 	hook post-upgrade
 }
 
 use() {
 	git_dir_exists
-	export GIT_WORK_TREE="$(git config --get core.worktree)"
 	export VCSH_DIRECTORY="$VCSH_REPO_NAME"
 }
 
@@ -369,10 +385,6 @@ write_gitignore() {
 	mv -f "$tempfile" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ||
 		fatal "could not move '$tempfile' to '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME'" 53
 }
-
-if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xnone' ] && [ ! "x$VCSH_GITIGNORE" = 'xrecursive' ]; then
-	fatal "'\$VCSH_GITIGNORE' must equal 'exact', 'none', or 'recursive'" 1
-fi
 
 if [ "$1" = 'clone' ]; then
 	[ -z "$2" ] && fatal "$1: please specify a remote" 1
