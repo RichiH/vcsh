@@ -147,8 +147,8 @@ clone() {
 	init
 	git remote add origin "$GIT_REMOTE"
 	git config branch."$VCSH_BRANCH".remote origin
-	git config branch."$VCSH_BRANCH".merge  refs/heads/$VCSH_BRANCH
-	if [ $(git ls-remote origin $VCSH_BRANCH 2> /dev/null | wc -l ) -lt 1 ]; then
+	git config branch."$VCSH_BRANCH".merge  refs/heads/"$VCSH_BRANCH"
+	if [ $(git ls-remote origin "$VCSH_BRANCH" 2> /dev/null | wc -l ) -lt 1 ]; then
 		info "remote is empty, not merging anything"
 		exit
 	fi
@@ -162,7 +162,7 @@ clone() {
 	[ x"$VCSH_CONFLICT" = x'1' ]) &&
 		fatal "will stop after fetching and not try to merge!
   Once this situation has been resolved, run 'vcsh $VCSH_REPO_NAME pull' to finish cloning." 17
-	git merge origin/master # XXX
+	git merge origin/"$VCSH_BRANCH"
 	hook post-merge
 	hook post-clone
 	retire
