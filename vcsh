@@ -395,6 +395,7 @@ if [ "$1" = 'clone' ]; then
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 elif [ "$1" = 'version' ]; then
 	echo "$SELF $VERSION"
+	git version
 	exit
 elif [ "$1" = 'which' ]; then
 	[ -z "$2" ] && fatal "$1: please specify a filename" 1
