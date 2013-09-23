@@ -156,12 +156,12 @@ clone() {
 		exit
 	fi
 	git fetch
-	for object in $(git ls-tree -r origin/master | awk '{print $4}'); do
+	git ls-tree -r --name-only origin/master | (while read object; do
 		[ -e "$object" ] &&
 			error "'$object' exists." &&
 			VCSH_CONFLICT=1;
 	done
-	[ "$VCSH_CONFLICT" = '1' ] &&
+	[ "$VCSH_CONFLICT" = '1' ]) &&
 		fatal "will stop after fetching and not try to merge!
   Once this situation has been resolved, run 'vcsh run $VCSH_REPO_NAME git pull' to finish cloning.\n" 17
 	git merge origin/master
@@ -288,7 +288,7 @@ rename() {
 	# Now that the repository has been renamed, we need to fix up its configuration
 	# Overwrite old name..
 	GIT_DIR="$GIT_DIR_NEW"
-	$VCSH_REPO_NAME="$VCSH_REPO_NAME_NEW"
+	VCSH_REPO_NAME="$VCSH_REPO_NAME_NEW"
 	# ..and clobber all old configuration
 	upgrade
 }
@@ -418,7 +418,7 @@ export VCSH_COMMAND="$1"
 if [ "$VCSH_COMMAND" = 'clone' ]; then
 	[ -z "$2" ] && fatal "$VCSH_COMMAND: please specify a remote" 1
 	GIT_REMOTE="$2"
-	[ -n "$3" ] && VCSH_REPO_NAME="$3" || VCSH_REPO_NAME=$(basename "$GIT_REMOTE" .git)
+	[ -n "$3" ] && VCSH_REPO_NAME="$3" || VCSH_REPO_NAME=$(basename "${GIT_REMOTE#*:}" .git)
 	export VCSH_REPO_NAME
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 elif [ "$VCSH_COMMAND" = 'version' ]; then
