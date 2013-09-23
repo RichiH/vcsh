@@ -418,7 +418,7 @@ export VCSH_COMMAND="$1"
 if [ "$VCSH_COMMAND" = 'clone' ]; then
 	[ -z "$2" ] && fatal "$VCSH_COMMAND: please specify a remote" 1
 	GIT_REMOTE="$2"
-	[ -n "$3" ] && VCSH_REPO_NAME="$3" || VCSH_REPO_NAME=$(basename "$GIT_REMOTE" .git)
+	[ -n "$3" ] && VCSH_REPO_NAME="$3" || VCSH_REPO_NAME=$(basename "${GIT_REMOTE#*:}" .git)
 	export VCSH_REPO_NAME
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 elif [ "$VCSH_COMMAND" = 'version' ]; then
