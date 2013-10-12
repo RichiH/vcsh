@@ -157,7 +157,7 @@ clone() {
 		rm -rf "$GIT_DIR"
 		fatal "$VCSH_CLONE_ERROR" 1
 	fi
-	git fetch
+	git fetch origin "$VCSH_BRANCH"
 	hook pre-merge
 	git ls-tree -r --name-only origin/master | (while read object; do
 		[ -e "$object" ] &&
