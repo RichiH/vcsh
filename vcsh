@@ -153,7 +153,7 @@ clone() {
 		info "remote is empty, not merging anything"
 		exit
 	fi
-	git fetch
+	git fetch origin "$VCSH_BRANCH"
 	hook pre-merge
 	git ls-tree -r --name-only origin/master | (while read object; do
 		[ -e "$object" ] &&
