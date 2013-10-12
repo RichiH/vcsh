@@ -157,7 +157,7 @@ clone() {
 		info "remote is empty, not merging anything"
 		exit
 	fi
-	git fetch
+	git fetch origin "$VCSH_BRANCH"
 	for object in $(git ls-tree -r origin/"$VCSH_BRANCH" | awk '{print $4}'); do
 		[ -e "$object" ] &&
 			error "'$object' exists." &&
