@@ -1,4 +1,5 @@
 PREFIX=/usr
+RONN ?= ronn
 
 self=vcsh
 manpages=$(self).1
@@ -20,7 +21,7 @@ install: all
 manpages: $(manpages)
 
 $(self).1: doc/$(self).1.ronn
-	ronn < doc/$(self).1.ronn > $(self).1
+	$(RONN) < doc/$(self).1.ronn > $(self).1 || rm $(self).1
 
 clean:
 	rm -rf $(self).1
