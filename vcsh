@@ -159,7 +159,7 @@ clone() {
 	for object in $(git ls-tree -r origin/master | awk '{print $4}'); do
 		[ -e "$object" ] &&
 			error "'$object' exists." &&
-			VCSH_CONFLICT=1;
+			VCSH_CONFLICT=1
 	done
 	[ "$VCSH_CONFLICT" = '1' ] &&
 		fatal "will stop after fetching and not try to merge!
