@@ -152,6 +152,7 @@ clone() {
 		exit
 	fi
 	git fetch
+	hook pre-merge
 	git ls-tree -r --name-only origin/master | (while read object; do
 		[ -e "$object" ] &&
 			error "'$object' exists." &&
@@ -161,6 +162,7 @@ clone() {
 		fatal "will stop after fetching and not try to merge!
   Once this situation has been resolved, run 'vcsh run $VCSH_REPO_NAME git pull' to finish cloning." 17
 	git merge origin/master
+	hook post-merge
 	hook post-clone
 	retire
 	hook post-clone-retired

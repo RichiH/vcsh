@@ -14,6 +14,12 @@ Available hooks are:
 * post-enter
 * pre-init
 * post-init
+* pre-merge
+    Use this hook to detect and handle merge conflicts before vcsh's native code
+	finds and errors on them. This is useful for allowing clones on top of existing
+	files.
+* post-merge
+    Use this hook to finish handling any merge conflicts found in the pre-merge hook.
 * pre-pull
 * post-pull
 * pre-push
