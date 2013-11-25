@@ -288,7 +288,7 @@ rename() {
 	# Now that the repository has been renamed, we need to fix up its configuration
 	# Overwrite old name..
 	GIT_DIR="$GIT_DIR_NEW"
-	$VCSH_REPO_NAME="$VCSH_REPO_NAME_NEW"
+	VCSH_REPO_NAME="$VCSH_REPO_NAME_NEW"
 	# ..and clobber all old configuration
 	upgrade
 }
