@@ -18,7 +18,8 @@
 basename() {
 	# Implemented in shell to avoid spawning another process
 	local file
-	file="${1##*/}"
+	file="${1%/}"
+	file="${file##*/}"
 	[ -z "$2" ] || file="${file%$2}"
 	echo "$file"
 }
@@ -419,6 +420,7 @@ if [ "$VCSH_COMMAND" = 'clone' ]; then
 	[ -z "$2" ] && fatal "$VCSH_COMMAND: please specify a remote" 1
 	GIT_REMOTE="$2"
 	[ -n "$3" ] && VCSH_REPO_NAME="$3" || VCSH_REPO_NAME=$(basename "$GIT_REMOTE" .git)
+	[ -z "$VCSH_REPO_NAME" ] && fatal "$VCSH_COMMAND: could not determine repository name" 1
 	export VCSH_REPO_NAME
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 elif [ "$VCSH_COMMAND" = 'version' ]; then
