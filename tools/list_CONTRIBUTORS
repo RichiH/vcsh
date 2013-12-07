@@ -1,5 +1,6 @@
 #!/bin/sh
 
-echo 'Alphabetical list of everyone who ever committed to this repository
+echo 'Alphabetical list of surnames of everyone who ever committed to this repository.
+Auto-generated from tools/list_CONTRIBUTORS.
 '
 git shortlog -se --all | cut -f1 --complement | sort -u -k2
