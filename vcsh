@@ -15,15 +15,6 @@
 # This should always be the first line of code to facilitate debugging
 [ -n "$VCSH_DEBUG" ] && set -vx
 
-basename() {
-	# Implemented in shell to avoid spawning another process
-	local file
-	file="${1%/}"
-	file="${file##*/}"
-	[ -z "$2" ] || file="${file%$2}"
-	echo "$file"
-}
-
 SELF=$(basename $0)
 VERSION='1.20130909.git-HEAD'
 
