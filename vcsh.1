@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "VCSH" "1" "August 2013" "" ""
+.TH "VCSH" "1" "December 2013" "" ""
 .
 .SH "NAME"
 \fBvcsh\fR \- Version Control System for $HOME \- multiple Git repositories in $HOME
@@ -227,6 +227,19 @@ Can be \fIexact\fR, \fInone\fR, or \fIrecursive\fR\.
 .
 .IP
 Defaults to \fIexact\fR\.
+.
+.TP
+\fI$VCSH_VCSH_WORKTREE\fR
+Can be \fIabsolute\fR, or \fIrelative\fR\.
+.
+.IP
+\fIabsolute\fR will set an absolute path; defaulting to \fI$HOME\fR\.
+.
+.IP
+\fIrelative\fR will set a path relative to \fI$GIT_DIR\fR\.
+.
+.IP
+Defaults to \fIabsolute\fR\.
 .
 .P
 Less interesting knobs you could turn:
