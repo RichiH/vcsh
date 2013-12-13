@@ -1,3 +1,19 @@
+vcsh (1.20131214-1) unstable; urgency=low
+
+  * New upstream release
+    + Release 1.20131214
+    + Revert "Implement basename() in shell"
+    + Fix mktemp on OS X
+    + Fix variable assignment bug
+    + Support shortnames for commands
+    + Improve Makefile
+    + Improve documentation
+    + Various minor improvements
+  * Packaging changes
+    + Bump Standards-Version to 3.9.5 (no changes)
+
+ -- Richard Hartmann <richih@debian.org>  Sat, 14 Dec 2013 00:08:37 +0100
+
 vcsh (1.20130909-1) unstable; urgency=low
 
   * New upstream release
