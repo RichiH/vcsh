@@ -1,3 +1,39 @@
+vcsh (1.20131214-1) unstable; urgency=low
+
+  * New upstream release
+    + Release 1.20131214
+    + Revert "Implement basename() in shell"
+    + Fix mktemp on OS X
+    + Fix variable assignment bug
+    + Support shortnames for commands
+    + Improve Makefile
+    + Improve documentation
+    + Various minor improvements
+  * Packaging changes
+    + Bump Standards-Version to 3.9.5 (no changes)
+
+ -- Richard Hartmann <richih@debian.org>  Sat, 14 Dec 2013 00:08:37 +0100
+
+vcsh (1.20130909-1) unstable; urgency=low
+
+  * New upstream release
+    + Add support for relative worktrees
+  * Packaging changes
+    + Start using dgit for actual releases
+
+ -- Richard Hartmann <richih@debian.org>  Mon, 09 Sep 2013 09:20:15 +0200
+
+vcsh (1.20130829-1) unstable; urgency=low
+
+  * New upstream release
+    + Add support for `vcsh commit`
+    + Add support for `vcsh status <repo>`
+    + Add pre-/post-init hooks
+    + Documentation improvements
+    + Minor cleanups
+
+ -- Richard Hartmann <richih@debian.org>  Thu, 29 Aug 2013 22:45:56 +0200
+
 vcsh (1.20130724-1~bpo70+1) wheezy-backports; urgency=low
 
   * Rebuild for wheezy-backports.
