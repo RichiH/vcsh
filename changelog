@@ -1,3 +1,28 @@
+2013-12-14  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20131214
+	* Revert "Implement basename() in shell"
+	* Fix mktemp on OS X
+	* Fix variable assignment bug
+	* Support shortnames for commands
+	* Improve Makefile
+	* Improve documentation
+	* Various minor improvements
+
+2013-09-09  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20130909
+	* Add support for relative worktrees
+
+2013-08-29  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20130829
+	* Add support for `vcsh commit`
+	* Add support for `vcsh status <repo>`
+	* Add pre-/post-init hooks
+	* Documentation improvements
+	* Minor cleanups
+
 2013-07-24  Richard Hartmann <richih.mailinglist@gmail.com>
 
 	* Release 1.20130724

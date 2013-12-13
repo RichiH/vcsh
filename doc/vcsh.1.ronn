@@ -29,7 +29,7 @@ vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
 
 `vcsh` run <repo> <shell command>
 
-`vcsh` status
+`vcsh` status [<repo>]
 
 `vcsh` upgrade <repo>
 
@@ -86,6 +86,9 @@ an interactive user.
   If you need to clone a bundle of repositories, look into the
   `post-clone-retired` hook.
 
+* commit:
+  Commit in all repositories
+
 * delete:
   Delete an existing repository.
 
@@ -128,7 +131,7 @@ an interactive user.
   an interactive user.
 
 * status:
-  Show statuses of all vcsh repositories.
+  Show statuses of all/one vcsh repositories.
 
 * upgrade:
   Upgrade repository to currently recommended settings.
@@ -181,6 +184,15 @@ Interesting knobs you can turn:
 
   Defaults to <exact>.
 
+* <$VCSH_VCSH_WORKTREE>:
+  Can be <absolute>, or <relative>.
+
+  <absolute> will set an absolute path; defaulting to <$HOME>.
+
+  <relative> will set a path relative to <$GIT_DIR>.
+
+  Defaults to <absolute>.
+
 Less interesting knobs you could turn:
 
 * <$VCSH_DEBUG>:
@@ -226,9 +238,12 @@ the repository's name, followed by a dot, i.e. <zsh.pre-run>. Otherwise, the
 same rules as above apply. The dot between the repository's name and the hook
 is mandatory, though.
 
-Available hooks are <pre-enter>, <post-enter>, <pre-run>, <post-run>,
-<pre-upgrade>, and <post-upgrade>. If you need more, vcsh is trivial to patch,
-but please let upstream know so we can ship them by default.
+Available hooks are <pre-clone>, <post-clone>, <post-clone-retired>,
+<pre-command>, <post-command>, <pre-enter>, <post-enter>, <pre-init>,
+<post-init>, <pre-pull>, <post-pull>, <pre-push>, <post-push>, <pre-run>,
+<post-run>, <pre-upgrade>, and <post-upgrade>.
+If you need more, vcsh is trivial to patch, but please let upstream know so
+we can ship them by default.
 
 ## DETAILED HOWTO AND FURTHER READING
 
@@ -279,7 +294,7 @@ This manpage and `vcsh` itself were written by Richard "RichiH" Hartmann.
 
 ## COPYRIGHT
 
-Copyright 2011-2013 Richard Hartmann <richih.mailinglist@gmail.com>
+Copyright 2011-2013 Richard Hartmann <richih@debian.org>
 
 Licensed under the GNU GPL version 2 or higher.
 
