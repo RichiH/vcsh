@@ -1,3 +1,16 @@
+vcsh (1.20131214-1~bpo60+2) squeeze-backports; urgency=low
+
+  * Rebuild for squeeze-backports.
+  * Fix local pebkac
+
+ -- Richard Hartmann <richih@debian.org>  Sat, 14 Dec 2013 00:46:17 +0100
+
+vcsh (1.20131214-1~bpo60+1) wheezy-backports; urgency=low
+
+  * Rebuild for squeeze-backports-sloppy.
+
+ -- Richard Hartmann <richih@debian.org>  Sat, 14 Dec 2013 00:37:04 +0100
+
 vcsh (1.20131214-1) unstable; urgency=low
 
   * New upstream release
