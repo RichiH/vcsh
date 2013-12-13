@@ -196,10 +196,10 @@ this repository and fork your own.
 
     [$XDG_CONFIG_HOME/vcsh/repo.d/zsh.git]
     checkout = vcsh clone 'git://github.com/RichiH/zshrc.git' zsh
-    update   = vcsh run zsh git pull
-    push     = vcsh run zsh git push
-    status   = vcsh run zsh git status
-    gc       = vcsh run zsh git gc
+    update   = vcsh zsh pull
+    push     = vcsh zsh push
+    status   = vcsh zsh status
+    gc       = vcsh zsh gc
 
 ### config.d
 
@@ -230,7 +230,7 @@ document (see above).
 vcsh will check if any file it would want to create exists. If it exists, vcsh
 will throw a warning and exit. Move away your old config and try again.
 Optionally, merge your local and your global configs afterwards and push with
-`vcsh run foo git push`.
+`vcsh foo push`.
 
 ## Moving into a New Host
 
@@ -334,10 +334,10 @@ Now, it's time to edit the template config and fill it with your own remotes:
 And then create your own stuff:
 
     vcsh init foo
-    vcsh run foo git add -f bar baz quux
-    vcsh run foo git remote add origin git://quuux
-    vcsh run foo git commit
-    vcsh run foo git push
+    vcsh foo add bar baz quux
+    vcsh foo remote add origin git://quuux
+    vcsh foo commit
+    vcsh foo push
 
     cp $XDG_CONFIG_HOME/mr/available.d/mr.vcsh $XDG_CONFIG_HOME/mr/available.d/foo.vcsh
     vim $XDG_CONFIG_HOME/mr/available.d/foo.vcsh # add your own repo
@@ -411,13 +411,9 @@ Neat.
 After you have made some changes, for which you would normally use `git add`
 and `git commit`, use the vcsh wrapper (like above):
 
-    vcsh run foo git add -f bar baz quux
-    vcsh run foo git commit
-    vcsh run foo git push
-
-By the way, you'll have to use -f/--force flag with git-add because all files
-will be ignored by default. This is to show you only useful output when running
-git-status. A fix for this problem is being worked on.
+    vcsh foo add bar baz quux
+    vcsh foo commit
+    vcsh foo push
 
 ### Using vcsh without mr
 
@@ -434,9 +430,9 @@ To clone a repository: `vcsh clone ssh://<remote>/zsh.git`
 To interact with a repository, use the regular Git commands, but prepend them
 with `vcsh run $repository_name`. For example:
 
-    vcsh run zsh git status
-    vcsh run zsh git add -f .zshrc
-    vcsh run zsh git commit
+    vcsh zsh status
+    vcsh zsh add .zshrc
+    vcsh zsh commit
 
 Obviously, without mr keeping repositories up-to-date, it will have to be done
 manually. Alternatively, you could try something like this:
