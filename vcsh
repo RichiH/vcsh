@@ -32,11 +32,11 @@ while getopts "c:dv" flag; do
 		VCSH_DEBUG=1
 		echo "debug mode on"
 		echo "$SELF $VERSION"
-	elif [ "$1" = '-v' ];then
+	elif [ "$1" = '-v' ]; then
 		VCSH_VERBOSE=1
 		echo "verbose mode on"
 		echo "$SELF $VERSION"
-	elif [ "$1" = '-c' ];then
+	elif [ "$1" = '-c' ]; then
 		VCSH_OPTION_CONFIG=$OPTARG
 	fi
 	shift 1
