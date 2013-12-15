@@ -1,13 +1,12 @@
 Name:           vcsh
-Version:        1.20130909
-Release:        3%{?dist}
+Version:        1.20131214
+Release:        1%{?dist}
 Summary:        Version Control System for $HOME
 Group:          Development/Tools
 
 License:        GPLv2+
 URL:            https://github.com/RichiH/vcsh
 Source0:        https://github.com/RichiH/vcsh/archive/v%{version}.tar.gz
-Patch0:         https://github.com/RichiH/vcsh/pull/90.diff
 
 BuildArch:      noarch
 BuildRequires:  rubygem-ronn
@@ -23,7 +22,6 @@ configs you want to use on which machine.
 
 %prep
 %setup -q
-%patch0 -p1
 
 
 %build
@@ -43,12 +41,15 @@ make %{?_smp_mflags} all=manpages
 
 
 %changelog
+* Sun Dec 15 2013 Dridi Boukelmoune <dridi.boukelmoune@gmail.com> - 1.20131214-1
+- Bumped version to 1.20131214
+
 * Tue Oct 22 2013 Dridi Boukelmoune <dridi.boukelmoune@gmail.com> - 1.20130909-3
 - The Makefile patch has been submitted upstream
 
 * Sat Oct 19 2013 Dridi Boukelmoune <dridi.boukelmoune@gmail.com> - 1.20130909-2
 - Switched to _pkgdocdir
-- Removed unnecessary `rm -rf %{buildroot}' in clean and install
+- Removed unnecessary `rm -rf %%{buildroot}' in clean and install
 
 * Sat Oct 12 2013 Dridi Boukelmoune <dridi.boukelmoune@gmail.com> - 1.20130909-1
 - Initial package
