@@ -70,44 +70,21 @@ modes you will still be fine.
 `vcsh enter` and `vcsh run`  will be covered in later sections.
 
 
-## Initialize a new repository called "vim"
+| Task                                                  | Command                                           |
+| ----------------------------------------------------- | ------------------------------------------------- |
+| _Initialize a new repository called "vim"_            |   `vcsh init vim`                                 |
+| _Clone an existing repository_                        |   `vcsh clone <remote> <repository_name>`         |
+| _Add files to repository "vim"_                       |   `vcsh vim add ~/.vimrc ~/.vim`                  |
+|                                                       |   `vcsh vim commit -m 'Update Vim configuration'` |
+| _Add a remote for repository "vim"_                   |   `vcsh vim remote add origin <remote>`           |
+|                                                       |   `vcsh vim push origin master:master`            |
+|                                                       |   `vcsh vim branch --track master origin/master`  |
+| _Push to remote of repository "vim"_                  |   `vcsh vim push`                                 |
+| _Pull from remote of repository "vim"_                |   `vcsh vim pull`                                 |
+| _Show status of changed files in all repositories_    |   `vcsh status`                                   |
+| _Pull from all repositories_                          |   `vcsh pull`                                     |
+| _Push to all repositories_                            |   `vcsh push`                                     |
 
-    vcsh init vim
-
-## Clone an existing repository
-
-    vcsh clone <remote> <repository_name>
-
-## Add files to repository "vim"
-
-    vcsh vim add ~/.vimrc ~/.vim
-    vcsh vim commit -m 'Update Vim configuration'
-
-## Add a remote for repository "vim"
-
-    vcsh vim remote add origin <remote>
-    vcsh vim push origin master:master
-    vcsh vim branch --track master origin/master
-
-## Push to remote of repository "vim"
-
-    vcsh vim push
-
-## Pull from remote of repository "vim"
-
-    vcsh vim pull
-
-## Show status of changed files in all repositories
-
-    vcsh status
-
-## Pull from all repositories
-
-    vcsh pull
-
-## Push to all repositories
-
-    vcsh push
 
 # Overview
 
