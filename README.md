@@ -257,13 +257,19 @@ the template will be stored.
 
     apt-get install mr
 
-#### Install vcsh
+### Install vcsh
 
 #### Debian
 
 If you are using Debian Squeeze, you will need to enable backports
 
     apt-get install vcsh
+
+#### Gentoo
+
+To install vcsh in Gentoo Linux just give the following command as root:
+
+    emerge dev-vcs/vcsh
 
 #### Arch Linux
 
