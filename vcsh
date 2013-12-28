@@ -53,7 +53,7 @@ source_all() {
 
 # Read configuration and set defaults if anything's not set
 [ -n "$VCSH_DEBUG" ]                  && set -vx
-[ -z "$XDG_CONFIG_HOME" ]             && XDG_CONFIG_HOME="$HOME/.config"
+: ${XDG_CONFIG_HOME:=$HOME/.config}
 
 # Read configuration files if there are any
 [ -r "/etc/vcsh/config" ]             && . "/etc/vcsh/config"
@@ -69,11 +69,11 @@ fi
 [ -n "$VCSH_DEBUG" ]                  && set -vx
 
 # Read defaults
-[ -z "$VCSH_REPO_D" ]                 && VCSH_REPO_D="$XDG_CONFIG_HOME/vcsh/repo.d"
-[ -z "$VCSH_HOOK_D" ]                 && VCSH_HOOK_D="$XDG_CONFIG_HOME/vcsh/hooks-enabled"
-[ -z "$VCSH_BASE" ]                   && VCSH_BASE="$HOME"
-[ -z "$VCSH_GITIGNORE" ]              && VCSH_GITIGNORE='exact'
-[ -z "$VCSH_WORKTREE" ]               && VCSH_WORKTREE='absolute'
+: ${VCSH_REPO_D:=$XDG_CONFIG_HOME/vcsh/repo.d}
+: ${VCSH_HOOK_D:=$XDH_CONFIG_HOME/vcsh/hooks-enabled}
+: ${VCSH_BASE:=$HOME}
+: ${VCSH_GITIGNORE:=exact}
+: ${VCSH_WORKTREE:=absolute}
 
 if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xnone' ] && [ ! "x$VCSH_GITIGNORE" = 'xrecursive' ]; then
 	fatal "'\$VCSH_GITIGNORE' must equal 'exact', 'none', or 'recursive'" 1
