@@ -261,7 +261,8 @@ the template will be stored.
 
 #### Debian
 
-If you are using Debian Squeeze, you will need to enable backports
+If you are using Debian Squeeze, you will need to enable backports.
+From Wheezy onwards, you can install it directly:
 
     apt-get install vcsh
 
