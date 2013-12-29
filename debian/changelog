@@ -1,3 +1,9 @@
+vcsh (1.20131229-1~bpo60+1) squeeze-backports-sloppy; urgency=low
+
+  * Rebuild for wheezy-backports.
+
+ -- Richard Hartmann <richih@debian.org>  Sun, 29 Dec 2013 17:51:40 +0100
+
 vcsh (1.20131229-1) unstable; urgency=low
 
   * New upstream release
