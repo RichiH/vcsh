@@ -16,7 +16,7 @@
 [ -n "$VCSH_DEBUG" ] && set -vx
 
 SELF=$(basename $0)
-VERSION='1.20131214.git-HEAD'
+VERSION='1.20131229'
 
 fatal() {
 	echo "$SELF: fatal: $1" >&2
@@ -32,11 +32,11 @@ while getopts "c:dv" flag; do
 		VCSH_DEBUG=1
 		echo "debug mode on"
 		echo "$SELF $VERSION"
-	elif [ "$1" = '-v' ];then
+	elif [ "$1" = '-v' ]; then
 		VCSH_VERBOSE=1
 		echo "verbose mode on"
 		echo "$SELF $VERSION"
-	elif [ "$1" = '-c' ];then
+	elif [ "$1" = '-c' ]; then
 		VCSH_OPTION_CONFIG=$OPTARG
 	fi
 	shift 1
@@ -53,7 +53,7 @@ source_all() {
 
 # Read configuration and set defaults if anything's not set
 [ -n "$VCSH_DEBUG" ]                  && set -vx
-[ -z "$XDG_CONFIG_HOME" ]             && XDG_CONFIG_HOME="$HOME/.config"
+: ${XDG_CONFIG_HOME:=$HOME/.config}
 
 # Read configuration files if there are any
 [ -r "/etc/vcsh/config" ]             && . "/etc/vcsh/config"
@@ -69,11 +69,11 @@ fi
 [ -n "$VCSH_DEBUG" ]                  && set -vx
 
 # Read defaults
-[ -z "$VCSH_REPO_D" ]                 && VCSH_REPO_D="$XDG_CONFIG_HOME/vcsh/repo.d"
-[ -z "$VCSH_HOOK_D" ]                 && VCSH_HOOK_D="$XDG_CONFIG_HOME/vcsh/hooks-enabled"
-[ -z "$VCSH_BASE" ]                   && VCSH_BASE="$HOME"
-[ -z "$VCSH_GITIGNORE" ]              && VCSH_GITIGNORE='exact'
-[ -z "$VCSH_WORKTREE" ]               && VCSH_WORKTREE='absolute'
+: ${VCSH_REPO_D:=$XDG_CONFIG_HOME/vcsh/repo.d}
+: ${VCSH_HOOK_D:=$XDH_CONFIG_HOME/vcsh/hooks-enabled}
+: ${VCSH_BASE:=$HOME}
+: ${VCSH_GITIGNORE:=exact}
+: ${VCSH_WORKTREE:=absolute}
 
 if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xnone' ] && [ ! "x$VCSH_GITIGNORE" = 'xrecursive' ]; then
 	fatal "'\$VCSH_GITIGNORE' must equal 'exact', 'none', or 'recursive'" 1
@@ -247,7 +247,7 @@ list_tracked_by() {
 pull() {
 	hook pre-pull
 	for VCSH_REPO_NAME in $(list); do
-		echo -n "$VCSH_REPO_NAME: "
+		printf "$VCSH_REPO_NAME: "
 		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 		use
 		git pull
@@ -259,7 +259,7 @@ pull() {
 push() {
 	hook pre-push
 	for VCSH_REPO_NAME in $(list); do
-		echo -n "$VCSH_REPO_NAME: "
+		printf "$VCSH_REPO_NAME: "
 		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 		use
 		git push
@@ -359,8 +359,9 @@ write_gitignore() {
 	done | sort -u)
 
 	# Contrary to GNU mktemp, mktemp on BSD/OSX requires a template for temp files
-	# Use the template GNU mktemo defaults to
-	tempfile=$(mktemp tmp.XXXXXXXXXX) || fatal "could not create tempfile" 51
+	# Using a template makes GNU mktemp default to $PWD and not #TMPDIR for tempfile location
+	# To make every OS happy, set full path explicitly
+	tempfile=$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX") || fatal "could not create tempfile: '${tempfile}'" 51
 
 	echo '*' > "$tempfile" || fatal "could not write to '$tempfile'" 57
 	for gitignore in $gitignores; do
@@ -390,22 +391,23 @@ fi
 
 export VCSH_COMMAND="$1"
 
-[ "$VCSH_COMMAND" = 'clon' ]   || [ "$VCSH_COMMAND" = 'clo' ]   || [ "$VCSH_COMMAND" = 'cl' ]                                                                && VCSH_COMMAND='clone'
-[ "$VCSH_COMMAND" = 'commi' ]  || [ "$VCSH_COMMAND" = 'comm' ]  || [ "$VCSH_COMMAND" = 'com' ]  || [ "$VCSH_COMMAND" = 'co' ]                                && VCSH_COMMAND='commit'
-[ "$VCSH_COMMAND" = 'delet' ]  || [ "$VCSH_COMMAND" = 'dele' ]  || [ "$VCSH_COMMAND" = 'del' ]  || [ "$VCSH_COMMAND" = 'de' ]                                && VCSH_COMMAND='delete'
-[ "$VCSH_COMMAND" = 'ente' ]   || [ "$VCSH_COMMAND" = 'ent' ]   || [ "$VCSH_COMMAND" = 'en' ]                                                                && VCSH_COMMAND='enter'
-[ "$VCSH_COMMAND" = 'hel' ]    || [ "$VCSH_COMMAND" = 'he' ]                                                                                                 && VCSH_COMMAND='help'
-[ "$VCSH_COMMAND" = 'ini' ]    || [ "$VCSH_COMMAND" = 'in' ]                                                                                                 && VCSH_COMMAND='init'
-[ "$VCSH_COMMAND" = 'pul' ]                                                                                                                                  && VCSH_COMMAND='pull'
-[ "$VCSH_COMMAND" = 'pus' ]                                                                                                                                  && VCSH_COMMAND='push'
-[ "$VCSH_COMMAND" = 'renam' ]  || [ "$VCSH_COMMAND" = 'rena' ]  || [ "$VCSH_COMMAND" = 'ren' ]  || [ "$VCSH_COMMAND" = 're' ]                                && VCSH_COMMAND='rename'
-[ "$VCSH_COMMAND" = 'ru' ]                                                                                                                                   && VCSH_COMMAND='run'
-[ "$VCSH_COMMAND" = 'statu' ]  || [ "$VCSH_COMMAND" = 'stat' ]  || [ "$VCSH_COMMAND" = 'sta' ]  || [ "$VCSH_COMMAND" = 'st' ]                                && VCSH_COMMAND='status'
-[ "$VCSH_COMMAND" = 'upgrad' ] || [ "$VCSH_COMMAND" = 'upgra' ] || [ "$VCSH_COMMAND" = 'upgr' ] || [ "$VCSH_COMMAND" = 'upg' ]                               && VCSH_COMMAND='upgrade'
-[ "$VCSH_COMMAND" = 'versio' ] || [ "$VCSH_COMMAND" = 'versi' ] || [ "$VCSH_COMMAND" = 'vers' ] || [ "$VCSH_COMMAND" = 'ver' ] || [ "$VCSH_COMMAND" = 've' ] && VCSH_COMMAND='version'
-[ "$VCSH_COMMAND" = 'whic' ]   || [ "$VCSH_COMMAND" = 'whi' ]   || [ "$VCSH_COMMAND" = 'wh' ]                                                                && VCSH_COMMAND='which'
-[ "$VCSH_COMMAND" = 'write' ]  || [ "$VCSH_COMMAND" = 'writ' ]  || [ "$VCSH_COMMAND" = 'wri' ]  || [ "$VCSH_COMMAND" = 'wr' ]                                && VCSH_COMMAND='write-gitignore'
-
+case "$VCSH_COMMAND" in
+	clon|clo|cl) VCSH_COMMAND=clone;;
+	commi|comm|com|co) VCSH_COMMAND=commit;;
+	delet|dele|del|de) VCSH_COMMAND=delete;;
+	ente|ent|en) VCSH_COMMAND=enter;;
+	hel|he) VCSH_COMMAND=help;;
+	ini|in) VCSH_COMMAND=init;;
+	pul) VCSH_COMMAND=pull;;
+	pus) VCSH_COMMAND=push;;
+	renam|rena|ren|re) VCSH_COMMAND=rename;;
+	ru) VCSH_COMMAND=run;;
+	statu|stat|sta|st) VCSH_COMMAND=status;;
+	upgrad|upgra|upgr|up) VCSH_COMMAND=upgrade;;
+	versio|versi|vers|ver|ve) VCSH_COMMAND=version;;
+	which|whi|wh) VCSH_COMMAND=which;;
+	write|writ|wri|wr) VCSH_COMMAND=write-gitignore;;
+esac    
 
 if [ "$VCSH_COMMAND" = 'clone' ]; then
 	[ -z "$2" ] && fatal "$VCSH_COMMAND: please specify a remote" 1
