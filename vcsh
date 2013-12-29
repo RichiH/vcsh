@@ -361,7 +361,7 @@ write_gitignore() {
 	# Contrary to GNU mktemp, mktemp on BSD/OSX requires a template for temp files
 	# Use the template GNU mktemo defaults to
 	# The downside to this is that we need to account for unset TMPDIR
-	tempfile=$(mktemp ${TMPDIR:-/tmp}/tmp.XXXXXXXXXX) || fatal "could not create tempfile: '${tempfile}'" 51
+	tempfile=$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX") || fatal "could not create tempfile: '${tempfile}'" 51
 
 	echo '*' > "$tempfile" || fatal "could not write to '$tempfile'" 57
 	for gitignore in $gitignores; do
