@@ -1,3 +1,13 @@
+vcsh (1.20131229-1) unstable; urgency=low
+
+  * New upstream release
+    + Release 1.20131229
+    + Fix mktemp bug (GitHub issue #99)
+    + Make code more resilient and efficient
+    + Improve output
+
+ -- Richard Hartmann <richih@debian.org>  Sun, 29 Dec 2013 17:35:42 +0100
+
 vcsh (1.20131214-1) unstable; urgency=low
 
   * New upstream release
