@@ -15,8 +15,12 @@
 # This should always be the first line of code to facilitate debugging
 [ -n "$VCSH_DEBUG" ] && set -vx
 
+
+# If '.git-HEAD' is appended to the version, you are seeing an unreleased
+# version of vcsh; the master branch is supposed to be clean at all times
+# so you can most likely just use it nonetheless
+VERSION='1.20131229.git-HEAD'
 SELF=$(basename $0)
-VERSION='1.20131229'
 
 fatal() {
 	echo "$SELF: fatal: $1" >&2
