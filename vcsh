@@ -16,7 +16,7 @@
 [ -n "$VCSH_DEBUG" ] && set -vx
 
 SELF=$(basename $0)
-VERSION='1.20131214.git-HEAD'
+VERSION='1.20131229'
 
 fatal() {
 	echo "$SELF: fatal: $1" >&2
