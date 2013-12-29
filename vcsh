@@ -359,8 +359,8 @@ write_gitignore() {
 	done | sort -u)
 
 	# Contrary to GNU mktemp, mktemp on BSD/OSX requires a template for temp files
-	# Use the template GNU mktemp defaults to
-	# The downside to this is that we need to account for unset TMPDIR
+	# Using a template makes GNU mktemp default to $PWD and not #TMPDIR for tempfile location
+	# To make every OS happy, set full path explicitly
 	tempfile=$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX") || fatal "could not create tempfile: '${tempfile}'" 51
 
 	echo '*' > "$tempfile" || fatal "could not write to '$tempfile'" 57
