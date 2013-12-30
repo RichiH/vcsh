@@ -1,5 +1,5 @@
 Name:           vcsh
-Version:        1.20131214
+Version:        1.20131229
 Release:        1%{?dist}
 Summary:        Version Control System for $HOME
 Group:          Development/Tools
@@ -41,6 +41,9 @@ make %{?_smp_mflags} all=manpages
 
 
 %changelog
+* Sun Dec 15 2013 Dridi Boukelmoune <dridi.boukelmoune@gmail.com> - 1.20131229-1
+- Bumped version to 1.20131229
+
 * Sun Dec 15 2013 Dridi Boukelmoune <dridi.boukelmoune@gmail.com> - 1.20131214-1
 - Bumped version to 1.20131214
 
