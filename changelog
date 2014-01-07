@@ -1,3 +1,10 @@
+2013-12-29  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20131229
+	* Fix mktemp bug (GitHub issue #99)
+	* Make code more resilient and efficient
+	* Improve output
+
 2013-12-14  Richard Hartmann <richih.mailinglist@gmail.com>
 
 	* Release 1.20131214
