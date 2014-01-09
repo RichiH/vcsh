@@ -18,7 +18,7 @@ eval {
 
 die $@ if $@;
 
-system ("./vcsh -d test1 add 'a'");
+system ("./vcsh test1 add 'a'");
 
 my $output = `./vcsh status`;
 
