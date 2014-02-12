@@ -257,6 +257,7 @@ pull() {
 		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 		use
 		git pull
+		VCSH_COMMAND_RETURN_CODE=$?
 		echo
 	done
 	hook post-pull
@@ -295,6 +296,7 @@ run() {
 	hook pre-run
 	use
 	"$@"
+	VCSH_COMMAND_RETURN_CODE=$?
 	hook post-run
 }
 
@@ -499,3 +501,4 @@ hook pre-command
 $VCSH_COMMAND "$@"
 hook post-command
 verbose "$VCSH_COMMAND end, exiting"
+exit $VCSH_COMMAND_RETURN_CODE
