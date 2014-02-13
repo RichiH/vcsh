@@ -224,7 +224,7 @@ init() {
 	[ ! -e "$GIT_DIR" ] || fatal "'$GIT_DIR' exists" 10
 	mkdir -p "$VCSH_BASE" || fatal "could not create '$VCSH_BASE'" 50
 	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
-	git init
+	git init --shared=0600
 	upgrade
 	hook post-init
 }
