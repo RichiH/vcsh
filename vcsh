@@ -175,6 +175,7 @@ commit() {
 		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 		use
 		git commit --untracked-files=no --quiet
+		VCSH_COMMAND_RETURN_CODE=$?
 		echo
 	done
 	hook post-commit
@@ -270,6 +271,7 @@ push() {
 		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 		use
 		git push
+		VCSH_COMMAND_RETURN_CODE=$?
 		echo
 	done
 	hook post-push
@@ -305,12 +307,14 @@ status() {
 		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 		use
 		git status --short --untracked-files='no'
+		VCSH_COMMAND_RETURN_CODE=$?
 	else
 		for VCSH_REPO_NAME in $(list); do
 			echo "$VCSH_REPO_NAME:"
 			export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 			use
 			git status --short --untracked-files='no'
+			VCSH_COMMAND_RETURN_CODE=$?
 			echo
 		done
 	fi
