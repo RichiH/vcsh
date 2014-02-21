@@ -334,7 +334,7 @@ upgrade() {
 		git config core.worktree "$VCSH_BASE"
 	fi
 	[ ! "x$VCSH_GITIGNORE" = 'xnone' ] && git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
-	git config vcsh.vcsh         'true'
+	git config vcsh.vcsh 'true'
 	use
 	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME"
 	hook post-upgrade
