@@ -334,9 +334,11 @@ upgrade() {
 		git config core.worktree "$VCSH_BASE"
 	fi
 	[ ! "x$VCSH_GITIGNORE" = 'xnone' ] && git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
+	git config core.attributesfile ".gitattributes.d/$VCSH_REPO_NAME"
 	git config vcsh.vcsh 'true'
 	use
 	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME"
+	[ -e "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME"
 	hook post-upgrade
 }
 
@@ -498,6 +500,7 @@ check_dir() {
 
 check_dir "$VCSH_REPO_D"
 [ ! "x$VCSH_GITIGNORE" = 'xnone' ] && check_dir "$VCSH_BASE/.gitignore.d"
+check_dir "$VCSH_BASE/.gitattributes.d"
 
 verbose "$VCSH_COMMAND begin"
 export VCSH_COMMAND=$(echo $VCSH_COMMAND | sed 's/-/_/g')
