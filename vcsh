@@ -74,7 +74,7 @@ fi
 
 # Read defaults
 : ${VCSH_REPO_D:=$XDG_CONFIG_HOME/vcsh/repo.d}
-: ${VCSH_HOOK_D:=$XDH_CONFIG_HOME/vcsh/hooks-enabled}
+: ${VCSH_HOOK_D:=$XDG_CONFIG_HOME/vcsh/hooks-enabled}
 : ${VCSH_BASE:=$HOME}
 : ${VCSH_GITIGNORE:=exact}
 : ${VCSH_WORKTREE:=absolute}
