@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# This adds a remote origin at $GITURL/dotfiles/$VCSH_DIRECTORY
+# Assumes $GITURL is set to the base of your remote repos.
+
+vcsh $VCSH_DIRECTORY remote add origin $GITURL/dotfiles/$VCSH_DIRECTORY
