@@ -364,6 +364,8 @@ write_gitignore() {
 
 	use
 	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
+	OLDIFS="$IFS"
+	IFS=$(printf '\n\t')
 	gitignores=$(for file in $(git ls-files); do
 		while true; do
 			echo $file; new="${file%/*}"
@@ -384,6 +386,7 @@ write_gitignore() {
 			{ echo "$gitignore/*" | sed 's@^@!/@' >> "$tempfile" || fatal "could not write to '$tempfile'" 57; }
 		fi
 	done
+	IFS="$OLDIFS"
 	if diff -N "$tempfile" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" > /dev/null; then
 		rm -f "$tempfile" || error "could not delete '$tempfile'"
 		exit
