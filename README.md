@@ -39,6 +39,7 @@ directory. They all maintain their working trees without clobbering each other
 or interfering otherwise. By default, all Git repositories maintained via
 `vcsh` store the actual files in `$HOME` but you can override this setting if
 you want to.
+
 All this means that you can have one repository per application or application
 family, i.e. `zsh`, `vim`, `ssh`, etc. This, in turn, allows you to clone
 custom sets of configurations onto different machines or even for different
@@ -64,9 +65,11 @@ All slides, videos, and further information can be found
 
 There are three different ways to interact with `vcsh` repositories; this
 section will only show the simplest and easiest way.
+
 Certain more advanced use cases require the other two ways, but don't worry
 about this for now. If you never even bother playing with the other two
 modes you will still be fine.
+
 `vcsh enter` and `vcsh run`  will be covered in later sections.
 
 
@@ -111,18 +114,17 @@ symbolic links in `$HOME`; it puts the actual files right into `$HOME`.
 As `vcsh` allows you to put an arbitrary number of distinct repositories into
 your `$HOME`, you will end up with a lot of repositories very quickly.
 
-To manage both `vcsh` and other repositories, we suggest using [mr](mr). `mr`
-takes care of pulling in and pushing out new data for a variety of version
-control systems.
+`vcsh` was designed with [myrepos][myrepos], a tool to manage Multiple
+Repositories, in mind and the two integrate very nicely. The myrepos tool
+(`mr`) has native support for `vcsh` repositories and the configuration for
+myrepos is just another set of files that you cat track with `vcsh` like any
+other. This makes setting up any new machine a breeze. It can take literally
+less than five minutes to go from standard installation to fully set up system.
 
-`vcsh` was designed with [mr][mr], a tool to manage Multiple Repositories, in
-mind and the two integrate very nicely. `mr` has native support for `vcsh`
-repositories and to `vcsh`, `mr` is just another configuration to track.
-This make setting up any new machine a breeze. It takes literally less than
-five minutes to go from standard installation to fully set up system
-
-This is where `mr` comes in. While the use of `mr` is technically
-optional, but it will be an integral part of the proposed system that follows.
+We suggest using [myrepos][myrepos] to manage both `vcsh` and other repositories. The
+`mr` utility takes care of pulling in and pushing out new data for a variety of
+version control systems.  While the use of myrepos is technically optional, it will
+be an integral part of the proposed system that follows.
 
 ## Default Directory Layout
 
@@ -162,14 +164,14 @@ To illustrate, this is what a possible directory structure looks like.
 
 ### available.d
 
-The files you see in $XDG\_CONFIG\_HOME/mr/available.d are mr configuration files
-that contain the commands to manage (checkout, update etc.) a single
-repository. vcsh repo configs end in .vcsh, git configs end in .git, etc. This
-is optional and your preference. For example, this is what a zsh.vcsh
-with read-only access to my zshrc repo looks likes. I.e. in this specific
-example, push can not work as you will be using the author's repository. This
-is for demonstration, only. Of course, you are more than welcome to clone from
-this repository and fork your own.
+The files you see in $XDG\_CONFIG\_HOME/mr/available.d are myrepos
+configuration files that contain the commands to manage (checkout, update
+etc.) a single repository. vcsh repo configs end in .vcsh, git configs end
+in .git, etc. This is optional and your preference. For example, this is
+what a zsh.vcsh with read-only access to my zshrc repo looks likes. I.e. in
+this specific example, push can not work as you will be using the author's
+repository. This is for demonstration, only. Of course, you are more than
+welcome to clone from this repository and fork your own.
 
     [$XDG_CONFIG_HOME/vcsh/repo.d/zsh.git]
     checkout = vcsh clone 'git://github.com/RichiH/zshrc.git' zsh
@@ -181,7 +183,7 @@ this repository and fork your own.
 ### config.d
 
 $XDG\_CONFIG\_HOME/mr/available.d contains *all available* repositories. Only
-files/links present in mr/config.d, however, will be used by mr. That means
+files/links present in mr/config.d, however, will be used by myrepos. That means
 that in this example, only the zsh, gitconfigs, tmux and vim repositories will
 be checked out. A simple `mr update` run in $HOME will clone or update those
 four repositories listed in config.d.
@@ -201,8 +203,9 @@ $XDG\_CONFIG\_HOME/vcsh/repo.d is the directory where all git repositories which
 are under vcsh's control are located. Since their working trees are configured
 to be in $HOME, the files contained in those repositories will be put in $HOME
 directly.
-Of course, [mr] [mr] will work with this layout if configured according to this
-document (see above).
+
+Of course, [myrepos][myrepos] will work with this layout if configured according to
+this document (see above).
 
 vcsh will check if any file it would want to create exists. If it exists, vcsh
 will throw a warning and exit. Move away your old config and try again.
@@ -214,17 +217,17 @@ Optionally, merge your local and your global configs afterwards and push with
 To illustrate further, the following steps could move your desired
 configuration to a new host.
 
-1. Clone the mr repository (containing available.d, config.d etc.); for
+1. Clone the myrepos repository (containing available.d, config.d etc.); for
    example: `vcsh clone git://github.com/RichiH/vcsh_mr_template.git mr`
 2. Choose your repositories by linking them in config.d (or go with the default
    you may have already configured by adding symlinks to git).
-3. Run mr to clone the repositories: `cd; mr update`.
+3. Run myrepos to clone the repositories: `cd; mr update`.
 4. Done.
 
 Hopefully the above could help explain how this approach saves time by
 
 1. making it easy to manage, clone and update a large number of repositories
-   (thanks to mr) and
+   (thanks to myrepos) and
 2. making it unnecessary to create symbolic links in $HOME (thanks to vcsh).
 
 If you want to give vcsh a try, follow the instructions below.
@@ -255,7 +258,7 @@ Make sure none of the following files and directories exist for your test
 All of the files are part of the template repository, the directory is where
 the template will be stored.
 
-    apt-get install mr
+    apt-get install myrepos
 
 ### Install vcsh
 
@@ -354,14 +357,14 @@ copy mine verbatim, either is fine.
     sudo ln -s ~/work/git/vcsh/vcsh /usr/bin/local
     hash -r
 
-Grab my mr config. see below for details on how I set this up
+Grab my myrepos config. see below for details on how I set this up
 
     vcsh clone ssh://<remote>/mr.git
     cd $XDG_CONFIG_HOME/mr/config.d/
     ln -s ../available.d/* .
 
 
-mr is used to actually retrieve configs, etc
+myrepos is used to actually retrieve configs, etc
 
     ~ % cat ~/.mrconfig
     [DEFAULT]
@@ -379,7 +382,7 @@ mr is used to actually retrieve configs, etc
     ~ % mr -j 5 up
 
 
-# mr usage ; will be factored out & rewritten
+# myrepos usage ; will be factored out & rewritten
 
 ### Keeping repositories Up-to-Date
 
@@ -399,11 +402,11 @@ and `git commit`, use the vcsh wrapper (like above):
     vcsh foo commit
     vcsh foo push
 
-### Using vcsh without mr
+### Using vcsh without myrepos
 
-vcsh encourages you to use [mr][mr]. It helps you manage a large number of
+vcsh encourages you to use [myrepos][myrepos]. It helps you manage a large number of
 repositories by running the necessary vcsh commands for you. You may choose not
-to use mr, in which case you will have to run those commands manually or by
+to use myrepos, in which case you will have to run those commands manually or by
 other means.
 
 
@@ -418,7 +421,7 @@ with `vcsh run $repository_name`. For example:
     vcsh zsh add .zshrc
     vcsh zsh commit
 
-Obviously, without mr keeping repositories up-to-date, it will have to be done
+Obviously, without myrepos keeping repositories up-to-date, it will have to be done
 manually. Alternatively, you could try something like this:
 
     for repo in `vcsh list`; do
@@ -438,7 +441,7 @@ community around the general idea of version controlling your (digital) life.
 * Pull requests or issues on [https://github.com/RichiH/vcsh][vcsh]
 
 
-[mr]: http://kitenet.net/~joey/code/mr/
+[myrepos]: http://myrepos.branchable.com/
 [talks]: http://richardhartmann.de/talks/
 [vcsh]: https://github.com/RichiH/vcsh
 [vcs-home-list]: http://lists.madduck.net/listinfo/vcs-home
