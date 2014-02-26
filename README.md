@@ -277,16 +277,20 @@ To install vcsh in Gentoo Linux just give the following command as root:
 
 #### Arch Linux
 
-vcsh is availabe via [AUR](https://aur.archlinux.org/packages.php?ID=54164)
+vcsh is available via [AUR](https://aur.archlinux.org/packages/vcsh/)
 and further documentation about the use of AUR is available
-[on Arch's wiki](https://wiki.archlinux.org/index.php/Arch_User_Repository).
+[on Arch's wiki](https://wiki.archlinux.org/index.php/Arch_User_Repository). You may
+use your favorite AUR helper to install automatically or do it yourself manually like this:
 
     cd /var/abs/local/
-    wget https://aur.archlinux.org/packages/vc/vcsh-git/vcsh-git.tar.gz
-    tar xfz vcsh-git.tar.gz
-    cd vcsh-git
+    wget https://aur.archlinux.org/packages/vc/vcsh/vcsh.tar.gz
+    tar xfz vcsh.tar.gz
+    cd vcsh
     makepkg -s
     pacman -U vcsh*.pkg.tar.xz
+
+If you prefer to use the devel package that installs the git HEAD version it
+is available [here](https://aur.archlinux.org/packages/vcsh-git/).
 
 #### From source
 
