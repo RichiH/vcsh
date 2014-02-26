@@ -293,6 +293,13 @@ Or you can do it yourself manually using the documentation on installing AUR pac
 If you prefer to use the devel package that installs the git HEAD version it
 is available [here](https://aur.archlinux.org/packages/vcsh-git/).
 
+#### Mac OSX
+
+Formulas are available for vcsh as well as git and myrepos through [homebrew](http://brew.sh). The
+vcsh formula is set to depend on myrepos, so you only need one install command:
+
+    brew install vcsh
+
 #### From source
 
 To install the latest version from git:
