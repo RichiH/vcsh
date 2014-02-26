@@ -258,16 +258,16 @@ Make sure none of the following files and directories exist for your test
 All of the files are part of the template repository, the directory is where
 the template will be stored.
 
-    apt-get install myrepos
-
 ### Install vcsh
 
 #### Debian
 
-If you are using Debian Squeeze, you will need to enable backports.
-From Wheezy onwards, you can install it directly:
+If you are using Debian Squeeze, you will need to enable backports and the
+package name for myrepos will be 'mr'.
 
-    apt-get install vcsh
+From Wheezy onwards, you can install both directly:
+
+    apt-get install myrepos vcsh
 
 #### Gentoo
 
@@ -275,32 +275,42 @@ To install vcsh in Gentoo Linux just give the following command as root:
 
     emerge dev-vcs/vcsh
 
+Note the portage package for myrepos still has the old project name:
+
+    emerge dev-vcs/mr
+
 #### Arch Linux
 
-vcsh is available via [AUR](https://aur.archlinux.org/packages/vcsh/)
-and further documentation about the use of AUR is available
-[on Arch's wiki](https://wiki.archlinux.org/index.php/Arch_User_Repository). You may
-use your favorite AUR helper to install automatically or do it yourself manually like this:
+vcsh is available via this [AUR](https://aur.archlinux.org/packages/vcsh/)
+package. Likewise myrepos is available [here](https://aur.archlinux.org/packages/myrepos/).
+You may install both useing your favorite AUR helper. e.g. with yaourt:
 
-    cd /var/abs/local/
-    wget https://aur.archlinux.org/packages/vc/vcsh/vcsh.tar.gz
-    tar xfz vcsh.tar.gz
-    cd vcsh
-    makepkg -s
-    pacman -U vcsh*.pkg.tar.xz
+    yaourt -Sya myrepos vcsh
+
+Or you can do it yourself manually using the documentation on installing AUR packages 
+[on Arch's wiki](https://wiki.archlinux.org/index.php/Arch_User_Repository#Installing_packages).
 
 If you prefer to use the devel package that installs the git HEAD version it
 is available [here](https://aur.archlinux.org/packages/vcsh-git/).
 
 #### From source
 
+To install the latest version from git:
+
     # choose a location for your checkout
     mkdir -p ~/work/git
     cd ~/work/git
     git clone git://github.com/RichiH/vcsh.git
     cd vcsh
-    sudo ln -s vcsh /usr/local/bin                       # or add it to your PATH
-    cd
+    sudo ln -s vcsh /usr/local/bin               # or add it to your PATH
+
+For myrepos:
+
+    # use checkout location from above
+    cd ~/work/git
+    git clone git://myrepos.branchable.com/ myrepos
+    cd myrepos
+    make install
 
 #### Clone the Template
 
