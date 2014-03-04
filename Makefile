@@ -28,11 +28,11 @@ manpages: $(manpages)
 $(self).1: doc/$(self).1.ronn
 	$(RONN) < doc/$(self).1.ronn > $(self).1 || rm $(self).1
 
-$(vcsha).1: doc/$(self).1.ronn
-	$(RONN) < doc/$(self).1.ronn > $(self).1 || rm $(self).1
+$(vcsha).1: doc/$(vcsha).1.ronn
+	$(RONN) < doc/$(vcsha).1.ronn > $(vcsha).1 || rm $(vcsha).1
 
 clean:
-	rm -rf $(self).1 $(vcsha).a
+	rm -rf $(self).1 $(vcsha).1
 
 uninstall:
 	rm -rf $(DESTDIR)$(PREFIX)/bin/$(self)
