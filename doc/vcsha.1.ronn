@@ -1,0 +1,59 @@
+vcsha(1) - Use vcsh(1) on arbitrary directories
+===============================================
+
+## SYSTEM
+`vcsha` init
+
+`vcsha` <any vcsh arguments>
+
+## DESCRIPTION
+
+This script is an addition that allow you to apply vcsh to files in
+arbitrary directories *NOT* under $HOME.
+
+## OPTIONS
+
+none
+
+## COMMANDS
+
+* init:
+  initialize the current directory for vcsh operations.  NOTE: if
+  `init` is passed any arguments, the whole command line will be
+  passed through to vcsh and have different results.
+
+* any vcsh command
+  See `vcsh`(1) for commands and options.
+
+## ENVIRONMENT
+
+Sets $VCSH_BASE and $XDG_CONFIG_HOME to the directory found for vcsha
+operations.
+
+## CONFIG
+
+Similar to git, `vcsha` will examine the directory tree from the
+current directory to the root directory for a ".vcsha" marker
+subdirectory.  If found, the directory containing ".vcsha" will be
+taken to be the base of all `vcsh`(1) operations and the environment
+variables will be set to that the directory containing .vcsha.  `vcsha
+init` is a convenience method for creating this directory.
+
+## AUTHOR
+
+This manpage and `vcsha` were written by Dewey Sasser.  The script is
+a trivial wrapper around the excellent work by Richard "RichiH"
+Hartmann.
+
+## COPYRIGHT
+
+Copyright 2014 Dewey Sasser <dewey@sasser.com>
+
+Licensed under the GNU GPL version 2 or higher.
+
+https://github.com/RichiH/vcsh
+
+## SEE ALSO
+
+`vcsh`(1)
+
