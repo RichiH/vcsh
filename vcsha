@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Purpose:  wrap vcsh to allow management of arbitrary directories
+
+finddir() {
+    (
+	while [ `pwd` != / ] ; do
+	    if [ -d .vcsha ] ; then
+		pwd
+	    fi
+	    cd ..
+	done
+    )
+}
+
+if [ "$1" = "init" -a "$#" -eq 1 ] ; then
+   mkdir .vcsha
+   exit 0
+fi
+
+dir=`finddir`
+
+if [ -z "$dir" ] ; then
+    echo "Not in a vcsha repository.  Use vcsha init to create a repository"
+    exit 1
+fi
+
+export VCSH_BASE="$dir"
+export XDG_CONFIG_HOME="$dir"
+exec vcsh "$@"
