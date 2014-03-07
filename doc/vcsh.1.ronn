@@ -29,11 +29,15 @@ vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
 
 `vcsh` run <repo> <shell command>
 
+`vcsh` setup
+
 `vcsh` status [<repo>]
 
 `vcsh` upgrade <repo>
 
 `vcsh` version
+
+`vcsh` where
 
 `vcsh` which <substring>
 
@@ -130,6 +134,17 @@ an interactive user.
   This is needed to support mr and other scripts properly and of no concern to
   an interactive user.
 
+* setup:
+  Creates ./config/vcsh/config with <$VCSH_BASE> and
+  <$XDG_CONFIG_HOME> variables set to `$(dir)` and `$(dir)/.config`
+  respectively. Allows for agnostic `vcsh` use in folders that are not
+  <$HOME>. Can also be run in <$HOME> for basic initial setup without
+  cloning the template.
+
+  Please note that `vcsh` will only detect the configuration from the
+  local working directory, and so will default back to <$HOME> if run
+  in a sub-directory. Use `vcsh where` to verify the above settings.
+
 * status:
   Show statuses of all/one vcsh repositories.
 
@@ -138,6 +153,10 @@ an interactive user.
 
 * version:
   Print version information.
+
+* where:
+
+  Print base <$VCSH_BASE> and config <$XDG_CONFIG_HOME> variables.
 
 * which <substring>:
   Find <substring> in name of any tracked file.
@@ -164,6 +183,7 @@ ascending precedence, they are:
 * `VARIABLE=foo vcsh`
 * </etc/vcsh/config>
 * <$XDG_CONFIG_HOME/vcsh/config>
+* <./.config/vcsh/config>
 * `vcsh -c <file>`
 
 Please note that those files are sourced. Any and all commands will be
