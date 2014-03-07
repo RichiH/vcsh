@@ -423,6 +423,27 @@ and `git commit`, use the vcsh wrapper (like above):
     vcsh foo commit
     vcsh foo push
 
+### Using vcsh in directories other than $HOME
+
+You can use `vcsh` in an agnostic manner by changing the `$VCSH_BASE`
+and `$XDG_CONFIG_HOME` variables to the desired git working directory
+and `vcsh` config directory respectively. These variables can be
+changed a hierarchy of config files documented in the manpage, the
+agnostic file being `./.config/vcsh/config`.
+
+If the current working directory has a `.config` folder with the necessary `vcsh`
+config file, it will be automatically sourced. You can execute `vcsh
+where` to print out the values of the above two variables.
+
+Setting this up for a local folder is easy, just run `vcsh
+setup`. This will create `./.config/vcsh/config` with `$VCSH_BASE` set
+to `$(pwd)` and `$XDG_CONFIG_HOME` set to `$(pwd)/.config`. Now, when
+`vcsh` is run in this folder, it will track files in the folder, and
+use the local `.config` folder for `mr` and `repos.d`.
+
+Please note that `vcsh` will default back to `$HOME` if run in a
+sub-directory. It must be run from the root folder you wish to track.
+
 ### Using vcsh without myrepos
 
 vcsh encourages you to use [myrepos][myrepos]. It helps you manage a large number of
