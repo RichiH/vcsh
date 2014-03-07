@@ -121,10 +121,17 @@ myrepos is just another set of files that you cat track with `vcsh` like any
 other. This makes setting up any new machine a breeze. It can take literally
 less than five minutes to go from standard installation to fully set up system.
 
-We suggest using [myrepos][myrepos] to manage both `vcsh` and other repositories. The
-`mr` utility takes care of pulling in and pushing out new data for a variety of
-version control systems.  While the use of myrepos is technically optional, it will
-be an integral part of the proposed system that follows.
+We suggest using [myrepos][myrepos] to manage both `vcsh` and other
+repositories. The `mr` utility takes care of pulling in and pushing
+out new data for a variety of version control systems. While the use
+of myrepos is technically optional, it will be an integral part of the
+proposed system that follows. For instance, you can use
+[myrepos][myrepos] to track repositories in home such as `.emacs.d`,
+which `mr` can clone and update for you automatically. To do this,
+just add a `mr` configuration file to `availabile.d` with a `checkout`
+command to clone the repo, and set the [title] to the desired
+location, e.g. `$HOME/.emacs.d`. Try the `mr register` command in an
+existing repository, then view `~/.mrconfig` for an example.
 
 ## Default Directory Layout
 
@@ -174,11 +181,14 @@ repository. This is for demonstration, only. Of course, you are more than
 welcome to clone from this repository and fork your own.
 
     [$XDG_CONFIG_HOME/vcsh/repo.d/zsh.git]
-    checkout = vcsh clone 'git://github.com/RichiH/zshrc.git' zsh
+    checkout = vcsh clone 'git://github.com/RichiH/zshrc.git' 'zsh'
     update   = vcsh zsh pull
     push     = vcsh zsh push
     status   = vcsh zsh status
     gc       = vcsh zsh gc
+
+    [$HOME/.emacs.d]
+    checkout = vcsh clone 'git://github.com/andschwa/emacs.git' '.emacs.d'
 
 ### config.d
 
@@ -248,12 +258,12 @@ Below, you will find a few different methods for setting up vcsh:
 Make sure none of the following files and directories exist for your test
 (user). If they do, move them away for now:
 
-* ~/.gitignore.d
-* ~/.mrconfig
-* $XDG\_CONFIG\_HOME/mr/available.d/mr.vcsh
-* $XDG\_CONFIG\_HOME/mr/available.d/zsh.vcsh
-* $XDG\_CONFIG\_HOME/mr/config.d/mr.vcsh
-* $XDG\_CONFIG\_HOME/vcsh/repo.d/mr.git/
+* `~/.gitignore.d`
+* `~/.mrconfig`
+* `$XDG\_CONFIG\_HOME/mr/available.d/mr.vcsh`
+* `$XDG\_CONFIG\_HOME/mr/available.d/zsh.vcsh`
+* `$XDG\_CONFIG\_HOME/mr/config.d/mr.vcsh`
+* `$XDG\_CONFIG\_HOME/vcsh/repo.d/mr.git/`
 
 All of the files are part of the template repository, the directory is where
 the template will be stored.
@@ -293,7 +303,7 @@ Or you can do it yourself manually using the documentation on installing AUR pac
 If you prefer to use the devel package that installs the git HEAD version it
 is available [here](https://aur.archlinux.org/packages/vcsh-git/).
 
-#### Mac OSX
+#### Mac OS X
 
 Formulas are available for vcsh as well as git and myrepos through [homebrew](http://brew.sh). The
 vcsh formula is set to depend on myrepos, so you only need one install command:
@@ -385,12 +395,10 @@ Grab my myrepos config. see below for details on how I set this up
     ln -s ../available.d/* .
 
 
-myrepos is used to actually retrieve configs, etc
+`myrepos` is used to actually retrieve configs, etc
 
     ~ % cat ~/.mrconfig
     [DEFAULT]
-    # adapt /usr/share/mr/vcsh to your system if needed
-    include = cat /usr/share/mr/vcsh
     include = cat $XDG_CONFIG_HOME/mr/config.d/*
     ~ % echo $XDG_CONFIG_HOME
     /home/richih/.config
