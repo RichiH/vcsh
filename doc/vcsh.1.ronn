@@ -141,9 +141,8 @@ an interactive user.
   <$HOME>. Can also be run in <$HOME> for basic initial setup without
   cloning the template.
 
-  Please note that `vcsh` will only detect the configuration from the
-  local working directory, and so will default back to <$HOME> if run
-  in a sub-directory. Use `vcsh where` to verify the above settings.
+  `vcsh` will detect the configuration from any directory below the
+  setup directory.  Use `vcsh where` to verify the above settings.
 
 * status:
   Show statuses of all/one vcsh repositories.

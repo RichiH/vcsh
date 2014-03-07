@@ -169,7 +169,7 @@ setup
 Creates \./config/vcsh/config with \fI$VCSH_BASE\fR and \fI$XDG_CONFIG_HOME\fR variables set to \fB$(dir)\fR and \fB$(dir)/\.config\fR respectively\. Allows for agnostic \fBvcsh\fR use in folders that are not \fI$HOME\fR\. Can also be run in \fI$HOME\fR for basic initial setup without cloning the template\.
 .
 .IP
-Please note that \fBvcsh\fR will only detect the configuration from the local working directory, and so will default back to \fI$HOME\fR if run in a sub\-directory\. Use \fBvcsh where\fR to verify the above settings\.
+\fBvcsh\fR will detect the configuration from any directory below the setup directory\. Use \fBvcsh where\fR to verify the above settings\.
 .
 .TP
 status
