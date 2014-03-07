@@ -54,6 +54,20 @@ source_all() {
 	esac;
 }
 
+find_dir_upwards() {
+    op="$1"
+    dir="$2"
+    (
+	while [ `pwd` != / ] ; do
+	    if [ $op "$dir" ] ; then
+		pwd
+		return
+	    fi
+	    cd ..
+	done
+    )
+}
+
 
 # Read configuration and set defaults if anything's not set
 [ -n "$VCSH_DEBUG" ]                  && set -vx
@@ -63,6 +77,11 @@ source_all() {
 [ -r "/etc/vcsh/config" ]             && . "/etc/vcsh/config"
 [ -r "$XDG_CONFIG_HOME/vcsh/config" ] && . "$XDG_CONFIG_HOME/vcsh/config"
 [ -r ".config/vcsh/config" ]          && . ".config/vcsh/config"
+
+# Look up the directory tree for the appropriate flag
+configdir=`find_dir_upwards -r .config/vcsh/config`
+[ -n "$configdir" ] && . "$configdir/.config/vcsh/config"
+
 if [ -n "$VCSH_OPTION_CONFIG" ]; then
 	# Source $VCSH_OPTION_CONFIG if it can be read and is in $PWD of $PATH
 	if [ -r "$VCSH_OPTION_CONFIG" ]; then
