@@ -118,6 +118,7 @@ help() {
    status [<repo>]      Show statuses of all/one vcsh repositories
    upgrade <repo>       Upgrade repository to currently recommended settings
    version              Print version information
+   where                Print base and config directories
    which <substring>    Find substring in name of any tracked file
    write-gitignore \\
    <repo>               Write .gitignore.d/<repo> via git ls-files
@@ -348,6 +349,11 @@ use() {
 	export VCSH_DIRECTORY="$VCSH_REPO_NAME"
 }
 
+where() {
+	echo "\$VCSH_BASE is $VCSH_BASE"
+	echo "\$XDG_CONFIG_HOME is $XDG_CONFIG_HOME"
+}
+
 which() {
 	for VCSH_REPO_NAME in $(list); do
 		for VCSH_FILE in $(get_files); do
@@ -423,7 +429,8 @@ case "$VCSH_COMMAND" in
 	statu|stat|sta|st) VCSH_COMMAND=status;;
 	upgrad|upgra|upgr|up) VCSH_COMMAND=upgrade;;
 	versio|versi|vers|ver|ve) VCSH_COMMAND=version;;
-	which|whi|wh) VCSH_COMMAND=which;;
+	where|whe) VCSH_COMMAND=where;;
+	which|whi) VCSH_COMMAND=which;;
 	write|writ|wri|wr) VCSH_COMMAND=write-gitignore;;
 esac    
 
@@ -462,7 +469,8 @@ elif [ "$VCSH_COMMAND" = 'commit' ] ||
      [ "$VCSH_COMMAND" = 'list' ] ||
      [ "$VCSH_COMMAND" = 'list-tracked' ] ||
      [ "$VCSH_COMMAND" = 'pull' ] ||
-     [ "$VCSH_COMMAND" = 'push' ]; then
+     [ "$VCSH_COMMAND" = 'push' ] ||
+     [ "$VCSH_COMMAND" = 'where' ]; then
 	:
 elif [ "$VCSH_COMMAND" = 'status' ]; then
 	export VCSH_REPO_NAME="$2"
