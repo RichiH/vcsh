@@ -115,6 +115,7 @@ help() {
           <newname>     Rename repository
    run <repo> \\
        <command>        Use this repository
+   setup                Create ./.config/vcsh/config for local vcsh use
    status [<repo>]      Show statuses of all/one vcsh repositories
    upgrade <repo>       Upgrade repository to currently recommended settings
    version              Print version information
@@ -304,6 +305,14 @@ run() {
 	hook post-run
 }
 
+setup() {
+	mkdir -p .config/vcsh
+	echo "export VCSH_BASE=\"$(pwd)\"" >> .config/vcsh/config
+	echo "export XDG_CONFIG_HOME=\"$(pwd)/.config\"" >> .config/vcsh/config
+	echo "$SELF $VCSH_COMMAND: $SELF has been initialized in \"$(pwd)/.config\""
+	echo "$SELF will now track files locally if run from this directory"
+}
+
 status() {
 	if [ ! "x$VCSH_REPO_NAME" = "x" ]; then
 		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
@@ -426,6 +435,7 @@ case "$VCSH_COMMAND" in
 	pus) VCSH_COMMAND=push;;
 	renam|rena|ren|re) VCSH_COMMAND=rename;;
 	ru) VCSH_COMMAND=run;;
+	setup|setu|set|se) VCSH_COMMAND=setup;;
 	statu|stat|sta|st) VCSH_COMMAND=status;;
 	upgrad|upgra|upgr|up) VCSH_COMMAND=upgrade;;
 	versio|versi|vers|ver|ve) VCSH_COMMAND=version;;
@@ -445,6 +455,8 @@ elif [ "$VCSH_COMMAND" = 'version' ]; then
 	echo "$SELF $VERSION"
 	git version
 	exit
+elif [ "$VCSH_COMMAND" = 'setup' ]; then
+	[ -r "./.config/vcsh/config" ] && fatal "$VCSH_COMMAND: .config already exists!"
 elif [ "$VCSH_COMMAND" = 'which' ]; then
 	[ -z "$2" ] && fatal "$VCSH_COMMAND: please specify a filename" 1
 	[ -n "$3" ] && fatal "$VCSH_COMMAND: too many parameters" 1
