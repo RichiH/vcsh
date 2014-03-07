@@ -395,7 +395,7 @@ Grab my myrepos config. see below for details on how I set this up
     ln -s ../available.d/* .
 
 
-`myrepos` is used to actually retrieve configs, etc
+[myrepos][myrepos] is used to actually retrieve configs, etc.
 
     ~ % cat ~/.mrconfig
     [DEFAULT]
