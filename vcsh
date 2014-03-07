@@ -62,6 +62,7 @@ source_all() {
 # Read configuration files if there are any
 [ -r "/etc/vcsh/config" ]             && . "/etc/vcsh/config"
 [ -r "$XDG_CONFIG_HOME/vcsh/config" ] && . "$XDG_CONFIG_HOME/vcsh/config"
+[ -r ".config/vcsh/config" ]          && . ".config/vcsh/config"
 if [ -n "$VCSH_OPTION_CONFIG" ]; then
 	# Source $VCSH_OPTION_CONFIG if it can be read and is in $PWD of $PATH
 	if [ -r "$VCSH_OPTION_CONFIG" ]; then
