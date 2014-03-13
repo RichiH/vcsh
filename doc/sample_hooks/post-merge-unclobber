@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# This finds objects that the pre-merge script moved out of the way to
+# avoid conflicts when running `vcsh clone` and moves them back to their
+# original places. The result is that the Git repository gets checked out
+# without error and the pre-existing files end up back in the working
+# directory. Git and thus vcsh now see these as un-staged changes to the
+# working branch and you can deal with them as usual.
+
+find . -name '*.vcsh-unclobber' -execdir rename .vcsh-unclobber '' {} \;

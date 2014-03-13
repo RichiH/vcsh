@@ -15,8 +15,12 @@
 # This should always be the first line of code to facilitate debugging
 [ -n "$VCSH_DEBUG" ] && set -vx
 
+
+# If '.git-HEAD' is appended to the version, you are seeing an unreleased
+# version of vcsh; the master branch is supposed to be clean at all times
+# so you can most likely just use it nonetheless
+VERSION='1.20140313'
 SELF=$(basename $0)
-VERSION='1.20131229'
 
 fatal() {
 	echo "$SELF: fatal: $1" >&2
@@ -70,9 +74,10 @@ fi
 
 # Read defaults
 : ${VCSH_REPO_D:=$XDG_CONFIG_HOME/vcsh/repo.d}
-: ${VCSH_HOOK_D:=$XDH_CONFIG_HOME/vcsh/hooks-enabled}
+: ${VCSH_HOOK_D:=$XDG_CONFIG_HOME/vcsh/hooks-enabled}
 : ${VCSH_BASE:=$HOME}
 : ${VCSH_GITIGNORE:=exact}
+: ${VCSH_GITATTRIBUTES:=none}
 : ${VCSH_WORKTREE:=absolute}
 
 if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xnone' ] && [ ! "x$VCSH_GITIGNORE" = 'xrecursive' ]; then
@@ -148,15 +153,17 @@ clone() {
 		exit
 	fi
 	git fetch
-	for object in $(git ls-tree -r origin/master | awk '{print $4}'); do
+	hook pre-merge
+	git ls-tree -r --name-only origin/master | (while read object; do
 		[ -e "$object" ] &&
 			error "'$object' exists." &&
 			VCSH_CONFLICT=1
 	done
-	[ "$VCSH_CONFLICT" = '1' ] &&
+	[ "$VCSH_CONFLICT" = '1' ]) &&
 		fatal "will stop after fetching and not try to merge!
   Once this situation has been resolved, run 'vcsh run $VCSH_REPO_NAME git pull' to finish cloning." 17
 	git merge origin/master
+	hook post-merge
 	hook post-clone
 	retire
 	hook post-clone-retired
@@ -169,6 +176,7 @@ commit() {
 		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 		use
 		git commit --untracked-files=no --quiet
+		VCSH_COMMAND_RETURN_CODE=$?
 		echo
 	done
 	hook post-commit
@@ -217,7 +225,7 @@ init() {
 	[ ! -e "$GIT_DIR" ] || fatal "'$GIT_DIR' exists" 10
 	mkdir -p "$VCSH_BASE" || fatal "could not create '$VCSH_BASE'" 50
 	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
-	git init
+	git init --shared=0600
 	upgrade
 	hook post-init
 }
@@ -251,6 +259,7 @@ pull() {
 		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 		use
 		git pull
+		VCSH_COMMAND_RETURN_CODE=$?
 		echo
 	done
 	hook post-pull
@@ -263,6 +272,7 @@ push() {
 		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 		use
 		git push
+		VCSH_COMMAND_RETURN_CODE=$?
 		echo
 	done
 	hook post-push
@@ -289,6 +299,7 @@ run() {
 	hook pre-run
 	use
 	"$@"
+	VCSH_COMMAND_RETURN_CODE=$?
 	hook post-run
 }
 
@@ -297,12 +308,14 @@ status() {
 		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 		use
 		git status --short --untracked-files='no'
+		VCSH_COMMAND_RETURN_CODE=$?
 	else
 		for VCSH_REPO_NAME in $(list); do
 			echo "$VCSH_REPO_NAME:"
 			export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 			use
 			git status --short --untracked-files='no'
+			VCSH_COMMAND_RETURN_CODE=$?
 			echo
 		done
 	fi
@@ -322,9 +335,11 @@ upgrade() {
 		git config core.worktree "$VCSH_BASE"
 	fi
 	[ ! "x$VCSH_GITIGNORE" = 'xnone' ] && git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
-	git config vcsh.vcsh         'true'
+	[ ! "x$VCSH_GITATTRIBUTES" = 'xnone' ] && git config core.attributesfile ".gitattributes.d/$VCSH_REPO_NAME"
+	git config vcsh.vcsh 'true'
 	use
 	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME"
+	[ -e "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME"
 	hook post-upgrade
 }
 
@@ -350,6 +365,8 @@ write_gitignore() {
 
 	use
 	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
+	OLDIFS="$IFS"
+	IFS=$(printf '\n\t')
 	gitignores=$(for file in $(git ls-files); do
 		while true; do
 			echo $file; new="${file%/*}"
@@ -370,6 +387,7 @@ write_gitignore() {
 			{ echo "$gitignore/*" | sed 's@^@!/@' >> "$tempfile" || fatal "could not write to '$tempfile'" 57; }
 		fi
 	done
+	IFS="$OLDIFS"
 	if diff -N "$tempfile" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" > /dev/null; then
 		rm -f "$tempfile" || error "could not delete '$tempfile'"
 		exit
@@ -383,7 +401,7 @@ write_gitignore() {
 		fatal "could not move '$tempfile' to '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME'" 53
 }
 
-debug `git version`
+debug $(git version)
 
 if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xnone' ] && [ ! "x$VCSH_GITIGNORE" = 'xrecursive' ]; then
 	fatal "'\$VCSH_GITIGNORE' must equal 'exact', 'none', or 'recursive'" 1
@@ -412,7 +430,7 @@ esac
 if [ "$VCSH_COMMAND" = 'clone' ]; then
 	[ -z "$2" ] && fatal "$VCSH_COMMAND: please specify a remote" 1
 	GIT_REMOTE="$2"
-	[ -n "$3" ] && VCSH_REPO_NAME="$3" || VCSH_REPO_NAME=$(basename "$GIT_REMOTE" .git)
+	[ -n "$3" ] && VCSH_REPO_NAME="$3" || VCSH_REPO_NAME=$(basename "${GIT_REMOTE#*:}" .git)
 	[ -z "$VCSH_REPO_NAME" ] && fatal "$VCSH_COMMAND: could not determine repository name" 1
 	export VCSH_REPO_NAME
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
@@ -486,6 +504,7 @@ check_dir() {
 
 check_dir "$VCSH_REPO_D"
 [ ! "x$VCSH_GITIGNORE" = 'xnone' ] && check_dir "$VCSH_BASE/.gitignore.d"
+[ ! "x$VCSH_GITATTRIBUTES" = 'xnone' ] && check_dir "$VCSH_BASE/.gitattributes.d"
 
 verbose "$VCSH_COMMAND begin"
 export VCSH_COMMAND=$(echo $VCSH_COMMAND | sed 's/-/_/g')
@@ -493,3 +512,4 @@ hook pre-command
 $VCSH_COMMAND "$@"
 hook post-command
 verbose "$VCSH_COMMAND end, exiting"
+exit $VCSH_COMMAND_RETURN_CODE

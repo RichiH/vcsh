@@ -6,7 +6,7 @@ RONN ?= ronn
 
 self=vcsh
 manpages=$(self).1
-all=test manpages
+all=test
 
 all: $(all)
 
