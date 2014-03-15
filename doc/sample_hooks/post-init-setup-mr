@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# This sets up your new repos with mr.
+
+cat > $HOME/.config/mr/available.d/$VCSH_DIRECTORY.vcsh << EOF
+[\$HOME/.config/vcsh/repo.d/$VCSH_DIRECTORY.git]
+checkout = vcsh clone $GITURL/dotfiles/$VCSH_DIRECTORY.git
+EOF
+
+ln -s $HOME/.config/mr/available.d/$VCSH_DIRECTORY.vcsh $HOME/.config/mr/config.d/
