@@ -3,15 +3,15 @@ vcsh - Version Control System for $HOME - multiple Git repositories in $HOME
 
 # Index
 
-1. [30 second howto](#30-second-howto)
+1. [30 Second How-to](#30-second-how-to)
 2. [Introduction](#introduction)
-3. [Usage Exmaples](#usage-examples)
+3. [Usage Examples](#usage-examples)
 4. [Overview](#overview)
 5. [Getting Started](#getting-started)
 6. [Contact](#contact)
 
 
-# 30 second howto
+# 30 Second How-to
 
 While it may appear that there's an overwhelming amount of documentation and
 while the explanation of the concepts behind `vcsh` needs to touch a few gory
