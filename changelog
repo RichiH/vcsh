@@ -1,3 +1,16 @@
+2014-03-13  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20140313 -- the "Git won a prize" edition
+	* Initialize repos with --shared=0600
+	* Fix cloning from some spefically-named remotes
+	* Support custom gitattribute files
+	* Support filenames with whitespace in gitignores
+	* Pass out git exit codes
+	* Switch to static, pre-built manpage
+	* Improve documentation
+	* Use more portable find(1) syntax
+	* Various minor improvements
+
 2013-12-29  Richard Hartmann <richih.mailinglist@gmail.com>
 
 	* Release 1.20131229

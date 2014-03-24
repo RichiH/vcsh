@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "VCSH" "1" "February 2014" "" ""
+.TH "VCSH" "1" "March 2014" "" ""
 .
 .SH "NAME"
 \fBvcsh\fR \- Version Control System for $HOME \- multiple Git repositories in $HOME
@@ -211,6 +211,19 @@ Please note that those files are sourced\. Any and all commands will be executed
 .
 .P
 Interesting knobs you can turn:
+.
+.TP
+\fI$VCSH_GITATTRIBUTES\fR
+Can be \fInone\fR, or any other value\.
+.
+.IP
+\fInone\fR will not maintain Git attributes in a special location\.
+.
+.IP
+If set to any other value, repo\-specific gitattributes files will be maintained\.
+.
+.IP
+Defaults to \fInone\fR\.
 .
 .TP
 \fI$VCSH_GITIGNORE\fR
