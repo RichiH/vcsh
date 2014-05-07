@@ -244,12 +244,14 @@ get_files() {
 list_tracked() {
 	for VCSH_REPO_NAME in $(list); do
 		get_files
-	done | sort -u
+	done | sed "s,^,$(printf '%s\n' "$VCSH_BASE/" | \
+	    sed 's/[,\&]/\\&/g')," | sort -u
 }
 
 list_tracked_by() {
 	use
-	git ls-files | sort -u
+	git ls-files | sed "s,^,$(printf '%s\n' "$VCSH_BASE/" | \
+	    sed 's/[,\&]/\\&/g')," | sort -u
 }
 
 pull() {
