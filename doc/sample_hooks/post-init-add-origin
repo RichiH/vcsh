@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# This adds a remote origin at $GITURL/dotfiles/$VCSH_DIRECTORY which
+# is helpful for creating new dotfile repositories that you plan to
+# store on (e.g.) Github.
+#
+# You must set $GITURL in order to use this hook. For example, add the
+# following to your .bashrc (or equivalent for your shell), replacing
+# YOURUSERNAME with your github username:
+#
+# export GITURL="git@github.com:YOURUSERNAME"
+
+if [ -z $GITURL ]; then
+    echo "\$GITURL is not set; please see post-init-add-origin hook"
+    exit 1;
+fi
+
+vcsh $VCSH_DIRECTORY remote add origin $GITURL/dotfiles/$VCSH_DIRECTORY
