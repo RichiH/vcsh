@@ -314,6 +314,12 @@ status() {
 			echo "$VCSH_REPO_NAME:"
 			GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 			use
+			# TODO repos without remote tracking branch error out
+			remote_tracking_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
+			commits_behind=$(git log ..${remote_tracking_branch} --oneline | wc -l)
+			commits_ahead=$(git log ${remote_tracking_branch}.. --oneline | wc -l)
+			[ ${commits_behind} -ne 0 ] && echo "Behind $remote_tracking_branch by $commits_behind commits"
+			[ ${commits_ahead} -ne 0 ] && echo "Ahead of $remote_tracking_branch by $commits_ahead commits"
 			git status --short --untracked-files='no'
 			VCSH_COMMAND_RETURN_CODE=$?
 			echo
