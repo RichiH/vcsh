@@ -255,7 +255,7 @@ list_tracked_by() {
 pull() {
 	hook pre-pull
 	for VCSH_REPO_NAME in $(list); do
-		printf "$VCSH_REPO_NAME: "
+		printf '%s: ' "$VCSH_REPO_NAME"
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
 		git pull
@@ -268,7 +268,7 @@ pull() {
 push() {
 	hook pre-push
 	for VCSH_REPO_NAME in $(list); do
-		printf "$VCSH_REPO_NAME: "
+		printf '%s: ' "$VCSH_REPO_NAME"
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
 		git push
