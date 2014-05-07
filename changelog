@@ -1,3 +1,10 @@
+2014-05-07  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Increase portability
+	* Improve hooks
+	* Improve docs
+	* Various minor improvements
+
 2014-03-13  Richard Hartmann <richih.mailinglist@gmail.com>
 
 	* Release 1.20140313 -- the "Git won a prize" edition
