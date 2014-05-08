@@ -171,6 +171,15 @@ executed in the context of your shell.
 
 Interesting knobs you can turn:
 
+* <$VCSH_GITATTRIBUTES>:
+  Can be <none>, or any other value.
+
+  <none> will not maintain Git attributes in a special location.
+
+  If set to any other value, repo-specific gitattributes files will be maintained.
+
+  Defaults to <none>.
+
 * <$VCSH_GITIGNORE>:
   Can be <exact>, <none>, or <recursive>.
 
