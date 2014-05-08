@@ -89,6 +89,7 @@ function _vcsh () {
 
 	subcommands=(
 		"clone:clone an existing repository"
+		"commit:commit in all repositories"
 		"delete:delete an existing repository"
 		"enter:enter repository; spawn new <\$SHELL>"
 		"help:display help"
@@ -97,8 +98,10 @@ function _vcsh () {
 		"list-tracked:list all files tracked by vcsh"
 		"list-tracked-by:list files tracked by a repository"
 		"pull:pull from all vcsh remotes"
+		"push:push to vcsh remotes"
 		"rename:rename a repository"
 		"run:run command with <\$GIT_DIR> and <\$GIT_WORK_TREE> set"
+		"status:show statuses of all/one vcsh repositories"
 		"upgrade:upgrade repository to currently recommended settings"
 		"version:print version information"
 		"which:find <substring> in name of any tracked file"
