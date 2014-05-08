@@ -1,3 +1,7 @@
+2014-05-08  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Revert "Introduce static manpage as part of normal repo"
+
 2014-05-07  Richard Hartmann <richih.mailinglist@gmail.com>
 
 	* Increase portability
