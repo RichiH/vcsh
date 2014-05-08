@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# This code does amost exactly what the native vcsh sanity checking code
+# does except that on finding a potential merge conflict, it moves existing
+# files out of the way temporarily. Merging (part of `vcsh clone`) happens
+# cleanly, and a post-merge hook can be used to figure out what to do with
+# the now-renamed files.
+
+for object in $(git ls-tree -r origin/master | awk '{print $4}'); do
+	[ -e "$object" ] && mv "$object" "$object.vcsh-unclobber" 
+done

@@ -1,3 +1,4 @@
 *.patch
 *.swp
+.swp
 *.bak
