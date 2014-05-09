@@ -1,12 +1,15 @@
+%global commit f7ce400c37d3308122195fd70fa79dff7aac00e3
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
+
 Name:           vcsh
-Version:        1.20131229
+Version:        1.20140508
 Release:        1%{?dist}
 Summary:        Version Control System for $HOME
 Group:          Development/Tools
 
 License:        GPLv2+
 URL:            https://github.com/RichiH/vcsh
-Source0:        https://github.com/RichiH/vcsh/archive/v%{version}.tar.gz
+Source0:        https://github.com/RichiH/vcsh/archive/%{commit}/%{name}-%{version}-%{shortcommit}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  rubygem-ronn
@@ -21,7 +24,7 @@ configs you want to use on which machine.
 
 
 %prep
-%setup -q
+%setup -qn %{name}-%{commit}
 
 
 %build
@@ -41,6 +44,10 @@ make %{?_smp_mflags} all=manpages
 
 
 %changelog
+* Fri May 09 2014 Dridi Boukelmoune <dridi.boukelmoune@gmail.com> - 1.20140508-1
+- Bumped version to 1.20140508
+- Switched to a commit tarball from github
+
 * Sun Dec 15 2013 Dridi Boukelmoune <dridi.boukelmoune@gmail.com> - 1.20131229-1
 - Bumped version to 1.20131229
 
