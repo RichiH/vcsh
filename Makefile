@@ -47,4 +47,4 @@ test:
 	@if which git > /dev/null ; then :; else echo "'git' not found, exiting..."; exit 1; fi
 
 moo:
-	@if [ -x /usr/games/cowsay ]; then /usr/games/cowsay "I hope you're happy now..."; fi
+	@ which cowsay >/dev/null 2>&1 && cowsay "I hope you're happy now..."
