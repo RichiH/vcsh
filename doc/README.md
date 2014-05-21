@@ -128,7 +128,7 @@ of myrepos is technically optional, it will be an integral part of the
 proposed system that follows. For instance, you can use
 [myrepos][myrepos] to track repositories in home such as `.emacs.d`,
 which `mr` can clone and update for you automatically. To do this,
-just add a `mr` configuration file to `availabile.d` with a `checkout`
+just add a `mr` configuration file to `available.d` with a `checkout`
 command to clone the repo, and set the [title] to the desired
 location, e.g. `$HOME/.emacs.d`. Try the `mr register` command in an
 existing repository, then view `~/.mrconfig` for an example.
