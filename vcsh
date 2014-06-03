@@ -196,7 +196,7 @@ To continue, type 'Yes, do as I say'"
 	read answer
 	[ "x$answer" = 'xYes, do as I say' ] || exit 16
 	for file in $files; do
-		rm -f $file || info "could not delete '$file', continuing with deletion"
+		rm -rf $file || info "could not delete '$file', continuing with deletion"
 	done
 	rm -rf "$GIT_DIR" || error "could not delete '$GIT_DIR'"
 }
