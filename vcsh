@@ -110,6 +110,7 @@ help() {
    list-tracked-by \\
         <repo>          List files tracked by a repository
    pull                 Pull from all vcsh remotes
+   purge <repo>         Purge an existing repository; including subdirectories
    push                 Push to vcsh remotes
    rename <repo> \\
           <newname>     Rename repository
@@ -183,22 +184,9 @@ commit() {
 }
 
 delete() {
-	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
-	use
-	info "This operation WILL DESTROY DATA!"
-	files=$(git ls-files)
-	echo "These files will be deleted:
-
-$files
-
-AGAIN, THIS WILL DELETE YOUR DATA!
-To continue, type 'Yes, do as I say'"
-	read answer
-	[ "x$answer" = 'xYes, do as I say' ] || exit 16
-	for file in $files; do
-		rm -f $file || info "could not delete '$file', continuing with deletion"
-	done
-	rm -rf "$GIT_DIR" || error "could not delete '$GIT_DIR'"
+	export VCSH_REMOVE_PARAMETER='-f'
+	export VCSH_REMOVE_WARNING='Again, this will delete your data!'
+	remove
 }
 
 enter() {
@@ -267,6 +255,15 @@ pull() {
 	hook post-pull
 }
 
+purge() {
+	export VCSH_REMOVE_PARAMETER='-rf'
+	export VCSH_REMOVE_WARNING="Again, this will delete your data INCLUDING UNTRACKED SUBDIRECTORIES!
+
+If you do not want that, use `$SELF delete`."
+	export VCSH_REMOVE_PURGE='1'
+	remove
+}
+
 push() {
 	hook pre-push
 	for VCSH_REPO_NAME in $(list); do
@@ -282,6 +279,27 @@ push() {
 
 retire() {
 	unset VCSH_DIRECTORY
+}
+
+remove() {
+	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
+	use
+	info "This operation WILL DESTROY DATA!"
+	files=$(git ls-files)
+	echo "These files will be deleted:
+
+$files
+
+$VCSH_REMOVE_WARNING
+
+To continue, type 'Yes, do as I say'"
+	read answer
+	[ "x$answer" = 'xYes, do as I say' ] || exit 16
+	for file in $files; do
+		[ -e "$file" ] && rm "$VCSH_REMOVE_PARAMETER" "$file" || info "could not delete '$file', continuing with deletion"
+		[ -n "$VCSH_REMOVE_PURGE" ] [ -e "$file" ] && rmdir -p "$file"
+	done
+	rm -rf "$GIT_DIR" || error "could not delete '$GIT_DIR'"
 }
 
 rename() {
@@ -448,6 +466,7 @@ elif [ x"$VCSH_COMMAND" = x'delete' ]           ||
      [ x"$VCSH_COMMAND" = x'enter' ]            ||
      [ x"$VCSH_COMMAND" = x'init' ]             ||
      [ x"$VCSH_COMMAND" = x'list-tracked-by' ]  ||
+     [ x"$VCSH_COMMAND" = x'purge' ]            ||
      [ x"$VCSH_COMMAND" = x'rename' ]           ||
      [ x"$VCSH_COMMAND" = x'run' ]              ||
      [ x"$VCSH_COMMAND" = x'upgrade' ]          ||
