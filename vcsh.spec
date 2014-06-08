@@ -3,7 +3,7 @@
 
 Name:           vcsh
 Version:        1.20140508
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Version Control System for $HOME
 Group:          Development/Tools
 
@@ -44,6 +44,9 @@ make %{?_smp_mflags} all=manpages
 
 
 %changelog
+* Sun Jun 08 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.20140508-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Fri May 09 2014 Dridi Boukelmoune <dridi.boukelmoune@gmail.com> - 1.20140508-1
 - Bumped version to 1.20140508
 - Switched to a commit tarball from github
