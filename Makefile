@@ -1,10 +1,11 @@
+self=vcsh
+version=20131214
 PREFIX=/usr
 DOCDIR_PREFIX=$(PREFIX)/share/doc
-DOCDIR=$(DOCDIR_PREFIX)/$(self)
-ZSHDIR=$(PREFIX)/share/zsh/vendor-completions
+DOCDIR=$(DOCDIR_PREFIX)/$(self)-$(version)
+ZSHDIR=$(PREFIX)/share/zsh/site-functions
 RONN ?= ronn
 
-self=vcsh
 manpages=$(self).1
 all=test manpages
 
