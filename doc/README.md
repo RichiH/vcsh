@@ -117,7 +117,7 @@ your `$HOME`, you will end up with a lot of repositories very quickly.
 `vcsh` was designed with [myrepos][myrepos], a tool to manage Multiple
 Repositories, in mind and the two integrate very nicely. The myrepos tool
 (`mr`) has native support for `vcsh` repositories and the configuration for
-myrepos is just another set of files that you cat track with `vcsh` like any
+myrepos is just another set of files that you can track with `vcsh` like any
 other. This makes setting up any new machine a breeze. It can take literally
 less than five minutes to go from standard installation to fully set up system.
 
