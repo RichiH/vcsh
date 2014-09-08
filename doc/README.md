@@ -220,7 +220,7 @@ this document (see above).
 vcsh will check if any file it would want to create exists. If it exists, vcsh
 will throw a warning and exit. Move away your old config and try again.
 Optionally, merge your local and your global configs afterwards and push with
-`vcsh foo push`.
+`vcsh repo_name push`.
 
 ## Moving into a New Host
 
@@ -351,14 +351,15 @@ Now, it's time to edit the template config and fill it with your own remotes:
 
 And then create your own stuff:
 
-    vcsh init foo
-    vcsh foo add bar baz quux
-    vcsh foo remote add origin git://quuux
-    vcsh foo commit
-    vcsh foo push
 
-    cp $XDG_CONFIG_HOME/mr/available.d/mr.vcsh $XDG_CONFIG_HOME/mr/available.d/foo.vcsh
-    vim $XDG_CONFIG_HOME/mr/available.d/foo.vcsh # add your own repo
+    vcsh init repo_name
+    vcsh repo_name add bar baz quux
+    vcsh repo_name remote add origin git://quuux
+    vcsh repo_name commit
+    vcsh repo_name push
+
+    cp $XDG_CONFIG_HOME/mr/available.d/mr.vcsh $XDG_CONFIG_HOME/mr/available.d/repo_name.vcsh
+    vim $XDG_CONFIG_HOME/mr/available.d/repo_name.vcsh # add your own repo
 
 Done!
 
@@ -427,9 +428,9 @@ Neat.
 After you have made some changes, for which you would normally use `git add`
 and `git commit`, use the vcsh wrapper (like above):
 
-    vcsh foo add bar baz quux
-    vcsh foo commit
-    vcsh foo push
+    vcsh repo_name add bar baz quux
+    vcsh repo_name commit
+    vcsh repo_name push
 
 ### Using vcsh without myrepos
 
