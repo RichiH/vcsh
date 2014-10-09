@@ -1,3 +1,12 @@
+vcsh (1.20141009-1) unstable; urgency=medium
+
+  * New upstream release
+    + Release 1.20141009
+    + Display full paths in list-tracked*
+    + Lots of help improvements
+
+ -- Richard Hartmann <richih@debian.org>  Thu, 09 Oct 2014 23:27:19 +0200
+
 vcsh (1.20140508-1) unstable; urgency=medium
 
   * New upstream release
