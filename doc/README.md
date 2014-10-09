@@ -117,7 +117,7 @@ your `$HOME`, you will end up with a lot of repositories very quickly.
 `vcsh` was designed with [myrepos][myrepos], a tool to manage Multiple
 Repositories, in mind and the two integrate very nicely. The myrepos tool
 (`mr`) has native support for `vcsh` repositories and the configuration for
-myrepos is just another set of files that you cat track with `vcsh` like any
+myrepos is just another set of files that you can track with `vcsh` like any
 other. This makes setting up any new machine a breeze. It can take literally
 less than five minutes to go from standard installation to fully set up system.
 
@@ -128,7 +128,7 @@ of myrepos is technically optional, it will be an integral part of the
 proposed system that follows. For instance, you can use
 [myrepos][myrepos] to track repositories in home such as `.emacs.d`,
 which `mr` can clone and update for you automatically. To do this,
-just add a `mr` configuration file to `availabile.d` with a `checkout`
+just add a `mr` configuration file to `available.d` with a `checkout`
 command to clone the repo, and set the [title] to the desired
 location, e.g. `$HOME/.emacs.d`. Try the `mr register` command in an
 existing repository, then view `~/.mrconfig` for an example.
@@ -220,7 +220,7 @@ this document (see above).
 vcsh will check if any file it would want to create exists. If it exists, vcsh
 will throw a warning and exit. Move away your old config and try again.
 Optionally, merge your local and your global configs afterwards and push with
-`vcsh foo push`.
+`vcsh repo_name push`.
 
 ## Moving into a New Host
 
@@ -351,14 +351,15 @@ Now, it's time to edit the template config and fill it with your own remotes:
 
 And then create your own stuff:
 
-    vcsh init foo
-    vcsh foo add bar baz quux
-    vcsh foo remote add origin git://quuux
-    vcsh foo commit
-    vcsh foo push
 
-    cp $XDG_CONFIG_HOME/mr/available.d/mr.vcsh $XDG_CONFIG_HOME/mr/available.d/foo.vcsh
-    vim $XDG_CONFIG_HOME/mr/available.d/foo.vcsh # add your own repo
+    vcsh init repo_name
+    vcsh repo_name add bar baz quux
+    vcsh repo_name remote add origin git://quuux
+    vcsh repo_name commit
+    vcsh repo_name push
+
+    cp $XDG_CONFIG_HOME/mr/available.d/mr.vcsh $XDG_CONFIG_HOME/mr/available.d/repo_name.vcsh
+    vim $XDG_CONFIG_HOME/mr/available.d/repo_name.vcsh # add your own repo
 
 Done!
 
@@ -427,9 +428,9 @@ Neat.
 After you have made some changes, for which you would normally use `git add`
 and `git commit`, use the vcsh wrapper (like above):
 
-    vcsh foo add bar baz quux
-    vcsh foo commit
-    vcsh foo push
+    vcsh repo_name add bar baz quux
+    vcsh repo_name commit
+    vcsh repo_name push
 
 ### Using vcsh without myrepos
 

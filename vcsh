@@ -19,7 +19,7 @@
 # If '.git-HEAD' is appended to the version, you are seeing an unreleased
 # version of vcsh; the master branch is supposed to be clean at all times
 # so you can most likely just use it nonetheless
-VERSION='1.20140508'
+VERSION='1.20141009'
 SELF=$(basename $0)
 
 fatal() {
@@ -161,7 +161,7 @@ clone() {
 	done
 	[ x"$VCSH_CONFLICT" = x'1' ]) &&
 		fatal "will stop after fetching and not try to merge!
-  Once this situation has been resolved, run 'vcsh run $VCSH_REPO_NAME git pull' to finish cloning." 17
+  Once this situation has been resolved, run 'vcsh $VCSH_REPO_NAME pull' to finish cloning." 17
 	git merge origin/master
 	hook post-merge
 	hook post-clone
@@ -244,12 +244,14 @@ get_files() {
 list_tracked() {
 	for VCSH_REPO_NAME in $(list); do
 		get_files
-	done | sort -u
+	done | sed "s,^,$(printf '%s\n' "$VCSH_BASE/" | \
+	    sed 's/[,\&]/\\&/g')," | sort -u
 }
 
 list_tracked_by() {
 	use
-	git ls-files | sort -u
+	git ls-files | sed "s,^,$(printf '%s\n' "$VCSH_BASE/" | \
+	    sed 's/[,\&]/\\&/g')," | sort -u
 }
 
 pull() {
