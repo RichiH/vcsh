@@ -1,3 +1,11 @@
+vcsh (1.201410XX-1) UNRELEASED; urgency=medium
+
+  * 
+  * Packaging changes
+    + Bump Standards-Version to 3.9.5 (no changes)
+
+ -- Richard Hartmann <richih@debian.org>  Sun, 19 Oct 2014 08:18:59 +0200
+
 vcsh (1.20141009-1) unstable; urgency=medium
 
   * New upstream release
