@@ -287,16 +287,34 @@ retire() {
 list_untracked() {
 	temp_file_others=$(mktemp) || fatal 'Could not create temp file'
 	temp_file_untracked=$(mktemp) || fatal 'Could not create temp file'
+	temp_file_untracked_copy=$(mktemp) || fatal 'Could not create temp file'
+	
+	# create dummy git repo
+	temp_repo=$(mktemp -d)
+	(
+	cd $temp_repo
+	git init -q
+	mktemp -p $(pwd) > /dev/null
+	git add .
+	git commit -q -m "dummy"
+	)
+	
+	export GIT_DIR=$temp_repo/.git
+	git ls-files --others --directory | sort -u > $temp_file_untracked
+	
 	for VCSH_REPO_NAME in $(list); do
-		[ -n $ran_once ] && foo="$(comm -12 --nocheck-order $temp_file_others $temp_file_untracked)"
-		echo "$foo" > $temp_file_untracked
-#		[ -n $ran_once ] && files_untracked=$(printf '%s\n' "$files_untracked" | grep -Fx "$files_other")
 		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
-		git ls-files --others | sort -u > $temp_file_others
-		[ -z "$ran_once" ] && { ran_once=1; cp $temp_file_others $temp_file_untracked; }
+		git ls-files --others --directory | (
+			while read line; do
+				echo "$line"
+				printf '%s/\n' "$(echo "$line" | cut -d'/' -f1)"
+			done
+			) | sort -u > $temp_file_others
+		cp $temp_file_untracked $temp_file_untracked_copy
+		comm -12 --nocheck-order $temp_file_others $temp_file_untracked_copy > $temp_file_untracked
 	done
 	cat $temp_file_untracked
-	rm $temp_file_others $temp_file_untracked || fatal 'Could not delete temp file'
+	rm -r $temp_file_others $temp_file_untracked $temp_file_untracked_copy $temp_repo || fatal 'Could not delete temp file'
 }
 
 rename() {
