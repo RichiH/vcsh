@@ -254,6 +254,17 @@ Available hooks are <pre-clone>, <post-clone>, <post-clone-retired>,
 If you need more, vcsh is trivial to patch, but please let upstream know so
 we can ship them by default.
 
+## OVERLAY SYSTEM
+
+`vcsh` also provides an overlay system. Similar to hooks, the recommended
+locations are <$XDG_CONFIG_HOME/vcsh/overlays-available> and
+<$XDG_CONFIG_HOME/vcsh/overlays-enabled>.
+
+Overlays follow the same rules as hooks and you are free to overwrite any
+and all functions. As the overlays will be sourced and you are replacing
+arbitrary functions, any and all features may stop working, or you may even
+lose data. You have been warned.
+
 ## DETAILED HOWTO AND FURTHER READING
 
 Manpages are often short and sometimes useless to glean best practices from.

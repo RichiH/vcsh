@@ -75,6 +75,7 @@ fi
 # Read defaults
 : ${VCSH_REPO_D:="$XDG_CONFIG_HOME/vcsh/repo.d"}
 : ${VCSH_HOOK_D:="$XDG_CONFIG_HOME/vcsh/hooks-enabled"}
+: ${VCSH_OVERLAY_D:="$XDG_CONFIG_HOME/vcsh/overlays-enabled"}
 : ${VCSH_BASE:="$HOME"}
 : ${VCSH_GITIGNORE:=exact}
 : ${VCSH_GITATTRIBUTES:=none}
@@ -511,6 +512,14 @@ check_dir "$VCSH_REPO_D"
 
 verbose "$VCSH_COMMAND begin"
 VCSH_COMMAND=$(echo "$VCSH_COMMAND" | sed 's/-/_/g'); export VCSH_COMMAND
+
+# source overlay functions
+for overlay in "$VCSH_OVERLAY_D/$VCSH_COMMAND"* "$VCSH_OVERLAY_D/$VCSH_REPO_NAME.$VCSH_COMMAND"*; do
+	[ -r "$overlay" ] || continue
+	info "sourcing '$overlay'"
+	. "$overlay"
+done
+
 hook pre-command
 $VCSH_COMMAND "$@"
 hook post-command
