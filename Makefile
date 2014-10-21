@@ -1,4 +1,4 @@
-PREFIX=/usr
+PREFIX?=/usr
 DOCDIR_PREFIX=$(PREFIX)/share/doc
 DOCDIR=$(DOCDIR_PREFIX)/$(self)
 ZSHDIR=$(PREFIX)/share/zsh/vendor-completions
