@@ -297,13 +297,13 @@ list_untracked() {
 	
 	# create dummy git repo
 	temp_repo=$(mktemp -d) || fatal 'Could not create temp repo'
-	(
+
 	cd $temp_repo || fatal 'Could not cd into temp repo'
 	git init -q
 	mktemp -q -p $(pwd) > /dev/null || fatal 'Could not create dummy file'
 	git add .
 	git commit -q -m "dummy"
-	)
+	cd - > /dev/null 2>&1 || fatal 'Could not cd back'
 	
 	export GIT_DIR=$temp_repo/.git
 	git ls-files --others --directory | sort -u > $temp_file_untracked
