@@ -284,7 +284,13 @@ retire() {
 	unset VCSH_DIRECTORY
 }
 
+command_exists() {
+	command -v "$1" >/dev/null 2>&1 || fatal "Could not find '$1' command"
+}
+
 list_untracked() {
+	command_exists comm
+
 	temp_file_others=$(mktemp) || fatal 'Could not create temp file'
 	temp_file_untracked=$(mktemp) || fatal 'Could not create temp file'
 	temp_file_untracked_copy=$(mktemp) || fatal 'Could not create temp file'
