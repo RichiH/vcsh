@@ -290,11 +290,11 @@ list_untracked() {
 	temp_file_untracked_copy=$(mktemp) || fatal 'Could not create temp file'
 	
 	# create dummy git repo
-	temp_repo=$(mktemp -d)
+	temp_repo=$(mktemp -d) || fatal 'Could not create temp repo'
 	(
-	cd $temp_repo
+	cd $temp_repo || fatal 'Could not cd into temp repo'
 	git init -q
-	mktemp -p $(pwd) > /dev/null
+	mktemp -q -p $(pwd) > /dev/null || fatal 'Could not create dummy file'
 	git add .
 	git commit -q -m "dummy"
 	)
@@ -310,7 +310,7 @@ list_untracked() {
 				printf '%s/\n' "$(echo "$line" | cut -d'/' -f1)"
 			done
 			) | sort -u > $temp_file_others
-		cp $temp_file_untracked $temp_file_untracked_copy
+		cp $temp_file_untracked $temp_file_untracked_copy || fatal 'Could not copy temp file'
 		comm -12 --nocheck-order $temp_file_others $temp_file_untracked_copy > $temp_file_untracked
 	done
 	cat $temp_file_untracked
