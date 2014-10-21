@@ -30,7 +30,7 @@ fatal() {
 # We need to run getops as soon as possible so we catch -d and other
 # options that will modify our behaviour.
 # Commands are handled at the end of this script.
-while getopts "c:dv" flag; do
+while getopts "c:dvr" flag; do
 	if [ x"$1" = x'-d' ] || [ x"$1" = x'--debug' ]; then
 		set -vx
 		VCSH_DEBUG=1
@@ -40,6 +40,8 @@ while getopts "c:dv" flag; do
 		VCSH_VERBOSE=1
 		echo "verbose mode on"
 		echo "$SELF $VERSION"
+	elif [ x"$1" = x'-r' ]; then
+		VCSH_OPTION_RECURSIVE=1
 	elif [ x"$1" = x'-c' ]; then
 		VCSH_OPTION_CONFIG=$OPTARG
 	fi
@@ -304,13 +306,15 @@ list_untracked() {
 	git add .
 	git commit -q -m "dummy"
 	cd - > /dev/null 2>&1 || fatal 'Could not cd back'
-	
+
+	[ -z "$VCSH_OPTION_RECURSIVE" ] && directory_opt="--directory"
+
 	export GIT_DIR=$temp_repo/.git
-	git ls-files --others --directory | sort -u > $temp_file_untracked
-	
+	git ls-files --others "$directory_opt" | sort -u > $temp_file_untracked
+
 	for VCSH_REPO_NAME in $(list); do
 		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
-		git ls-files --others --directory | (
+		git ls-files --others "$directory_opt" | (
 			while read line; do
 				echo "$line"
 				printf '%s/\n' "$(echo "$line" | cut -d'/' -f1)"
@@ -320,6 +324,8 @@ list_untracked() {
 		comm -12 --nocheck-order $temp_file_others $temp_file_untracked_copy > $temp_file_untracked
 	done
 	cat $temp_file_untracked
+	
+	unset directory_opt
 	rm -f $temp_file_others $temp_file_untracked $temp_file_untracked_copy || fatal 'Could not delete temp files'
 	rm -rf $temp_repo || fatal 'Could not delete temp repo'
 }
