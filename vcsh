@@ -293,9 +293,9 @@ command_exists() {
 list_untracked() {
 	command_exists comm
 
-	temp_file_others=$(mktemp) || fatal 'Could not create temp file'
-	temp_file_untracked=$(mktemp) || fatal 'Could not create temp file'
-	temp_file_untracked_copy=$(mktemp) || fatal 'Could not create temp file'
+	temp_file_others=$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX") || fatal 'Could not create temp file'
+	temp_file_untracked=$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX") || fatal 'Could not create temp file'
+	temp_file_untracked_copy=$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX") || fatal 'Could not create temp file'
 
 	[ -z "$VCSH_OPTION_RECURSIVE" ] && directory_opt="--directory"
 
