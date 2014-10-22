@@ -306,7 +306,7 @@ list_untracked() {
 		git ls-files --others "$directory_opt" | (
 			while read line; do
 				echo "$line"
-				directory_component="$(echo "$line" | cut -d'/' -f1)"
+				directory_component=${line%%/*}
 				[ -d "$directory_component" ] && printf '%s/\n' "$directory_component"
 			done
 			) | sort -u > $temp_file_others
