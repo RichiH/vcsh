@@ -296,38 +296,29 @@ list_untracked() {
 	temp_file_others=$(mktemp) || fatal 'Could not create temp file'
 	temp_file_untracked=$(mktemp) || fatal 'Could not create temp file'
 	temp_file_untracked_copy=$(mktemp) || fatal 'Could not create temp file'
-	
-	# create dummy git repo
-	temp_repo=$(mktemp -d) || fatal 'Could not create temp repo'
-
-	cd $temp_repo || fatal 'Could not cd into temp repo'
-	git init -q
-	mktemp -q -p $(pwd) > /dev/null || fatal 'Could not create dummy file'
-	git add .
-	git commit -q -m "dummy"
-	cd - > /dev/null 2>&1 || fatal 'Could not cd back'
 
 	[ -z "$VCSH_OPTION_RECURSIVE" ] && directory_opt="--directory"
-
-	export GIT_DIR=$temp_repo/.git
-	git ls-files --others "$directory_opt" | sort -u > $temp_file_untracked
 
 	for VCSH_REPO_NAME in $(list); do
 		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 		git ls-files --others "$directory_opt" | (
 			while read line; do
 				echo "$line"
-				printf '%s/\n' "$(echo "$line" | cut -d'/' -f1)"
+				directory_component="$(echo "$line" | cut -d'/' -f1)"
+				[ -d "$directory_component" ] && printf '%s/\n' "$directory_component"
 			done
 			) | sort -u > $temp_file_others
+		if [ -z "$ran_once" ]; then
+			ran_once=1
+			cp $temp_file_others $temp_file_untracked || fatal 'Could not copy temp file'
+		fi
 		cp $temp_file_untracked $temp_file_untracked_copy || fatal 'Could not copy temp file'
 		comm -12 --nocheck-order $temp_file_others $temp_file_untracked_copy > $temp_file_untracked
 	done
 	cat $temp_file_untracked
 	
-	unset directory_opt
+	unset directory_opt directory_component
 	rm -f $temp_file_others $temp_file_untracked $temp_file_untracked_copy || fatal 'Could not delete temp files'
-	rm -rf $temp_repo || fatal 'Could not delete temp repo'
 }
 
 rename() {
