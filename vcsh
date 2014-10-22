@@ -109,6 +109,7 @@ help() {
    list-tracked         List all files tracked by vcsh
    list-tracked-by \\
         <repo>          List files tracked by a repository
+   list-untracked       List all files not tracked by vcsh
    pull                 Pull from all vcsh remotes
    push                 Push to vcsh remotes
    rename <repo> \\
