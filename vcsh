@@ -100,7 +100,8 @@ help() {
    -v                   Enable verbose mode
 
    commands:
-   clone <remote> \\
+   clone [-b <branch>] \\
+         <remote> \\
          [<repo>]       Clone from an existing repository
    commit               Commit in all repositories
    delete <repo>        Delete an existing repository
@@ -498,6 +499,13 @@ case $VCSH_COMMAND in
 esac    
 
 if [ x"$VCSH_COMMAND" = x'clone' ]; then
+	if [ "$2" = -b ]; then
+		VCSH_BRANCH="$3"
+		shift
+		shift
+	else
+		VCSH_BRANCH=master
+	fi
 	[ -z "$2" ] && fatal "$VCSH_COMMAND: please specify a remote" 1
 	GIT_REMOTE="$2"
 	[ -n "$3" ] && VCSH_REPO_NAME=$3 || VCSH_REPO_NAME=$(basename "${GIT_REMOTE#*:}" .git)
