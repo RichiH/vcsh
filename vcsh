@@ -30,7 +30,7 @@ fatal() {
 # We need to run getops as soon as possible so we catch -d and other
 # options that will modify our behaviour.
 # Commands are handled at the end of this script.
-while getopts "c:dvr" flag; do
+while getopts "c:dv" flag; do
 	if [ x"$1" = x'-d' ] || [ x"$1" = x'--debug' ]; then
 		set -vx
 		VCSH_DEBUG=1
@@ -40,8 +40,6 @@ while getopts "c:dvr" flag; do
 		VCSH_VERBOSE=1
 		echo "verbose mode on"
 		echo "$SELF $VERSION"
-	elif [ x"$1" = x'-r' ]; then
-		VCSH_OPTION_RECURSIVE=1
 	elif [ x"$1" = x'-c' ]; then
 		VCSH_OPTION_CONFIG=$OPTARG
 	fi
@@ -293,7 +291,15 @@ list_untracked() {
 	temp_file_untracked=$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX") || fatal 'Could not create temp file'
 	temp_file_untracked_copy=$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX") || fatal 'Could not create temp file'
 
-	[ -z "$VCSH_OPTION_RECURSIVE" ] && directory_opt="--directory"
+	# Hack in support for `vcsh list-untracked -r`
+	directory_opt="--directory"
+	shift 1
+	while getopts "r" flag; do
+		if [ x"$1" = x'-r' ]; then
+			unset directory_opt
+		fi
+		shift 1
+	done
 
 	for VCSH_REPO_NAME in $(list); do
 		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
