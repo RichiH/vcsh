@@ -43,6 +43,10 @@ function _vcsh-list-tracked-by () {
 	(( CURRENT == 2 )) && __vcsh_repositories
 }
 
+function _vcsh-list-untracked () {
+	_nothing
+}
+
 function _vcsh-pull () {
 	_nothing
 }
@@ -64,6 +68,10 @@ function _vcsh-run () {
 		(( CURRENT -= 2 ))
 		_complete
 	fi
+}
+
+function _vcsh-status () {
+	(( CURRENT == 2 )) && __vcsh_repositories
 }
 
 function _vcsh-upgrade () {
@@ -97,6 +105,7 @@ function _vcsh () {
 		"list:list all local vcsh repositories"
 		"list-tracked:list all files tracked by vcsh"
 		"list-tracked-by:list files tracked by a repository"
+		"list-untracked:list all files not tracked by vcsh"
 		"pull:pull from all vcsh remotes"
 		"push:push to vcsh remotes"
 		"rename:rename a repository"

@@ -111,6 +111,8 @@ help() {
    list-tracked         List all files tracked by vcsh
    list-tracked-by \\
         <repo>          List files tracked by a repository
+   list-untracked \\
+        [<-r>] [<repo>] List all files not tracked by all or one repositories
    pull                 Pull from all vcsh remotes
    push                 Push to vcsh remotes
    rename <repo> \\
@@ -285,6 +287,55 @@ push() {
 
 retire() {
 	unset VCSH_DIRECTORY
+}
+
+list_untracked() {
+	command -v 'comm' >/dev/null 2>&1 || fatal "Could not find 'comm'"
+
+	temp_file_others=$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX") || fatal 'Could not create temp file'
+	temp_file_untracked=$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX") || fatal 'Could not create temp file'
+	temp_file_untracked_copy=$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX") || fatal 'Could not create temp file'
+
+	# Hack in support for `vcsh list-untracked -r`...
+	directory_opt="--directory"
+	shift 1
+	while getopts "r" flag; do
+		if [ x"$1" = x'-r' ]; then
+			unset directory_opt
+		fi
+		shift 1
+	done
+	# ...and parse for a potential parameter afterwards. As we shifted things out of $* in during getops, we need to look at $1
+	VCSH_REPO_NAME=$1; export VCSH_REPO_NAME
+
+	if [ -n "$VCSH_REPO_NAME" ]; then
+		list_untracked_helper $VCSH_REPO_NAME
+	else
+		for VCSH_REPO_NAME in $(list); do
+			list_untracked_helper $VCSH_REPO_NAME
+		done
+	fi
+	cat $temp_file_untracked
+
+	unset directory_opt directory_component
+	rm -f $temp_file_others $temp_file_untracked $temp_file_untracked_copy || fatal 'Could not delete temp files'
+}
+
+list_untracked_helper() {
+	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
+	git ls-files --others "$directory_opt" | (
+		while read line; do
+			echo "$line"
+			directory_component=${line%%/*}
+			[ -d "$directory_component" ] && printf '%s/\n' "$directory_component"
+		done
+		) | sort -u > $temp_file_others
+	if [ -z "$ran_once" ]; then
+		ran_once=1
+		cp $temp_file_others $temp_file_untracked || fatal 'Could not copy temp file'
+	fi
+	cp $temp_file_untracked $temp_file_untracked_copy || fatal 'Could not copy temp file'
+	comm -12 --nocheck-order $temp_file_others $temp_file_untracked_copy > $temp_file_untracked
 }
 
 rename() {
@@ -467,6 +518,7 @@ elif [ x"$VCSH_COMMAND" = x'delete' ]           ||
 elif [ x"$VCSH_COMMAND" = x'commit' ] ||
      [ x"$VCSH_COMMAND" = x'list'   ] ||
      [ x"$VCSH_COMMAND" = x'list-tracked' ] ||
+     [ x"$VCSH_COMMAND" = x'list-untracked' ] ||
      [ x"$VCSH_COMMAND" = x'pull'   ] ||
      [ x"$VCSH_COMMAND" = x'push'   ]; then
 	:
