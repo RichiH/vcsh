@@ -259,36 +259,6 @@ list_tracked_by() {
 	    sed 's/[,\&]/\\&/g')," | sort -u
 }
 
-pull() {
-	hook pre-pull
-	for VCSH_REPO_NAME in $(list); do
-		printf '%s: ' "$VCSH_REPO_NAME"
-		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
-		use
-		git pull
-		VCSH_COMMAND_RETURN_CODE=$?
-		echo
-	done
-	hook post-pull
-}
-
-push() {
-	hook pre-push
-	for VCSH_REPO_NAME in $(list); do
-		printf '%s: ' "$VCSH_REPO_NAME"
-		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
-		use
-		git push
-		VCSH_COMMAND_RETURN_CODE=$?
-		echo
-	done
-	hook post-push
-}
-
-retire() {
-	unset VCSH_DIRECTORY
-}
-
 list_untracked() {
 	command -v 'comm' >/dev/null 2>&1 || fatal "Could not find 'comm'"
 
@@ -336,6 +306,36 @@ list_untracked_helper() {
 	fi
 	cp $temp_file_untracked $temp_file_untracked_copy || fatal 'Could not copy temp file'
 	comm -12 --nocheck-order $temp_file_others $temp_file_untracked_copy > $temp_file_untracked
+}
+
+pull() {
+	hook pre-pull
+	for VCSH_REPO_NAME in $(list); do
+		printf '%s: ' "$VCSH_REPO_NAME"
+		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
+		use
+		git pull
+		VCSH_COMMAND_RETURN_CODE=$?
+		echo
+	done
+	hook post-pull
+}
+
+push() {
+	hook pre-push
+	for VCSH_REPO_NAME in $(list); do
+		printf '%s: ' "$VCSH_REPO_NAME"
+		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
+		use
+		git push
+		VCSH_COMMAND_RETURN_CODE=$?
+		echo
+	done
+	hook post-push
+}
+
+retire() {
+	unset VCSH_DIRECTORY
 }
 
 rename() {
