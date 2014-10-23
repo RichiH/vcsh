@@ -149,9 +149,10 @@ clone() {
 	git remote add origin "$GIT_REMOTE"
 	git config branch.master.remote origin
 	git config branch.master.merge  refs/heads/master
-	if [ $(git ls-remote origin master 2> /dev/null | wc -l ) -lt 1 ]; then
-		info "remote is empty, not merging anything"
-		exit
+	VCSH_CLONE_ERROR=$(git ls-remote origin master 2>&1)
+	if [ -n "$VCSH_CLONE_ERROR" ]; then
+		rm -rf "$GIT_DIR"
+		fatal "$VCSH_CLONE_ERROR" 1
 	fi
 	git fetch
 	hook pre-merge
