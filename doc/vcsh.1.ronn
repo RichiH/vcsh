@@ -17,9 +17,7 @@ vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
 
 `vcsh` list
 
-`vcsh` list-tracked
-
-`vcsh` list-tracked-by <repo>
+`vcsh` list-tracked [<rpoe>]
 
 `vcsh` list-untracked [<-r>] [<repo>]
 
@@ -109,8 +107,13 @@ an interactive user.
 * list-tracked:
   List all files tracked by vcsh.
 
+  If you want to list files tracked by a specific repository, simply
+  append the repository's name last.
+
 * list-tracked-by:
   List files tracked by a repository.
+
+  This is a legacy command; you should use `list-tracked <repo>` instead.
 
 * list-untracked:
   List all files NOT tracked by vcsh.

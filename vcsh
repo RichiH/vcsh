@@ -108,9 +108,8 @@ help() {
    help                 Display this help text
    init <repo>          Initialize a new repository
    list                 List all repositories
-   list-tracked         List all files tracked by vcsh
-   list-tracked-by \\
-        <repo>          List files tracked by a repository
+   list-tracked \\
+        [<repo>]        List all files tracked all or one repositories
    list-untracked \\
         [<-r>] [<repo>] List all files not tracked by all or one repositories
    pull                 Pull from all vcsh remotes
@@ -247,16 +246,22 @@ get_files() {
 }
 
 list_tracked() {
-	for VCSH_REPO_NAME in $(list); do
-		get_files
-	done | sed "s,^,$(printf '%s\n' "$VCSH_BASE/" | \
-	    sed 's/[,\&]/\\&/g')," | sort -u
+	VCSH_REPO_NAME=$2; export VCSH_REPO_NAME
+	if [ -n "$VCSH_REPO_NAME" ]; then
+		get_files | list_tracked_helper
+	else
+		for VCSH_REPO_NAME in $(list); do
+			get_files
+		done | list_tracked_helper
+	fi
+}
+
+list_tracked_helper() {
+	sed "s,^,$(printf '%s\n' "$VCSH_BASE/" | sed 's/[,\&]/\\&/g')," | sort -u
 }
 
 list_tracked_by() {
-	use
-	git ls-files | sed "s,^,$(printf '%s\n' "$VCSH_BASE/" | \
-	    sed 's/[,\&]/\\&/g')," | sort -u
+	list_tracked $2
 }
 
 list_untracked() {
