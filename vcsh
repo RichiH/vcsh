@@ -109,7 +109,8 @@ help() {
    list-tracked         List all files tracked by vcsh
    list-tracked-by \\
         <repo>          List files tracked by a repository
-   list-untracked       List all files not tracked by vcsh
+   list-untracked \\
+        [<-r>] [<repo>] List all files not tracked by all or one repositories
    pull                 Pull from all vcsh remotes
    push                 Push to vcsh remotes
    rename <repo> \\
@@ -292,7 +293,7 @@ list_untracked() {
 	temp_file_untracked=$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX") || fatal 'Could not create temp file'
 	temp_file_untracked_copy=$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX") || fatal 'Could not create temp file'
 
-	# Hack in support for `vcsh list-untracked -r`
+	# Hack in support for `vcsh list-untracked -r`...
 	directory_opt="--directory"
 	shift 1
 	while getopts "r" flag; do
@@ -301,27 +302,37 @@ list_untracked() {
 		fi
 		shift 1
 	done
+	# ...and parse for a potential parameter afterwards. As we shifted things out of $* in during getops, we need to look at $1
+	VCSH_REPO_NAME=$1; export VCSH_REPO_NAME
 
-	for VCSH_REPO_NAME in $(list); do
-		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
-		git ls-files --others "$directory_opt" | (
-			while read line; do
-				echo "$line"
-				directory_component=${line%%/*}
-				[ -d "$directory_component" ] && printf '%s/\n' "$directory_component"
-			done
-			) | sort -u > $temp_file_others
-		if [ -z "$ran_once" ]; then
-			ran_once=1
-			cp $temp_file_others $temp_file_untracked || fatal 'Could not copy temp file'
-		fi
-		cp $temp_file_untracked $temp_file_untracked_copy || fatal 'Could not copy temp file'
-		comm -12 --nocheck-order $temp_file_others $temp_file_untracked_copy > $temp_file_untracked
-	done
+	if [ -n "$VCSH_REPO_NAME" ]; then
+		list_untracked_helper $VCSH_REPO_NAME
+	else
+		for VCSH_REPO_NAME in $(list); do
+			list_untracked_helper $VCSH_REPO_NAME
+		done
+	fi
 	cat $temp_file_untracked
 
 	unset directory_opt directory_component
 	rm -f $temp_file_others $temp_file_untracked $temp_file_untracked_copy || fatal 'Could not delete temp files'
+}
+
+list_untracked_helper() {
+	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
+	git ls-files --others "$directory_opt" | (
+		while read line; do
+			echo "$line"
+			directory_component=${line%%/*}
+			[ -d "$directory_component" ] && printf '%s/\n' "$directory_component"
+		done
+		) | sort -u > $temp_file_others
+	if [ -z "$ran_once" ]; then
+		ran_once=1
+		cp $temp_file_others $temp_file_untracked || fatal 'Could not copy temp file'
+	fi
+	cp $temp_file_untracked $temp_file_untracked_copy || fatal 'Could not copy temp file'
+	comm -12 --nocheck-order $temp_file_others $temp_file_untracked_copy > $temp_file_untracked
 }
 
 rename() {
