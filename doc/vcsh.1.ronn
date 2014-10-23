@@ -254,6 +254,24 @@ Available hooks are <pre-clone>, <post-clone>, <post-clone-retired>,
 If you need more, vcsh is trivial to patch, but please let upstream know so
 we can ship them by default.
 
+## OVERLAY SYSTEM
+
+`vcsh` also provides an overlay system. Similar to hooks, the recommended
+locations are <$XDG_CONFIG_HOME/vcsh/overlays-available> and
+<$XDG_CONFIG_HOME/vcsh/overlays-enabled>.
+
+Overlays follow the same rules as hooks and you are free to overwrite any
+and all functions. Same as hooks, you can use global or repository-specific
+overlays by using either <$VCSH_OVERLAY_D/$VCSH_COMMAND> or
+<$VCSH_OVERLAY_D/$VCSH_REPO_NAME.$VCSH_COMMAND>.
+
+Please note that nothing stops you from, e.g. overwriting `status()` in
+<$VCSH_OVERLAY_D/commit>. As the overlays will be sourced and you are
+replacing arbitrary functions, any and all features may stop working, or you
+may even lose data.
+
+You have been warned.
+
 ## DETAILED HOWTO AND FURTHER READING
 
 Manpages are often short and sometimes useless to glean best practices from.
