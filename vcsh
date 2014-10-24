@@ -432,18 +432,28 @@ case $VCSH_COMMAND in
 esac    
 
 if [ x"$VCSH_COMMAND" = x'clone' ]; then
+	VCSH_BRANCH=
 	if [ "$2" = -b ]; then
-		VCSH_BRANCH="$3"
+		VCSH_BRANCH=$3
 		shift
 		shift
-	else
-		VCSH_BRANCH=master
 	fi
 	[ -z "$2" ] && fatal "$VCSH_COMMAND: please specify a remote" 1
 	GIT_REMOTE="$2"
-	[ -n "$3" ] && VCSH_REPO_NAME=$3 || VCSH_REPO_NAME=$(basename "${GIT_REMOTE#*:}" .git)
+	[ -n "$VCSH_BRANCH" ] || if [ "$3" = -b ]; then
+		VCSH_BRANCH=$4
+		shift
+		shift
+	fi
+	if [ -n "$3" ]; then
+		VCSH_REPO_NAME=$3
+		[ -z "$VCSH_BRANCH" ] && [ "$4" = -b ] && VCSH_BRANCH=$5
+	else
+		VCSH_REPO_NAME=$(basename "${GIT_REMOTE#*:}" .git)
+	fi
 	[ -z "$VCSH_REPO_NAME" ] && fatal "$VCSH_COMMAND: could not determine repository name" 1
 	export VCSH_REPO_NAME
+	[ -n "$VCSH_BRANCH" ] || VCSH_BRANCH=master
 	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 elif [ "$VCSH_COMMAND" = 'version' ]; then
 	echo "$SELF $VERSION"
