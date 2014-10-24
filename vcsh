@@ -147,16 +147,16 @@ clone() {
 	hook pre-clone
 	init
 	git remote add origin "$GIT_REMOTE"
+	git checkout -b "$VCSH_BRANCH" || return $?
 	git config branch."$VCSH_BRANCH".remote origin
 	git config branch."$VCSH_BRANCH".merge  refs/heads/"$VCSH_BRANCH"
-	git checkout -b $VCSH_BRANCH
 	if [ $(git ls-remote origin "$VCSH_BRANCH" 2> /dev/null | wc -l ) -lt 1 ]; then
 		info "remote is empty, not merging anything"
 		exit
 	fi
 	git fetch origin "$VCSH_BRANCH"
 	hook pre-merge
-	git ls-tree -r --name-only origin/master | (while read object; do
+	git ls-tree -r --name-only origin/"$VCSH_BRANCH" | (while read object; do
 		[ -e "$object" ] &&
 			error "'$object' exists." &&
 			VCSH_CONFLICT=1
