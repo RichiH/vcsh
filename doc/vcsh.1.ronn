@@ -5,7 +5,7 @@ vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
 
 `vcsh` [<options>] <command>
 
-`vcsh` clone <url> [<repo>]
+`vcsh` clone [-b <branch>] <url> [<repo>]
 
 `vcsh` delete <repo>
 
@@ -85,6 +85,9 @@ an interactive user.
 
   If you need to clone a bundle of repositories, look into the
   `post-clone-retired` hook.
+
+  You can also use a single git repository with several branches. Use the `-b`
+  option to specify a branch at clone time, the default is `master`.
 
 * commit:
   Commit in all repositories
