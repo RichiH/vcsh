@@ -150,9 +150,9 @@ clone() {
 	hook pre-clone
 	init
 	git remote add origin "$GIT_REMOTE"
+	git checkout -b "$VCSH_BRANCH" || return $?
 	git config branch."$VCSH_BRANCH".remote origin
 	git config branch."$VCSH_BRANCH".merge  refs/heads/"$VCSH_BRANCH"
-	git checkout -b $VCSH_BRANCH
 	VCSH_CLONE_ERROR=$(git ls-remote origin $VCSH_BRANCH 2>&1)
 	if [ -n "$VCSH_CLONE_ERROR" ]; then
 		rm -rf "$GIT_DIR"
@@ -160,7 +160,7 @@ clone() {
 	fi
 	git fetch origin "$VCSH_BRANCH"
 	hook pre-merge
-	git ls-tree -r --name-only origin/master | (while read object; do
+	git ls-tree -r --name-only origin/"$VCSH_BRANCH" | (while read object; do
 		[ -e "$object" ] &&
 			error "'$object' exists." &&
 			VCSH_CONFLICT=1
