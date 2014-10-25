@@ -19,11 +19,12 @@
 # If '.git-HEAD' is appended to the version, you are seeing an unreleased
 # version of vcsh; the master branch is supposed to be clean at all times
 # so you can most likely just use it nonetheless
-VERSION='1.20141009'
+VERSION='1.20141025'
 SELF=$(basename $0)
 
 fatal() {
 	echo "$SELF: fatal: $1" >&2
+	[ -z $2] && exit 1
 	exit $2
 }
 
@@ -75,6 +76,7 @@ fi
 # Read defaults
 : ${VCSH_REPO_D:="$XDG_CONFIG_HOME/vcsh/repo.d"}
 : ${VCSH_HOOK_D:="$XDG_CONFIG_HOME/vcsh/hooks-enabled"}
+: ${VCSH_OVERLAY_D:="$XDG_CONFIG_HOME/vcsh/overlays-enabled"}
 : ${VCSH_BASE:="$HOME"}
 : ${VCSH_GITIGNORE:=exact}
 : ${VCSH_GITATTRIBUTES:=none}
@@ -106,9 +108,10 @@ help() {
    help                 Display this help text
    init <repo>          Initialize a new repository
    list                 List all repositories
-   list-tracked         List all files tracked by vcsh
-   list-tracked-by \\
-        <repo>          List files tracked by a repository
+   list-tracked \\
+        [<repo>]        List all files tracked all or one repositories
+   list-untracked \\
+        [<-r>] [<repo>] List all files not tracked by all or one repositories
    pull                 Pull from all vcsh remotes
    push                 Push to vcsh remotes
    rename <repo> \\
@@ -148,9 +151,10 @@ clone() {
 	git remote add origin "$GIT_REMOTE"
 	git config branch.master.remote origin
 	git config branch.master.merge  refs/heads/master
-	if [ $(git ls-remote origin master 2> /dev/null | wc -l ) -lt 1 ]; then
-		info "remote is empty, not merging anything"
-		exit
+	VCSH_CLONE_ERROR=$(git ls-remote origin master 2>&1)
+	if [ -n "$VCSH_CLONE_ERROR" ]; then
+		rm -rf "$GIT_DIR"
+		fatal "$VCSH_CLONE_ERROR" 1
 	fi
 	git fetch
 	hook pre-merge
@@ -242,16 +246,71 @@ get_files() {
 }
 
 list_tracked() {
-	for VCSH_REPO_NAME in $(list); do
-		get_files
-	done | sed "s,^,$(printf '%s\n' "$VCSH_BASE/" | \
-	    sed 's/[,\&]/\\&/g')," | sort -u
+	VCSH_REPO_NAME=$2; export VCSH_REPO_NAME
+	if [ -n "$VCSH_REPO_NAME" ]; then
+		get_files | list_tracked_helper
+	else
+		for VCSH_REPO_NAME in $(list); do
+			get_files
+		done | list_tracked_helper
+	fi
+}
+
+list_tracked_helper() {
+	sed "s,^,$(printf '%s\n' "$VCSH_BASE/" | sed 's/[,\&]/\\&/g')," | sort -u
 }
 
 list_tracked_by() {
-	use
-	git ls-files | sed "s,^,$(printf '%s\n' "$VCSH_BASE/" | \
-	    sed 's/[,\&]/\\&/g')," | sort -u
+	list_tracked $2
+}
+
+list_untracked() {
+	command -v 'comm' >/dev/null 2>&1 || fatal "Could not find 'comm'"
+
+	temp_file_others=$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX") || fatal 'Could not create temp file'
+	temp_file_untracked=$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX") || fatal 'Could not create temp file'
+	temp_file_untracked_copy=$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX") || fatal 'Could not create temp file'
+
+	# Hack in support for `vcsh list-untracked -r`...
+	directory_opt="--directory"
+	shift 1
+	while getopts "r" flag; do
+		if [ x"$1" = x'-r' ]; then
+			unset directory_opt
+		fi
+		shift 1
+	done
+	# ...and parse for a potential parameter afterwards. As we shifted things out of $* in during getops, we need to look at $1
+	VCSH_REPO_NAME=$1; export VCSH_REPO_NAME
+
+	if [ -n "$VCSH_REPO_NAME" ]; then
+		list_untracked_helper $VCSH_REPO_NAME
+	else
+		for VCSH_REPO_NAME in $(list); do
+			list_untracked_helper $VCSH_REPO_NAME
+		done
+	fi
+	cat $temp_file_untracked
+
+	unset directory_opt directory_component
+	rm -f $temp_file_others $temp_file_untracked $temp_file_untracked_copy || fatal 'Could not delete temp files'
+}
+
+list_untracked_helper() {
+	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
+	git ls-files --others "$directory_opt" | (
+		while read line; do
+			echo "$line"
+			directory_component=${line%%/*}
+			[ -d "$directory_component" ] && printf '%s/\n' "$directory_component"
+		done
+		) | sort -u > $temp_file_others
+	if [ -z "$ran_once" ]; then
+		ran_once=1
+		cp $temp_file_others $temp_file_untracked || fatal 'Could not copy temp file'
+	fi
+	cp $temp_file_untracked $temp_file_untracked_copy || fatal 'Could not copy temp file'
+	comm -12 --nocheck-order $temp_file_others $temp_file_untracked_copy > $temp_file_untracked
 }
 
 pull() {
@@ -307,20 +366,27 @@ run() {
 
 status() {
 	if [ -n "$VCSH_REPO_NAME" ]; then
-		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
-		use
-		git status --short --untracked-files='no'
-		VCSH_COMMAND_RETURN_CODE=$?
+		status_helper $VCSH_REPO_NAME
 	else
 		for VCSH_REPO_NAME in $(list); do
 			echo "$VCSH_REPO_NAME:"
-			GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
-			use
-			git status --short --untracked-files='no'
-			VCSH_COMMAND_RETURN_CODE=$?
+			status_helper $VCSH_REPO_NAME
 			echo
 		done
 	fi
+}
+
+status_helper() {
+	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
+	use
+	remote_tracking_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2> /dev/null) && {
+		commits_behind=$(git log ..${remote_tracking_branch} --oneline | wc -l)
+		commits_ahead=$(git log ${remote_tracking_branch}.. --oneline | wc -l)
+		[ ${commits_behind} -ne 0 ] && echo "Behind $remote_tracking_branch by $commits_behind commits"
+		[ ${commits_ahead} -ne 0 ] && echo "Ahead of $remote_tracking_branch by $commits_ahead commits"
+	}
+	git status --short --untracked-files='no'
+	VCSH_COMMAND_RETURN_CODE=$?
 }
 
 upgrade() {
@@ -351,6 +417,7 @@ use() {
 }
 
 which() {
+	[ -e "$VCSH_COMMAND_PARAMETER" ] || fatal "'$VCSH_COMMAND_PARAMETER' does not exist" 1
 	for VCSH_REPO_NAME in $(list); do
 		for VCSH_FILE in $(get_files); do
 			echo "$VCSH_FILE" | grep -q "$VCSH_COMMAND_PARAMETER" && echo "$VCSH_REPO_NAME: $VCSH_FILE"
@@ -463,6 +530,7 @@ elif [ x"$VCSH_COMMAND" = x'delete' ]           ||
 elif [ x"$VCSH_COMMAND" = x'commit' ] ||
      [ x"$VCSH_COMMAND" = x'list'   ] ||
      [ x"$VCSH_COMMAND" = x'list-tracked' ] ||
+     [ x"$VCSH_COMMAND" = x'list-untracked' ] ||
      [ x"$VCSH_COMMAND" = x'pull'   ] ||
      [ x"$VCSH_COMMAND" = x'push'   ]; then
 	:
@@ -510,6 +578,17 @@ check_dir "$VCSH_REPO_D"
 
 verbose "$VCSH_COMMAND begin"
 VCSH_COMMAND=$(echo "$VCSH_COMMAND" | sed 's/-/_/g'); export VCSH_COMMAND
+
+# Source repo-specific configuration file
+[ -r "$XDG_CONFIG_HOME/vcsh/config.d/$VCSH_REPO_NAME" ] && . "$XDG_CONFIG_HOME/vcsh/config.d/$VCSH_REPO_NAME"
+
+# source overlay functions
+for overlay in "$VCSH_OVERLAY_D/$VCSH_COMMAND"* "$VCSH_OVERLAY_D/$VCSH_REPO_NAME.$VCSH_COMMAND"*; do
+	[ -r "$overlay" ] || continue
+	info "sourcing '$overlay'"
+	. "$overlay"
+done
+
 hook pre-command
 $VCSH_COMMAND "$@"
 hook post-command
