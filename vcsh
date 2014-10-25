@@ -24,7 +24,7 @@ SELF=$(basename $0)
 
 fatal() {
 	echo "$SELF: fatal: $1" >&2
-	[ -z $2] && exit 1
+	[ -z $2 ] && exit 1
 	exit $2
 }
 
