@@ -1,3 +1,23 @@
+2014-10-26  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20141026
+	* FIX fatal()
+	* Improve error handling of clone()
+
+2014-10-25  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20141025
+	* `vcsh which dontexist` exits 1
+	* `vcsh status` shows commits ahead/behind remote tracking branch
+	* Support overlay functions
+	* Support `vcsh list-untracked`, optionally recursively
+	* Support `vcsh list-untracked $repo`
+	* Improve error handling of clone()
+	* Rename `list-tracked-by` to `list-tracked <repo>`
+	* Support repo-specific config files
+	* Various minor improvements
+	* More moo
+
 2014-10-09  Richard Hartmann <richih.mailinglist@gmail.com>
 
 	* Display full paths in list-tracked*
