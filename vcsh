@@ -154,7 +154,8 @@ clone() {
 	git config branch."$VCSH_BRANCH".remote origin
 	git config branch."$VCSH_BRANCH".merge  refs/heads/"$VCSH_BRANCH"
 	if [ $(git ls-remote origin "$VCSH_BRANCH" 2> /dev/null | wc -l ) -lt 1 ]; then
-		info "remote is empty, not merging anything"
+		info "remote is empty, not merging anything.
+  You should add files to your new repository."
 		exit
 	fi
 	git fetch origin "$VCSH_BRANCH"
