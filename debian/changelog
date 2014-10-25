@@ -1,10 +1,20 @@
-vcsh (1.201410XX-1) UNRELEASED; urgency=medium
+vcsh (1.20141025-1) unstable; urgency=low
 
-  * 
+  * New upstream release
+    + `vcsh which dontexist` exits 1
+    + `vcsh status` shows commits ahead/behind remote tracking branch
+    + Support overlay functions
+    + Support `vcsh list-untracked`, optionally recursively
+    + Support `vcsh list-untracked $repo`
+    + Improve error handling of clone()
+    + Rename `list-tracked-by` to `list-tracked <repo>`
+    + Support repo-specific config files
+    + Various minor improvements
+    + More moo
   * Packaging changes
     + Bump Standards-Version to 3.9.5 (no changes)
 
- -- Richard Hartmann <richih@debian.org>  Sun, 19 Oct 2014 08:18:59 +0200
+ -- Richard Hartmann <richih@debian.org>  Sat, 25 Oct 2014 21:30:25 +0200
 
 vcsh (1.20141009-1) unstable; urgency=medium
 
