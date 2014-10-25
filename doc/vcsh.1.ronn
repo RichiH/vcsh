@@ -9,7 +9,7 @@ vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
 
 `vcsh` base new
 
-`vcsh` clone <url> [<repo>]
+`vcsh` clone [-b <branch>] <url> [<repo>]
 
 `vcsh` delete <repo>
 
@@ -21,9 +21,9 @@ vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
 
 `vcsh` list
 
-`vcsh` list-tracked
+`vcsh` list-tracked [<rpoe>]
 
-`vcsh` list-tracked-by <repo>
+`vcsh` list-untracked [<-r>] [<repo>]
 
 `vcsh` pull
 
@@ -103,6 +103,9 @@ an interactive user.
   If you need to clone a bundle of repositories, look into the
   `post-clone-retired` hook.
 
+  You can also use a single git repository with several branches. Use the `-b`
+  option to specify a branch at clone time, the default is `master`.
+
 * commit:
   Commit in all repositories
 
@@ -124,8 +127,23 @@ an interactive user.
 * list-tracked:
   List all files tracked by vcsh.
 
+  If you want to list files tracked by a specific repository, simply
+  append the repository's name last.
+
 * list-tracked-by:
   List files tracked by a repository.
+
+  This is a legacy command; you should use `list-tracked <repo>` instead.
+
+* list-untracked:
+  List all files NOT tracked by vcsh.
+
+  By default, the file list is shallow and stops at directory levels where
+  possible. If you prefer to get a list of all files, append `-r` for
+  recursive mode.
+
+  If you want to list files not tracked by a specific repository, simply
+  append the repository's name last.
 
 * pull:
   Pull from all vcsh remotes.
@@ -188,6 +206,15 @@ Please note that those files are sourced. Any and all commands will be
 executed in the context of your shell.
 
 Interesting knobs you can turn:
+
+* <$VCSH_GITATTRIBUTES>:
+  Can be <none>, or any other value.
+
+  <none> will not maintain Git attributes in a special location.
+
+  If set to any other value, repo-specific gitattributes files will be maintained.
+
+  Defaults to <none>.
 
 * <$VCSH_GITIGNORE>:
   Can be <exact>, <none>, or <recursive>.
@@ -262,6 +289,24 @@ Available hooks are <pre-clone>, <post-clone>, <post-clone-retired>,
 <post-run>, <pre-upgrade>, and <post-upgrade>.
 If you need more, vcsh is trivial to patch, but please let upstream know so
 we can ship them by default.
+
+## OVERLAY SYSTEM
+
+`vcsh` also provides an overlay system. Similar to hooks, the recommended
+locations are <$XDG_CONFIG_HOME/vcsh/overlays-available> and
+<$XDG_CONFIG_HOME/vcsh/overlays-enabled>.
+
+Overlays follow the same rules as hooks and you are free to overwrite any
+and all functions. Same as hooks, you can use global or repository-specific
+overlays by using either <$VCSH_OVERLAY_D/$VCSH_COMMAND> or
+<$VCSH_OVERLAY_D/$VCSH_REPO_NAME.$VCSH_COMMAND>.
+
+Please note that nothing stops you from, e.g. overwriting `status()` in
+<$VCSH_OVERLAY_D/commit>. As the overlays will be sourced and you are
+replacing arbitrary functions, any and all features may stop working, or you
+may even lose data.
+
+You have been warned.
 
 ## DETAILED HOWTO AND FURTHER READING
 

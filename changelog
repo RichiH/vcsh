@@ -1,3 +1,46 @@
+2014-10-25  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20141025
+	* `vcsh which dontexist` exits 1
+	* `vcsh status` shows commits ahead/behind remote tracking branch
+	* Support overlay functions
+	* Support `vcsh list-untracked`, optionally recursively
+	* Support `vcsh list-untracked $repo`
+	* Improve error handling of clone()
+	* Rename `list-tracked-by` to `list-tracked <repo>`
+	* Support repo-specific config files
+	* Various minor improvements
+	* More moo
+
+2014-10-09  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Display full paths in list-tracked*
+	* Lots of help improvements
+
+2014-05-08  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Revert "Introduce static manpage as part of normal repo"
+
+2014-05-07  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Increase portability
+	* Improve hooks
+	* Improve docs
+	* Various minor improvements
+
+2014-03-13  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20140313 -- the "Git won a prize" edition
+	* Initialize repos with --shared=0600
+	* Fix cloning from some spefically-named remotes
+	* Support custom gitattribute files
+	* Support filenames with whitespace in gitignores
+	* Pass out git exit codes
+	* Switch to static, pre-built manpage
+	* Improve documentation
+	* Use more portable find(1) syntax
+	* Various minor improvements
+
 2013-12-29  Richard Hartmann <richih.mailinglist@gmail.com>
 
 	* Release 1.20131229
