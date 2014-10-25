@@ -19,12 +19,12 @@
 # If '.git-HEAD' is appended to the version, you are seeing an unreleased
 # version of vcsh; the master branch is supposed to be clean at all times
 # so you can most likely just use it nonetheless
-VERSION='1.20141025'
+VERSION='1.20141026'
 SELF=$(basename $0)
 
 fatal() {
 	echo "$SELF: fatal: $1" >&2
-	[ -z $2] && exit 1
+	[ -z $2 ] && exit 1
 	exit $2
 }
 
@@ -100,7 +100,8 @@ help() {
    -v                   Enable verbose mode
 
    commands:
-   clone <remote> \\
+   clone [-b <branch>] \\
+         <remote> \\
          [<repo>]       Clone from an existing repository
    commit               Commit in all repositories
    delete <repo>        Delete an existing repository
@@ -149,16 +150,17 @@ clone() {
 	hook pre-clone
 	init
 	git remote add origin "$GIT_REMOTE"
-	git config branch.master.remote origin
-	git config branch.master.merge  refs/heads/master
-	VCSH_CLONE_ERROR=$(git ls-remote origin master 2>&1)
-	if [ -n "$VCSH_CLONE_ERROR" ]; then
-		rm -rf "$GIT_DIR"
-		fatal "$VCSH_CLONE_ERROR" 1
+	git checkout -b "$VCSH_BRANCH" || return $?
+	git config branch."$VCSH_BRANCH".remote origin
+	git config branch."$VCSH_BRANCH".merge  refs/heads/"$VCSH_BRANCH"
+	if [ $(git ls-remote origin "$VCSH_BRANCH" 2> /dev/null | wc -l ) -lt 1 ]; then
+		info "remote is empty, not merging anything.
+  You should add files to your new repository."
+		exit
 	fi
-	git fetch
+	git fetch origin "$VCSH_BRANCH"
 	hook pre-merge
-	git ls-tree -r --name-only origin/master | (while read object; do
+	git ls-tree -r --name-only origin/"$VCSH_BRANCH" | (while read object; do
 		[ -e "$object" ] &&
 			error "'$object' exists." &&
 			VCSH_CONFLICT=1
@@ -166,7 +168,7 @@ clone() {
 	[ x"$VCSH_CONFLICT" = x'1' ]) &&
 		fatal "will stop after fetching and not try to merge!
   Once this situation has been resolved, run 'vcsh $VCSH_REPO_NAME pull' to finish cloning." 17
-	git merge origin/master
+	git merge origin/"$VCSH_BRANCH"
 	hook post-merge
 	hook post-clone
 	retire
@@ -497,11 +499,28 @@ case $VCSH_COMMAND in
 esac    
 
 if [ x"$VCSH_COMMAND" = x'clone' ]; then
+	VCSH_BRANCH=
+	if [ "$2" = -b ]; then
+		VCSH_BRANCH=$3
+		shift
+		shift
+	fi
 	[ -z "$2" ] && fatal "$VCSH_COMMAND: please specify a remote" 1
 	GIT_REMOTE="$2"
-	[ -n "$3" ] && VCSH_REPO_NAME=$3 || VCSH_REPO_NAME=$(basename "${GIT_REMOTE#*:}" .git)
+	[ -n "$VCSH_BRANCH" ] || if [ "$3" = -b ]; then
+		VCSH_BRANCH=$4
+		shift
+		shift
+	fi
+	if [ -n "$3" ]; then
+		VCSH_REPO_NAME=$3
+		[ -z "$VCSH_BRANCH" ] && [ "$4" = -b ] && VCSH_BRANCH=$5
+	else
+		VCSH_REPO_NAME=$(basename "${GIT_REMOTE#*:}" .git)
+	fi
 	[ -z "$VCSH_REPO_NAME" ] && fatal "$VCSH_COMMAND: could not determine repository name" 1
 	export VCSH_REPO_NAME
+	[ -n "$VCSH_BRANCH" ] || VCSH_BRANCH=master
 	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 elif [ "$VCSH_COMMAND" = 'version' ]; then
 	echo "$SELF $VERSION"
