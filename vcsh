@@ -113,7 +113,8 @@ help() {
    -v                   Enable verbose mode
 
    commands:
-   base                 Print base and config directories
+   base                 Print base directory
+   base new             Create new base directory
    clone <remote> \\
          [<repo>]       Clone from an existing repository
    commit               Commit in all repositories
@@ -131,7 +132,6 @@ help() {
           <newname>     Rename repository
    run <repo> \\
        <command>        Use this repository
-   setup                Create ./.config/vcsh/config for local vcsh use
    status [<repo>]      Show statuses of all/one vcsh repositories
    upgrade <repo>       Upgrade repository to currently recommended settings
    version              Print version information
@@ -320,14 +320,6 @@ run() {
 	hook post-run
 }
 
-setup() {
-	mkdir -p .config/vcsh
-	echo "export VCSH_BASE=\"$(pwd)\"" >> .config/vcsh/config
-	echo "export XDG_CONFIG_HOME=\"$(pwd)/.config\"" >> .config/vcsh/config
-	echo "$SELF $VCSH_COMMAND: $SELF has been initialized in \"$(pwd)/.config\""
-	echo "$SELF will now track files locally if run from this directory"
-}
-
 status() {
 	if [ ! "x$VCSH_REPO_NAME" = "x" ]; then
 		export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
@@ -374,8 +366,20 @@ use() {
 }
 
 base() {
-	echo "\$VCSH_BASE is $VCSH_BASE"
-	echo "\$XDG_CONFIG_HOME is $XDG_CONFIG_HOME"
+	if [ "x$2" = 'xnew' ]; then
+		base_new
+	else
+		echo "\$VCSH_BASE is $VCSH_BASE"
+		echo "\$XDG_CONFIG_HOME is $XDG_CONFIG_HOME"
+	fi
+}
+
+base_new() {
+	mkdir -p .config/vcsh
+	echo "export VCSH_BASE=\"$(pwd)\"" >> .config/vcsh/config
+	echo "export XDG_CONFIG_HOME=\"$(pwd)/.config\"" >> .config/vcsh/config
+	echo "$SELF $VCSH_COMMAND: $SELF has been initialized in \"$(pwd)/.config\""
+	echo "$SELF will now track files locally if run from this directory"
 }
 
 which() {
