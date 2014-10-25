@@ -499,16 +499,21 @@ case $VCSH_COMMAND in
 esac    
 
 if [ x"$VCSH_COMMAND" = x'clone' ]; then
-	if [ "$2" = -b ]; then
-		VCSH_BRANCH="$3"
-		shift
-		shift
-	else
-		VCSH_BRANCH=master
-	fi
-	[ -z "$2" ] && fatal "$VCSH_COMMAND: please specify a remote" 1
-	GIT_REMOTE="$2"
-	[ -n "$3" ] && VCSH_REPO_NAME=$3 || VCSH_REPO_NAME=$(basename "${GIT_REMOTE#*:}" .git)
+	VCSH_BRANCH=master
+	shift # remove the clone|clon|clo|cl arg
+	clone_args="$(getopt :b: "$@")"
+	[ $? -ne 0 ] && fatal "$VCSH_COMMAND: invalid arguments '$*'" 1
+	eval set -- "$clone_args"
+	while getopts :b: opt; do
+		case "$opt" in
+			b) VCSH_BRANCH="$OPTARG";;
+			*) fatal "$VCSH_COMMAND: unknown option '$opt'" 1
+		esac
+	done
+	shift $((OPTIND-1))
+	[ -z "$1" ] && fatal "$VCSH_COMMAND: please specify a remote" 1
+	GIT_REMOTE="$1"
+	[ -n "$2" ] && VCSH_REPO_NAME=$2 || VCSH_REPO_NAME=$(basename "${GIT_REMOTE#*:}" .git)
 	[ -z "$VCSH_REPO_NAME" ] && fatal "$VCSH_COMMAND: could not determine repository name" 1
 	export VCSH_REPO_NAME
 	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
