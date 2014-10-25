@@ -1,3 +1,39 @@
+vcsh (1.20141026-1) unstable; urgency=medium
+
+  * New upstream release
+    + Release 1.20141026
+    + FIX fatal()
+    + Improve error handling of clone()
+
+ -- Richard Hartmann <richih@debian.org>  Sun, 26 Oct 2014 00:32:38 +0200
+
+vcsh (1.20141025-1) unstable; urgency=low
+
+  * New upstream release
+    + `vcsh which dontexist` exits 1
+    + `vcsh status` shows commits ahead/behind remote tracking branch
+    + Support overlay functions
+    + Support `vcsh list-untracked`, optionally recursively
+    + Support `vcsh list-untracked $repo`
+    + Improve error handling of clone()
+    + Rename `list-tracked-by` to `list-tracked <repo>`
+    + Support repo-specific config files
+    + Various minor improvements
+    + More moo
+  * Packaging changes
+    + Bump Standards-Version to 3.9.5 (no changes)
+
+ -- Richard Hartmann <richih@debian.org>  Sat, 25 Oct 2014 21:30:25 +0200
+
+vcsh (1.20141009-1) unstable; urgency=medium
+
+  * New upstream release
+    + Release 1.20141009
+    + Display full paths in list-tracked*
+    + Lots of help improvements
+
+ -- Richard Hartmann <richih@debian.org>  Thu, 09 Oct 2014 23:27:19 +0200
+
 vcsh (1.20140508-1~bpo70+1) wheezy-backports; urgency=medium
 
   * Rebuild for wheezy-backports.
