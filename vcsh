@@ -113,6 +113,7 @@ help() {
    -v                   Enable verbose mode
 
    commands:
+   base                 Print base and config directories
    clone <remote> \\
          [<repo>]       Clone from an existing repository
    commit               Commit in all repositories
@@ -134,7 +135,6 @@ help() {
    status [<repo>]      Show statuses of all/one vcsh repositories
    upgrade <repo>       Upgrade repository to currently recommended settings
    version              Print version information
-   where                Print base and config directories
    which <substring>    Find substring in name of any tracked file
    write-gitignore \\
    <repo>               Write .gitignore.d/<repo> via git ls-files
@@ -373,7 +373,7 @@ use() {
 	export VCSH_DIRECTORY="$VCSH_REPO_NAME"
 }
 
-where() {
+base() {
 	echo "\$VCSH_BASE is $VCSH_BASE"
 	echo "\$XDG_CONFIG_HOME is $XDG_CONFIG_HOME"
 }
@@ -440,6 +440,7 @@ fi
 export VCSH_COMMAND="$1"
 
 case "$VCSH_COMMAND" in
+	bas|ba) VCSH_COMMAND=base;;
 	clon|clo|cl) VCSH_COMMAND=clone;;
 	commi|comm|com|co) VCSH_COMMAND=commit;;
 	delet|dele|del|de) VCSH_COMMAND=delete;;
@@ -454,7 +455,6 @@ case "$VCSH_COMMAND" in
 	statu|stat|sta|st) VCSH_COMMAND=status;;
 	upgrad|upgra|upgr|up) VCSH_COMMAND=upgrade;;
 	versio|versi|vers|ver|ve) VCSH_COMMAND=version;;
-	where|whe) VCSH_COMMAND=where;;
 	which|whi) VCSH_COMMAND=which;;
 	write|writ|wri|wr) VCSH_COMMAND=write-gitignore;;
 esac    
@@ -492,12 +492,12 @@ elif [ "$VCSH_COMMAND" = 'delete' ]           ||
 	[ "$VCSH_COMMAND" = 'rename' ] && { export VCSH_REPO_NAME_NEW="$3";
 	                                    export GIT_DIR_NEW="$VCSH_REPO_D/$VCSH_REPO_NAME_NEW.git"; }
 	[ "$VCSH_COMMAND" = 'run' ]    && shift 2
-elif [ "$VCSH_COMMAND" = 'commit' ] ||
+elif [ "$VCSH_COMMAND" = 'base' ] ||
+     [ "$VCSH_COMMAND" = 'commit' ] ||
      [ "$VCSH_COMMAND" = 'list' ] ||
      [ "$VCSH_COMMAND" = 'list-tracked' ] ||
      [ "$VCSH_COMMAND" = 'pull' ] ||
-     [ "$VCSH_COMMAND" = 'push' ] ||
-     [ "$VCSH_COMMAND" = 'where' ]; then
+     [ "$VCSH_COMMAND" = 'push' ]; then
 	:
 elif [ "$VCSH_COMMAND" = 'status' ]; then
 	export VCSH_REPO_NAME="$2"

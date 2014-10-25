@@ -3,6 +3,8 @@ vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
 
 ## SYNOPSIS
 
+`vcsh` base
+
 `vcsh` [<options>] <command>
 
 `vcsh` clone <url> [<repo>]
@@ -36,8 +38,6 @@ vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
 `vcsh` upgrade <repo>
 
 `vcsh` version
-
-`vcsh` where
 
 `vcsh` which <substring>
 
@@ -83,6 +83,10 @@ an interactive user.
   Enable verbose mode
 
 ## COMMANDS
+
+* base:
+
+  Print base <$VCSH_BASE> and config <$XDG_CONFIG_HOME> variables.
 
 * clone:
   Clone an existing repository.
@@ -142,7 +146,7 @@ an interactive user.
   cloning the template.
 
   `vcsh` will detect the configuration from any directory below the
-  setup directory.  Use `vcsh where` to verify the above settings.
+  setup directory.  Use `vcsh base` to verify the above settings.
 
 * status:
   Show statuses of all/one vcsh repositories.
@@ -152,10 +156,6 @@ an interactive user.
 
 * version:
   Print version information.
-
-* where:
-
-  Print base <$VCSH_BASE> and config <$XDG_CONFIG_HOME> variables.
 
 * which <substring>:
   Find <substring> in name of any tracked file.
