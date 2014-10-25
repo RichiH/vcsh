@@ -164,6 +164,23 @@ info() {
 	echo "$SELF: info: $1"
 }
 
+base() {
+	if [ "x$2" = 'xnew' ]; then
+		base_new
+	else
+		echo "\$VCSH_BASE is $VCSH_BASE"
+		echo "\$XDG_CONFIG_HOME is $XDG_CONFIG_HOME"
+	fi
+}
+
+base_new() {
+	mkdir -p .config/vcsh
+	echo "export VCSH_BASE=\"$(pwd)\"" >> .config/vcsh/config
+	echo "export XDG_CONFIG_HOME=\"$(pwd)/.config\"" >> .config/vcsh/config
+	echo "$SELF $VCSH_COMMAND: $SELF has been initialized in \"$(pwd)/.config\""
+	echo "$SELF will now track files locally if run from this directory"
+}
+
 clone() {
 	hook pre-clone
 	init
@@ -434,23 +451,6 @@ upgrade() {
 use() {
 	git_dir_exists
 	VCSH_DIRECTORY=$VCSH_REPO_NAME; export VCSH_DIRECTORY
-}
-
-base() {
-	if [ "x$2" = 'xnew' ]; then
-		base_new
-	else
-		echo "\$VCSH_BASE is $VCSH_BASE"
-		echo "\$XDG_CONFIG_HOME is $XDG_CONFIG_HOME"
-	fi
-}
-
-base_new() {
-	mkdir -p .config/vcsh
-	echo "export VCSH_BASE=\"$(pwd)\"" >> .config/vcsh/config
-	echo "export XDG_CONFIG_HOME=\"$(pwd)/.config\"" >> .config/vcsh/config
-	echo "$SELF $VCSH_COMMAND: $SELF has been initialized in \"$(pwd)/.config\""
-	echo "$SELF will now track files locally if run from this directory"
 }
 
 which() {
