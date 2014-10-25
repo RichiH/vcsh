@@ -9,7 +9,7 @@ use Test::Most;
 chdir 't' or die $!;
 
 if (!-d 'etc') {
-	plan skip_all => 'No need to tear previous env.';
+	plan skip_all => 'No need to tear down previous env.';
 }
 
 ok rm_rf 'etc';

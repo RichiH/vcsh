@@ -12,21 +12,24 @@ chdir 't/etc/' or die $!;
 
 $ENV{'HOME'} = abs_path ('.vcsh_home');
 
+chdir '.vcsh_home' or die $!;
+
 eval {
 	touch 'a';
 };
 
 die $@ if $@;
 
-system ("./vcsh test1 add 'a'");
+system (".././vcsh test1 add 'a'");
 
-my $output = `./vcsh status`;
+my $output = `.././vcsh status`;
 
 diag $output;
 
 ok $output eq "test1:
-A a
-", 'Adding a file worksl';
+A  a
+
+", 'Adding a file works';
 
 done_testing;
 
