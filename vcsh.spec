@@ -1,9 +1,9 @@
-%global commit f7ce400c37d3308122195fd70fa79dff7aac00e3
+%global commit 36fc049881253a38f0b72d6d6aeb01c1295b8a2c
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           vcsh
-Version:        1.20140508
-Release:        2%{?dist}
+Version:        1.20141026
+Release:        1%{?dist}
 Summary:        Version Control System for $HOME
 Group:          Development/Tools
 
@@ -44,6 +44,9 @@ make %{?_smp_mflags} all=manpages
 
 
 %changelog
+* Sun Oct 26 2014 Dridi Boukelmoune <dridi.boukelmoune@gmail.com> - 1.20141026-1
+- Bumped version to 1.20141026
+
 * Sun Jun 08 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.20140508-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
