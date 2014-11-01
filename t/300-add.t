@@ -24,8 +24,6 @@ system (".././vcsh test1 add 'a'");
 
 my $output = `.././vcsh status`;
 
-diag $output;
-
 ok $output eq "test1:
 A  a
 
