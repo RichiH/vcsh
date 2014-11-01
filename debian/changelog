@@ -2,6 +2,7 @@ vcsh (1.20141026-1) unstable; urgency=medium
 
   * New upstream release
     + Release 1.20141026
+    + Closes: #760882
     + FIX fatal()
     + Improve error handling of clone()
 
