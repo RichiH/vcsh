@@ -2,11 +2,9 @@ PREFIX?=/usr
 DOCDIR_PREFIX=$(PREFIX)/share/doc
 DOCDIR=$(DOCDIR_PREFIX)/$(self)
 ZSHDIR=$(PREFIX)/share/zsh/vendor-completions
-RONN ?= ronn
 
 self=vcsh
-manpages=$(self).1
-all=test manpages
+all=test
 
 all: $(all)
 
@@ -14,20 +12,12 @@ install: all
 	install -d $(DESTDIR)$(PREFIX)/bin
 	install -m 0755 $(self) $(DESTDIR)$(PREFIX)/bin
 	install -d $(DESTDIR)$(PREFIX)/share/man/man1
-	install -m 0644 $(manpages) $(DESTDIR)$(PREFIX)/share/man/man1
+	install -m 0644 doc/$(self).1.mdoc $(DESTDIR)$(PREFIX)/share/man/man1
 	install -d $(DESTDIR)$(DOCDIR)
 	install -m 0644 README.md $(DESTDIR)$(DOCDIR)
 	install -m 0644 doc/hooks $(DESTDIR)$(DOCDIR)
 	install -d $(DESTDIR)$(ZSHDIR)
 	install -m 0644 _$(self) $(DESTDIR)$(ZSHDIR)
-
-manpages: $(manpages)
-
-$(self).1: doc/$(self).1.ronn
-	$(RONN) < doc/$(self).1.ronn > $(self).1 || rm $(self).1
-
-clean:
-	rm -rf $(self).1
 
 uninstall:
 	rm -rf $(DESTDIR)$(PREFIX)/bin/$(self)
