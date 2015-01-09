@@ -1,0 +1,537 @@
+.\" vim: ft=nroff fdm=marker
+.\"
+.\" this is a man page written using the mdoc macro set,
+.\" see roff(7), mdoc(7) <http://mdocml.bsd.lv/man/mdoc.7.html>.
+.
+.
+.Dd Oct 22, 2014
+.Os
+.Dt VCSH 1
+.
+.
+.Sh NAME
+.
+.Nm vcsh
+.Nd Version Control System for $HOME - multiple Git repositories in $HOME
+.
+.
+.Sh SYNOPSIS
+.
+.Nm
+. Op Ar options
+. Ar command
+.
+.Nm
+. Cm clone
+. Op Fl b Ar branch
+. Ar url
+. Op Ar repo
+.
+.Nm
+. Cm delete
+. Ar repo
+.
+.Nm
+. Cm enter
+. Ar repo
+.
+.Nm
+. Cm help
+.
+.Nm
+. Cm init
+. Ar repo
+.
+.Nm
+. Cm list
+.
+.Nm
+. Cm list-tracked
+. Op Ar repo
+.
+.Nm
+. Cm list-untracked
+. Op Fl r
+. Op Ar repo
+.
+.Nm
+. Cm pull
+.
+.Nm
+. Cm push
+.
+.Nm
+. Cm rename
+. Ar repo
+. Ar newname
+.
+.Nm
+. Cm run
+. Ar repo
+. Ar shell command
+.
+.Nm
+. Cm status
+. Op Ar repo
+.
+.Nm
+. Cm upgrade
+. Ar repo
+.
+.Nm
+. Cm version
+.
+.Nm
+. Cm which
+. Ar substring
+.
+.Nm
+. Cm write-gitignore
+. Ar repo
+.
+.Nm
+. Ar repo
+. Ar git-command
+.
+.Nm
+. Ar repo
+.
+.
+.Sh DESCRIPTION
+.
+.Nm
+allows you to have several
+.Xr git 1
+repositories, all maintaining their
+working trees in
+.Ev $HOME
+without clobbering each other. That, in turn, means you
+can have one repository per config set (zsh, vim, ssh, etc), picking and
+choosing which configs you want to use on which machine.
+.Pp
+.Nm
+is using a technique called fake bare Git repositories, keeping
+.Ev $GIT_DIR
+in a different directory from
+.Ev $GIT_WORK_TREE
+which is pointed to
+.Ev $HOME .
+.Pp
+The use of symlinks is not needed in this setup, making for a cleaner setup.
+.Pp
+.Nm
+was designed with
+.Xr mr 1
+in mind so you might want to install it alongside
+vcsh. That being said, you can easily use
+.Nm
+without
+.Nm mr
+if you prefer.
+.Pp
+A sample configuration for
+.Nm
+and
+.Nm mr
+can be found at
+.Lk https://github.com/RichiH/vcsh_mr_template
+and used with
+.Bd -literal -offset indent
+vcsh clone https://github.com/RichiH/vcsh_mr_template mr
+.Ed
+.Pp
+Please note that you can always use a path instead of a name for
+.Ar repo .
+This is needed to support mr and other scripts properly and of no concern to
+an interactive user.
+.
+.
+.Sh OPTIONS
+.
+.Bl -tag
+.
+. It Fl c Ar file
+Source
+. Ar file
+prior to other configuration files
+.
+. It Fl d
+Enable debug mode
+.
+. It Fl v
+Enable verbose mode
+.
+.El
+.
+.
+.Sh COMMANDS
+.
+.Bl -tag
+.
+.It Cm clone
+Clone an existing repository.
+. Pp
+If you need to clone a bundle of repositories, look into the
+.Cm post-clone-retired
+hook.
+.Pp
+You can also use a single git repository with several branches.
+Use the
+.Fl b
+option to specify a branch at clone time, the default is
+.Li master .
+.
+.It Cm commit
+Commit in all repositories
+.
+.It Cm delete
+Delete an existing repository.
+.
+.It Cm enter
+Enter repository; spawn new
+. Ev $SHELL .
+.
+.It Cm help
+Display help.
+.
+.It Cm init
+Initialize an empty repository.
+.
+.It Cm list
+List all local vcsh repositories.
+.
+.It Cm list-tracked
+List all files tracked by vcsh.
+.
+.It Cm list-tracked-by
+List files tracked by a repository.
+.Pp
+This is a legacy command; you should use
+.Cm list-tracked Ar repo
+instead.
+.
+.It Cm list-untracked
+List all files NOT tracked by
+.Nm .
+.Pp
+By default, the file list is shallow and stops at directory levels where possible.
+If you prefer to get a list of all files, append
+.Fl r
+for recursive mode.
+.Pp
+If you want to list files not tracked by a specific repository, simply append
+the repository's name last.
+.
+.It Cm pull
+Pull from all vcsh remotes.
+.
+.It Cm push
+Push to all vcsh remotes.
+.
+.It Cm rename
+Rename a repository.
+.
+.It Cm run
+Run command with
+. Ev $GIT_DIR
+and
+. Ev $GIT_WORK_TREE
+set. Allows you to run any
+and all commands without any restrictions. Use with care.
+. Pp
+Please note that there is a somewhat magic feature for run. Instead of
+. Ar repo
+it accepts
+. Ar path ,
+as well. Anything that has a slash in it will be assumed to
+be a path.
+. Nm Cm run
+will then operate on this directory instead of the one
+normally generated from the repository's name.
+This is needed to support mr and other scripts properly and of no concern to
+an interactive user.
+.
+.It Cm status
+Show statuses of all/one vcsh repositories.
+.
+.It Cm upgrade
+Upgrade repository to currently recommended settings.
+.
+.It Cm version
+Print version information.
+.
+.It Cm which Ar substring
+Find
+. Ar substring
+in name of any tracked file.
+.
+.It Cm write-gitignore Ar repo
+Write
+. Pa .gitignore.d/ Ns Ar repo
+via
+. Nm git Cm ls-files .
+.
+.It Ar repo Ar command
+Shortcut to run
+. Nm
+on a repo. Will prepend
+. Nm git
+to
+. Ar command .
+.
+.It Ar repo
+Shortcut to run
+. Nm
+.  Cm enter
+.  Ar repo .
+.
+.El
+.
+.
+.Sh ENVIRONMENT
+.
+As noted earlier,
+.Nm
+will set
+.Ev $GIT_DIR
+and
+.Ev $GIT_WORK_TREE
+to the
+appropriate values for fake bare Git repositories.
+.
+.
+.Sh CONFIGURATION
+.
+There are several ways to turn the various knobs on
+.Nm .
+In order of
+ascending precedence, they are:
+.
+.Bl -bullet -compact
+.It
+. Ev VARIABLE Ns = Ns Li foo Nm
+.It
+. Pa /etc/vcsh/config
+.It
+. Ev $XDG_CONFIG_HOME Ns Pa /vcsh/config
+.It
+. Nm Fl c Ar file
+.El
+.Pp
+Please note that those files are sourced. Any and all commands will be
+executed in the context of your shell.
+.Pp
+Interesting knobs you can turn:
+.
+.Bl -tag
+.It Ev $VCSH_GITATTRIBUTES
+Can be
+. Li none ,
+or any other value.
+. Li none
+will not maintain Git attributes in a special location.
+If set to any other value, repo-specific gitattributes files will be maintained.
+.Pp
+Defaults to
+.Li none .
+.
+.It Ev $VCSH_GITIGNORE
+Can be
+. Li exact , none ,
+or
+. Li recursive .
+. Li exact
+will seed the repo-specific ignore file with all file and directory
+names which
+. Nm git Cm ls-files
+returns.
+. Li none
+will not write any ignore file.
+. Li recursive
+will descend through all directories recursively additionally to the above.
+.Pp
+Defaults to
+. Li exact .
+.
+.It Ev $VCSH_VCSH_WORKTREE
+Can be
+. Li absolute ,
+or
+. Li relative .
+. Li absolute
+will set an absolute path; defaulting to
+. Ev $HOME .
+. Li relative
+will set a path relative to
+. Ev $GIT_DIR .
+.Pp
+Defaults to
+. Li absolute .
+.El
+.
+.Pp
+.
+Less interesting knobs you could turn:
+.
+.Bl -tag
+.It Ev $VCSH_DEBUG
+Enter debug mode.
+.
+.It Ev $XDG_CONFIG_HOME
+As specified in the 'XDG Base Directory Specification', see
+. Lk http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
+. Pp
+Defaults to
+. Ev $HOME Ns Pa /.config .
+.
+.It Ev $VCSH_REPO_D
+The directory where repositories are read from and stored.
+. Pp
+Defaults to
+. Ev $XDG_CONFIG_HOME Ns Pa /vcsh/repo.d .
+.
+.It Ev $VCSH_HOOK_D
+The directory where hooks are read from.
+. Pp
+Defaults to
+. Ev $XDG_CONFIG_HOME Ns Pa /vcsh/hooks-enabled .
+.
+.It Ev $VCSH_BASE
+The directory where repositories are checked out to.
+. Pp
+Defaults to
+. Ev $HOME .
+.El
+.
+.
+.Sh HOOK SYSTEM
+.
+.Nm
+provides a hook system. Hook scripts must be executable and should be
+placed in
+.Ev $XDG_CONFIG_HOME Ns Pa /vcsh/hooks-available .
+From there, they can be
+soft-linked into
+.Ev $XDG_CONFIG_HOME Ns Pa /vcsh/hooks-enabled ;
+.Nm
+will only
+execute hooks that are in this directory.
+.Pp
+Hooks follow a simple format.
+.Pa pre-run
+will be run before anything is run.
+If you want to have more than one script for a certain hook, just append
+any kind of string to order them. A system of
+.Pa pre-run , pre-run.10 , pre-run.20
+etc is suggested; other options would be
+.Pa pre-run-10
+or
+.Pa pre-run.sh .
+A dot after the hook name is optional.
+.Pp
+If you want to create hooks for a specific
+.Nm
+repository, simply prepend
+the repository's name, followed by a dot, i.e.
+.Pa zsh.pre-run .
+Otherwise, the
+same rules as above apply. The dot between the repository's name and the hook
+is mandatory, though.
+.Pp
+Available hooks are
+.Pa pre-clone , post-clone , post-clone-retired ,
+.Pa pre-command , post-command , pre-enter , post-enter , pre-init ,
+.Pa post-init , pre-pull , post-pull , pre-push , post-push , pre-run ,
+.Pa post-run , pre-upgrade ,
+and
+.Pa post-upgrade .
+If you need more, vcsh is trivial to patch, but please let upstream know so
+we can ship them by default.
+.
+.
+.Sh DETAILED HOWTO AND FURTHER READING
+.
+Manpages are often short and sometimes useless to glean best practices from.
+While the author tried to avoid this in this case, manpages can not cover
+detailed howtos.
+.Pp
+This software also comes with a file called
+.Pa README.md .
+It contains various
+approaches to setting up and using
+.Nm .
+You can view the file it as
+plain text or render it into various other formats via Markdown.
+.Pp
+On Debian-based systems, this file can be found in
+.Pa /usr/share/doc/vcsh .
+.
+.
+.Sh SECURITY CONSIDERATIONS
+.
+.Nm
+allows you to execute arbitrary commands via
+.Nm Cm run .
+For example,
+adding a
+.Xr sudo 8
+rule for
+.Nm
+would be pretty stupid.
+.Pp
+Additionally, vcsh will source, i.e. execute, all files listed in
+.Sx CONFIGURATION .
+You can put any and all commands into these config files and they will be
+executed.
+.
+.
+.Sh BUGS
+.
+None are known at this time, but reports and/or patches are more than welcome.
+.
+.
+.Sh INTEROPERABILITY
+.
+If you rely on
+.Nm git
+.Cm submodule
+use git 1.7.12 or later.
+Earlier versions do not clean internal variables properly before descending into
+submodules, resulting in unhappy end users.
+.
+.
+.Sh HISTORY
+.
+Like most people, the author initially made do with a single repository for all
+config files, all of which were soft-linked into
+.Ev $HOME .
+.Pp
+Martin F. Krafft aka madduck came up with the concept of fake bare Git
+repositories.
+.
+.Nm
+was initally written by madduck. This version is a re-implementation from
+scratch with a lot more features. madduck graciously agreed to let the author
+take over the name.
+.
+.
+.Sh AUTHOR
+.
+This manpage and
+.Nm
+itself were written by Richard "RichiH" Hartmann.
+.
+.
+.Sh COPYRIGHT
+.
+Copyright 2011-2013 Richard Hartmann <richih@debian.org>
+.Pp
+Licensed under the GNU GPL version 2 or higher.
+.Pp
+.Lk https://github.com/RichiH/vcsh
+.
+.
+.Sh SEE ALSO
+.
+.Xr git 1 ,
+.Xr mr 1 .

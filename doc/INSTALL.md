@@ -1,13 +1,6 @@
 # Pre-requisites #
 
-If you want to build the manpage, you will need [ronn] [1].
-Debian 7.0 and above come with a package, so do most Debian clones.
-
-To install ronn on your Debian-based system, simply run
-
-	apt-get install ruby-ronn
-
-There are no other dependencies other than `git`, `ronn` and a POSIX shell.
+There are no other dependencies other than git and a POSIX shell.
 
 
 # Installing #
@@ -42,4 +35,3 @@ and if you are bored, I suggest
 
 	make moo
 
-[1]: http://rtomayko.github.io/ronn/
