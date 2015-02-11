@@ -40,7 +40,7 @@ uninstall:
 purge: uninstall
 	rmdir -p --ignore-fail-on-non-empty $(DESTDIR)$(PREFIX)/bin/
 	rmdir -p --ignore-fail-on-non-empty $(DESTDIR)$(PREFIX)/share/man/man1/
-	rmdir -p --ignore-fail-on-non-empty $(DESTDIR)$(DOCDIR_PREFIX)
+	rmdir -p --ignore-fail-on-non-empty $(DESTDIR)$(DOCDIR)
 	rmdir -p --ignore-fail-on-non-empty $(DESTDIR)$(ZSHDIR)
 
 test:
