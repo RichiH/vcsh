@@ -4,7 +4,7 @@ before_install:
   - cpanm Test::Most
   - apt-get moo
 install:
-  - sudo apt-get install git ruby-ronn
+  - sudo apt-get install cowsay git ruby-ronn
 script:
   - make test
 after_script:
