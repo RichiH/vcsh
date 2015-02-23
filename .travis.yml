@@ -6,3 +6,7 @@ install:
   - sudo apt-get install git ruby-ronn
 script:
   - make test
+notifications:
+  email:
+    on_success: change
+    on_failure: always
