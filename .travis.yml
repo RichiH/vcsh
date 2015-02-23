@@ -1,5 +1,5 @@
 language: perl
 install:
-  - sudo apt-get install git ruby-ronn
+  - sudo apt-get install git ruby-ronn libshell-command-perl
 script:
   - make test
