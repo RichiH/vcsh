@@ -1,0 +1,5 @@
+language: perl
+install:
+	- apt-get install git ruby-ronn
+script:
+	- make test
