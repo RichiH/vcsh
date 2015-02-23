@@ -1,4 +1,5 @@
-vcsh - Version Control System for $HOME - multiple Git repositories in $HOME [![Build Status](https://travis-ci.org/RichiH/vcsh.svg)](https://travis-ci.org/RichiH/vcsh)
+vcsh - Version Control System for $HOME - multiple Git repositories in $HOME
+[![Build Status](https://travis-ci.org/RichiH/vcsh.svg)](https://travis-ci.org/RichiH/vcsh)
 
 
 # Index
