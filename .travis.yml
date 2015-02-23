@@ -1,5 +1,8 @@
 language: perl
+before_install:
+  - cpanm Shell::Command
+  - cpanm Test::Most
 install:
-  - sudo apt-get install git ruby-ronn libshell-command-perl
+  - sudo apt-get install git ruby-ronn
 script:
   - make test
