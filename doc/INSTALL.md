@@ -7,7 +7,7 @@ To install ronn on your Debian-based system, simply run
 
 	apt-get install ruby-ronn
 
-There are no other dependencies other than `git`, `ronn` and a POSIX shell.
+There are no other dependencies other than `git`, `ronn`, full `perl` (including the [`Test:Most`](http://search.cpan.org/~ovid/Test-Most-0.34/lib/Test/Most.pm) and [`Shell:Command`](http://search.cpan.org/~flora/Shell-Command-0.06/lib/Shell/Command.pm)) and a POSIX shell.
 
 
 # Installing #
