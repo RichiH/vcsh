@@ -317,11 +317,12 @@ list_untracked_helper() {
 
 pull() {
 	hook pre-pull
+	shift 1
 	for VCSH_REPO_NAME in $(list); do
 		printf '%s: ' "$VCSH_REPO_NAME"
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
-		git pull
+		git pull $@
 		VCSH_COMMAND_RETURN_CODE=$?
 		echo
 	done
