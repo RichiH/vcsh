@@ -1,3 +1,12 @@
+2015-05-02  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20150502
+	* Add tests
+	* Integrate tests with Travis CI
+	* Make `vcsh --list_untracked` GNU-independent
+	* Improve vcsh's code quality
+	* Improve Makefile, documentation, etc
+
 2014-10-26  Richard Hartmann <richih.mailinglist@gmail.com>
 
 	* Release 1.20141026
