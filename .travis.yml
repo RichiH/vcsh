@@ -1,0 +1,15 @@
+language: perl
+before_install:
+  - cpanm Shell::Command
+  - cpanm Test::Most
+  - apt-get moo
+install:
+  - sudo apt-get install cowsay git ruby-ronn
+script:
+  - make test
+after_script:
+  - make moo
+notifications:
+  email:
+    on_success: change
+    on_failure: always
