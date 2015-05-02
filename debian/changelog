@@ -1,3 +1,12 @@
+vcsh (1.20150502-1) unstable; urgency=medium
+
+  * New upstream release
+    + Release 1.20150502
+    + Add tests
+    + Various improvements
+
+ -- Richard Hartmann <richih@debian.org>  Sat, 02 May 2015 17:02:40 +0200
+
 vcsh (1.20141026-1) unstable; urgency=medium
 
   * New upstream release
