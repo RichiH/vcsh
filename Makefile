@@ -21,13 +21,7 @@ install: all
 	install -d $(DESTDIR)$(ZSHDIR)
 	install -m 0644 _$(self) $(DESTDIR)$(ZSHDIR)
 
-manpages: $(manpages)
-
-$(self).1: doc/$(self).1.ronn
-	$(RONN) < doc/$(self).1.ronn > $(self).1 || rm $(self).1
-
 clean:
-	rm -rf $(self).1
 
 uninstall:
 	rm -rf $(DESTDIR)$(PREFIX)/bin/$(self)
