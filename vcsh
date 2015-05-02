@@ -19,7 +19,7 @@
 # If '.git-HEAD' is appended to the version, you are seeing an unreleased
 # version of vcsh; the master branch is supposed to be clean at all times
 # so you can most likely just use it nonetheless
-VERSION='1.20141026'
+VERSION='1.20150502'
 SELF=$(basename $0)
 
 fatal() {
@@ -312,7 +312,7 @@ list_untracked_helper() {
 		cp $temp_file_others $temp_file_untracked || fatal 'Could not copy temp file'
 	fi
 	cp $temp_file_untracked $temp_file_untracked_copy || fatal 'Could not copy temp file'
-	comm -12 --nocheck-order $temp_file_others $temp_file_untracked_copy > $temp_file_untracked
+	comm -12 $temp_file_others $temp_file_untracked_copy > $temp_file_untracked
 }
 
 pull() {

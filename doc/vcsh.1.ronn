@@ -17,7 +17,7 @@ vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
 
 `vcsh` list
 
-`vcsh` list-tracked [<rpoe>]
+`vcsh` list-tracked [<repo>]
 
 `vcsh` list-untracked [<-r>] [<repo>]
 

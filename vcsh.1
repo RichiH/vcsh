@@ -1,0 +1,378 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "VCSH" "1" "October 2014" "" ""
+.
+.SH "NAME"
+\fBvcsh\fR \- Version Control System for $HOME \- multiple Git repositories in $HOME
+.
+.SH "SYNOPSIS"
+\fBvcsh\fR [\fIoptions\fR] \fIcommand\fR
+.
+.P
+\fBvcsh\fR clone [\-b \fIbranch\fR] \fIurl\fR [\fIrepo\fR]
+.
+.P
+\fBvcsh\fR delete \fIrepo\fR
+.
+.P
+\fBvcsh\fR enter \fIrepo\fR
+.
+.P
+\fBvcsh\fR help
+.
+.P
+\fBvcsh\fR init \fIrepo\fR
+.
+.P
+\fBvcsh\fR list
+.
+.P
+\fBvcsh\fR list\-tracked [\fIrpoe\fR]
+.
+.P
+\fBvcsh\fR list\-untracked [\fI\-r\fR] [\fIrepo\fR]
+.
+.P
+\fBvcsh\fR pull
+.
+.P
+\fBvcsh\fR push
+.
+.P
+\fBvcsh\fR rename \fIrepo\fR \fInewname\fR
+.
+.P
+\fBvcsh\fR run \fIrepo\fR \fIshell command\fR
+.
+.P
+\fBvcsh\fR status [\fIrepo\fR]
+.
+.P
+\fBvcsh\fR upgrade \fIrepo\fR
+.
+.P
+\fBvcsh\fR version
+.
+.P
+\fBvcsh\fR which \fIsubstring\fR
+.
+.P
+\fBvcsh\fR write\-gitignore \fIrepo\fR
+.
+.P
+\fBvcsh\fR \fIrepo\fR \fIgit command\fR
+.
+.P
+\fBvcsh\fR \fIrepo\fR
+.
+.SH "DESCRIPTION"
+\fBvcsh\fR allows you to have several \fBgit\fR(1) repositories, all maintaining their working trees in $HOME without clobbering each other\. That, in turn, means you can have one repository per config set (zsh, vim, ssh, etc), picking and choosing which configs you want to use on which machine\.
+.
+.P
+\fBvcsh\fR is using a technique called fake bare Git repositories, keeping \fI$GIT_DIR\fR in a different directory from \fI$GIT_WORK_TREE\fR which is pointed to \fI$HOME\fR\.
+.
+.P
+The use of symlinks is not needed in this setup, making for a cleaner setup\.
+.
+.P
+\fBvcsh\fR was designed with \fBmr\fR(1) in mind so you might want to install it alongside vcsh\. That being said, you can easily use \fBvcsh\fR without \fBmr\fR if you prefer\.
+.
+.P
+A sample configuration for \fBvcsh\fR and \fBmr\fR can be found at \fIhttps://github\.com/RichiH/vcsh_mr_template\fR and used with \fBvcsh clone https://github\.com/RichiH/vcsh_mr_template mr\fR\.
+.
+.P
+Please note that you can always use a path instead of a name for \fIrepo\fR\. This is needed to support mr and other scripts properly and of no concern to an interactive user\.
+.
+.SH "OPTIONS"
+.
+.TP
+\-c
+Source \fIfile\fR prior to other configuration files
+.
+.TP
+\-d
+Enable debug mode
+.
+.TP
+\-v
+Enable verbose mode
+.
+.SH "COMMANDS"
+.
+.TP
+clone
+Clone an existing repository\.
+.
+.IP
+If you need to clone a bundle of repositories, look into the \fBpost\-clone\-retired\fR hook\.
+.
+.IP
+You can also use a single git repository with several branches\. Use the \fB\-b\fR option to specify a branch at clone time, the default is \fBmaster\fR\.
+.
+.TP
+commit
+Commit in all repositories
+.
+.TP
+delete
+Delete an existing repository\.
+.
+.TP
+enter
+Enter repository; spawn new \fI$SHELL\fR\.
+.
+.TP
+help
+Display help\.
+.
+.TP
+init
+Initialize an empty repository\.
+.
+.TP
+list
+List all local vcsh repositories\.
+.
+.TP
+list\-tracked
+List all files tracked by vcsh\.
+.
+.IP
+If you want to list files tracked by a specific repository, simply append the repository\'s name last\.
+.
+.TP
+list\-tracked\-by
+List files tracked by a repository\.
+.
+.IP
+This is a legacy command; you should use \fBlist\-tracked <repo>\fR instead\.
+.
+.TP
+list\-untracked
+List all files NOT tracked by vcsh\.
+.
+.IP
+By default, the file list is shallow and stops at directory levels where possible\. If you prefer to get a list of all files, append \fB\-r\fR for recursive mode\.
+.
+.IP
+If you want to list files not tracked by a specific repository, simply append the repository\'s name last\.
+.
+.TP
+pull
+Pull from all vcsh remotes\.
+.
+.TP
+push
+Push to all vcsh remotes\.
+.
+.TP
+rename
+Rename a repository\.
+.
+.TP
+run
+Run command with \fI$GIT_DIR\fR and \fI$GIT_WORK_TREE\fR set\. Allows you to run any and all commands without any restrictions\. Use with care\.
+.
+.IP
+Please note that there is a somewhat magic feature for run\. Instead of \fIrepo\fR it accepts \fIpath\fR, as well\. Anything that has a slash in it will be assumed to be a path\. \fBvcsh run\fR will then operate on this directory instead of the one normally generated from the repository\'s name\. This is needed to support mr and other scripts properly and of no concern to an interactive user\.
+.
+.TP
+status
+Show statuses of all/one vcsh repositories\.
+.
+.TP
+upgrade
+Upgrade repository to currently recommended settings\.
+.
+.TP
+version
+Print version information\.
+.
+.TP
+which \fIsubstring\fR
+Find \fIsubstring\fR in name of any tracked file\.
+.
+.TP
+write\-gitignore
+Write \.gitignore\.d/\fIrepo\fR via \fBgit ls\-files\fR\.
+.
+.TP
+\fIrepo\fR \fIgitcommand\fR
+Shortcut to run \fBvcsh\fR on a repo\. Will prepend \fBgit\fR to \fIcommand\fR\.
+.
+.TP
+\fIrepo\fR
+Shortcut to run \fBvcsh enter <repo>\fR\.
+.
+.SH "ENVIRONMENT"
+As noted earlier, \fBvcsh\fR will set \fI$GIT_DIR\fR and \fI$GIT_WORK_TREE\fR to the appropriate values for fake bare Git repositories\.
+.
+.SH "CONFIG"
+There are several ways to turn the various knobs on \fBvcsh\fR\. In order of ascending precedence, they are:
+.
+.IP "\(bu" 4
+\fBVARIABLE=foo vcsh\fR
+.
+.IP "\(bu" 4
+</etc/vcsh/config>
+.
+.IP "\(bu" 4
+<$XDG_CONFIG_HOME/vcsh/config>
+.
+.IP "\(bu" 4
+\fBvcsh \-c <file>\fR
+.
+.IP "" 0
+.
+.P
+Please note that those files are sourced\. Any and all commands will be executed in the context of your shell\.
+.
+.P
+Interesting knobs you can turn:
+.
+.TP
+\fI$VCSH_GITATTRIBUTES\fR
+Can be \fInone\fR, or any other value\.
+.
+.IP
+\fInone\fR will not maintain Git attributes in a special location\.
+.
+.IP
+If set to any other value, repo\-specific gitattributes files will be maintained\.
+.
+.IP
+Defaults to \fInone\fR\.
+.
+.TP
+\fI$VCSH_GITIGNORE\fR
+Can be \fIexact\fR, \fInone\fR, or \fIrecursive\fR\.
+.
+.IP
+\fIexact\fR will seed the repo\-specific ignore file with all file and directory names which \fBgit ls\-files\fR returns\.
+.
+.IP
+\fInone\fR will not write any ignore file\.
+.
+.IP
+\fIrecursive\fR will descend through all directories recursively additionally to the above\.
+.
+.IP
+Defaults to \fIexact\fR\.
+.
+.TP
+\fI$VCSH_VCSH_WORKTREE\fR
+Can be \fIabsolute\fR, or \fIrelative\fR\.
+.
+.IP
+\fIabsolute\fR will set an absolute path; defaulting to \fI$HOME\fR\.
+.
+.IP
+\fIrelative\fR will set a path relative to \fI$GIT_DIR\fR\.
+.
+.IP
+Defaults to \fIabsolute\fR\.
+.
+.P
+Less interesting knobs you could turn:
+.
+.TP
+\fI$VCSH_DEBUG\fR
+Enter debug mode\.
+.
+.TP
+\fI$XDG_CONFIG_HOME\fR
+As specified in the \'XDG Base Directory Specification\', see \fIhttp://standards\.freedesktop\.org/basedir\-spec/basedir\-spec\-latest\.html\fR
+.
+.IP
+Defaults to <$HOME/\.config>\.
+.
+.TP
+\fI$VCSH_REPO_D\fR
+The directory where repositories are read from and stored\.
+.
+.IP
+Defaults to <$XDG_CONFIG_HOME/vcsh/repo\.d>\.
+.
+.TP
+\fI$VCSH_HOOK_D\fR
+The directory where hooks are read from\.
+.
+.IP
+Defaults to <$XDG_CONFIG_HOME/vcsh/hooks\-enabled>\.
+.
+.TP
+\fI$VCSH_BASE\fR
+The directory where repositories are checked out to\.
+.
+.IP
+Defaults to \fI$HOME\fR\.
+.
+.SH "HOOK SYSTEM"
+\fBvcsh\fR provides a hook system\. Hook scripts must be executable and should be placed in <$XDG_CONFIG_HOME/vcsh/hooks\-available>\. From there, they can be soft\-linked into <$XDG_CONFIG_HOME/vcsh/hooks\-enabled>; \fBvcsh\fR will only execute hooks that are in this directory\.
+.
+.P
+Hooks follow a simple format\. \fIpre\-run\fR will be run before anything is run\. If you want to have more than one script for a certain hook, just append any kind of string to order them\. A system of \fIpre\-run\fR, <pre\-run\.10>, <pre\-run\.20> etc is suggested; other options would be \fIpre\-run\-10\fR or <pre\-run\.sh>\. A dot after the hook name is optional\.
+.
+.P
+If you want to create hooks for a specific \fIvcsh\fR repository, simply prepend the repository\'s name, followed by a dot, i\.e\. <zsh\.pre\-run>\. Otherwise, the same rules as above apply\. The dot between the repository\'s name and the hook is mandatory, though\.
+.
+.P
+Available hooks are \fIpre\-clone\fR, \fIpost\-clone\fR, \fIpost\-clone\-retired\fR, \fIpre\-command\fR, \fIpost\-command\fR, \fIpre\-enter\fR, \fIpost\-enter\fR, \fIpre\-init\fR, \fIpost\-init\fR, \fIpre\-pull\fR, \fIpost\-pull\fR, \fIpre\-push\fR, \fIpost\-push\fR, \fIpre\-run\fR, \fIpost\-run\fR, \fIpre\-upgrade\fR, and \fIpost\-upgrade\fR\. If you need more, vcsh is trivial to patch, but please let upstream know so we can ship them by default\.
+.
+.SH "OVERLAY SYSTEM"
+\fBvcsh\fR also provides an overlay system\. Similar to hooks, the recommended locations are <$XDG_CONFIG_HOME/vcsh/overlays\-available> and <$XDG_CONFIG_HOME/vcsh/overlays\-enabled>\.
+.
+.P
+Overlays follow the same rules as hooks and you are free to overwrite any and all functions\. Same as hooks, you can use global or repository\-specific overlays by using either <$VCSH_OVERLAY_D/$VCSH_COMMAND> or <$VCSH_OVERLAY_D/$VCSH_REPO_NAME\.$VCSH_COMMAND>\.
+.
+.P
+Please note that nothing stops you from, e\.g\. overwriting \fBstatus()\fR in <$VCSH_OVERLAY_D/commit>\. As the overlays will be sourced and you are replacing arbitrary functions, any and all features may stop working, or you may even lose data\.
+.
+.P
+You have been warned\.
+.
+.SH "DETAILED HOWTO AND FURTHER READING"
+Manpages are often short and sometimes useless to glean best practices from\. While the author tried to avoid this in this case, manpages can not cover detailed howtos\.
+.
+.P
+This software also comes with a file called <README\.md>\. It contains various approaches to setting up and using vcsh\. You can view the file it as plain text or render it into various other formats via Markdown\.
+.
+.P
+On Debian\-based systems, this file can be found in </usr/share/doc/vcsh>\.
+.
+.SH "SECURITY CONSIDERATIONS"
+\fBvcsh\fR allows you to execute arbitrary commands via \fBvcsh run\fR\. For example, adding a \fBsudo\fR(8) rule for \fBvcsh\fR would be pretty stupid\.
+.
+.P
+Additionally, vcsh will source, i\.e\. execute, all files listed in \fICONFIG\fR\. You can put any and all commands into these config files and they will be executed\.
+.
+.SH "BUGS"
+None are known at this time, but reports and/or patches are more than welcome\.
+.
+.SH "INTEROPERABILITY"
+If you rely on \fBgit submodule\fR use \fBgit\fR 1\.7\.12 or later\. Earlier versions do not clean internal variables properly before descending into submodules, resulting in unhappy end users\.
+.
+.SH "HISTORY"
+Like most people, the author initially made do with a single repository for all config files, all of which were soft\-linked into \fI$HOME\fR\.
+.
+.P
+Martin F\. Krafft aka madduck came up with the concept of fake bare Git repositories\.
+.
+.P
+vcsh was initally written by madduck\. This version is a re\-implementation from scratch with a lot more features\. madduck graciously agreed to let the author take over the name\.
+.
+.SH "AUTHOR"
+This manpage and \fBvcsh\fR itself were written by Richard "RichiH" Hartmann\.
+.
+.SH "COPYRIGHT"
+Copyright 2011\-2013 Richard Hartmann \fIrichih@debian\.org\fR
+.
+.P
+Licensed under the GNU GPL version 2 or higher\.
+.
+.P
+https://github\.com/RichiH/vcsh
+.
+.SH "SEE ALSO"
+\fBgit\fR(1), \fBmr\fR(1)
