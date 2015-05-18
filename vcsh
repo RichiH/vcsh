@@ -119,7 +119,8 @@ help() {
           <newname>     Rename repository
    run <repo> \\
        <command>        Use this repository
-   status [<repo>]      Show statuses of all/one vcsh repositories
+   status \\
+     [--terse] [<repo>] Show statuses of all/one vcsh repositories
    upgrade <repo>       Upgrade repository to currently recommended settings
    version              Print version information
    which <substring>    Find substring in name of any tracked file
@@ -367,19 +368,24 @@ run() {
 }
 
 status() {
+	if [ -t 1 ]; then
+		COLORING="-c color.status=always"
+	fi
 	if [ -n "$VCSH_REPO_NAME" ]; then
 		status_helper $VCSH_REPO_NAME
 	else
 		for VCSH_REPO_NAME in $(list); do
-			echo "$VCSH_REPO_NAME:"
-			status_helper $VCSH_REPO_NAME
-			echo
+			STATUS=$(status_helper $VCSH_REPO_NAME "$COLORING")
+			[ -n "$STATUS" -o -z "$VCSH_STATUS_TERSE" ] && echo "$VCSH_REPO_NAME:"
+			[ -n "$STATUS" ]            && echo "$STATUS"
+			[ -z "$VCSH_STATUS_TERSE" ] && echo
 		done
 	fi
 }
 
 status_helper() {
-	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
+	GIT_DIR=$VCSH_REPO_D/$1.git; export GIT_DIR
+	VCSH_GIT_OPTIONS=$2
 	use
 	remote_tracking_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2> /dev/null) && {
 		commits_behind=$(git log ..${remote_tracking_branch} --oneline | wc -l)
@@ -387,7 +393,7 @@ status_helper() {
 		[ ${commits_behind} -ne 0 ] && echo "Behind $remote_tracking_branch by $commits_behind commits"
 		[ ${commits_ahead} -ne 0 ] && echo "Ahead of $remote_tracking_branch by $commits_ahead commits"
 	}
-	git status --short --untracked-files='no'
+	git ${VCSH_GIT_OPTIONS} status --short --untracked-files='no'
 	VCSH_COMMAND_RETURN_CODE=$?
 }
 
@@ -554,6 +560,10 @@ elif [ x"$VCSH_COMMAND" = x'commit' ] ||
      [ x"$VCSH_COMMAND" = x'push'   ]; then
 	:
 elif [ x"$VCSH_COMMAND" = x'status' ]; then
+	if [ x"$2" = x'--terse' ]; then
+		VCSH_STATUS_TERSE=1; export VCSH_STATUS_TERSE
+		shift
+	fi
 	VCSH_REPO_NAME=$2; export VCSH_REPO_NAME
 elif [ -n "$2" ]; then
 	VCSH_COMMAND='run'; export VCSH_COMMAND
