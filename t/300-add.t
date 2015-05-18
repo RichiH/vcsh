@@ -29,7 +29,7 @@ A  a
 
 ", 'Adding a file works';
 
-my $output = `.././vcsh status --terse`;
+$output = `.././vcsh status --terse`;
 
 ok $output eq "test1:
 A  a
