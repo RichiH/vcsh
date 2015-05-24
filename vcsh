@@ -350,6 +350,12 @@ rename() {
 	git_dir_exists
 	[ -d "$GIT_DIR_NEW" ] && fatal "'$GIT_DIR_NEW' exists" 54
 	mv -f "$GIT_DIR" "$GIT_DIR_NEW" || fatal "Could not mv '$GIT_DIR' '$GIT_DIR_NEW'" 52
+	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ] \
+		&& mv -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME_NEW" \
+		|| fatal "Could not mv '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME' '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME_NEW'"
+	[ -e "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME" ] \
+		&& mv -f "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME" "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME_NEW" \
+		|| fatal "Could not mv '$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME' '$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME_NEW'"
 
 	# Now that the repository has been renamed, we need to fix up its configuration
 	# Overwrite old name..
