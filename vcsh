@@ -348,14 +348,25 @@ retire() {
 
 rename() {
 	git_dir_exists
+
+	# Verify that new files and directories are non-existant
 	[ -d "$GIT_DIR_NEW" ] && fatal "'$GIT_DIR_NEW' exists" 54
+	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME_NEW" ] \
+		&& fatal "'$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME_NEW' already exists"
+	[ -e "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME_NEW" ] \
+		&& fatal "'$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME_NEW' already exists"
+
+	# Actually move things over
 	mv -f "$GIT_DIR" "$GIT_DIR_NEW" || fatal "Could not mv '$GIT_DIR' '$GIT_DIR_NEW'" 52
-	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ] \
-		&& mv -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME_NEW" \
+	if [ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ]; then
+		mv -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME_NEW" \
 		|| fatal "Could not mv '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME' '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME_NEW'"
-	[ -e "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME" ] \
-		&& mv -f "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME" "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME_NEW" \
+		write_gitignore
+	fi
+	if [ -e "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME" ]; then
+		mv -f "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME" "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME_NEW" \
 		|| fatal "Could not mv '$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME' '$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME_NEW'"
+	fi
 
 	# Now that the repository has been renamed, we need to fix up its configuration
 	# Overwrite old name..
