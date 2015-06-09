@@ -17,7 +17,7 @@ Architecture: all
 Depends: git,
          ${misc:Depends},
          ${shlibs:Depends}
-Recommends: mr (>= 1.07),
+Recommends: myrepos,
             ssh-client
 Description: Version Control System for $HOME - multiple Git repositories in $HOME
  vcsh allows you to have several git repositories, all maintaining their working
