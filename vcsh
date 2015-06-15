@@ -427,9 +427,7 @@ use() {
 which() {
 	[ -e "$VCSH_COMMAND_PARAMETER" ] || fatal "'$VCSH_COMMAND_PARAMETER' does not exist" 1
 	for VCSH_REPO_NAME in $(list); do
-		for VCSH_FILE in $(get_files); do
-			echo "$VCSH_FILE" | grep -q "$VCSH_COMMAND_PARAMETER" && echo "$VCSH_REPO_NAME: $VCSH_FILE"
-		done
+		get_files | grep -- "$VCSH_COMMAND_PARAMETER" | sed "s/^/$VCSH_REPO_NAME: /"
 	done | sort -u
 }
 
