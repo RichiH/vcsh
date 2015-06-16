@@ -425,12 +425,16 @@ use() {
 }
 
 which() {
-	[ -e "$VCSH_COMMAND_PARAMETER" ] || fatal "'$VCSH_COMMAND_PARAMETER' does not exist" 1
+	got_result=0
+	# Pipes are launched in a subshell, so we need to communicate using a file
+	tempfile="$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX")" || fatal 'Could not create temp file'
 	for VCSH_REPO_NAME in $(list); do
-		for VCSH_FILE in $(get_files); do
-			echo "$VCSH_FILE" | grep -q "$VCSH_COMMAND_PARAMETER" && echo "$VCSH_REPO_NAME: $VCSH_FILE"
-		done
+		get_files | grep -- "$VCSH_COMMAND_PARAMETER" | sed "s/^/$VCSH_REPO_NAME: /" | grep .
+		[ $? -eq 0 ] && echo 1 > "$tempfile"
 	done | sort -u
+	[ -s "$tempfile" ] && got_result=1
+	rm -f "$tempfile" || error "Could not delete '$tempfile'"
+	[ "$got_result" -eq 0 ] && fatal "No matching files where found" 1
 }
 
 write_gitignore() {
