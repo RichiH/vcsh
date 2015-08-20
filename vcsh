@@ -264,7 +264,7 @@ list_tracked_helper() {
 }
 
 list_tracked_by() {
-	list_tracked $2
+	list_tracked '' $2
 }
 
 list_untracked() {
