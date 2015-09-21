@@ -169,7 +169,7 @@ clone() {
 	[ x"$VCSH_CONFLICT" = x'1' ]) &&
 		fatal "will stop after fetching and not try to merge!
   Once this situation has been resolved, run 'vcsh $VCSH_REPO_NAME pull' to finish cloning." 17
-	git merge origin/"$VCSH_BRANCH"
+	git -c merge.ff=true merge origin/"$VCSH_BRANCH"
 	hook post-merge
 	hook post-clone
 	retire
