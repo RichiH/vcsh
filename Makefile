@@ -10,7 +10,7 @@ all=test manpages
 
 all: $(all)
 
-install: all
+install: manpages
 	install -d $(DESTDIR)$(PREFIX)/bin
 	install -m 0755 $(self) $(DESTDIR)$(PREFIX)/bin
 	install -d $(DESTDIR)$(PREFIX)/share/man/man1
