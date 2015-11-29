@@ -25,7 +25,6 @@ ok $output eq "test1:\n\n", 'Our new repo is there';
 chdir $ENV{"HOME"} . '/.config/vcsh/repo.d/test1.git/' or die $!;
 
 ok -f 'HEAD';
-ok -d 'branches';
 ok -f 'config';
 ok -f 'description';
 ok -d 'hooks';
