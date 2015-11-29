@@ -19,7 +19,7 @@ vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
 
 `vcsh` list-tracked [<repo>]
 
-`vcsh` list-untracked [<-r>] [<repo>]
+`vcsh` list-untracked [<-a>] [<-r>] [<repo>]
 
 `vcsh` pull
 
@@ -121,12 +121,14 @@ an interactive user.
 * list-untracked:
   List all files NOT tracked by vcsh.
 
-  By default, the file list is shallow and stops at directory levels where
-  possible. If you prefer to get a list of all files, append `-r` for
-  recursive mode.
+  `-a`: Show all files.
+  By default, the `git ls-files --exclude-standard` is called.
 
-  If you want to list files not tracked by a specific repository, simply
-  append the repository's name last.
+  `-r`: Recursive mode.
+  By default, the file list is shallow and stops at directory levels where
+  possible.
+
+  `$repo`: List files not tracked by this specific repository.
 
 * pull:
   Pull from all vcsh remotes.

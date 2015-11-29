@@ -112,7 +112,8 @@ help() {
    list-tracked \\
         [<repo>]        List all files tracked all or one repositories
    list-untracked \\
-        [<-r>] [<repo>] List all files not tracked by all or one repositories
+        [<-a>] [<-r>]
+        [<repo>]        List all files not tracked by all or one repositories
    pull                 Pull from all vcsh remotes
    push                 Push to vcsh remotes
    rename <repo> \\
@@ -275,10 +276,13 @@ list_untracked() {
 	temp_file_untracked_copy=$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX") || fatal 'Could not create temp file'
 
 	# Hack in support for `vcsh list-untracked -r`...
+	exclude_standard_opt='--exclude-standard'
 	directory_opt="--directory"
 	shift 1
-	while getopts "r" flag; do
-		if [ x"$1" = x'-r' ]; then
+	while getopts "ar" flag; do
+		if [ x"$1" = x'-a' ]; then
+			unset exclude_standard_opt
+		elif [ x"$1" = x'-r' ]; then
 			unset directory_opt
 		fi
 		shift 1
@@ -301,7 +305,7 @@ list_untracked() {
 
 list_untracked_helper() {
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
-	git ls-files --others "$directory_opt" | (
+	git ls-files --others $exclude_standard_opt "$directory_opt" | (
 		while read line; do
 			echo "$line"
 			directory_component=${line%%/*}
