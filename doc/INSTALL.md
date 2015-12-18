@@ -14,6 +14,12 @@ There are no other dependencies other than `git`, `ronn` and a POSIX shell.
 
 	sudo make install
 
+## Installing without root privileges ##
+
+	make install DESTDIR=/home/myuser/local
+
+or simply copy the shell script into any place you like, e.g. `~/bin`
+
 
 # Uninstalling #
 

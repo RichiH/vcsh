@@ -14,7 +14,7 @@ my $output = `./vcsh status`;
 
 ok $output eq "", 'No repos set up yet.';
 
-$output = `./vcsh init test1`;
+$output = `LC_ALL=C ./vcsh init test1`;
 
 ok $output eq "Initialized empty shared Git repository in " . $ENV{'HOME'} . "/.config/vcsh/repo.d/test1.git/\n";
 
@@ -25,7 +25,6 @@ ok $output eq "test1:\n\n", 'Our new repo is there';
 chdir $ENV{"HOME"} . '/.config/vcsh/repo.d/test1.git/' or die $!;
 
 ok -f 'HEAD';
-ok -d 'branches';
 ok -f 'config';
 ok -f 'description';
 ok -d 'hooks';
