@@ -100,7 +100,6 @@ function _vcsh () {
 		"init:initialize an empty repository"
 		"list:list all local vcsh repositories"
 		"list-tracked:list all files tracked by vcsh"
-		"list-tracked-by:list files tracked by a repository"
 		"list-untracked:list all files not tracked by vcsh"
 		"pull:pull from all vcsh remotes"
 		"push:push to vcsh remotes"
