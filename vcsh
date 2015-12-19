@@ -160,7 +160,7 @@ clone() {
 		exit
 	fi
 	GIT_VERSION_MAJOR=$(git --version | sed -n 's/.* \([0-9]\)\..*/\1/p' )
-	if [ 2 -ge "$GIT_VERSION_MAJOR" ];then
+	if [ 1 -lt "$GIT_VERSION_MAJOR" ];then
 		git fetch origin "$VCSH_BRANCH"
 	else
 		git fetch origin
