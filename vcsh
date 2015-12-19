@@ -106,6 +106,8 @@ help() {
    commit               Commit in all repositories
    delete <repo>        Delete an existing repository
    enter <repo>         Enter repository; spawn new instance of \$SHELL
+   foreach [<-g>]
+     <git command>      Execute a command for every repository
    help                 Display this help text
    init <repo>          Initialize a new repository
    list                 List all repositories
@@ -214,6 +216,27 @@ enter() {
 	use
 	$SHELL
 	hook post-enter
+}
+
+foreach() {
+	hook pre-foreach
+
+	# We default to prefixing `git` to all commands passed to foreach, but
+	# allow running in general context with -g
+	command_prefix=git
+	while getopts "g" flag; do
+		if [ x"$1" = x'-g' ]; then
+			unset command_prefix
+		fi
+		shift 1
+	done
+	for VCSH_REPO_NAME in $(list); do
+		echo "$VCSH_REPO_NAME:"
+		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
+		use
+		$command_prefix "$@"
+	done
+	hook post-foreach
 }
 
 git_dir_exists() {
@@ -558,6 +581,9 @@ elif [ x"$VCSH_COMMAND" = x'delete' ]           ||
 	[ x"$VCSH_COMMAND" = x'rename' ] && { VCSH_REPO_NAME_NEW=$3; export VCSH_REPO_NAME_NEW;
 	                                      GIT_DIR_NEW=$VCSH_REPO_D/$VCSH_REPO_NAME_NEW.git; export GIT_DIR_NEW; }
 	[ x"$VCSH_COMMAND" = x'run' ]    && shift 2
+elif [ x"$VCSH_COMMAND" = x'foreach' ]; then
+	[ -z "$2" ] && fatal "$VCSH_COMMAND: please specify a command" 1
+	shift 1
 elif [ x"$VCSH_COMMAND" = x'commit' ] ||
      [ x"$VCSH_COMMAND" = x'list'   ] ||
      [ x"$VCSH_COMMAND" = x'list-tracked' ] ||
