@@ -36,10 +36,6 @@ function _vcsh-list () {
 }
 
 function _vcsh-list-tracked () {
-	_nothing
-}
-
-function _vcsh-list-tracked-by () {
 	(( CURRENT == 2 )) && __vcsh_repositories
 }
 
