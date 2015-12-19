@@ -23,6 +23,10 @@ function _vcsh-enter () {
 	(( CURRENT == 2 )) && __vcsh_repositories
 }
 
+function _vcsh-foreach () {
+	_dispatch git git
+}
+
 function _vcsh-help () {
 	_nothing
 }
@@ -100,6 +104,7 @@ function _vcsh () {
 		"commit:commit in all repositories"
 		"delete:delete an existing repository"
 		"enter:enter repository; spawn new <\$SHELL>"
+		"foreach:execute for all repos"
 		"help:display help"
 		"init:initialize an empty repository"
 		"list:list all local vcsh repositories"

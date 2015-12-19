@@ -11,6 +11,8 @@ vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
 
 `vcsh` enter <repo>
 
+`vcsh` foreach [-g] <git command>
+
 `vcsh` help
 
 `vcsh` init <repo>
@@ -97,6 +99,11 @@ an interactive user.
 
 * enter:
   Enter repository; spawn new <$SHELL>.
+
+* foreach:
+  Execute git command for every vcsh repository.
+
+  `-g`: Execute in general context.
 
 * help:
   Display help.
