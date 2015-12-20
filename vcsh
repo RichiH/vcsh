@@ -162,7 +162,7 @@ clone() {
   You should add files to your new repository."
 		exit
 	fi
-	git fetch origin "$VCSH_BRANCH"
+	git fetch origin
 	hook pre-merge
 	git ls-tree -r --name-only origin/"$VCSH_BRANCH" | (while read object; do
 		[ -e "$object" ] &&
