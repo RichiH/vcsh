@@ -162,7 +162,12 @@ clone() {
   You should add files to your new repository."
 		exit
 	fi
-	git fetch origin "$VCSH_BRANCH"
+	GIT_VERSION_MAJOR=$(git --version | sed -n 's/.* \([0-9]\)\..*/\1/p' )
+	if [ 1 -lt "$GIT_VERSION_MAJOR" ];then
+		git fetch origin "$VCSH_BRANCH"
+	else
+		git fetch origin
+	fi
 	hook pre-merge
 	git ls-tree -r --name-only origin/"$VCSH_BRANCH" | (while read object; do
 		[ -e "$object" ] &&
