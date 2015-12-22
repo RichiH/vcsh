@@ -1,13 +1,10 @@
 language: perl
-sudo: false
-addons:
-  apt:
-    packages:
-      - cowsay
-      - git
-      - libshell-command-perl
-      - libtest-most-perl
-      - ruby-ronn
+before_install:
+  - cpanm Shell::Command
+  - cpanm Test::Most
+  - apt-get moo
+install:
+  - sudo apt-get install cowsay git ruby-ronn
 script:
   - make test
 after_script:
