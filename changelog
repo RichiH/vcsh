@@ -1,3 +1,17 @@
+2015-12-29  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Fix tests to always use C locale, this makes vcsh reproducible
+	* Implement `vcsh foreach`
+	* Implement `vcsh list-untracked -a`
+	* Handle Git older than 2.x gracefully
+	* Fix broken list-tracked-by
+	* Fix regression in `vcsh which`
+	* Skip ignored files in the output of list-untracked
+	* Improve cloning
+	* Clean up docs
+	* Implement `vcsh status --terse`
+	* Improve tests
+
 2015-05-02  Richard Hartmann <richih.mailinglist@gmail.com>
 
 	* Release 1.20150502
