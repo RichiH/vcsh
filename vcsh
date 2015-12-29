@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # This program is licensed under the GNU GPL version 2 or later.
-# (c) Richard "RichiH" Hartmann <richih@debian.org>, 2011-2014
+# (c) Richard "RichiH" Hartmann <richih@debian.org>, 2011-2015
 # For details, see LICENSE. To submit patches, you have to agree to
 # license your code under the GNU GPL version 2 or later.
 
@@ -19,7 +19,7 @@
 # If '.git-HEAD' is appended to the version, you are seeing an unreleased
 # version of vcsh; the master branch is supposed to be clean at all times
 # so you can most likely just use it nonetheless
-VERSION='1.20150502'
+VERSION='1.20151229'
 SELF=$(basename $0)
 
 fatal() {
@@ -106,20 +106,24 @@ help() {
    commit               Commit in all repositories
    delete <repo>        Delete an existing repository
    enter <repo>         Enter repository; spawn new instance of \$SHELL
+   foreach [<-g>]
+     <git command>      Execute a command for every repository
    help                 Display this help text
    init <repo>          Initialize a new repository
    list                 List all repositories
    list-tracked \\
         [<repo>]        List all files tracked all or one repositories
    list-untracked \\
-        [<-r>] [<repo>] List all files not tracked by all or one repositories
+        [<-a>] [<-r>]
+        [<repo>]        List all files not tracked by all or one repositories
    pull                 Pull from all vcsh remotes
    push                 Push to vcsh remotes
    rename <repo> \\
           <newname>     Rename repository
    run <repo> \\
        <command>        Use this repository
-   status [<repo>]      Show statuses of all/one vcsh repositories
+   status \\
+     [--terse] [<repo>] Show statuses of all/one vcsh repositories
    upgrade <repo>       Upgrade repository to currently recommended settings
    version              Print version information
    which <substring>    Find substring in name of any tracked file
@@ -158,7 +162,12 @@ clone() {
   You should add files to your new repository."
 		exit
 	fi
-	git fetch origin "$VCSH_BRANCH"
+	GIT_VERSION_MAJOR=$(git --version | sed -n 's/.* \([0-9]\)\..*/\1/p' )
+	if [ 1 -lt "$GIT_VERSION_MAJOR" ];then
+		git fetch origin "$VCSH_BRANCH"
+	else
+		git fetch origin
+	fi
 	hook pre-merge
 	git ls-tree -r --name-only origin/"$VCSH_BRANCH" | (while read object; do
 		[ -e "$object" ] &&
@@ -168,7 +177,7 @@ clone() {
 	[ x"$VCSH_CONFLICT" = x'1' ]) &&
 		fatal "will stop after fetching and not try to merge!
   Once this situation has been resolved, run 'vcsh $VCSH_REPO_NAME pull' to finish cloning." 17
-	git merge origin/"$VCSH_BRANCH"
+	git -c merge.ff=true merge origin/"$VCSH_BRANCH"
 	hook post-merge
 	hook post-clone
 	retire
@@ -212,6 +221,27 @@ enter() {
 	use
 	$SHELL
 	hook post-enter
+}
+
+foreach() {
+	hook pre-foreach
+
+	# We default to prefixing `git` to all commands passed to foreach, but
+	# allow running in general context with -g
+	command_prefix=git
+	while getopts "g" flag; do
+		if [ x"$1" = x'-g' ]; then
+			unset command_prefix
+		fi
+		shift 1
+	done
+	for VCSH_REPO_NAME in $(list); do
+		echo "$VCSH_REPO_NAME:"
+		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
+		use
+		$command_prefix "$@"
+	done
+	hook post-foreach
 }
 
 git_dir_exists() {
@@ -263,7 +293,7 @@ list_tracked_helper() {
 }
 
 list_tracked_by() {
-	list_tracked $2
+	list_tracked '' $2
 }
 
 list_untracked() {
@@ -274,10 +304,13 @@ list_untracked() {
 	temp_file_untracked_copy=$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX") || fatal 'Could not create temp file'
 
 	# Hack in support for `vcsh list-untracked -r`...
+	exclude_standard_opt='--exclude-standard'
 	directory_opt="--directory"
 	shift 1
-	while getopts "r" flag; do
-		if [ x"$1" = x'-r' ]; then
+	while getopts "ar" flag; do
+		if [ x"$1" = x'-a' ]; then
+			unset exclude_standard_opt
+		elif [ x"$1" = x'-r' ]; then
 			unset directory_opt
 		fi
 		shift 1
@@ -300,7 +333,7 @@ list_untracked() {
 
 list_untracked_helper() {
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
-	git ls-files --others "$directory_opt" | (
+	git ls-files --others $exclude_standard_opt "$directory_opt" | (
 		while read line; do
 			echo "$line"
 			directory_component=${line%%/*}
@@ -367,19 +400,24 @@ run() {
 }
 
 status() {
+	if [ -t 1 ]; then
+		COLORING="-c color.status=always"
+	fi
 	if [ -n "$VCSH_REPO_NAME" ]; then
 		status_helper $VCSH_REPO_NAME
 	else
 		for VCSH_REPO_NAME in $(list); do
-			echo "$VCSH_REPO_NAME:"
-			status_helper $VCSH_REPO_NAME
-			echo
+			STATUS=$(status_helper $VCSH_REPO_NAME "$COLORING")
+			[ -n "$STATUS" -o -z "$VCSH_STATUS_TERSE" ] && echo "$VCSH_REPO_NAME:"
+			[ -n "$STATUS" ]            && echo "$STATUS"
+			[ -z "$VCSH_STATUS_TERSE" ] && echo
 		done
 	fi
 }
 
 status_helper() {
-	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
+	GIT_DIR=$VCSH_REPO_D/$1.git; export GIT_DIR
+	VCSH_GIT_OPTIONS=$2
 	use
 	remote_tracking_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2> /dev/null) && {
 		commits_behind=$(git log ..${remote_tracking_branch} --oneline | wc -l)
@@ -387,7 +425,7 @@ status_helper() {
 		[ ${commits_behind} -ne 0 ] && echo "Behind $remote_tracking_branch by $commits_behind commits"
 		[ ${commits_ahead} -ne 0 ] && echo "Ahead of $remote_tracking_branch by $commits_ahead commits"
 	}
-	git status --short --untracked-files='no'
+	git ${VCSH_GIT_OPTIONS} status --short --untracked-files='no'
 	VCSH_COMMAND_RETURN_CODE=$?
 }
 
@@ -419,12 +457,14 @@ use() {
 }
 
 which() {
-	[ -e "$VCSH_COMMAND_PARAMETER" ] || fatal "'$VCSH_COMMAND_PARAMETER' does not exist" 1
-	for VCSH_REPO_NAME in $(list); do
-		for VCSH_FILE in $(get_files); do
-			echo "$VCSH_FILE" | grep -q "$VCSH_COMMAND_PARAMETER" && echo "$VCSH_REPO_NAME: $VCSH_FILE"
-		done
-	done | sort -u
+	output=$(for VCSH_REPO_NAME in $(list); do
+		get_files | grep -- "$VCSH_COMMAND_PARAMETER" | sed "s/^/$VCSH_REPO_NAME: /"
+	done | sort -u)
+	if [ -z "$output" ]; then
+		fatal "'$VCSH_COMMAND_PARAMETER' does not exist" 1
+	else
+		echo "$output"
+	fi
 }
 
 write_gitignore() {
@@ -546,6 +586,9 @@ elif [ x"$VCSH_COMMAND" = x'delete' ]           ||
 	[ x"$VCSH_COMMAND" = x'rename' ] && { VCSH_REPO_NAME_NEW=$3; export VCSH_REPO_NAME_NEW;
 	                                      GIT_DIR_NEW=$VCSH_REPO_D/$VCSH_REPO_NAME_NEW.git; export GIT_DIR_NEW; }
 	[ x"$VCSH_COMMAND" = x'run' ]    && shift 2
+elif [ x"$VCSH_COMMAND" = x'foreach' ]; then
+	[ -z "$2" ] && fatal "$VCSH_COMMAND: please specify a command" 1
+	shift 1
 elif [ x"$VCSH_COMMAND" = x'commit' ] ||
      [ x"$VCSH_COMMAND" = x'list'   ] ||
      [ x"$VCSH_COMMAND" = x'list-tracked' ] ||
@@ -554,6 +597,10 @@ elif [ x"$VCSH_COMMAND" = x'commit' ] ||
      [ x"$VCSH_COMMAND" = x'push'   ]; then
 	:
 elif [ x"$VCSH_COMMAND" = x'status' ]; then
+	if [ x"$2" = x'--terse' ]; then
+		VCSH_STATUS_TERSE=1; export VCSH_STATUS_TERSE
+		shift
+	fi
 	VCSH_REPO_NAME=$2; export VCSH_REPO_NAME
 elif [ -n "$2" ]; then
 	VCSH_COMMAND='run'; export VCSH_COMMAND

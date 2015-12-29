@@ -23,6 +23,10 @@ function _vcsh-enter () {
 	(( CURRENT == 2 )) && __vcsh_repositories
 }
 
+function _vcsh-foreach () {
+	_dispatch git git
+}
+
 function _vcsh-help () {
 	_nothing
 }
@@ -36,10 +40,6 @@ function _vcsh-list () {
 }
 
 function _vcsh-list-tracked () {
-	_nothing
-}
-
-function _vcsh-list-tracked-by () {
 	(( CURRENT == 2 )) && __vcsh_repositories
 }
 
@@ -100,11 +100,11 @@ function _vcsh () {
 		"commit:commit in all repositories"
 		"delete:delete an existing repository"
 		"enter:enter repository; spawn new <\$SHELL>"
+		"foreach:execute for all repos"
 		"help:display help"
 		"init:initialize an empty repository"
 		"list:list all local vcsh repositories"
 		"list-tracked:list all files tracked by vcsh"
-		"list-tracked-by:list files tracked by a repository"
 		"list-untracked:list all files not tracked by vcsh"
 		"pull:pull from all vcsh remotes"
 		"push:push to vcsh remotes"

@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+BEGIN { $ENV{LC_ALL} = 'C' }
+
 use strict;
 use warnings;
 
@@ -25,7 +27,6 @@ ok $output eq "test1:\n\n", 'Our new repo is there';
 chdir $ENV{"HOME"} . '/.config/vcsh/repo.d/test1.git/' or die $!;
 
 ok -f 'HEAD';
-ok -d 'branches';
 ok -f 'config';
 ok -f 'description';
 ok -d 'hooks';
