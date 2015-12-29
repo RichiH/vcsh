@@ -1,3 +1,21 @@
+vcsh (1.20151229-1) unstable; urgency=medium
+
+  * New upstream release
+    + Release 1.20151229
+    + Fix tests to always use C locale, this makes vcsh reproducible
+    + Implement `vcsh foreach`
+    + Implement `vcsh list-untracked -a`
+    + Handle Git older than 2.x gracefully
+    + Fix broken list-tracked-by
+    + Fix regression in `vcsh which`
+    + Skip ignored files in the output of list-untracked
+    + Improve cloning
+    + Clean up docs
+    + Implement `vcsh status --terse`
+    + Improve tests
+
+ -- Richard Hartmann <richih@debian.org>  Tue, 29 Dec 2015 20:28:57 +0100
+
 vcsh (1.20150502-1) unstable; urgency=medium
 
   * New upstream release
