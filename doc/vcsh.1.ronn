@@ -41,7 +41,7 @@ vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
 
 `vcsh` write-gitignore <repo>
 
-`vcsh` <repo> <git command>
+`vcsh` <repo> <gitcommand>
 
 `vcsh` <repo>
 
@@ -173,7 +173,7 @@ an interactive user.
   Write .gitignore.d/<repo> via `git ls-files`.
 
 * <repo> <gitcommand>:
-  Shortcut to run `vcsh` on a repo. Will prepend `git` to <command>.
+  Shortcut to run `git` commands on a repo. Will prepend `git` to <gitcommand>.
 
 * <repo>:
   Shortcut to run `vcsh enter <repo>`.
