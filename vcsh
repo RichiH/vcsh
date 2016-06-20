@@ -249,11 +249,19 @@ git_dir_exists() {
 }
 
 hook() {
+	# Save and unset the GIT_DIR environment variable so that it does not
+	# interfere with the hook scripts running git commands.
+	local VCSH_GIT_DIR=$GIT_DIR
+	unset GIT_DIR
+
 	for hook in "$VCSH_HOOK_D/$1"* "$VCSH_HOOK_D/$VCSH_REPO_NAME.$1"*; do
 		[ -x "$hook" ] || continue
 		verbose "executing '$hook'"
 		"$hook"
 	done
+
+  # Restore GIT_DIR from the saved value
+	GIT_DIR=$VCSH_GIT_DIR; export GIT_DIR
 }
 
 init() {
