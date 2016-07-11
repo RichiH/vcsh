@@ -169,13 +169,8 @@ clone() {
 		git fetch origin
 	fi
 	hook pre-merge
-	git ls-tree -r --name-only origin/"$VCSH_BRANCH" | (while read object; do
-		[ -e "$object" ] &&
-			error "'$object' exists." &&
-			VCSH_CONFLICT=1
-	done
-	[ x"$VCSH_CONFLICT" = x'1' ]) &&
-		fatal "will stop after fetching and not try to merge!
+	git read-tree -n -mu origin/"$VCSH_BRANCH" \
+		|| fatal "will stop after fetching and not try to merge!
   Once this situation has been resolved, run 'vcsh $VCSH_REPO_NAME pull' to finish cloning." 17
 	git -c merge.ff=true merge origin/"$VCSH_BRANCH"
 	hook post-merge
