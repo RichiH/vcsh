@@ -248,11 +248,17 @@ git_dir_exists() {
 	[ -d "$GIT_DIR" ] || fatal "no repository found for '$VCSH_REPO_NAME'" 12
 }
 
+# $1: message
+die () {
+  >&2 echo -e $1
+  exit 1
+}
+
 hook() {
 	for hook in "$VCSH_HOOK_D/$1"* "$VCSH_HOOK_D/$VCSH_REPO_NAME.$1"*; do
 		[ -x "$hook" ] || continue
 		verbose "executing '$hook'"
-		"$hook"
+		"$hook" || die "Hook [$hook] failed"
 	done
 }
 
