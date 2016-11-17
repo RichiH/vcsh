@@ -529,7 +529,7 @@ VCSH_COMMAND=$1; export VCSH_COMMAND
 
 case $VCSH_COMMAND in
 	clon|clo|cl) VCSH_COMMAND=clone;;
-	commi|comm|com|co) VCSH_COMMAND=commit;;
+	commi|comm|com|co|ci) VCSH_COMMAND=commit;;
 	delet|dele|del|de) VCSH_COMMAND=delete;;
 	ente|ent|en) VCSH_COMMAND=enter;;
 	hel|he) VCSH_COMMAND=help;;
