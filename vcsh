@@ -186,11 +186,12 @@ clone() {
 
 commit() {
 	hook pre-commit
+        shift  # remove the "commit" command.
 	for VCSH_REPO_NAME in $(list); do
 		echo "$VCSH_REPO_NAME: "
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
-		git commit --untracked-files=no --quiet $@
+		git commit --untracked-files=no --quiet "$@"
 		VCSH_COMMAND_RETURN_CODE=$?
 		echo
 	done
