@@ -31,7 +31,7 @@ load environment
 	test -d .config/vcsh/repo.d
 	test -d .config/vcsh/repo.d/test1.git
 
-	is_git_repo "$HOME/.config/vcsh/repo.d/test1.git"
+	git rev-parse --resolve-git-dir "$HOME/.config/vcsh/repo.d/test1.git"
 }
 
 @test "Init command creates \$VCSH_REPO_D" {
