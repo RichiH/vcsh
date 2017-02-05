@@ -19,6 +19,10 @@ setup() {
 }
 
 teardown() {
+	# Don't saw off the branch you're sitting on
 	cd /
+
+	# Make sure removal will succeed even if we have altered permissions
+	chmod -R a+rwx "$BATS_TESTDIR"
 	rm -rf "$BATS_TESTDIR"
 }
