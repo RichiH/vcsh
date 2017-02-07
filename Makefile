@@ -43,10 +43,12 @@ purge: uninstall
 	rmdir -p --ignore-fail-on-non-empty $(DESTDIR)$(DOCDIR)
 	rmdir -p --ignore-fail-on-non-empty $(DESTDIR)$(ZSHDIR)
 
-test:
+vcsh_testrepo.git:
+	git clone --mirror https://github.com/djpohly/vcsh_testrepo.git
+
+test: | vcsh_testrepo.git
 	@if ! which git  > /dev/null; then echo "'git' not found, exiting..."        ; exit 1; fi
 	@if ! which bats > /dev/null; then echo "'bats' not found; not running tests"; exit 1; fi
-	[ -d "vcsh_testrepo.git" ] || git clone --mirror https://github.com/djpohly/vcsh_testrepo.git
 	TESTREPO=$(PWD)/vcsh_testrepo.git TESTREPONAME=vcsh_testrepo bats ./bats
 
 moo:
