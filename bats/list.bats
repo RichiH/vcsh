@@ -1,149 +1,96 @@
 load environment
 
-@test "List command succeeds" {
-	"$VCSH" list
-}
-
-@test "List command creates default support directories" {
-	"$VCSH" list
-	test -d .config
-	test -d .config/vcsh
-	test -d .config/vcsh/repo.d
-	test -d .gitignore.d
-}
-
-@test "List command creates \$VCSH_REPO_D" {
-	VCSH_REPO_D="$PWD/foo/bar" "$VCSH" list
-	test -d foo
-	test -d foo/bar
-	test -d .gitignore.d
-}
-
-@test "List command creates .gitignore.d in \$VCSH_BASE" {
-	VCSH_BASE="$PWD/foo/bar" "$VCSH" list
-	test -d .config
-	test -d .config/vcsh
-	test -d .config/vcsh/repo.d
-	test -d foo
-	test -d foo/bar
-	test -d foo/bar/.gitignore.d
-}
-
-@test "List command creates .gitignore.d with VCSH_GITIGNORE=recursive" {
-	VCSH_GITIGNORE=recursive "$VCSH" list
-	test -d .config
-	test -d .config/vcsh
-	test -d .config/vcsh/repo.d
-	test -d .gitignore.d
-}
-
-@test "List command does not create .gitignore.d with VCSH_GITIGNORE=none" {
-	VCSH_GITIGNORE=none "$VCSH" list
-	test -d .config
-	test -d .config/vcsh
-	test -d .config/vcsh/repo.d
-	! test -d .gitignore.d
-}
-
-@test "List command gives correct output for no repos" {
+@test "List command correct for no repositories" {
 	run "$VCSH" list
+	[ "$status" -eq 0 ]
 	[ "$output" = '' ]
 }
 
-@test "List command gives correct output for empty repo directory" {
-	# XXX should vcsh fail if this is not a Git repository?
-	mkdir -p .config/vcsh/repo.d/foo.git
+@test "List command displays inited repository" {
+	"$VCSH" init test1
 	run "$VCSH" list
-	[ "$output" = $'foo' ]
+	[ "$status" -eq 0 ]
+	[ "$output" = 'test1' ]
 }
 
-@test "List command gives correct output for non-bare repo" {
-	# XXX should vcsh fail if this is not a bare repository?
-	mkdir -p .config/vcsh/repo.d
-	git init .config/vcsh/repo.d/foo.git
+@test "List command displays cloned repository" {
+	"$VCSH" clone "$TESTREPO" test1
 	run "$VCSH" list
-	[ "$output" = $'foo' ]
+	[ "$status" -eq 0 ]
+	[ "$output" = 'test1' ]
 }
 
-@test "List command gives correct output for one repo (git init)" {
-	mkdir -p .config/vcsh/repo.d
-	git init --bare .config/vcsh/repo.d/foo.git
-	run "$VCSH" list
-	[ "$output" = $'foo' ]
-}
-
-@test "List command gives correct output for one repo (vcsh init)" {
-	"$VCSH" init foo
-	run "$VCSH" list
-	[ "$output" = $'foo' ]
-}
-
-@test "List command gives correct output for three repos (git init)" {
-	# XXX should this fail if these are not bare repositories?
-	mkdir -p .config/vcsh/repo.d
-	git init --bare .config/vcsh/repo.d/foo.git
-	git init --bare .config/vcsh/repo.d/bar.git
-	git init --bare .config/vcsh/repo.d/baz.git
-	run "$VCSH" list
-	[ "$output" = $'bar\nbaz\nfoo' ]
-}
-
-@test "List command gives correct output for three repos (vcsh init)" {
-	# XXX should this fail if these are not bare repositories?
-	mkdir -p .config/vcsh/repo.d
+@test "List command displays multiple repositories" {
 	"$VCSH" init foo
 	"$VCSH" init bar
 	"$VCSH" init baz
 	run "$VCSH" list
+	[ "$status" -eq 0 ]
 	[ "$output" = $'bar\nbaz\nfoo' ]
 }
 
-@test "List command only lists directories" {
-	mkdir -p .config/vcsh/repo.d
-	touch .config/vcsh/repo.d/foo.git
-	mkfifo .config/vcsh/repo.d/bar.git
+@test "List command respects \$VCSH_REPO_D" {
+	VCSH_REPO_D="$PWD/foo" "$VCSH" init test1
+	VCSH_REPO_D="$PWD/bar" "$VCSH" init test2
 
-	run "$VCSH" list
-	[ "$output" = '' ]
+	VCSH_REPO_D="$PWD/foo" run "$VCSH" list
+	[ "$status" -eq 0 ]
+	[ "$output" = 'test1' ]
 
-	"$VCSH" init baz
-	run "$VCSH" list
-	[ "$output" = 'baz' ]
+	VCSH_REPO_D="$PWD/bar" run "$VCSH" list
+	[ "$status" -eq 0 ]
+	[ "$output" = 'test2' ]
 }
 
-@test "List command only lists directories ending in '.git'" {
-	mkdir -p .config/vcsh/repo.d
-	git init --bare .config/vcsh/repo.d/foo
-	git init --bare .config/vcsh/repo.d/bar
-	git init --bare .config/vcsh/repo.d/baz.git
+@test "List command respects \$XDG_CONFIG_HOME" {
+	XDG_CONFIG_HOME="$PWD/foo" "$VCSH" init test1
+	XDG_CONFIG_HOME="$PWD/bar" "$VCSH" init test2
 
-	run "$VCSH" list
-	[ "$output" = 'baz' ]
+	XDG_CONFIG_HOME="$PWD/foo" run "$VCSH" list
+	[ "$status" -eq 0 ]
+	[ "$output" = 'test1' ]
+
+	XDG_CONFIG_HOME="$PWD/bar" run "$VCSH" list
+	[ "$status" -eq 0 ]
+	[ "$output" = 'test2' ]
 }
 
-@test "List command does not list unreadable repos" {
-	"$VCSH" init foo
+@test "List command respects \$HOME" {
+	HOME="$PWD/foo" "$VCSH" init test1
+	HOME="$PWD/bar" "$VCSH" init test2
 
-	run "$VCSH" list
-	[ "$output" = 'foo' ]
+	HOME="$PWD/foo" run "$VCSH" list
+	[ "$status" -eq 0 ]
+	[ "$output" = 'test1' ]
 
-	chmod a-r .config/vcsh/repo.d/foo.git
-	run "$VCSH" list
-	[ "$output" = '' ]
+	HOME="$PWD/bar" run "$VCSH" list
+	[ "$status" -eq 0 ]
+	[ "$output" = 'test2' ]
 }
 
-@test "List command respects \$VCSH_REPO_D (git init)" {
-	mkdir -p foo/bar
-	git init --bare foo/bar/hello.git
+@test "List command prioritizes \$XDG_CONFIG_HOME over \$HOME" {
+	HOME="$PWD/foo" "$VCSH" init correct
+	HOME="$PWD/bar" "$VCSH" init wrong
 
-	VCSH_REPO_D="$PWD/foo/bar" run "$VCSH" list
-	[ "$output" = 'hello' ]
+	HOME="$PWD/bar" XDG_CONFIG_HOME="$PWD/foo/.config" run "$VCSH" list
+	[ "$status" -eq 0 ]
+	[ "$output" = 'correct' ]
 }
 
-@test "List command respects \$VCSH_REPO_D (vcsh init)" {
-	mkdir -p foo/bar
-	VCSH_REPO_D="$PWD/foo/bar" "$VCSH" init hello
+@test "List command prioritizes \$VCSH_REPO_D over \$HOME" {
+	HOME="$PWD/foo" "$VCSH" init correct
+	HOME="$PWD/bar" "$VCSH" init wrong
 
-	VCSH_REPO_D="$PWD/foo/bar" run "$VCSH" list
-	[ "$output" = 'hello' ]
+	HOME="$PWD/bar" VCSH_REPO_D="$PWD/foo/.config/vcsh/repo.d" run "$VCSH" list
+	[ "$status" -eq 0 ]
+	[ "$output" = 'correct' ]
+}
+
+@test "List command prioritizes \$VCSH_REPO_D over \$XDG_CONFIG_HOME" {
+	XDG_CONFIG_HOME="$PWD/foo" "$VCSH" init correct
+	XDG_CONFIG_HOME="$PWD/bar" "$VCSH" init wrong
+
+	XDG_CONFIG_HOME="$PWD/bar" VCSH_REPO_D="$PWD/foo/vcsh/repo.d" run "$VCSH" list
+	[ "$status" -eq 0 ]
+	[ "$output" = 'correct' ]
 }
