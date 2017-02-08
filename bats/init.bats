@@ -30,10 +30,10 @@ load environment
 	HOME="$PWD/bar" "$VCSH" init samename
 }
 
-@test "Debug output includes git version" {
-	"$VCSH" -d init foo |& grep -q 'git version [0-9]'
-	"$VCSH" -d list |& grep -q 'git version [0-9]'
-	# XXX add more?
+@test "Init command fails if directories cannot be created" {
+	mkdir ro
+	chmod a-w ro
+	! HOME="$PWD/ro" "$VCSH" init foo
 }
 
 @test "Init command can be abbreviated 'ini'/'in'" {
@@ -105,71 +105,27 @@ load environment
 	# XXX test instead by making sure files are actually excluded, not by
 	# reading config option
 	VCSH_GITIGNORE=exact "$VCSH" init test1
-	run "$VCSH" run test1 git config core.excludesfile
-	[ "$output" = ".gitignore.d/test1" ]
+	"$VCSH" run test1 git config core.excludesfile
 }
 
 @test "Init command sets core.excludesfile with VCSH_GITIGNORE=recursive" {
 	# XXX test instead by making sure files are actually excluded, not by
 	# reading config option
 	VCSH_GITIGNORE=recursive "$VCSH" init test1
-	run "$VCSH" run test1 git config core.excludesfile
-	[ "$output" = ".gitignore.d/test1" ]
+	"$VCSH" run test1 git config core.excludesfile
 }
 
 @test "Init command does not set core.excludesfile with VCSH_GITIGNORE=none" {
 	VCSH_GITIGNORE=none "$VCSH" init test1
-	run "$VCSH" run test1 git config core.excludesfile
-	[ "$status" -ne 0 ]
+	! "$VCSH" run test1 git config core.excludesfile
 }
 
-# ----- good above here -----
-
-@test "Init command creates .gitignore.d in \$VCSH_BASE" {
-	VCSH_BASE="$PWD/foo/bar" "$VCSH" init foo
-	test -d .config
-	test -d .config/vcsh
-	test -d .config/vcsh/repo.d
-	test -d foo
-	test -d foo/bar
-	test -d foo/bar/.gitignore.d
-}
-
-@test "Init command fails if \$VCSH_REPO_D cannot be created" {
-	mkdir ro
-	chmod a-w ro
-	! VCSH_REPO_D="$PWD/ro/repo.d" "$VCSH" init foo
-}
-
-@test "Init command fails if .gitignore.d cannot be created" {
-	mkdir ro
-	chmod a-w ro
-	! VCSH_REPO_D="$PWD/bar" VCSH_BASE="$PWD/ro" \
-		VCSH_GITIGNORE=exact VCSH_GITATTRIBUTES=none \
-		"$VCSH" init foo
-}
-
-@test "Init command fails if .gitattributes.d cannot be created" {
-	mkdir ro
-	chmod a-w ro
-	! VCSH_REPO_D="$PWD/bar" VCSH_BASE="$PWD/ro" \
-		VCSH_GITIGNORE=none VCSH_GITATTRIBUTES=yes \
-		"$VCSH" init foo
-}
-
-@test "Init command fails if \$VCSH_BASE cannot be created" {
-	mkdir ro
-	chmod a-w ro
-	! VCSH_BASE="$PWD/ro/base" "$VCSH" init test1
-}
-
-@test "Init command fails if \$VCSH_BASE cannot be entered" {
-	mkdir noentry
-	chmod a-x noentry
-	! VCSH_BASE="$PWD/noentry" "$VCSH" init test1
+@test "Init command sets core.attributesfile with VCSH_GITATTRIBUTES!=none" {
+	VCSH_GITATTRIBUTES=whatever "$VCSH" init test1
+	"$VCSH" run test1 git config core.attributesfile
 }
 
 @test "Init command does not set core.attributesfile with VCSH_GITATTRIBUTES=none" {
 	VCSH_GITATTRIBUTES=none "$VCSH" init test1
-	! GIT_DIR="$HOME/.config/vcsh/repo.d/test1.git" git config core.attributesfile
+	! "$VCSH" run test1 git config core.attributesfile
 }
