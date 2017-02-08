@@ -1,11 +1,6 @@
 setup() {
-	VCSH="$BATS_TEST_DIRNAME/../vcsh"
+	export VCSH="$BATS_TEST_DIRNAME/../vcsh"
 	export LC_ALL=C
-
-	# Ensure behavior/output isn't affected by outside variables
-	# (We'll have to assume things like PWD and PATH are sane)
-	export VCSH_DEBUG=
-	PS4='+ '
 
 	# XXX Currently the /etc/vcsh/config file can affect testcases.
 	# Perhaps it should be ignored if one exists in $XDG_CONFIG_HOME or was
@@ -15,14 +10,15 @@ setup() {
 	# use that instead.
 	: ${TESTREPO:='https://github.com/djpohly/vcsh_testrepo.git'}
 	: ${TESTREPONAME:='vcsh_testrepo'}
-	TESTM1=master
-	TESTM2=master2
-	TESTBR1=branch1
-	TESTBR2=branch2
-	TESTBRX=conflict
+	export TESTREPO TESTREPONAME
+	export TESTM1=master
+	export TESTM2=master2
+	export TESTBR1=branch1
+	export TESTBR2=branch2
+	export TESTBRX=conflict
 
 	# Other things used in tests
-	GITVERSION=$(git version)
+	export GITVERSION=$(git version)
 
 	# Clear out environment variables that affect VCSH behavior
 	unset VCSH_OPTION_CONFIG VCSH_REPO_D VCSH_HOOK_D VCSH_OVERLAY_D
@@ -30,7 +26,7 @@ setup() {
 	unset XDG_CONFIG_HOME
 
 	# Make a directory for testing and make it $HOME
-	BATS_TESTDIR=$(mktemp -d -p "$BATS_TMPDIR")
+	export BATS_TESTDIR=$(mktemp -d -p "$BATS_TMPDIR")
 	export HOME=$BATS_TESTDIR
 	cd
 }
