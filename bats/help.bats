@@ -1,28 +1,28 @@
 load environment
 
 @test "Help command succeeds" {
-	"$VCSH" help
+	$VCSH help
 }
 @test "Help command writes to stderr and not stdout" {
-	"$VCSH" help 2>&1 1>/dev/null |
+	$VCSH help 2>&1 1>/dev/null |
 		grep -q ''
-	! "$VCSH" help 2>/dev/null |
+	! $VCSH help 2>/dev/null |
 		grep -q ''
 }
 @test "Help command prints usage on first line" {
-	run "$VCSH" help
+	run $VCSH help
 	[[ "$output" = 'usage: '* ]]
 }
 
 @test "Help command can be abbreviated (hel, he)" {
-	run "$VCSH" help
+	run $VCSH help
 	local good=$output
 
-	run "$VCSH" hel
+	run $VCSH hel
 	[ "$status" -eq 0 ]
 	[ "$output" = "$good" ]
 
-	run "$VCSH" he
+	run $VCSH he
 	[ "$status" -eq 0 ]
 	[ "$output" = "$good" ]
 }
@@ -30,7 +30,7 @@ load environment
 # Help should explain each command.  (Note: adjust the help_check function if
 # the format of help output changes.)
 help_check() {
-	"$VCSH" help 2>&1 |
+	$VCSH help 2>&1 |
 		grep -q "^   $1\\b"
 }
 
