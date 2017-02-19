@@ -15,6 +15,17 @@ load environment
 	! $VCSH init exists
 }
 
+@test "Init creates repositories with same toplevel" {
+	$VCSH init foo
+	$VCSH init bar
+
+	run $VCSH run foo git rev-parse --show-toplevel
+	toplevel="$output"
+
+	run $VCSH run bar git rev-parse --show-toplevel
+	[ "$output" = "$toplevel" ]
+}
+
 @test "Init command respects alternate \$VCSH_REPO_D" {
 	VCSH_REPO_D="$PWD/foo" $VCSH init samename
 	VCSH_REPO_D="$PWD/bar" $VCSH init samename
