@@ -1,3 +1,5 @@
+#!/usr/bin/env bats
+
 load environment
 
 @test "Status command correct for no repos" {

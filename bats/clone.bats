@@ -1,3 +1,5 @@
+#!/usr/bin/env bats
+
 load environment
 
 @test "Clone requires a remote" {

@@ -1,3 +1,5 @@
+#!/usr/bin/env bats
+
 load environment
 
 @test "List command correct for no repositories" {
