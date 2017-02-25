@@ -50,6 +50,9 @@ load environment
 	$VCSH run foo git add a
 	$VCSH run foo git config --local color.status.added green
 
+	# Ensure terminal is something Git will attempt to color
+	TERM=vt100
+	export TERM
 	run socat -u exec:"$VCSH status foo",pty,rawer stdio
 	[ "$output" = $'\e[32mA\e[m  a' ]
 }
