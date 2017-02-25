@@ -60,3 +60,16 @@ load environment
 	[ "$status" -eq 0 ]
 	[ "$output" = ".gitattributes.d/bar" ]
 }
+
+@test "Rename can be abbreviated (renam, rena, ren, re)" {
+	$VCSH init foo
+
+	$VCSH renam foo bar
+	$VCSH rena bar baz
+	$VCSH ren baz bat
+	$VCSH re bat quux
+
+	run $VCSH list
+	[ "$status" -eq 0 ]
+	[ "$output" = "quux" ]
+}

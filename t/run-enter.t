@@ -34,6 +34,16 @@ load environment
 	[ "$output" = "$rev2" ]
 }
 
+@test "Run can be abbreviated (ru)" {
+	$VCSH clone -b "$TESTBR1" "$TESTREPO" foo
+
+	rev1=$(git ls-remote "$TESTREPO" "refs/heads/$TESTBR1" | cut -f 1)
+
+	run $VCSH ru foo git rev-parse HEAD
+	[ "$status" -eq 0 ]
+	[ "$output" = "$rev1" ]
+}
+
 @test "Run returns exit status of subcommand" {
 	$VCSH init foo
 
@@ -96,4 +106,16 @@ load environment
 
 	echo 'exit 93' | SHELL=/bin/sh $VCSH enter foo
 	[ "$?" -eq 93 ]
+}
+
+@test "Enter can be abbreviated (ente, ent, en)" {
+	$VCSH clone -b "$TESTBR1" "$TESTREPO" foo
+
+	rev1=$(git ls-remote "$TESTREPO" "refs/heads/$TESTBR1" | cut -f 1)
+
+	echo 'git rev-parse HEAD >> output' | SHELL=/bin/sh $VCSH ente foo
+	echo 'git rev-parse HEAD >> output' | SHELL=/bin/sh $VCSH ent foo
+	echo 'git rev-parse HEAD >> output' | SHELL=/bin/sh $VCSH en foo
+
+	[ "$(cat output)" = "$(printf '%s\n%s\n%s' "$rev1" "$rev1" "$rev1")" ]
 }

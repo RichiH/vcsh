@@ -87,3 +87,13 @@ load environment
 	run $VCSH run "$TESTREPONAME" git branch
 	[ "${#lines[@]}" -eq 1 ]
 }
+
+@test "Clone can be abbreviated (clon, clo, cl)" {
+	$VCSH clon "$TESTREPO" a
+	$VCSH clo -b "$TESTBR1" "$TESTREPO" b
+	$VCSH cl -b "$TESTBR2" "$TESTREPO" c
+
+	run $VCSH list
+	[ "$status" -eq 0 ]
+	[ "$output" = "$(printf 'a\nb\nc')" ]
+}

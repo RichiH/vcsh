@@ -56,3 +56,18 @@ load environment
 	run socat -u exec:"$VCSH status foo",pty,rawer stdio
 	[ "$output" = $'\e[32mA\e[m  a' ]
 }
+
+@test "Status can be abbreviated (statu, stat, sta, st)" {
+	$VCSH init foo
+	touch a
+	$VCSH foo add a
+
+	run $VCSH status
+	expected=$output
+
+	for cmd in statu stat sta st; do
+		run $VCSH $cmd
+		[ "$status" -eq 0 ]
+		[ "$output" = "$expected" ]
+	done
+}
