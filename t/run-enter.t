@@ -71,7 +71,7 @@ load environment
 	[ "$(cat rev)" = "$rev2" ]
 }
 
-@test "Enter executes \$SHELL" {
+@test "Enter executes \$SHELL inside repository" {
 	$VCSH clone -b "$TESTBR1" "$TESTREPO" foo
 
 	rev1=$(git ls-remote "$TESTREPO" "refs/heads/$TESTBR1" | cut -f 1)
