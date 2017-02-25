@@ -29,6 +29,19 @@ setup() {
 	export BATS_TESTDIR=$(mktemp -d -p "$BATS_TMPDIR")
 	export HOME=$BATS_TESTDIR
 	cd
+
+	# Clear out variables that affect Git behavior
+	unset EDITOR VISUAL GIT_EDITOR
+
+	# Set a few Git variables
+	GIT_AUTHOR_NAME='A U Thor'
+	GIT_AUTHOR_EMAIL='author@example.com'
+	GIT_COMMITTER_NAME='C O Mitter'
+	GIT_COMMITTER_EMAIL='committer@example.com'
+	GIT_MERGE_VERBOSITY=5
+	GIT_MERGE_AUTOEDIT=no
+	export GIT_{AUTHOR,COMMITTER}_{NAME,EMAIL}
+	export GIT_MERGE_{VERBOSITY,AUTOEDIT}
 }
 
 teardown() {

@@ -64,7 +64,7 @@ doit() {
 	$VCSH init foo
 	touch randomtexttofind
 	$VCSH foo add randomtexttofind
-	$VCSH foo -c user.name="A U Thor" -c user.email="author@example.com" commit -m 'a'
+	$VCSH foo commit -m 'a'
 
 	: | $VCSH delete foo | grep -Fq randomtexttofind
 }
@@ -75,7 +75,7 @@ doit() {
 	$VCSH init foo
 	touch randomtexttofind
 	$VCSH foo add randomtexttofind
-	$VCSH foo -c user.name="A U Thor" -c user.email="author@example.com" commit -m 'a'
+	$VCSH foo commit -m 'a'
 	$VCSH foo rm --cached randomtexttofind
 
 	: | $VCSH delete foo | grep -Fq randomtexttofind
@@ -87,9 +87,9 @@ doit() {
 
 	touch a b c d e
 	$VCSH foo add b e
-	$VCSH foo -c user.name="A U Thor" -c user.email="author@example.com" commit -m 'b e'
+	$VCSH foo commit -m 'b e'
 	$VCSH bar add a c
-	$VCSH bar -c user.name="A U Thor" -c user.email="author@example.com" commit -m 'a c'
+	$VCSH bar commit -m 'a c'
 
 	doit | $VCSH delete foo
 	[ ! -e b ]
@@ -110,7 +110,7 @@ doit() {
 	$VCSH init foo
 	touch a b 'a b'
 	$VCSH foo add 'a b'
-	$VCSH foo -c user.name="A U Thor" -c user.email="author@example.com" commit -m 'a b'
+	$VCSH foo commit -m 'a b'
 
 	doit | $VCSH delete foo
 	[ ! -e 'a b' ]
@@ -124,7 +124,7 @@ doit() {
 	$VCSH init foo
 	touch a b '?'
 	$VCSH foo add '\?'
-	$VCSH foo -c user.name="A U Thor" -c user.email="author@example.com" commit -m '?'
+	$VCSH foo commit -m '?'
 
 	doit | $VCSH delete foo
 	[ ! -e '?' ]
