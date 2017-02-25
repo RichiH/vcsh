@@ -43,8 +43,7 @@ load environment
 }
 
 @test "Status colored when output to tty" {
-	# Requires socat to create a pseudo-tty
-	which socat || skip
+	which socat || skip "socat required to create pseudo-tty"
 
 	$VCSH init foo
 	touch a

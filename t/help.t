@@ -47,11 +47,7 @@ help_check() {
 @test "Help text includes init command" { help_check init; }
 @test "Help text includes list command" { help_check list; }
 @test "Help text includes list-tracked command" { help_check list-tracked; }
-@test "Help text includes list-tracked-by command" {
-	skip
-	# FIXME
-	help_check list-tracked-by;
-}
+# list-tracked-by is deprecated, not shown in help
 @test "Help text includes list-untracked command" { help_check list-untracked; }
 @test "Help text includes pull command" { help_check pull; }
 @test "Help text includes push command" { help_check push; }
