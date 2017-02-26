@@ -9,9 +9,10 @@ load environment
 }
 
 @test "push succeeds if up-to-date" {
-	git clone "$TESTREPO" upstream.git
+	git clone --bare "$TESTREPO" upstream.git
 
 	$VCSH clone upstream.git foo
+	$VCSH foo config push.default simple
 	run $VCSH push
 	[ "$status" -eq 0 ]
 	[ "$output" = "foo: Everything up-to-date" ]
@@ -21,6 +22,7 @@ load environment
 	git clone --bare "$TESTREPO" upstream.git
 
 	$VCSH clone upstream.git foo
+	$VCSH foo config push.default simple
 	$VCSH foo commit --allow-empty -m 'empty'
 	run $VCSH foo rev-parse HEAD
 	rev=$output
@@ -37,7 +39,9 @@ load environment
 	git clone --bare -b "$TESTBR2" "$TESTREPO" upstream2.git
 
 	$VCSH clone -b "$TESTBR1" upstream1.git foo
+	$VCSH foo config push.default simple
 	$VCSH clone -b "$TESTBR2" upstream2.git bar
+	$VCSH bar config push.default simple
 
 	$VCSH foo commit --allow-empty -m 'empty'
 	run $VCSH foo rev-parse HEAD
@@ -64,7 +68,9 @@ load environment
 	git clone --bare -b "$TESTBR2" "$TESTREPO" upstream2.git
 
 	$VCSH clone -b "$TESTBR1" upstream1.git a
+	$VCSH foo config push.default simple
 	$VCSH clone -b "$TESTBR2" upstream2.git b
+	$VCSH bar config push.default simple
 
 	rm -rf upstream1.git
 	$VCSH b commit --allow-empty -m 'empty'
@@ -77,7 +83,9 @@ load environment
 	git clone --bare -b "$TESTBR2" "$TESTREPO" upstream2.git
 
 	$VCSH clone -b "$TESTBR1" upstream1.git a
+	$VCSH a config push.default simple
 	$VCSH clone -b "$TESTBR2" upstream2.git b
+	$VCSH b config push.default simple
 
 	$VCSH a commit --allow-empty -m 'empty'
 	rm -rf upstream2.git
