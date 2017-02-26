@@ -2,7 +2,7 @@
 
 load environment
 
-@test "list-tracked command works with no repos" {
+@test "list-tracked works with no repos" {
 	run $VCSH list-tracked
 	[ "$status" -eq 0 ]
 	[ "$output" = "" ]
@@ -124,4 +124,33 @@ load environment
 	run $VCSH list-tracked bar
 	[ "$status" -eq 0 ]
 	[ "$output" = "$(printf '%s\n' "$HOME/a" "$HOME/b")" ]
+}
+
+@test "list-tracked-by requires an argument" {
+	! $VCSH list-tracked-by
+}
+
+@test "list-tracked-by fails if argument is not a repo" {
+	skip "BUG"
+
+	! $VCSH list-tracked-by nope
+}
+
+@test "list-tracked-by lists files from specified repo" {
+	$VCSH init foo
+	$VCSH init bar
+
+	touch a b c d e
+	$VCSH foo add a b
+	$VCSH foo commit -m 'a b'
+	$VCSH bar add c d
+	$VCSH bar commit -m 'c d'
+
+	run $VCSH list-tracked-by foo
+	[ "$status" -eq 0 ]
+	[ "$output" = "$(printf '%s\n' "$HOME/a" "$HOME/b")" ]
+
+	run $VCSH list-tracked-by bar
+	[ "$status" -eq 0 ]
+	[ "$output" = "$(printf '%s\n' "$HOME/c" "$HOME/d")" ]
 }
