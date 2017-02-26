@@ -44,7 +44,7 @@ purge: uninstall
 	rmdir -p --ignore-fail-on-non-empty $(DESTDIR)$(ZSHDIR)
 
 vcsh_testrepo.git:
-	git clone --mirror https://github.com/djpohly/vcsh_testrepo.git
+	git clone --mirror https://github.com/RichiH/vcsh_testrepo.git
 
 test: | vcsh_testrepo.git
 	@if ! which git   > /dev/null; then echo "'git' not found, exiting..."         ; exit 1; fi

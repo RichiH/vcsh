@@ -8,7 +8,7 @@ setup() {
 
 	# Test repository.  For faster tests, you can create a local mirror and
 	# use that instead.
-	: ${TESTREPO:='https://github.com/djpohly/vcsh_testrepo.git'}
+	: ${TESTREPO:='https://github.com/RichiH/vcsh_testrepo.git'}
 	: ${TESTREPONAME:='vcsh_testrepo'}
 	export TESTREPO TESTREPONAME
 	export TESTM1=master
