@@ -43,6 +43,15 @@ doit() {
 	[ "$output" = "bar" ]
 }
 
+@test "Deleted repository not in status" {
+	$VCSH init foo
+	doit | $VCSH delete foo
+
+	run $VCSH status
+	[ "$status" -eq 0 ]
+	[ "$output" = "" ]
+}
+
 @test "Deleted repository cannot be subsequently used" {
 	$VCSH init foo
 	doit | $VCSH delete foo
