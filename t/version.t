@@ -18,7 +18,7 @@ load environment
 
 	for cmd in versio versi vers ver ve; do
 		run $VCSH $cmd
-		[ "$status" -eq 0 ]
-		[ "$output" = "$expected" ]
+		assert "$status" -eq 0
+		assert "$output" = "$expected"
 	done
 }

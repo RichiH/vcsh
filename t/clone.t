@@ -4,22 +4,22 @@ load environment
 
 @test "Clone requires a remote" {
 	run $VCSH clone
-	[ "$status" -eq 1 ]
+	assert "$status" -eq 1
 }
 
 @test "Clone uses existing repo name by default" {
 	$VCSH clone "$TESTREPO"
 	$VCSH list
 	run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = "$TESTREPONAME" ]
+	assert "$status" -eq 0
+	assert "$output" = "$TESTREPONAME"
 }
 
 @test "Clone honors specified repo name" {
 	$VCSH clone "$TESTREPO" foo
 	run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = "foo" ]
+	assert "$status" -eq 0
+	assert "$output" = "foo"
 }
 
 @test "Clone uses given remote HEAD by default" {
@@ -28,8 +28,8 @@ load environment
 	correct=${output::40}
 
 	run $VCSH run "$TESTREPONAME" git rev-parse HEAD
-	[ "$status" -eq 0 ]
-	[ "$output" = "$correct" ]
+	assert "$status" -eq 0
+	assert "$output" = "$correct"
 }
 
 @test "Clone honors -b option before remote" {
@@ -38,8 +38,8 @@ load environment
 	correct=${output::40}
 
 	run $VCSH run "$TESTREPONAME" git rev-parse "$TESTBR1"
-	[ "$status" -eq 0 ]
-	[ "$output" = "$correct" ]
+	assert "$status" -eq 0
+	assert "$output" = "$correct"
 }
 
 @test "Clone honors -b option before remote and repo name" {
@@ -48,8 +48,8 @@ load environment
 	correct=${output::40}
 
 	run $VCSH run foo git rev-parse "$TESTBR1"
-	[ "$status" -eq 0 ]
-	[ "$output" = "$correct" ]
+	assert "$status" -eq 0
+	assert "$output" = "$correct"
 }
 
 @test "Clone honors -b option after remote" {
@@ -58,8 +58,8 @@ load environment
 	correct=${output::40}
 
 	run $VCSH run "$TESTREPONAME" git rev-parse "$TESTBR1"
-	[ "$status" -eq 0 ]
-	[ "$output" = "$correct" ]
+	assert "$status" -eq 0
+	assert "$output" = "$correct"
 }
 
 @test "Clone honors -b option between remote and repo name" {
@@ -68,8 +68,8 @@ load environment
 	correct=${output::40}
 
 	run $VCSH run foo git rev-parse "$TESTBR1"
-	[ "$status" -eq 0 ]
-	[ "$output" = "$correct" ]
+	assert "$status" -eq 0
+	assert "$output" = "$correct"
 }
 
 @test "Clone honors -b option after repo name" {
@@ -78,14 +78,14 @@ load environment
 	correct=${output::40}
 
 	run $VCSH run foo git rev-parse "$TESTBR1"
-	[ "$status" -eq 0 ]
-	[ "$output" = "$correct" ]
+	assert "$status" -eq 0
+	assert "$output" = "$correct"
 }
 
 @test "Clone -b option clones only one branch" {
 	$VCSH clone -b "$TESTBR1" "$TESTREPO"
 	run $VCSH run "$TESTREPONAME" git branch
-	[ "${#lines[@]}" -eq 1 ]
+	assert "${#lines[@]}" -eq 1
 }
 
 @test "Clone can be abbreviated (clon, clo, cl)" {
@@ -94,6 +94,6 @@ load environment
 	$VCSH cl -b "$TESTBR2" "$TESTREPO" c
 
 	run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = "$(printf 'a\nb\nc')" ]
+	assert "$status" -eq 0
+	assert "$output" = "$(printf 'a\nb\nc')"
 }

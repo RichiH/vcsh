@@ -19,18 +19,18 @@ doit() {
 
 	! $VCSH delete foo < /dev/null
 	run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = "foo" ]
+	assert "$status" -eq 0
+	assert "$output" = "foo"
 
 	! echo | $VCSH delete foo
 	run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = "foo" ]
+	assert "$status" -eq 0
+	assert "$output" = "foo"
 
 	! echo no | $VCSH delete foo
 	run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = "foo" ]
+	assert "$status" -eq 0
+	assert "$output" = "foo"
 }
 
 @test "Deleted repository removed from list" {
@@ -39,8 +39,8 @@ doit() {
 	doit | $VCSH delete foo
 
 	run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = "bar" ]
+	assert "$status" -eq 0
+	assert "$output" = "bar"
 }
 
 @test "Deleted repository not in status" {
@@ -48,8 +48,8 @@ doit() {
 	doit | $VCSH delete foo
 
 	run $VCSH status
-	[ "$status" -eq 0 ]
-	[ "$output" = "" ]
+	assert "$status" -eq 0
+	assert "$output" = ""
 }
 
 @test "Deleted repository cannot be subsequently used" {
@@ -57,8 +57,8 @@ doit() {
 	doit | $VCSH delete foo
 
 	run $VCSH run foo echo fail
-	[ "$status" -ne 0 ]
-	[ "$output" != "fail" ]
+	assert "$status" -ne 0
+	assert "$output" != "fail"
 }
 
 @test "Delete lists staged files before confirmation" {

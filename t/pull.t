@@ -4,8 +4,8 @@ load environment
 
 @test "pull works with no repositories" {
 	run $VCSH pull
-	[ "$status" -eq 0 ]
-	[ "$output" = "" ]
+	assert "$status" -eq 0
+	assert "$output" = ""
 }
 
 @test "pull succeeds if up-to-date" {
@@ -13,8 +13,8 @@ load environment
 
 	$VCSH clone upstream foo
 	run $VCSH pull
-	[ "$status" -eq 0 ]
-	[ "$output" = "foo: Already up-to-date." ]
+	assert "$status" -eq 0
+	assert "$output" = "foo: Already up-to-date."
 }
 
 @test "pull works with one repository" {
@@ -27,8 +27,8 @@ load environment
 
 	$VCSH pull
 	run $VCSH foo rev-parse HEAD
-	[ "$status" -eq 0 ]
-	[ "$output" = "$rev" ]
+	assert "$status" -eq 0
+	assert "$output" = "$rev"
 }
 
 @test "pull works with multiple repositories" {
@@ -49,11 +49,11 @@ load environment
 	$VCSH pull
 
 	run $VCSH foo rev-parse HEAD
-	[ "$status" -eq 0 ]
-	[ "$output" = "$rev1" ]
+	assert "$status" -eq 0
+	assert "$output" = "$rev1"
 	run $VCSH bar rev-parse HEAD
-	[ "$status" -eq 0 ]
-	[ "$output" = "$rev2" ]
+	assert "$status" -eq 0
+	assert "$output" = "$rev2"
 }
 
 @test "pull fails if first pull fails" {

@@ -23,8 +23,8 @@ load environment
 	$VCSH rename foo bar
 
 	run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = 'bar' ]
+	assert "$status" -eq 0
+	assert "$output" = 'bar'
 }
 
 @test "Rename works on repository with files/commits" {
@@ -33,8 +33,8 @@ load environment
 
 	$VCSH rename foo bar
 	run $VCSH bar rev-parse HEAD
-	[ "$status" -eq 0 ]
-	[ "$output" = "$rev" ]
+	assert "$status" -eq 0
+	assert "$output" = "$rev"
 }
 
 @test "Rename adopts existing .gitignore.d files under new name (bug?)" {
@@ -45,8 +45,8 @@ load environment
 
 	$VCSH rename foo bar
 	run $VCSH bar ls-files
-	[ "$status" -eq 0 ]
-	[ "$output" = ".gitignore.d/bar" ]
+	assert "$status" -eq 0
+	assert "$output" = ".gitignore.d/bar"
 }
 
 @test "Rename adopts existing .gitattributes.d files under new name (bug?)" {
@@ -57,8 +57,8 @@ load environment
 
 	$VCSH rename foo bar
 	run $VCSH bar ls-files
-	[ "$status" -eq 0 ]
-	[ "$output" = ".gitattributes.d/bar" ]
+	assert "$status" -eq 0
+	assert "$output" = ".gitattributes.d/bar"
 }
 
 @test "Rename can be abbreviated (renam, rena, ren, re)" {
@@ -70,6 +70,6 @@ load environment
 	$VCSH re bat quux
 
 	run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = "quux" ]
+	assert "$status" -eq 0
+	assert "$output" = "quux"
 }

@@ -4,8 +4,8 @@ load environment
 
 @test "commit works with no repos" {
 	run $VCSH commit
-	[ "$status" -eq 0 ]
-	[ "$output" = "" ]
+	assert "$status" -eq 0
+	assert "$output" = ""
 }
 
 @test "commit works with single repo" {
@@ -16,13 +16,13 @@ load environment
 	touch a
 	$VCSH foo add a
 	run $VCSH commit -m 'a'
-	[ "$status" -eq 0 ]
+	assert "$status" -eq 0
 	# XXX Is printing a trailing space really intended?
-	[ "$output" = "foo: " ]
+	assert "$output" = "foo: "
 
 	run $VCSH foo rev-list HEAD --count
-	[ "$status" -eq 0 ]
-	[ "$output" = "1" ]
+	assert "$status" -eq 0
+	assert "$output" = "1"
 }
 
 @test "commit works with multiple repos" {
@@ -35,9 +35,9 @@ load environment
 	$VCSH foo add a
 	$VCSH bar add b
 	run $VCSH commit -m 'ab'
-	[ "$status" -eq 0 ]
+	assert "$status" -eq 0
 	# XXX Is printing a trailing space and blank line really intended?
-	[ "$output" = "$(printf 'bar: \n\nfoo: ')" ]
+	assert "$output" = "$(printf 'bar: \n\nfoo: ')"
 
 	$VCSH foo log --oneline | grep -qx '....... ab'
 	$VCSH bar log --oneline | grep -qx '....... ab'
@@ -53,9 +53,9 @@ load environment
 	$VCSH foo add a
 	$VCSH bar add b
 	run $VCSH commit -m 'log message'
-	[ "$status" -eq 0 ]
+	assert "$status" -eq 0
 	# XXX Is printing a trailing space and blank line really intended?
-	[ "$output" = "$(printf 'bar: \n\nfoo: ')" ]
+	assert "$output" = "$(printf 'bar: \n\nfoo: ')"
 
 	$VCSH foo log --oneline | grep -qx '....... log message'
 	$VCSH bar log --oneline | grep -qx '....... log message'
@@ -85,6 +85,6 @@ load environment
 	export VCSH_COMMAND_RETURN_CODE
 
 	run $VCSH commit
-	[ "$status" -eq 0 ]
-	[ "$output" = "" ]
+	assert "$status" -eq 0
+	assert "$output" = ""
 }

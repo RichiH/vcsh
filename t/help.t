@@ -23,12 +23,12 @@ load environment
 	local good=$output
 
 	run $VCSH hel
-	[ "$status" -eq 0 ]
-	[ "$output" = "$good" ]
+	assert "$status" -eq 0
+	assert "$output" = "$good"
 
 	run $VCSH he
-	[ "$status" -eq 0 ]
-	[ "$output" = "$good" ]
+	assert "$status" -eq 0
+	assert "$output" = "$good"
 }
 
 # Help should explain each command.  (Note: adjust the help_check function if

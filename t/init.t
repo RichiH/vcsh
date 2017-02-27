@@ -25,7 +25,7 @@ load environment
 	toplevel="$output"
 
 	run $VCSH run bar git rev-parse --show-toplevel
-	[ "$output" = "$toplevel" ]
+	assert "$output" = "$toplevel"
 }
 
 @test "Init command respects alternate \$VCSH_REPO_D" {
@@ -54,8 +54,8 @@ load environment
 	$VCSH in test2
 
 	run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = $'test1\ntest2' ]
+	assert "$status" -eq 0
+	assert "$output" = $'test1\ntest2'
 }
 
 @test "\$VCSH_REPO_D overrides \$XDG_CONFIG_HOME and \$HOME for init" {
@@ -78,15 +78,15 @@ load environment
 	$VCSH init test1
 
 	run $VCSH run test1 git config vcsh.vcsh
-	[ "$status" -eq 0 ]
-	[ "$output" = "true" ]
+	assert "$status" -eq 0
+	assert "$output" = "true"
 }
 
 @test "Files created by init are not readable by other users" {
 	# verifies commit e220a61
 	$VCSH init foo
 	run find "$PWD" -type f -perm /g+rwx,o+rwx
-	[ "$output" = '' ]
+	assert "$output" = ''
 }
 
 @test "Init command adds matching gitignore.d files" {
@@ -99,12 +99,12 @@ load environment
 
 @test "Init command creates new Git repository" {
 	run num_gitrepos "$PWD"
-	[ "$output" = '0' ]
+	assert "$output" = '0'
 
 	for i in $(seq 5); do
 		$VCSH init "test$i"
 		run num_gitrepos "$PWD"
-		[ "$output" = "$i" ]
+		assert "$output" = "$i"
 	done
 }
 

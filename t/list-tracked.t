@@ -4,16 +4,16 @@ load environment
 
 @test "list-tracked works with no repos" {
 	run $VCSH list-tracked
-	[ "$status" -eq 0 ]
-	[ "$output" = "" ]
+	assert "$status" -eq 0
+	assert "$output" = ""
 }
 
 @test "list-tracked command works with no repos and untracked files" {
 	touch a b c d e
 
 	run $VCSH list-tracked
-	[ "$status" -eq 0 ]
-	[ "$output" = "" ]
+	assert "$status" -eq 0
+	assert "$output" = ""
 }
 
 @test "list-tracked fails if argument is not a repo" {
@@ -27,8 +27,8 @@ load environment
 
 	$VCSH init foo
 	run $VCSH list-tracked
-	[ "$status" -eq 0 ]
-	[ "$output" = "" ]
+	assert "$status" -eq 0
+	assert "$output" = ""
 }
 
 @test "list-tracked lists files from one repo" {
@@ -39,8 +39,8 @@ load environment
 	$VCSH foo commit -m 'a d'
 
 	run $VCSH list-tracked
-	[ "$status" -eq 0 ]
-	[ "$output" = "$(printf '%s\n' "$HOME/a" "$HOME/d")" ]
+	assert "$status" -eq 0
+	assert "$output" = "$(printf '%s\n' "$HOME/a" "$HOME/d")"
 }
 
 @test "list-tracked lists files from two repos" {
@@ -54,8 +54,8 @@ load environment
 	$VCSH bar commit -m 'c d'
 
 	run $VCSH list-tracked
-	[ "$status" -eq 0 ]
-	[ "$output" = "$(printf '%s\n' "$HOME/a" "$HOME/b" "$HOME/c" "$HOME/d")" ]
+	assert "$status" -eq 0
+	assert "$output" = "$(printf '%s\n' "$HOME/a" "$HOME/b" "$HOME/c" "$HOME/d")"
 }
 
 @test "list-tracked lists files from specified repo" {
@@ -69,12 +69,12 @@ load environment
 	$VCSH bar commit -m 'c d'
 
 	run $VCSH list-tracked foo
-	[ "$status" -eq 0 ]
-	[ "$output" = "$(printf '%s\n' "$HOME/a" "$HOME/b")" ]
+	assert "$status" -eq 0
+	assert "$output" = "$(printf '%s\n' "$HOME/a" "$HOME/b")"
 
 	run $VCSH list-tracked bar
-	[ "$status" -eq 0 ]
-	[ "$output" = "$(printf '%s\n' "$HOME/c" "$HOME/d")" ]
+	assert "$status" -eq 0
+	assert "$output" = "$(printf '%s\n' "$HOME/c" "$HOME/d")"
 }
 
 @test "list-tracked orders files by path" {
@@ -88,8 +88,8 @@ load environment
 	$VCSH bar commit -m 'b e'
 
 	run $VCSH list-tracked
-	[ "$status" -eq 0 ]
-	[ "$output" = "$(printf '%s\n' "$HOME/a" "$HOME/b" "$HOME/d" "$HOME/e")" ]
+	assert "$status" -eq 0
+	assert "$output" = "$(printf '%s\n' "$HOME/a" "$HOME/b" "$HOME/d" "$HOME/e")"
 }
 
 @test "list-tracked does not repeat multiple-tracked files" {
@@ -103,8 +103,8 @@ load environment
 	$VCSH bar commit -m 'a b'
 
 	run $VCSH list-tracked
-	[ "$status" -eq 0 ]
-	[ "$output" = "$(printf '%s\n' "$HOME/a" "$HOME/b")" ]
+	assert "$status" -eq 0
+	assert "$output" = "$(printf '%s\n' "$HOME/a" "$HOME/b")"
 }
 
 @test "list-tracked accepts each repo for multiple-tracked files" {
@@ -118,12 +118,12 @@ load environment
 	$VCSH bar commit -m 'a b'
 
 	run $VCSH list-tracked foo
-	[ "$status" -eq 0 ]
-	[ "$output" = "$(printf '%s\n' "$HOME/a" "$HOME/b")" ]
+	assert "$status" -eq 0
+	assert "$output" = "$(printf '%s\n' "$HOME/a" "$HOME/b")"
 
 	run $VCSH list-tracked bar
-	[ "$status" -eq 0 ]
-	[ "$output" = "$(printf '%s\n' "$HOME/a" "$HOME/b")" ]
+	assert "$status" -eq 0
+	assert "$output" = "$(printf '%s\n' "$HOME/a" "$HOME/b")"
 }
 
 @test "list-tracked-by requires an argument" {
@@ -147,10 +147,10 @@ load environment
 	$VCSH bar commit -m 'c d'
 
 	run $VCSH list-tracked-by foo
-	[ "$status" -eq 0 ]
-	[ "$output" = "$(printf '%s\n' "$HOME/a" "$HOME/b")" ]
+	assert "$status" -eq 0
+	assert "$output" = "$(printf '%s\n' "$HOME/a" "$HOME/b")"
 
 	run $VCSH list-tracked-by bar
-	[ "$status" -eq 0 ]
-	[ "$output" = "$(printf '%s\n' "$HOME/c" "$HOME/d")" ]
+	assert "$status" -eq 0
+	assert "$output" = "$(printf '%s\n' "$HOME/c" "$HOME/d")"
 }

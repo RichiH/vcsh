@@ -4,8 +4,8 @@ load environment
 
 @test "push works with no repositories" {
 	run $VCSH push
-	[ "$status" -eq 0 ]
-	[ "$output" = "" ]
+	assert "$status" -eq 0
+	assert "$output" = ""
 }
 
 @test "push succeeds if up-to-date" {
@@ -14,8 +14,8 @@ load environment
 	$VCSH clone upstream.git foo
 	$VCSH foo config push.default simple
 	run $VCSH push
-	[ "$status" -eq 0 ]
-	[ "$output" = "foo: Everything up-to-date" ]
+	assert "$status" -eq 0
+	assert "$output" = "foo: Everything up-to-date"
 }
 
 @test "push works with one repository" {
@@ -30,8 +30,8 @@ load environment
 	$VCSH push
 
 	run git -C upstream.git rev-parse HEAD
-	[ "$status" -eq 0 ]
-	[ "$output" = "$rev" ]
+	assert "$status" -eq 0
+	assert "$output" = "$rev"
 }
 
 @test "push works with multiple repositories" {
@@ -54,11 +54,11 @@ load environment
 	$VCSH push
 
 	run git -C upstream1.git rev-parse HEAD
-	[ "$status" -eq 0 ]
-	[ "$output" = "$rev1" ]
+	assert "$status" -eq 0
+	assert "$output" = "$rev1"
 	run git -C upstream2.git rev-parse HEAD
-	[ "$status" -eq 0 ]
-	[ "$output" = "$rev2" ]
+	assert "$status" -eq 0
+	assert "$output" = "$rev2"
 }
 
 @test "push fails if first push fails" {

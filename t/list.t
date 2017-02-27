@@ -4,22 +4,22 @@ load environment
 
 @test "List command correct for no repositories" {
 	run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = '' ]
+	assert "$status" -eq 0
+	assert "$output" = ''
 }
 
 @test "List command displays inited repository" {
 	$VCSH init test1
 	run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = 'test1' ]
+	assert "$status" -eq 0
+	assert "$output" = 'test1'
 }
 
 @test "List command displays cloned repository" {
 	$VCSH clone "$TESTREPO" test1
 	run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = 'test1' ]
+	assert "$status" -eq 0
+	assert "$output" = 'test1'
 }
 
 @test "List command displays multiple repositories" {
@@ -27,8 +27,8 @@ load environment
 	$VCSH init bar
 	$VCSH init baz
 	run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = $'bar\nbaz\nfoo' ]
+	assert "$status" -eq 0
+	assert "$output" = $'bar\nbaz\nfoo'
 }
 
 @test "List command respects \$VCSH_REPO_D" {
@@ -36,12 +36,12 @@ load environment
 	VCSH_REPO_D="$PWD/bar" $VCSH init test2
 
 	VCSH_REPO_D="$PWD/foo" run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = 'test1' ]
+	assert "$status" -eq 0
+	assert "$output" = 'test1'
 
 	VCSH_REPO_D="$PWD/bar" run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = 'test2' ]
+	assert "$status" -eq 0
+	assert "$output" = 'test2'
 }
 
 @test "List command respects \$XDG_CONFIG_HOME" {
@@ -49,12 +49,12 @@ load environment
 	XDG_CONFIG_HOME="$PWD/bar" $VCSH init test2
 
 	XDG_CONFIG_HOME="$PWD/foo" run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = 'test1' ]
+	assert "$status" -eq 0
+	assert "$output" = 'test1'
 
 	XDG_CONFIG_HOME="$PWD/bar" run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = 'test2' ]
+	assert "$status" -eq 0
+	assert "$output" = 'test2'
 }
 
 @test "List command respects \$HOME" {
@@ -62,12 +62,12 @@ load environment
 	HOME="$PWD/bar" $VCSH init test2
 
 	HOME="$PWD/foo" run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = 'test1' ]
+	assert "$status" -eq 0
+	assert "$output" = 'test1'
 
 	HOME="$PWD/bar" run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = 'test2' ]
+	assert "$status" -eq 0
+	assert "$output" = 'test2'
 }
 
 @test "List command prioritizes \$XDG_CONFIG_HOME over \$HOME" {
@@ -75,8 +75,8 @@ load environment
 	HOME="$PWD/bar" $VCSH init wrong
 
 	HOME="$PWD/bar" XDG_CONFIG_HOME="$PWD/foo/.config" run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = 'correct' ]
+	assert "$status" -eq 0
+	assert "$output" = 'correct'
 }
 
 @test "List command prioritizes \$VCSH_REPO_D over \$HOME" {
@@ -84,8 +84,8 @@ load environment
 	HOME="$PWD/bar" $VCSH init wrong
 
 	HOME="$PWD/bar" VCSH_REPO_D="$PWD/foo/.config/vcsh/repo.d" run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = 'correct' ]
+	assert "$status" -eq 0
+	assert "$output" = 'correct'
 }
 
 @test "List command prioritizes \$VCSH_REPO_D over \$XDG_CONFIG_HOME" {
@@ -93,6 +93,6 @@ load environment
 	XDG_CONFIG_HOME="$PWD/bar" $VCSH init wrong
 
 	XDG_CONFIG_HOME="$PWD/bar" VCSH_REPO_D="$PWD/foo/vcsh/repo.d" run $VCSH list
-	[ "$status" -eq 0 ]
-	[ "$output" = 'correct' ]
+	assert "$status" -eq 0
+	assert "$output" = 'correct'
 }

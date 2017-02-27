@@ -33,8 +33,8 @@ load environment
 	$VCSH foo commit -m 'testfile'
 
 	run $VCSH which testfile
-	[ "$status" -eq 0 ]
-	[ "$output" = "foo: testfile" ]
+	assert "$status" -eq 0
+	assert "$output" = "foo: testfile"
 }
 
 @test "Which command matches entire path" {
@@ -46,8 +46,8 @@ load environment
 	$VCSH foo commit -m 'dir/testfile'
 
 	run $VCSH which dir/testfile
-	[ "$status" -eq 0 ]
-	[ "$output" = "foo: dir/testfile" ]
+	assert "$status" -eq 0
+	assert "$output" = "foo: dir/testfile"
 }
 
 @test "Which command matches filename within subdirectory" {
@@ -59,8 +59,8 @@ load environment
 	$VCSH foo commit -m 'dir/testfile'
 
 	run $VCSH which testfile
-	[ "$status" -eq 0 ]
-	[ "$output" = "foo: dir/testfile" ]
+	assert "$status" -eq 0
+	assert "$output" = "foo: dir/testfile"
 }
 
 @test "Which command matches directory path component" {
@@ -72,8 +72,8 @@ load environment
 	$VCSH foo commit -m 'dir/subd/testfile'
 
 	run $VCSH which subd
-	[ "$status" -eq 0 ]
-	[ "$output" = "foo: dir/subd/testfile" ]
+	assert "$status" -eq 0
+	assert "$output" = "foo: dir/subd/testfile"
 }
 
 @test "Which command matches partial filename" {
@@ -85,8 +85,8 @@ load environment
 	$VCSH foo commit -m 'dir/subd/testfile'
 
 	run $VCSH which estf
-	[ "$status" -eq 0 ]
-	[ "$output" = "foo: dir/subd/testfile" ]
+	assert "$status" -eq 0
+	assert "$output" = "foo: dir/subd/testfile"
 }
 
 @test "Which command matches partial path component across slash" {
@@ -98,8 +98,8 @@ load environment
 	$VCSH foo commit -m 'dir/subd/testfile'
 
 	run $VCSH which bd/te
-	[ "$status" -eq 0 ]
-	[ "$output" = "foo: dir/subd/testfile" ]
+	assert "$status" -eq 0
+	assert "$output" = "foo: dir/subd/testfile"
 }
 
 @test "Which command matches using POSIX BRE" {
@@ -110,8 +110,8 @@ load environment
 	$VCSH foo commit -m 'color'
 
 	run $VCSH which 'c.lou\?r'
-	[ "$status" -eq 0 ]
-	[ "$output" = "$(printf 'foo: calor\nfoo: color\nfoo: colour')" ]
+	assert "$status" -eq 0
+	assert "$output" = "$(printf 'foo: calor\nfoo: color\nfoo: colour')"
 }
 
 @test "Which command searches all repos" {
@@ -129,6 +129,6 @@ load environment
 	$VCSH baz commit -m 'hello'
 
 	run $VCSH which hello
-	[ "$status" -eq 0 ]
-	[ "$output" = "$(printf 'bar: b/hello\nbaz: c/hello\nfoo: a/hello')" ]
+	assert "$status" -eq 0
+	assert "$output" = "$(printf 'bar: b/hello\nbaz: c/hello\nfoo: a/hello')"
 }

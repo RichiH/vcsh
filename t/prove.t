@@ -10,10 +10,10 @@ load environment
 	$VCSH test2 add 'a'
 
 	run $VCSH status
-	[ "$status" -eq 0 ]
-	[ "$output" = $'test1:\n\ntest2:\nA  a' ]
+	assert "$status" -eq 0
+	assert "$output" = $'test1:\n\ntest2:\nA  a'
 
 	run $VCSH status --terse
-	[ "$status" -eq 0 ]
-	[ "$output" = $'test2:\nA  a' ]
+	assert "$status" -eq 0
+	assert "$output" = $'test2:\nA  a'
 }

@@ -8,16 +8,16 @@ load environment
 
 @test "Status command correct for no repos" {
 	run $VCSH status
-	[ "$status" -eq 0 ]
-	[ "$output" = '' ]
+	assert "$status" -eq 0
+	assert "$output" = ''
 }
 
 @test "Status command correct for empty repo" {
 	$VCSH init foo
 
 	run $VCSH status
-	[ "$status" -eq 0 ]
-	[ "$output" = 'foo:' ]
+	assert "$status" -eq 0
+	assert "$output" = 'foo:'
 }
 
 @test "Status command correct for multiple empty repos" {
@@ -25,16 +25,16 @@ load environment
 	$VCSH init bar
 
 	run $VCSH status
-	[ "$status" -eq 0 ]
-	[ "$output" = $'bar:\n\nfoo:' ]
+	assert "$status" -eq 0
+	assert "$output" = $'bar:\n\nfoo:'
 }
 
 @test "Terse status correct for empty repo" {
 	$VCSH init foo
 
 	run $VCSH status --terse
-	[ "$status" -eq 0 ]
-	[ "$output" = '' ]
+	assert "$status" -eq 0
+	assert "$output" = ''
 }
 
 @test "Terse status correct for multiple empty repos" {
@@ -42,8 +42,8 @@ load environment
 	$VCSH init bar
 
 	run $VCSH status --terse
-	[ "$status" -eq 0 ]
-	[ "$output" = '' ]
+	assert "$status" -eq 0
+	assert "$output" = ''
 }
 
 @test "Status shows added/modified/moved/deleted files" {
@@ -81,8 +81,8 @@ load environment
 	rm ?D
 
 	run $VCSH status
-	[ "$status" -eq 0 ]
-	[ "$output" = "$(printf '%s\n' \
+	assert "$status" -eq 0
+	assert "$output" = "$(printf '%s\n' \
 		'foo:'         \
 		' D 0D'        \
 		' M 0M'        \
@@ -95,7 +95,7 @@ load environment
 		'MM MM'        \
 		'R  R0x -> R0' \
 		'RD RDx -> RD' \
-		'RM RMx -> RM')" ]
+		'RM RMx -> RM')"
 }
 
 @test "Status shows commits behind upstream" {
@@ -122,7 +122,7 @@ load environment
 	TERM=vt100
 	export TERM
 	run socat -u exec:"$VCSH status foo",pty,rawer stdio
-	[ "$output" = $'\e[32mA\e[m  a' ]
+	assert "$output" = $'\e[32mA\e[m  a'
 }
 
 @test "Status can be abbreviated (statu, stat, sta, st)" {
@@ -135,7 +135,7 @@ load environment
 
 	for cmd in statu stat sta st; do
 		run $VCSH $cmd
-		[ "$status" -eq 0 ]
-		[ "$output" = "$expected" ]
+		assert "$status" -eq 0
+		assert "$output" = "$expected"
 	done
 }
