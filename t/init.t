@@ -7,14 +7,14 @@ load environment
 }
 
 @test "Init command takes exactly one parameter" {
-	! $VCSH init
-	! $VCSH init foo bar
+	! $VCSH init || false
+	! $VCSH init foo bar || false
 	$VCSH init baz
 }
 
 @test "Init command fails if repository already exists" {
 	$VCSH init exists
-	! $VCSH init exists
+	! $VCSH init exists || false
 }
 
 @test "Init creates repositories with same toplevel" {
@@ -46,7 +46,7 @@ load environment
 @test "Init command fails if directories cannot be created" {
 	mkdir ro
 	chmod a-w ro
-	! HOME="$PWD/ro" $VCSH init foo
+	! HOME="$PWD/ro" $VCSH init foo || false
 }
 
 @test "Init command can be abbreviated 'ini'/'in'" {
@@ -109,9 +109,9 @@ load environment
 }
 
 @test "VCSH_GITIGNORE variable is validated" {
-	! VCSH_GITIGNORE=x $VCSH init foo
-	! VCSH_GITIGNORE=nonsense $VCSH init foo
-	! VCSH_GITIGNORE=fhqwhgads $VCSH init foo
+	! VCSH_GITIGNORE=x $VCSH init foo || false
+	! VCSH_GITIGNORE=nonsense $VCSH init foo || false
+	! VCSH_GITIGNORE=fhqwhgads $VCSH init foo || false
 }
 
 @test "Init command sets core.excludesfile with VCSH_GITIGNORE=exact" {
@@ -130,7 +130,7 @@ load environment
 
 @test "Init command does not set core.excludesfile with VCSH_GITIGNORE=none" {
 	VCSH_GITIGNORE=none $VCSH init test1
-	! $VCSH run test1 git config core.excludesfile
+	! $VCSH run test1 git config core.excludesfile || false
 }
 
 @test "Init command sets core.attributesfile with VCSH_GITATTRIBUTES!=none" {
@@ -140,5 +140,5 @@ load environment
 
 @test "Init command does not set core.attributesfile with VCSH_GITATTRIBUTES=none" {
 	VCSH_GITATTRIBUTES=none $VCSH init test1
-	! $VCSH run test1 git config core.attributesfile
+	! $VCSH run test1 git config core.attributesfile || false
 }

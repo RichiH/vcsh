@@ -3,7 +3,7 @@
 load environment
 
 @test "Foreach requires an argument" {
-	! $VCSH foreach
+	! $VCSH foreach || false
 }
 
 @test "Foreach does nothing if no repositories exist" {

@@ -3,7 +3,7 @@
 load environment
 
 @test "Status argument if any must be a repo" {
-	! $VCSH status nope
+	! $VCSH status nope || false
 }
 
 @test "Status command correct for no repos" {

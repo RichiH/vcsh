@@ -3,19 +3,19 @@
 load environment
 
 @test "Rename requires two arguments" {
-	! $VCSH rename
-	! $VCSH rename foo
+	! $VCSH rename || false
+	! $VCSH rename foo || false
 }
 
 @test "Repository to be renamed must exist" {
-	! $VCSH rename foo bar
+	! $VCSH rename foo bar || false
 }
 
 @test "Target of rename must not already exist" {
 	$VCSH init foo
 	$VCSH init bar
 
-	! $VCSH rename foo bar
+	! $VCSH rename foo bar || false
 }
 
 @test "Rename works on empty repository" {

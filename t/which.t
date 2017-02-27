@@ -3,16 +3,16 @@
 load environment
 
 @test "Which command requires exactly one parameter" {
-	! $VCSH which
-	! $VCSH which foo bar
+	! $VCSH which || false
+	! $VCSH which foo bar || false
 }
 
 @test "Which command does not accept an empty parameter" {
-	! $VCSH which ''
+	! $VCSH which '' || false
 }
 
 @test "Which command fails if no repositories" {
-	! $VCSH which nope
+	! $VCSH which nope || false
 }
 
 @test "Which command fails if pattern not found" {
@@ -22,7 +22,7 @@ load environment
 	$VCSH foo add a
 	$VCSH foo commit -m 'a'
 
-	! $VCSH which nope
+	! $VCSH which nope || false
 }
 
 @test "Which command matches exact filename" {

@@ -19,7 +19,7 @@ load environment
 @test "list-tracked fails if argument is not a repo" {
 	skip "BUG"
 
-	! $VCSH list-tracked nope
+	! $VCSH list-tracked nope || false
 }
 
 @test "list-tracked works on empty repo" {
@@ -127,13 +127,13 @@ load environment
 }
 
 @test "list-tracked-by requires an argument" {
-	! $VCSH list-tracked-by
+	! $VCSH list-tracked-by || false
 }
 
 @test "list-tracked-by fails if argument is not a repo" {
 	skip "BUG"
 
-	! $VCSH list-tracked-by nope
+	! $VCSH list-tracked-by nope || false
 }
 
 @test "list-tracked-by lists files from specified repo" {

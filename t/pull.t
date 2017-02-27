@@ -68,7 +68,7 @@ load environment
 	rm -rf upstream1
 	git -C upstream2 commit --allow-empty -m 'empty'
 
-	! $VCSH pull
+	! $VCSH pull || false
 }
 
 @test "pull fails if last pull fails" {
@@ -81,5 +81,5 @@ load environment
 	git -C upstream1 commit --allow-empty -m 'empty'
 	rm -rf upstream2
 
-	! $VCSH pull
+	! $VCSH pull || false
 }

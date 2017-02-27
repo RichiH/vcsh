@@ -75,7 +75,7 @@ load environment
 	rm -rf upstream1.git
 	$VCSH b commit --allow-empty -m 'empty'
 
-	! $VCSH push
+	! $VCSH push || false
 }
 
 @test "push fails if last push fails" {
@@ -90,5 +90,5 @@ load environment
 	$VCSH a commit --allow-empty -m 'empty'
 	rm -rf upstream2.git
 
-	! $VCSH push
+	! $VCSH push || false
 }

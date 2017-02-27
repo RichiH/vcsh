@@ -7,27 +7,27 @@ doit() {
 }
 
 @test "Delete requires repo name" {
-	! $VCSH delete
+	! $VCSH delete || false
 }
 
 @test "Repository to be deleted must exist" {
-	! $VCSH delete foo
+	! $VCSH delete foo || false
 }
 
 @test "Delete requires confirmation" {
 	$VCSH init foo
 
-	! $VCSH delete foo < /dev/null
+	! $VCSH delete foo < /dev/null || false
 	run $VCSH list
 	assert "$status" -eq 0
 	assert "$output" = "foo"
 
-	! echo | $VCSH delete foo
+	! echo | $VCSH delete foo || false
 	run $VCSH list
 	assert "$status" -eq 0
 	assert "$output" = "foo"
 
-	! echo no | $VCSH delete foo
+	! echo no | $VCSH delete foo || false
 	run $VCSH list
 	assert "$status" -eq 0
 	assert "$output" = "foo"
@@ -148,14 +148,14 @@ doit() {
 	$VCSH init d
 
 	doit | $VCSH delet a
-	! $VCSH list | grep -Fqx a
+	! $VCSH list | grep -Fqx a || false
 
 	doit | $VCSH dele b
-	! $VCSH list | grep -Fqx b
+	! $VCSH list | grep -Fqx b || false
 
 	doit | $VCSH del c
-	! $VCSH list | grep -Fqx c
+	! $VCSH list | grep -Fqx c || false
 
 	doit | $VCSH de d
-	! $VCSH list | grep -Fqx d
+	! $VCSH list | grep -Fqx d || false
 }

@@ -10,7 +10,7 @@ load environment
 	$VCSH help 2>&1 1>/dev/null |
 		grep -q ''
 	! $VCSH help 2>/dev/null |
-		grep -q ''
+		grep -q '' || false
 }
 @test "Help command prints usage on first line" {
 	run $VCSH help
