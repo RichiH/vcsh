@@ -39,8 +39,8 @@ load environment
 	# XXX Is printing a trailing space and blank line really intended?
 	assert "$output" = "$(printf 'bar: \n\nfoo: ')"
 
-	$VCSH foo log --oneline | grep -qx '....... ab'
-	$VCSH bar log --oneline | grep -qx '....... ab'
+	$VCSH foo log --oneline | assert_grep -x '....... ab'
+	$VCSH bar log --oneline | assert_grep -x '....... ab'
 }
 
 @test "commit can handle arguments with spaces" {
@@ -57,8 +57,8 @@ load environment
 	# XXX Is printing a trailing space and blank line really intended?
 	assert "$output" = "$(printf 'bar: \n\nfoo: ')"
 
-	$VCSH foo log --oneline | grep -qx '....... log message'
-	$VCSH bar log --oneline | grep -qx '....... log message'
+	$VCSH foo log --oneline | assert_grep -x '....... log message'
+	$VCSH bar log --oneline | assert_grep -x '....... log message'
 }
 
 @test "commit works even if not all repos have changes" {
@@ -74,8 +74,8 @@ load environment
 	$VCSH bar add b
 	$VCSH commit -m 'part2'
 
-	$VCSH foo log --oneline | grep -qx '....... part1'
-	$VCSH bar log --oneline | grep -qx '....... part2'
+	$VCSH foo log --oneline | assert_grep -x '....... part1'
+	$VCSH bar log --oneline | assert_grep -x '....... part2'
 }
 
 @test "commit not affected by existing \$VCSH_COMMAND_RETURN_CODE" {

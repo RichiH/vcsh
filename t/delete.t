@@ -66,7 +66,7 @@ doit() {
 	touch randomtexttofind
 	$VCSH foo add randomtexttofind
 
-	: | $VCSH delete foo | grep -Fq randomtexttofind
+	: | $VCSH delete foo | assert_grep -F randomtexttofind
 }
 
 @test "Delete lists committed files before confirmation" {
@@ -75,7 +75,7 @@ doit() {
 	$VCSH foo add randomtexttofind
 	$VCSH foo commit -m 'a'
 
-	: | $VCSH delete foo | grep -Fq randomtexttofind
+	: | $VCSH delete foo | assert_grep -F randomtexttofind
 }
 
 @test "Delete lists files staged for removal before confirmation" {
@@ -87,7 +87,7 @@ doit() {
 	$VCSH foo commit -m 'a'
 	$VCSH foo rm --cached randomtexttofind
 
-	: | $VCSH delete foo | grep -Fq randomtexttofind
+	: | $VCSH delete foo | assert_grep -F randomtexttofind
 }
 
 @test "Delete removes corresponding files" {
@@ -148,14 +148,14 @@ doit() {
 	$VCSH init d
 
 	doit | $VCSH delet a
-	! $VCSH list | grep -Fqx a || false
+	! $VCSH list | assert_grep -Fx a || false
 
 	doit | $VCSH dele b
-	! $VCSH list | grep -Fqx b || false
+	! $VCSH list | assert_grep -Fx b || false
 
 	doit | $VCSH del c
-	! $VCSH list | grep -Fqx c || false
+	! $VCSH list | assert_grep -Fx c || false
 
 	doit | $VCSH de d
-	! $VCSH list | grep -Fqx d || false
+	! $VCSH list | assert_grep -Fx d || false
 }

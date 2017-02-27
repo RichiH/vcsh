@@ -7,14 +7,12 @@ load environment
 	$VCSH help
 }
 @test "Help command writes to stderr and not stdout" {
-	$VCSH help 2>&1 1>/dev/null |
-		grep -q ''
-	! $VCSH help 2>/dev/null |
-		grep -q '' || false
+	$VCSH help 2>&1 1>/dev/null | assert_grep ''
+	! $VCSH help 2>/dev/null | assert_grep '' || false
 }
 @test "Help command prints usage on first line" {
 	run $VCSH help
-	[[ "$output" = 'usage: '* ]]
+	echo "${lines[0]}" | assert_grep '^usage: '
 }
 
 @test "Help command can be abbreviated (hel, he)" {
@@ -34,8 +32,7 @@ load environment
 # Help should explain each command.  (Note: adjust the help_check function if
 # the format of help output changes.)
 help_check() {
-	$VCSH help 2>&1 |
-		grep -q "^   $1\\b"
+	$VCSH help 2>&1 | assert_grep "^   $1\\b"
 }
 
 @test "Help text includes clone command" { help_check clone; }

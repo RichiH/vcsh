@@ -96,7 +96,7 @@ load environment
 	touch .gitattributes.d/test1 .gitignore.d/test1
 
 	VCSH_GITIGNORE=exact $VCSH init test1
-	$VCSH status test1 | grep -Fqx 'A  .gitignore.d/test1'
+	$VCSH status test1 | assert_grep -Fx 'A  .gitignore.d/test1'
 }
 
 @test "Init command creates new Git repository" {

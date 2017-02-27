@@ -92,3 +92,8 @@ assert_file() {
 		return 1
 	fi
 }
+
+# Similar to grep -q, but prints the entire input to stderr for debugging
+assert_grep() {
+	tee /dev/stderr | grep "$@" > /dev/null
+}
