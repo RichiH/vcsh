@@ -101,16 +101,16 @@ doit() {
 	$VCSH bar commit -m 'a c'
 
 	doit | $VCSH delete foo
-	[ ! -e b ]
-	[ ! -e e ]
-	[ -e a ]
-	[ -e c ]
-	[ -e d ]
+	assert_file ! -e b
+	assert_file ! -e e
+	assert_file -e a
+	assert_file -e c
+	assert_file -e d
 
 	doit | $VCSH delete bar
-	[ ! -e a ]
-	[ ! -e c ]
-	[ -e d ]
+	assert_file ! -e a
+	assert_file ! -e c
+	assert_file -e d
 }
 
 @test "Delete handles filenames with spaces properly" {
@@ -122,9 +122,9 @@ doit() {
 	$VCSH foo commit -m 'a b'
 
 	doit | $VCSH delete foo
-	[ ! -e 'a b' ]
-	[ -e a ]
-	[ -e b ]
+	assert_file ! -e 'a b'
+	assert_file -e a
+	assert_file -e b
 }
 
 @test "Delete handles filenames with wildcard characters properly" {
@@ -136,9 +136,9 @@ doit() {
 	$VCSH foo commit -m '?'
 
 	doit | $VCSH delete foo
-	[ ! -e '?' ]
-	[ -e a ]
-	[ -e b ]
+	assert_file ! -e '?'
+	assert_file -e a
+	assert_file -e b
 }
 
 @test "Delete can be abbreviated (delet, dele, del, de)" {

@@ -71,3 +71,24 @@ assert() {
 		return 1
 	fi
 }
+
+assert_file() {
+	negate=
+	if [ "$1" = "!" ]; then
+		if [ $# -ne 3 ]; then
+			echo 'assert_file: requires two arguments after ! (forgot to quote?)' >&2
+			return 2
+		fi
+		negate='! '
+		shift
+	elif [ $# -ne 2 ]; then
+		echo 'assert_file: requires two arguments (forgot to quote?)' >&2
+		return 2
+	fi
+
+	if ! test $negate "$@"; then
+		echo "assertion \"$negate$1\" failed" >&2
+		echo "file: \"$2\"" >&2
+		return 1
+	fi
+}
