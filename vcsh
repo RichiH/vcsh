@@ -151,10 +151,24 @@ info() {
 }
 
 clone() {
+	GIT_VERSION=$(git --version)
+    GIT_VERSION_MAJOR=$(echo $GIT_VERSION | awk -F '[^0-9]*' '$0=$2')
+    GIT_VERSION_MINOR=$(echo $GIT_VERSION | awk 'BEGIN {FS="."} {print $2}')
+    GIT_VERSION_REV=$(echo $GIT_VERSION | awk 'BEGIN {FS="."} {print $3}')
 	hook pre-clone
 	init
 	git remote add origin "$GIT_REMOTE"
-	git checkout -b "$VCSH_BRANCH" || return $?
+    if [ 1 -lt "$GIT_VERSION_MAJOR" ];then
+    	git checkout -b "$VCSH_BRANCH" || return $?
+    else
+        if [ 7 -lt $GIT_VERSION_MINOR ];then
+    	    git checkout -b "$VCSH_BRANCH" || return $?
+        else
+            if [ 1 -lt $GIT_VERSION_REV ];then
+                git checkout -b "$VCSH_BRANCH" || return $?
+            fi
+        fi
+	fi
 	git config branch."$VCSH_BRANCH".remote origin
 	git config branch."$VCSH_BRANCH".merge  refs/heads/"$VCSH_BRANCH"
 	if [ $(git ls-remote origin "$VCSH_BRANCH" 2> /dev/null | wc -l ) -lt 1 ]; then
@@ -162,7 +176,6 @@ clone() {
   You should add files to your new repository."
 		exit
 	fi
-	GIT_VERSION_MAJOR=$(git --version | sed -n 's/.* \([0-9]\)\..*/\1/p' )
 	if [ 1 -lt "$GIT_VERSION_MAJOR" ];then
 		git fetch origin "$VCSH_BRANCH"
 	else
@@ -177,7 +190,19 @@ clone() {
 	[ x"$VCSH_CONFLICT" = x'1' ]) &&
 		fatal "will stop after fetching and not try to merge!
   Once this situation has been resolved, run 'vcsh $VCSH_REPO_NAME pull' to finish cloning." 17
-	git -c merge.ff=true merge origin/"$VCSH_BRANCH"
+    if [ 1 -lt "$GIT_VERSION_MAJOR" ];then
+        git -c merge.ff=true merge origin/"$VCSH_BRANCH"
+    else
+        if [ 7 -lt $GIT_VERSION_MINOR ];then
+	        git -c merge.ff=true merge origin/"$VCSH_BRANCH"
+        else
+            if [ 1 -lt $GIT_VERSION_REV ];then
+	            git -c merge.ff=true merge origin/"$VCSH_BRANCH"
+            else
+        	    git merge origin/"$VCSH_BRANCH"
+            fi
+        fi
+	fi
 	hook post-merge
 	hook post-clone
 	retire
