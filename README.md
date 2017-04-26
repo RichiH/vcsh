@@ -30,6 +30,11 @@ Let's say you want to version control your `vim` configuration:
 If all that looks a _lot_ like standard `git`, that's no coincidence; it's
 a design feature.
 
+vcsh also works with repositories containing submodules:
+
+    vcsh clone https://github.com/spf13/spf13-vim.git
+    vcsh spf13-vim submodule update --init --recursive
+
 
 # Introduction
 
