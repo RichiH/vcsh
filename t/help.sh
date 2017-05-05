@@ -10,7 +10,7 @@ test_expect_failure 'Help command succeeds' \
 
 test_expect_success 'Help command writes to stderr and not stdout' \
 	'$VCSH help 2>&1 1>/dev/null | assert_grep "" &&
-	! $VCSH help 2>/dev/null | assert_grep ""'
+	$VCSH help 2>/dev/null | test_must_fail assert_grep ""'
 
 test_expect_success 'Help command prints usage on first line' \
 	'$VCSH help |&
