@@ -5,8 +5,6 @@ test_description='Help command'
 . test-lib.sh
 . "$TEST_DIRECTORY/environment.bash"
 
-VCSH='sh vcsh'
-
 test_expect_failure 'Help command succeeds' \
 	'$VCSH help'
 
