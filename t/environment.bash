@@ -24,9 +24,13 @@ export GITVERSION=$(git version)
 unset VCSH_OPTION_CONFIG VCSH_REPO_D VCSH_HOOK_D VCSH_OVERLAY_D
 unset VCSH_BASE VCSH_GITIGNORE VCSH_GITATTRIBUTES VCSH_WORKTREE
 
+find_gitrepos() {
+	# Prints apparent Git repositories below $1
+	find "$1" -mindepth 1 -type d -name '*.git'
+}
+
 num_gitrepos() {
-	# Prints the number of apparent Git repositories below $1
-	find "$1" -mindepth 1 -type d -name '*.git' | wc -l
+	find_gitrepos "$@" | wc -l
 }
 
 assert() {

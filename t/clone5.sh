@@ -7,10 +7,10 @@ test_description='Clone command'
 
 test_expect_success 'Clone honors -b option before remote' \
 	'$VCSH clone -b "$TESTBR1" "$TESTREPO" &&
-	output="$(git ls-remote "$TESTREPO" "$TESTBR1")" &&
-	correct=${output::40} &&
+	git ls-remote "$TESTREPO" "$TESTBR1" | head -c40 >expected &&
+	echo >>expected &&
 
-	output="$($VCSH run "$TESTREPONAME" git rev-parse "$TESTBR1")" &&
-	assert "$output" = "$correct"'
+	$VCSH run "$TESTREPONAME" git rev-parse "$TESTBR1" >output &&
+	test_cmp expected output'
 
 test_done

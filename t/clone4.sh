@@ -7,10 +7,10 @@ test_description='Clone command'
 
 test_expect_success 'Clone uses given remote HEAD by default' \
 	'$VCSH clone "$TESTREPO" &&
-	output="$(git ls-remote "$TESTREPO" HEAD)" &&
-	correct=${output::40} &&
+	git ls-remote "$TESTREPO" HEAD | head -c40 >expected &&
+	echo >>expected &&
 
-	output="$($VCSH run "$TESTREPONAME" git rev-parse HEAD)" &&
-	assert "$output" = "$correct"'
+	$VCSH run "$TESTREPONAME" git rev-parse HEAD >output &&
+	test_cmp expected output'
 
 test_done

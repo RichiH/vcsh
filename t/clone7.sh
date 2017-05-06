@@ -5,12 +5,12 @@ test_description='Clone command'
 . test-lib.sh
 . "$TEST_DIRECTORY/environment.bash"
 
-@test "Clone honors -b option after remote" {
-	$VCSH clone "$TESTREPO" -b "$TESTBR1" &&
-	output="$(git ls-remote "$TESTREPO" "$TESTBR1")" &&
-	correct=${output::40} &&
+test_expect_success 'Clone honors -b option after remote' \
+	'$VCSH clone "$TESTREPO" -b "$TESTBR1" &&
+	git ls-remote "$TESTREPO" "$TESTBR1" | head -c40 >expected &&
+	echo >>expected &&
 
-	output="$($VCSH run "$TESTREPONAME" git rev-parse "$TESTBR1")" &&
-	assert "$output" = "$correct"'
+	$VCSH run "$TESTREPONAME" git rev-parse "$TESTBR1" >output &&
+	test_cmp expected output'
 
 test_done

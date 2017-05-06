@@ -10,7 +10,10 @@ test_expect_success 'Clone can be abbreviated (clon, clo, cl)' \
 	$VCSH clo -b "$TESTBR1" "$TESTREPO" b &&
 	$VCSH cl -b "$TESTBR2" "$TESTREPO" c &&
 
-	output="$($VCSH list)" &&
-	assert "$output" = "$(printf '\''a\nb\nc'\'')"'
+	echo a > expected &&
+	echo b >> expected &&
+	echo c >> expected &&
+	$VCSH list >output &&
+	test_cmp expected output'
 
 test_done

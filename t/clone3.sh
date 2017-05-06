@@ -7,7 +7,8 @@ test_description='Clone command'
 
 test_expect_success 'Clone honors specified repo name' \
 	'$VCSH clone "$TESTREPO" foo &&
-	output=$($VCSH list) &&
-	assert "$output" = "foo"'
+	echo foo >expected &&
+	$VCSH list >output &&
+	test_cmp expected output'
 
 test_done

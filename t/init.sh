@@ -23,9 +23,9 @@ test_expect_failure 'Init command takes exactly one parameter' \
 	test_must_fail $VCSH init a b c'
 
 test_expect_success 'Init creates repositories with same toplevel' \
-	'toplevel="$($VCSH run foo git rev-parse --show-toplevel)" &&
-	output="$($VCSH run bar git rev-parse --show-toplevel)" &&
-	assert "$output" = "$toplevel"'
+	'$VCSH run foo git rev-parse --show-toplevel >output1 &&
+	$VCSH run bar git rev-parse --show-toplevel >output2 &&
+	test_cmp output1 output2'
 
 test_expect_success 'Init command respects alternate $VCSH_REPO_D' \
 	'mkdir -p repod1 repod2 &&
@@ -68,8 +68,9 @@ test_expect_success '$XDG_CONFIG_HOME overrides $HOME for init' \
 # Too internal to implementation?  If another command verifies
 # vcsh.vcsh, use that instead of git config.
 test_expect_success 'Init command marks repository with vcsh.vcsh=true' \
-	'output=$($VCSH run foo git config vcsh.vcsh) &&
-	assert "$output" = "true"'
+	'echo true >expected &&
+	$VCSH run foo git config vcsh.vcsh >output &&
+	test_cmp expected output'
 
 test_expect_success 'Init command adds matching gitignore.d files' \
 	'mkdir -p .gitattributes.d .gitignore.d &&

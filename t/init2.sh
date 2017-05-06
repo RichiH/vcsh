@@ -6,14 +6,13 @@ test_description='Init command'
 . "$TEST_DIRECTORY/environment.bash"
 
 test_expect_success 'Init command creates new Git repository' \
-	'output=$(num_gitrepos "$PWD") &&
-	assert "$output" = "0" &&
+	'find_gitrepos "$PWD" >output &&
+	test_must_be_empty output &&
 
-	for i in $(seq 5)
-	do
+	for i in $(test_seq 5); do
 		$VCSH init "test$i" &&
-		output=$(num_gitrepos "$PWD") &&
-		assert "$output" = "$i"
+		find_gitrepos "$PWD" >output &&
+		test_line_count = "$i" output
 	done'
 
 test_done

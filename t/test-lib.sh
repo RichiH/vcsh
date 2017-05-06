@@ -44,7 +44,7 @@ then
 	exit 1
 fi
 
-export PERL_PATH=perl SHELL_PATH=sh
+export PERL_PATH=perl SHELL_PATH=sh DIFF=diff
 
 # if --tee was passed, write the output not only to the terminal, but
 # additionally to the file test-results/$BASENAME.out, too.
