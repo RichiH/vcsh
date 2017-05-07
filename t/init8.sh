@@ -6,7 +6,7 @@ test_description='Init command'
 . "$TEST_DIRECTORY/environment.bash"
 
 test_expect_success 'Init command does not set core.attributesfile with VCSH_GITATTRIBUTES=none' \
-	'VCSH_GITATTRIBUTES=none $VCSH init test1 &&
+	'test_env VCSH_GITATTRIBUTES=none $VCSH init test1 &&
 	test_must_fail $VCSH run test1 git config core.attributesfile'
 
 test_done
