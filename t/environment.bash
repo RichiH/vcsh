@@ -72,3 +72,8 @@ assert_file() {
 assert_grep() {
 	tee /dev/stderr | grep "$@" > /dev/null
 }
+
+# For delete testing
+doit() {
+	echo "Yes, do as I say"
+}
