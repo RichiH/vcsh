@@ -4,6 +4,8 @@ DOCDIR=$(DOCDIR_PREFIX)/$(self)
 ZSHDIR=$(PREFIX)/share/zsh/vendor-completions
 RONN ?= ronn
 
+.PHONY: all install manpages clean uninstall purge test moo
+
 self=vcsh
 manpages=$(self).1
 all=test manpages
