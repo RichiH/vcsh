@@ -47,13 +47,7 @@ vcsh_testrepo.git:
 	git clone --mirror https://github.com/djpohly/vcsh_testrepo.git
 
 test: | vcsh_testrepo.git
-	@if ! which git   > /dev/null; then echo "'git' not found, exiting..."         ; exit 1; fi
-	@if ! which prove > /dev/null; then echo "'prove' not found; not running tests"; exit 1; fi
-	@if ! which bats  > /dev/null; then echo "'bats' not found; not running tests" ; exit 1; fi
-	TESTREPO=$(PWD)/vcsh_testrepo.git TESTREPONAME=vcsh_testrepo prove $(filter -j%,$(MAKEFLAGS)) --timer -e bats
-
-test-%: t/%.t | vcsh_testrepo.git
-	TESTREPO=$(PWD)/vcsh_testrepo.git TESTREPONAME=vcsh_testrepo bats $<
+	$(MAKE) -C t/
 
 moo:
 	@which cowsay >/dev/null 2>&1 && cowsay "I hope you're happy now..."
