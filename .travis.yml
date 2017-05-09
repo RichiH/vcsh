@@ -1,10 +1,6 @@
 sudo: false
 language: bash
-install:
-  - git clone --depth 1 https://github.com/sstephenson/bats
-  - bats/install.sh "$HOME/.local"
 before_script:
-  - export PATH="$HOME/.local/bin:$PATH"
   - echo '-v' > "$HOME/.proverc"
 script:
   - make test
