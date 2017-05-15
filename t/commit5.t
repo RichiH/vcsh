@@ -6,7 +6,7 @@ test_description='Commit command'
 . "$TEST_DIRECTORY/environment.bash"
 
 # Known bug
-test_expect_failure 'commit not affected by existing \$VCSH_COMMAND_RETURN_CODE' \
+test_expect_failure 'commit not affected by existing $VCSH_COMMAND_RETURN_CODE' \
 	'VCSH_COMMAND_RETURN_CODE=1 &&
 	export VCSH_COMMAND_RETURN_CODE &&
 	$VCSH commit'
