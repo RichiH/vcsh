@@ -15,8 +15,9 @@ test_expect_success 'push fails if last push fails' \
 	$VCSH b config push.default simple &&
 
 	$VCSH a commit --allow-empty -m 'empty' &&
-	rm -rf upstream2.git &&
+	$VCSH b commit --allow-empty -m 'empty' &&
 
+	rm -rf upstream2.git &&
 	test_must_fail $VCSH push'
 
 test_done
