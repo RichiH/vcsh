@@ -54,7 +54,7 @@ done,*)
 	;;
 *' --tee '*|*' --va'*|*' --verbose-log '*)
 	mkdir -p "$TEST_OUTPUT_DIRECTORY/test-results"
-	BASE="$TEST_OUTPUT_DIRECTORY/test-results/$(basename "$0" .sh)"
+	BASE="$TEST_OUTPUT_DIRECTORY/test-results/$(basename "$0" .t)"
 
 	# Make this filename available to the sub-process in case it is using
 	# --verbose-log.
@@ -693,7 +693,7 @@ test_done () {
 		test_results_dir="$TEST_OUTPUT_DIRECTORY/test-results"
 		mkdir -p "$test_results_dir"
 		base=${0##*/}
-		test_results_path="$test_results_dir/${base%.sh}.counts"
+		test_results_path="$test_results_dir/${base%.t}.counts"
 
 		cat >"$test_results_path" <<-EOF
 		total $test_count
