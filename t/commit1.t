@@ -13,6 +13,7 @@ test_expect_failure 'commit works with single repo' \
 	$VCSH foo add a &&
 	# XXX Is printing a trailing space really intended?
 	echo "foo: " >expected &&
+	echo ""     >>expected &&
 	$VCSH commit -m a >output &&
 	test_cmp expected output &&
 

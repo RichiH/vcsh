@@ -17,6 +17,7 @@ test_expect_failure 'commit works with multiple repos' \
 	echo "bar: "  >expected &&
 	echo ""      >>expected &&
 	echo "foo: " >>expected &&
+	echo ""      >>expected &&
 	$VCSH commit -m "ab" >output &&
 	test_cmp expected output &&
 
