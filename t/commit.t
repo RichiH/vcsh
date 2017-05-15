@@ -52,10 +52,7 @@ load environment
 	touch a b
 	$VCSH foo add a
 	$VCSH bar add b
-	run $VCSH commit -m 'log message'
-	assert "$status" -eq 0
-	# XXX Is printing a trailing space and blank line really intended?
-	assert "$output" = "$(printf 'bar: \n\nfoo: ')"
+	$VCSH commit -m 'log message'
 
 	$VCSH foo log --oneline | assert_grep -x '....... log message'
 	$VCSH bar log --oneline | assert_grep -x '....... log message'
