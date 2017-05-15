@@ -18,11 +18,11 @@ test_expect_success 'Help command prints usage on first line' \
 		assert_grep "^usage: "'
 
 test_expect_failure 'Help command can be abbreviated (hel, he)' \
-	'good="$($VCSH help 2>&1)" &&
-	output1=$($VCSH hel 2>&1)" &&
-	assert "$output1" = "$good" &&
-	output2=$($VCSH he 2>&1)" &&
-	assert "$output2" = "$good"'
+	'$VCSH help >expected 2>&1 &&
+	$VCSH hel >output 2>&1 &&
+	test_cmp expected output &&
+	$VCSH he >output 2>&1 &&
+	test_cmp expected output'
 
 # Help should explain each non-deprecated command.  (Note: adjust this if the
 # format of help output changes.)
