@@ -7,4 +7,4 @@ test-prereq:
 	@if ! which prove > /dev/null; then echo "'prove' not found; not running tests"; exit 1; fi
 
 test: test-prereq
-	prove $(filter -j%,$(MAKEFLAGS)) --timer *.t
+	prove $(filter -j%,$(MAKEFLAGS)) --timer *.t :: $(TEST_ARGS)
