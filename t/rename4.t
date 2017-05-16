@@ -6,9 +6,12 @@ test_description='Rename command'
 . "$TEST_DIRECTORY/environment.bash"
 
 test_expect_success 'Rename works on repository with files/commits' \
-	'$VCSH clone -b "$TESTBR1" "$TESTREPO" foo &&
-	git ls-remote "$TESTREPO" "refs/heads/$TESTBR1" | cut -f 1 >expected &&
+	'test_create_repo repo &&
+	test_commit -C repo A &&
+	test_commit -C repo B &&
+	git -C repo rev-parse HEAD >expected &&
 
+	$VCSH clone ./repo foo &&
 	$VCSH rename foo bar &&
 	$VCSH bar rev-parse HEAD >output &&
 	test_cmp expected output'
