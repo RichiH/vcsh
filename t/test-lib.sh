@@ -40,7 +40,7 @@ GIT_BUILD_DIR="$TEST_DIRECTORY"/..
 # It appears that people try to run tests without building...
 if ! test -x "$GIT_BUILD_DIR/vcsh"
 then
-	echo >&2 'error: you do not seem to have built git yet.'
+	echo >&2 'error: you do not seem to have vcsh here.'
 	exit 1
 fi
 
@@ -772,9 +772,6 @@ then
 		GIT_TEST_CMP="$DIFF -u"
 	fi
 fi
-
-GITPERLLIB="$GIT_BUILD_DIR"/perl/blib/lib:"$GIT_BUILD_DIR"/perl/blib/arch/auto/Git
-export GITPERLLIB
 
 # Test repository
 TRASH_DIRECTORY="trash directory.$(basename "$0" .t)"
