@@ -6,8 +6,12 @@ test_description='List command'
 . "$TEST_DIRECTORY/environment.bash"
 
 test_expect_success 'List command displays cloned repository' \
-	'$VCSH clone "$TESTREPO" test2 &&
-	echo test2 >expected &&
+	'test_create_repo repo &&
+	test_commit -C repo A &&
+	test_commit -C repo B &&
+
+	$VCSH clone ./repo foo &&
+	echo foo >expected &&
 	$VCSH list >output &&
 	test_cmp expected output'
 
