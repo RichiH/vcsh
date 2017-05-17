@@ -6,11 +6,12 @@ test_description='Clone command'
 . "$TEST_DIRECTORY/environment.bash"
 
 test_expect_success 'Clone uses given remote HEAD by default' \
-	'$VCSH clone "$TESTREPO" &&
-	git ls-remote "$TESTREPO" HEAD | head -c40 >expected &&
-	echo >>expected &&
+	'test_create_repo repo &&
+	test_commit -C repo A &&
+	$VCSH clone ./repo foo &&
 
-	$VCSH run "$TESTREPONAME" git rev-parse HEAD >output &&
+	git -C repo rev-parse HEAD >expected &&
+	$VCSH foo rev-parse HEAD >output &&
 	test_cmp expected output'
 
 test_done

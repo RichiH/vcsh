@@ -6,9 +6,19 @@ test_description='Clone command'
 . "$TEST_DIRECTORY/environment.bash"
 
 test_expect_success 'Clone can be abbreviated (clon, clo, cl)' \
-	'$VCSH clon "$TESTREPO" a &&
-	$VCSH clo -b "$TESTBR1" "$TESTREPO" b &&
-	$VCSH cl -b "$TESTBR2" "$TESTREPO" c &&
+	'test_create_repo repo &&
+	test_commit -C repo A &&
+	git -C repo checkout --orphan branchb &&
+	git -C repo rm -rf . &&
+	test_commit -C repo B &&
+	git -C repo checkout --orphan branchc &&
+	git -C repo rm -rf . &&
+	test_commit -C repo C &&
+	git -C repo checkout master &&
+
+	$VCSH clon ./repo a &&
+	$VCSH clo -b branchb ./repo b &&
+	$VCSH cl -b branchc ./repo c &&
 
 	echo a > expected &&
 	echo b >> expected &&

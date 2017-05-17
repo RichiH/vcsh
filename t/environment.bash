@@ -6,17 +6,6 @@ export VCSH="vcsh"
 # Perhaps it should be ignored if one exists in $XDG_CONFIG_HOME or was
 # specified with -c?
 
-# Test repository.  For faster tests, you can create a local mirror and
-# use that instead.
-: ${TESTREPO:='https://github.com/djpohly/vcsh_testrepo.git'}
-: ${TESTREPONAME:='vcsh_testrepo'}
-export TESTREPO TESTREPONAME
-export TESTM1=master
-export TESTM2=master2
-export TESTBR1=branch1
-export TESTBR2=branch2
-export TESTBRX=conflict
-
 # Other things used in tests
 export GITVERSION=$(git version)
 

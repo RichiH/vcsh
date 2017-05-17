@@ -6,11 +6,15 @@ test_description='Clone command'
 . "$TEST_DIRECTORY/environment.bash"
 
 test_expect_success 'Clone honors -b option before remote and repo name' \
-	'$VCSH clone -b "$TESTBR1" "$TESTREPO" foo &&
-	git ls-remote "$TESTREPO" "$TESTBR1" | head -c40 >expected &&
-	echo >>expected &&
+	'test_create_repo repo &&
+	test_commit -C repo A &&
+	git -C repo checkout -b branchb &&
+	test_commit -C repo B &&
+	git -C repo checkout master &&
 
-	$VCSH run foo git rev-parse "$TESTBR1" >output &&
+	$VCSH clone -b branchb ./repo foo &&
+	git -C repo rev-parse branchb >expected &&
+	$VCSH foo rev-parse HEAD >output &&
 	test_cmp expected output'
 
 test_done

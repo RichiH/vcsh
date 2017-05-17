@@ -49,7 +49,7 @@ vcsh_testrepo.git:
 	git clone --mirror https://github.com/djpohly/vcsh_testrepo.git
 
 test: | vcsh_testrepo.git
-	$(MAKE) -C t/ VCSH_TESTREPO="$(PWD)/vcsh_testrepo.git" VCSH_TESTREPONAME="vcsh_testrepo"
+	$(MAKE) -C t/
 
 moo:
 	@which cowsay >/dev/null 2>&1 && cowsay "I hope you're happy now..."
