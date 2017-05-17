@@ -6,14 +6,15 @@ test_description='Pull command'
 . "$TEST_DIRECTORY/environment.bash"
 
 test_expect_failure 'pull fails if first pull fails' \
-	'git clone -b "$TESTBR1" "$TESTREPO" upstream1 &&
-	git clone -b "$TESTBR2" "$TESTREPO" upstream2 &&
+	'test_create_repo repo1 &&
+	test_create_repo repo2 &&
+	test_commit -C repo1 A &&
+	test_commit -C repo2 B &&
+	$VCSH clone ./repo1 a &&
+	$VCSH clone ./repo2 b &&
 
-	$VCSH clone -b "$TESTBR1" upstream1 a &&
-	$VCSH clone -b "$TESTBR2" upstream2 b &&
-
-	rm -rf upstream1 &&
-	git -C upstream2 commit --allow-empty -m "empty" &&
+	rm -rf repo1 &&
+	test_commit -C repo2 X &&
 
 	test_must_fail $VCSH pull'
 

@@ -6,8 +6,9 @@ test_description='Pull command'
 . "$TEST_DIRECTORY/environment.bash"
 
 test_expect_success 'pull succeeds if up-to-date' \
-	'git clone "$TESTREPO" upstream &&
-	$VCSH clone upstream foo &&
+	'test_create_repo repo &&
+	test_commit -C repo A &&
+	$VCSH clone ./repo foo &&
 
 	echo -e "foo: Already up-to-date.\\n" >expected &&
 	$VCSH pull >output &&

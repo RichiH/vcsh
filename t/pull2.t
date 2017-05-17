@@ -6,11 +6,12 @@ test_description='Pull command'
 . "$TEST_DIRECTORY/environment.bash"
 
 test_expect_success 'pull works with one repository' \
-	'git clone "$TESTREPO" upstream &&
-	$VCSH clone upstream foo &&
+	'test_create_repo repo &&
+	test_commit -C repo A &&
+	$VCSH clone ./repo foo &&
 
-	git -C upstream commit --allow-empty -m "empty" &&
-	git -C upstream rev-parse HEAD >expected &&
+	test_commit -C repo B &&
+	git -C repo rev-parse HEAD >expected &&
 
 	$VCSH pull &&
 	$VCSH foo rev-parse HEAD >output &&
