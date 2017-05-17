@@ -6,24 +6,28 @@ test_description='Push command'
 . "$TEST_DIRECTORY/environment.bash"
 
 test_expect_success 'push works with multiple repositories' \
-	'git clone --bare -b "$TESTBR1" "$TESTREPO" upstream1.git &&
-	git clone --bare -b "$TESTBR2" "$TESTREPO" upstream2.git &&
+	'test_create_repo repo1 &&
+	test_create_repo repo2 &&
+	test_commit -C repo1 A &&
+	test_commit -C repo2 B &&
+	git clone --bare ./repo1 repo1.git &&
+	git clone --bare ./repo2 repo2.git &&
 
-	$VCSH clone -b "$TESTBR1" upstream1.git foo &&
+	$VCSH clone repo1.git foo &&
 	$VCSH foo config push.default simple &&
-	$VCSH clone -b "$TESTBR2" upstream2.git bar &&
+	$VCSH clone repo2.git bar &&
 	$VCSH bar config push.default simple &&
 
-	$VCSH foo commit --allow-empty -m 'empty' &&
-	$VCSH bar commit --allow-empty -m 'empty' &&
+	$VCSH foo commit --allow-empty -m "empty" &&
+	$VCSH bar commit --allow-empty -m "empty" &&
 	$VCSH push &&
 
 	$VCSH foo rev-parse HEAD >expected &&
-	git -C upstream1.git rev-parse HEAD >output &&
+	git -C repo1.git rev-parse HEAD >output &&
 	test_cmp expected output &&
 
 	$VCSH bar rev-parse HEAD >expected &&
-	git -C upstream2.git rev-parse HEAD >output &&
+	git -C repo2.git rev-parse HEAD >output &&
 	test_cmp expected output'
 
 test_done

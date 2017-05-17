@@ -6,15 +6,17 @@ test_description='Push command'
 . "$TEST_DIRECTORY/environment.bash"
 
 test_expect_success 'push works with one repository' \
-	'git clone --bare "$TESTREPO" upstream.git &&
+	'test_create_repo repo &&
+	test_commit -C repo A &&
+	git clone --bare ./repo repo.git &&
 
-	$VCSH clone upstream.git foo &&
+	$VCSH clone ./repo.git foo &&
 	$VCSH foo config push.default simple &&
-	$VCSH foo commit --allow-empty -m 'empty' &&
+	$VCSH foo commit --allow-empty -m "empty" &&
 	$VCSH foo rev-parse HEAD >expected &&
 
 	$VCSH push &&
-	git -C upstream.git rev-parse HEAD >output &&
+	git -C ./repo.git rev-parse HEAD >output &&
 	test_cmp expected output'
 
 test_done
