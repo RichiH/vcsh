@@ -3,7 +3,7 @@
 test_description='Run/enter commands'
 
 . ./test-lib.sh
-. "$TEST_DIRECTORY/environment.bash"
+. "$TEST_DIRECTORY/environment.sh"
 
 test_expect_success 'Setup' \
 	'test_create_repo repo1 &&

@@ -3,7 +3,7 @@
 test_description='List-untracked command'
 
 . ./test-lib.sh
-. "$TEST_DIRECTORY/environment.bash"
+. "$TEST_DIRECTORY/environment.sh"
 
 test_expect_success 'list-untracked works with no repos' \
 	'$VCSH list-untracked &>output &&

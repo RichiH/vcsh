@@ -3,7 +3,7 @@
 test_description='Which command'
 
 . ./test-lib.sh
-. "$TEST_DIRECTORY/environment.bash"
+. "$TEST_DIRECTORY/environment.sh"
 
 test_expect_success 'Which command does not accept an empty parameter' \
 	'test_must_fail $VCSH which ""'

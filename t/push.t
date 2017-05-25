@@ -3,7 +3,7 @@
 test_description='Push command'
 
 . ./test-lib.sh
-. "$TEST_DIRECTORY/environment.bash"
+. "$TEST_DIRECTORY/environment.sh"
 
 test_expect_success 'push works with no repositories' \
 	'$VCSH push &>output &&

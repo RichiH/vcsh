@@ -3,7 +3,7 @@
 test_description='Commit command'
 
 . ./test-lib.sh
-. "$TEST_DIRECTORY/environment.bash"
+. "$TEST_DIRECTORY/environment.sh"
 
 test_expect_success 'commit works with no repos' \
 	'$VCSH commit >output &&
