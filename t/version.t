@@ -10,8 +10,8 @@ test_expect_success 'Version command succeeds' \
 
 test_expect_success 'Version command prints vcsh and git versions' \
 	'$VCSH version >output &&
-	sed -n 1p output | assert_grep "^vcsh [0-9]" &&
-	sed -n 2p output | assert_grep "^git version [0-9]"'
+	sed -n 1p output | test_grep "^vcsh [0-9]" &&
+	sed -n 2p output | test_grep "^git version [0-9]"'
 
 test_expect_success 'Version can be abbreviated (versio, versi, vers, ver, ve)' \
 	'$VCSH version >expected &&

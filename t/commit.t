@@ -40,8 +40,8 @@ test_expect_failure 'commit works with multiple repos' \
 	$VCSH commit -m "multiple" >output &&
 	test_cmp expected output &&
 
-	$VCSH foo log --oneline | assert_grep -x "....... multiple" &&
-	$VCSH bar log --oneline | assert_grep -x "....... multiple"'
+	$VCSH foo log --oneline | test_grep -x "....... multiple" &&
+	$VCSH bar log --oneline | test_grep -x "....... multiple"'
 
 # Commit is broken
 test_expect_failure 'commit can handle arguments with spaces' \
@@ -50,8 +50,8 @@ test_expect_failure 'commit can handle arguments with spaces' \
 	$VCSH bar add msg2 &&
 	$VCSH commit -m "log message" &&
 
-	$VCSH foo log --oneline | assert_grep -x "....... log message" &&
-	$VCSH bar log --oneline | assert_grep -x "....... log message"'
+	$VCSH foo log --oneline | test_grep -x "....... log message" &&
+	$VCSH bar log --oneline | test_grep -x "....... log message"'
 
 # Commit is broken
 test_expect_failure 'commit works even if not all repos have changes' \
@@ -62,8 +62,8 @@ test_expect_failure 'commit works even if not all repos have changes' \
 	$VCSH bar add part2 &&
 	$VCSH commit -m "part2" &&
 
-	$VCSH foo log --oneline | assert_grep -x "....... part1" &&
-	$VCSH bar log --oneline | assert_grep -x "....... part2"'
+	$VCSH foo log --oneline | test_grep -x "....... part1" &&
+	$VCSH bar log --oneline | test_grep -x "....... part2"'
 
 # Known bug
 test_expect_failure 'commit not affected by existing $VCSH_COMMAND_RETURN_CODE' \

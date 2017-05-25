@@ -21,7 +21,7 @@ num_gitrepos() {
 }
 
 # Similar to grep -q, but prints the entire input to stderr for debugging
-assert_grep() {
+test_grep() {
 	tee /dev/stderr | grep "$@" > /dev/null
 }
 

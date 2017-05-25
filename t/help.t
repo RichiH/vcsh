@@ -9,13 +9,13 @@ test_expect_failure 'Help command succeeds' \
 	'$VCSH help'
 
 test_expect_success 'Help command writes to stderr and not stdout' \
-	'$VCSH help 2>&1 1>/dev/null | assert_grep "" &&
-	$VCSH help 2>/dev/null | test_must_fail assert_grep ""'
+	'$VCSH help 2>&1 1>/dev/null | test_grep "" &&
+	$VCSH help 2>/dev/null | test_must_fail test_grep ""'
 
 test_expect_success 'Help command prints usage on first line' \
 	'$VCSH help |&
 		head -1 |
-		assert_grep "^usage: "'
+		test_grep "^usage: "'
 
 test_expect_failure 'Help command can be abbreviated (hel, he)' \
 	'$VCSH help >expected 2>&1 &&
@@ -29,7 +29,7 @@ test_expect_failure 'Help command can be abbreviated (hel, he)' \
 for cmd in clone commit delete enter foreach help init list list-tracked list-untracked \
 		pull push rename run status upgrade version which write-gitignore; do
 	test_expect_success "Help text includes $cmd command" \
-		'$VCSH help 2>&1 | assert_grep "^   '"$cmd"'\\b"'
+		'$VCSH help 2>&1 | test_grep "^   '"$cmd"'\\b"'
 done
 
 test_done

@@ -66,10 +66,10 @@ test_expect_success 'Rename can be abbreviated (renam, rena, ren, re)' \
 
 	echo name5 >expected &&
 	$VCSH list >output &&
-	assert_grep -Fx name5 <output &&
-	test_must_fail assert_grep -Fx name4 <output &&
-	test_must_fail assert_grep -Fx name3 <output &&
-	test_must_fail assert_grep -Fx name2 <output &&
-	test_must_fail assert_grep -Fx name1 <output'
+	test_grep -Fx name5 <output &&
+	test_must_fail test_grep -Fx name4 <output &&
+	test_must_fail test_grep -Fx name3 <output &&
+	test_must_fail test_grep -Fx name2 <output &&
+	test_must_fail test_grep -Fx name1 <output'
 
 test_done

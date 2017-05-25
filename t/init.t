@@ -92,7 +92,7 @@ test_expect_success 'Init command adds matching gitignore.d files' \
 	touch .gitattributes.d/ignore-d .gitignore.d/ignore-d &&
 
 	test_env VCSH_GITIGNORE=exact $VCSH init ignore-d &&
-	$VCSH status ignore-d | assert_grep -Fx "A  .gitignore.d/ignore-d"'
+	$VCSH status ignore-d | test_grep -Fx "A  .gitignore.d/ignore-d"'
 
 test_expect_success 'VCSH_GITIGNORE variable is validated' \
 	'test_env VCSH_GITIGNORE=x test_must_fail $VCSH init ignore1 &&
