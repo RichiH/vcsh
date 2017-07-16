@@ -138,7 +138,7 @@ function _vcsh () {
 				_dispatch git git
 			else
 				curcontext="${curcontext%:*:*}:vcsh-${vcshcommand}:"
-				_call_function ret _vcsh-${vcshcommand}
+				_call_function ret _vcsh-${vcshcommand} && (( ret ))
 			fi
 		fi
 	fi
