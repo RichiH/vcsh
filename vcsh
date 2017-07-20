@@ -274,7 +274,7 @@ list() {
 
 get_files() {
 	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
-	git ls-files
+	git ls-files --full-name
 }
 
 list_tracked() {
