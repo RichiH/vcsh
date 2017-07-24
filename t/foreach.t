@@ -12,7 +12,7 @@ test_expect_success 'Foreach does nothing if no repositories exist' \
 	'$VCSH foreach version >output &&
 	test_must_be_empty output'
 
-test_expect_success '(setup) Create two repositories' \
+test_setup 'Create two repositories' \
 	'test_create_repo repo1 &&
 	test_commit -C repo1 A &&
 	test_create_repo repo2 &&
