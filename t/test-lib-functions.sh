@@ -385,6 +385,22 @@ test_verify_prereq () {
 	error "bug in the test script: '$test_prereq' does not look like a prereq"
 }
 
+test_setup () {
+	test "$#" = 3 && { test_prereq=$1; shift; } || test_prereq=
+	test "$#" = 2 ||
+	error "bug in the test script: not 2 or 3 parameters to test-setup"
+	test_verify_prereq
+	export test_prereq
+	say "# setup: $1"
+	if ! test_run_ "$2"; then
+		printf 'Bail out! %s\n' "setup script failed"
+		shift
+		printf '%s\n' "$*" | sed -e 's/^/#	/'
+		GIT_EXIT_OK=t
+		exit 1
+	fi
+}
+
 test_expect_failure () {
 	test_start_
 	test "$#" = 3 && { test_prereq=$1; shift; } || test_prereq=
