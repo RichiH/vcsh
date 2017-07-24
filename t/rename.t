@@ -5,7 +5,7 @@ test_description='Rename command'
 . ./test-lib.sh
 . "$TEST_DIRECTORY/environment.sh"
 
-test_expect_success 'Setup' \
+test_setup 'Create repo and make commits' \
 	'test_create_repo repo &&
 	test_commit -C repo A &&
 	test_commit -C repo B'
@@ -13,19 +13,27 @@ test_expect_success 'Setup' \
 test_expect_success 'Repository to be renamed must exist' \
 	'test_must_fail $VCSH rename foo bar'
 
-test_expect_success 'Rename works on empty repository' \
+test_setup 'Create empty and nonempty repos' \
 	'$VCSH init foo &&
-	$VCSH rename foo bar &&
+	$VCSH init foo2 &&
+	$VCSH clone ./repo bar'
 
-	echo bar >expected &&
+test_expect_success 'Rename works on empty repository' \
+	'$VCSH rename foo baz &&
+	test_when_finished "$VCSH rename baz foo" &&
+
+	echo bar  >expected &&
+	echo baz >>expected &&
+	echo foo2>>expected &&
+
 	$VCSH list >output &&
 	test_cmp expected output'
 
 test_expect_success 'Rename works on repository with files/commits' \
-	'git -C repo rev-parse HEAD >expected &&
+	'$VCSH rename bar baz &&
+	test_when_finished "$VCSH rename baz bar" &&
 
-	$VCSH clone ./repo foo &&
-	$VCSH rename foo baz &&
+	git -C repo rev-parse HEAD >expected &&
 	$VCSH baz rev-parse HEAD >output &&
 	test_cmp expected output'
 
@@ -34,26 +42,30 @@ test_expect_success 'Rename requires two arguments' \
 	test_must_fail $VCSH rename bar'
 
 test_expect_success 'Target of rename must not already exist' \
-	'test_must_fail $VCSH rename bar baz'
+	'test_must_fail $VCSH rename foo bar'
 
 test_expect_success 'Rename adopts existing .gitignore.d files under new name (bug?)' \
 	'mkdir -p .gitignore.d &&
-	echo test > .gitignore.d/foo &&
+	test_when_finished "rm -r .gitignore.d/" &&
+	echo test > .gitignore.d/baz &&
 
-	$VCSH rename bar foo &&
-	echo ".gitignore.d/foo" >expected &&
-	$VCSH foo ls-files >output &&
+	$VCSH rename foo baz &&
+	test_when_finished "$VCSH rename baz foo" &&
+
+	echo ".gitignore.d/baz" >expected &&
+	$VCSH baz ls-files >output &&
 	test_cmp expected output'
 
 test_expect_success 'Rename adopts existing .gitattributes.d files under new name (bug?)' \
-	'$VCSH init bar &&
+	'mkdir -p .gitattributes.d &&
+	test_when_finished "rm -r .gitattributes.d/" &&
+	echo "* whitespace" > .gitattributes.d/baz &&
 
-	mkdir -p .gitattributes.d &&
-	echo "* whitespace" > .gitattributes.d/fribble &&
+	$VCSH rename foo2 baz &&
+	test_when_finished "$VCSH rename baz foo2" &&
 
-	$VCSH rename bar fribble &&
-	echo ".gitattributes.d/fribble" >expected &&
-	$VCSH fribble ls-files >output &&
+	echo ".gitattributes.d/baz" >expected &&
+	$VCSH baz ls-files >output &&
 	test_cmp expected output'
 
 test_expect_success 'Rename can be abbreviated (renam, rena, ren, re)' \
@@ -63,6 +75,7 @@ test_expect_success 'Rename can be abbreviated (renam, rena, ren, re)' \
 	$VCSH rena name2 name3 &&
 	$VCSH ren name3 name4 &&
 	$VCSH re name4 name5 &&
+	test_when_finished "doit | $VCSH delete name5" &&
 
 	echo name5 >expected &&
 	$VCSH list >output &&

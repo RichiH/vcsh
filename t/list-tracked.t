@@ -9,42 +9,47 @@ test_expect_success 'list-tracked works with no repos' \
 	'$VCSH list-tracked &>output &&
 	test_must_be_empty output'
 
-test_expect_success 'list-tracked command works with no repos and untracked files' \
-	'touch a b c d e &&
+test_setup 'Create some files' \
+	'touch a b c d e'
 
-	$VCSH list-tracked >output &&
+test_expect_success 'list-tracked command works with no repos and untracked files' \
+	'$VCSH list-tracked >output &&
 	test_must_be_empty output'
 
 test_expect_failure 'list-tracked fails if argument is not a repo' \
 	'test_must_fail $VCSH list-tracked nope'
 
+test_setup 'Create repo' \
+	'$VCSH init foo'
+
 test_expect_success 'list-tracked works on empty repo' \
-	'$VCSH init foo &&
-	$VCSH list-tracked >output &&
+	'$VCSH list-tracked >output &&
 	test_must_be_empty output'
 
 test_expect_success 'list-tracked works on specified empty repo' \
 	'$VCSH list-tracked foo >output &&
 	test_must_be_empty output'
 
-test_expect_success 'list-tracked lists files from one repo' \
+test_setup 'Commit some files' \
 	'$VCSH foo add a d &&
-	$VCSH foo commit -m "a d" &&
+	$VCSH foo commit -m "a d"'
 
-	{
+test_expect_success 'list-tracked lists files from one repo' \
+	'{
 		echo "$HOME/a" &&
 		echo "$HOME/d"
 	} >expected &&
 	$VCSH list-tracked >output &&
 	test_cmp expected output'
 
-test_expect_success 'list-tracked lists files from two repos' \
+test_setup 'Set up second repo' \
 	'$VCSH init bar &&
 
 	$VCSH bar add b e &&
-	$VCSH bar commit -m "b e" &&
+	$VCSH bar commit -m "b e"'
 
-	{
+test_expect_success 'list-tracked lists files from two repos' \
+	'{
 		echo "$HOME/a" &&
 		echo "$HOME/b" &&
 		echo "$HOME/d" &&
