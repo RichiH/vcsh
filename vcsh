@@ -535,6 +535,7 @@ case $VCSH_COMMAND in
 	ente|ent|en) VCSH_COMMAND=enter;;
 	hel|he) VCSH_COMMAND=help;;
 	ini|in) VCSH_COMMAND=init;;
+	ls) VCSH_COMMAND=list;;
 	pul) VCSH_COMMAND=pull;;
 	pus) VCSH_COMMAND=push;;
 	renam|rena|ren|re) VCSH_COMMAND=rename;;
