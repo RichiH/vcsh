@@ -106,6 +106,7 @@ help() {
    commit               Commit in all repositories
    delete <repo>        Delete an existing repository
    enter <repo>         Enter repository; spawn new instance of \$SHELL
+                        with \$GIT_DIR set.
    foreach [<-g>]
      <git command>      Execute a command for every repository
    help                 Display this help text
@@ -162,7 +163,7 @@ clone() {
   You should add files to your new repository."
 		exit
 	fi
-	GIT_VERSION_MAJOR=$(git --version | sed -n 's/.* \([0-9]\)\..*/\1/p' )
+	GIT_VERSION_MAJOR=$(git --version | sed -n 's/.* \([0-9]\+\)\..*/\1/p' )
 	if [ 1 -lt "$GIT_VERSION_MAJOR" ];then
 		git fetch origin "$VCSH_BRANCH"
 	else
@@ -274,7 +275,7 @@ list() {
 
 get_files() {
 	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
-	git ls-files
+	git ls-files --full-name
 }
 
 list_tracked() {
@@ -477,8 +478,8 @@ write_gitignore() {
 	use
 	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
 	local GIT_VERSION="$(git --version)"
-	local GIT_VERSION_MAJOR=$(echo $GIT_VERSION | sed -n 's/.* \([0-9]\)\..*/\1/p')
-	local GIT_VERSION_MINOR=$(echo $GIT_VERSION | sed -n 's/.* \([0-9]\)\.\([0-9]\)\..*/\2/p')
+	local GIT_VERSION_MAJOR=$(echo $GIT_VERSION | sed -n 's/.* \([0-9]\+\)\..*/\1/p')
+	local GIT_VERSION_MINOR=$(echo $GIT_VERSION | sed -n 's/.* \([0-9]\+\)\.\([0-9]\+\)\..*/\2/p')
 	OLDIFS=$IFS
 	IFS=$(printf '\n\t')
 	gitignores=$(for file in $(git ls-files); do
@@ -534,6 +535,7 @@ case $VCSH_COMMAND in
 	ente|ent|en) VCSH_COMMAND=enter;;
 	hel|he) VCSH_COMMAND=help;;
 	ini|in) VCSH_COMMAND=init;;
+	ls) VCSH_COMMAND=list;;
 	pul) VCSH_COMMAND=pull;;
 	pus) VCSH_COMMAND=push;;
 	renam|rena|ren|re) VCSH_COMMAND=rename;;
