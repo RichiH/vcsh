@@ -98,7 +98,7 @@ an interactive user.
   Delete an existing repository.
 
 * enter:
-  Enter repository; spawn new <$SHELL>.
+  Enter repository; spawn new <$SHELL> with <$GIT_DIR> set.
 
 * foreach:
   Execute git command for every vcsh repository.
