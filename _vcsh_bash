@@ -1,4 +1,4 @@
-# bash completion for vcsh
+# bash completion for vcsh.
 
 # run git command
 #   based on bash_completion:_command_offset()
@@ -57,7 +57,8 @@ _vcsh () {
 
 	local repos cmds
 	repos=( $(command vcsh list) )
-	cmds="clone delete enter foreach help init list list-tracked list-untracked pull push rename run status upgrade version which write-gitignore"
+	cmds="clone delete enter foreach help init list list-tracked list-untracked
+		  pull push rename run status upgrade version which write-gitignore"
 
 	local subcword cmd subcmd
 	for (( subcword=1; subcword < ${#words[@]}-1; subcword++ )); do
@@ -111,7 +112,8 @@ _vcsh () {
 			;;
 
 		clone)
-			: # todo
+			[[ $cur == -* ]] && \
+				COMPREPLY=( $(compgen -W '-b' -- $cur) )
 			return
 			;;
 
@@ -132,3 +134,5 @@ _vcsh () {
 }
 
 complete -F _vcsh vcsh
+
+# vim: ft=sh:
