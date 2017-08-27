@@ -95,6 +95,9 @@ function _vcsh () {
 	local state vcshcommand
 	local -a args subcommands
 
+	local VCSH_REPO_D
+        : ${VCSH_REPO_D:="${XDG_CONFIG_HOME:-"$HOME/.config"}/vcsh/repo.d"}
+
 	subcommands=(
 		"clone:clone an existing repository"
 		"commit:commit in all repositories"
@@ -135,7 +138,7 @@ function _vcsh () {
 			if ! (( ${+functions[_vcsh-$vcshcommand]} )); then
 				# There is no handler function, so this is probably the name
 				# of a repository. Act accordingly.
-				_dispatch git git
+				GIT_DIR=$VCSH_REPO_D/$words[1].git _dispatch git git
 			else
 				curcontext="${curcontext%:*:*}:vcsh-${vcshcommand}:"
 				_call_function ret _vcsh-${vcshcommand}
