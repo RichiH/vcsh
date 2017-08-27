@@ -22,6 +22,9 @@
 VERSION='1.20141026'
 SELF=$(basename $0)
 
+# Ensure all files created are accessible only to the current user.
+umask 0077
+
 fatal() {
 	echo "$SELF: fatal: $1" >&2
 	[ -z $2 ] && exit 1
@@ -106,6 +109,7 @@ help() {
    commit               Commit in all repositories
    delete <repo>        Delete an existing repository
    enter <repo>         Enter repository; spawn new instance of \$SHELL
+                        with \$GIT_DIR set.
    foreach [<-g>]
      <git command>      Execute a command for every repository
    help                 Display this help text
@@ -261,7 +265,7 @@ init() {
 	[ ! -e "$GIT_DIR" ] || fatal "'$GIT_DIR' exists" 10
 	mkdir -p "$VCSH_BASE" || fatal "could not create '$VCSH_BASE'" 50
 	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
-	git init --shared=0600
+	git init --shared=false
 	upgrade
 	hook post-init
 }
