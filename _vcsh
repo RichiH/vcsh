@@ -142,7 +142,7 @@ function _vcsh () {
 				GIT_DIR=$VCSH_REPO_D/$words[1].git _dispatch git git
 			else
 				curcontext="${curcontext%:*:*}:vcsh-${vcshcommand}:"
-				_call_function ret _vcsh-${vcshcommand}
+				_call_function ret _vcsh-${vcshcommand} && (( ret ))
 			fi
 		fi
 	fi
