@@ -24,7 +24,7 @@ function _vcsh-enter () {
 }
 
 function _vcsh-foreach () {
-	_dispatch git git
+	_dispatch vcsh-foreach git
 }
 
 function _vcsh-help () {
@@ -138,6 +138,7 @@ function _vcsh () {
 			if ! (( ${+functions[_vcsh-$vcshcommand]} )); then
 				# There is no handler function, so this is probably the name
 				# of a repository. Act accordingly.
+				# FIXME: this may want to use '_dispatch vcsh git'
 				GIT_DIR=$VCSH_REPO_D/$words[1].git _dispatch git git
 			else
 				curcontext="${curcontext%:*:*}:vcsh-${vcshcommand}:"
