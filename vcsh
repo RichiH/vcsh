@@ -106,6 +106,7 @@ help() {
    commit               Commit in all repositories
    delete <repo>        Delete an existing repository
    enter <repo>         Enter repository; spawn new instance of \$SHELL
+                        with \$GIT_DIR set.
    foreach [<-g>]
      <git command>      Execute a command for every repository
    help                 Display this help text
