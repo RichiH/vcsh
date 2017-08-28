@@ -63,10 +63,12 @@ function _vcsh-rename () {
 
 function _vcsh-run () {
 	(( CURRENT == 2 )) && __vcsh_repositories
-	if (( CURRENT >= 3 )); then
+	(( CURRENT == 3 )) && _command_names -e
+	if (( CURRENT >= 4 )); then
+		# see _precommand in zsh
 		words=( "${(@)words[3,-1]}" )
 		(( CURRENT -= 2 ))
-		_complete
+		_normal
 	fi
 }
 
