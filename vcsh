@@ -672,3 +672,14 @@ $VCSH_COMMAND "$@"
 hook post-command
 verbose "$VCSH_COMMAND end, exiting"
 exit $VCSH_COMMAND_RETURN_CODE
+
+#
+# Editor modelines  -  https://www.wireshark.org/tools/modelines.html
+#
+# Local variables:
+# indent-tabs-mode: t
+# End:
+#
+# vi: set noexpandtab:
+# :noTabs=false:
+#
