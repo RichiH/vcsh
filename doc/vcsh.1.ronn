@@ -5,6 +5,8 @@ vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
 
 `vcsh` [<options>] <command>
 
+`vcsh` alias [-d] [<alias>[=<command>]]
+
 `vcsh` clone [-b <branch>] <url> [<repo>]
 
 `vcsh` delete <repo>
@@ -81,6 +83,15 @@ an interactive user.
   Enable verbose mode
 
 ## COMMANDS
+
+* alias:
+  List all aliases in <$XDG_CONFIG_HOME/vcsh/aliases>.
+
+  `<alias>`: Print the right side of alias definition.
+
+  `<alias>=<command>`: Add alias. Make backup in <$XDG_CONFIG_HOME/vcsh/aliases.bak>.
+
+  `-d <alias>`: Delete alias. Make backup in <$XDG_CONFIG_HOME/vcsh/aliases.bak>.
 
 * clone:
   Clone an existing repository.
@@ -182,6 +193,17 @@ an interactive user.
 
 As noted earlier, `vcsh` will set <$GIT_DIR> and <$GIT_WORK_TREE> to the
 appropriate values for fake bare Git repositories.
+
+## ALIASES
+
+`vcsh' allows to define aliases. The first existing file
+
+* $XDG_CONFIG_HOME/vcsh/aliases
+* /etc/vcsh/aliases
+
+will be read. An alias definition has the format `alias = command`.
+Empty lines and lines starting with '#' are ignored.
+
 
 ## CONFIG
 

@@ -103,6 +103,7 @@ help() {
    -v                   Enable verbose mode
 
    commands:
+   alias [<name>]       List defined aliases
    clone [-b <branch>] \\
          <remote> \\
          [<repo>]       Clone from an existing repository
@@ -152,6 +153,79 @@ error() {
 
 info() {
 	echo "$SELF: info: $1"
+}
+
+alias_read() {
+    local aliases
+    if [ -r "$XDG_CONFIG_HOME/vcsh/aliases" ]; then
+        aliases="$XDG_CONFIG_HOME/vcsh/aliases"
+    elif [ -r /etc/vcsh/aliases ]; then
+        aliases=/etc/vcsh/aliases
+	else
+		return
+    fi
+
+    sed -r -e 's/#.*//' -ne 's/(\w+)\s*=\s*(.+)/\1 \2/p' "$aliases"
+}
+
+alias_get() {
+	local a cmd
+	if [ -n "$1" ]; then
+		alias_read | while read a cmd; do
+			if [ x"$1" = x"$a" ]; then
+				echo $cmd
+				return
+			fi
+		done
+	fi
+}
+
+alias_write() {
+	[ -w "$XDG_CONFIG_HOME/vcsh/aliases" ] ||
+	[ ! -e "$XDG_CONFIG_HOME/vcsh/aliases" -a -w "$XDG_CONFIG_HOME/vcsh/" ] ||
+		fatal "File '$XDG_CONFIG_HOME/vcsh/aliases' not writeable"
+	[ "$2" = '=' ] || fatal 'Invalid alias format'
+	if [ -n "$(alias_get $1)" ]; then
+		local regex="s/^$1\s*=.*/$@/"
+		sed -i.bak -re "$regex" "$XDG_CONFIG_HOME/vcsh/aliases"
+	else
+		echo "$@" >> "$XDG_CONFIG_HOME/vcsh/aliases"
+	fi
+}
+
+alias_remove() {
+	[ -w "$XDG_CONFIG_HOME/vcsh/aliases" ] ||
+	[ ! -e "$XDG_CONFIG_HOME/vcsh/aliases" -a -w "$XDG_CONFIG_HOME/vcsh/" ] ||
+		fatal "File '$XDG_CONFIG_HOME/vcsh/aliases' not writeable"
+	[ -n "$1" ] || fatal 'Empty alias'
+	local regex="/^$1\s*=/d"
+	sed -i.bak -re "$regex" "$XDG_CONFIG_HOME/vcsh/aliases"
+}
+
+aliases() {
+	if [ -n "$1" ]; then
+		local opts subcmd
+		while getopts d: opts; do
+			if [ $opts = d ]; then
+				alias_remove "$OPTARG"
+			fi
+		done
+		shift $(($OPTIND - 1))
+		local alias="$(echo "$@" | sed -nre 's/(\w+)\s*=\s*(\w.*)/\1 = \2/p')"
+		if [ -n "$alias" ]; then
+			alias_write $alias
+		else
+			alias_get "$1"
+		fi
+	else
+		# print all aliases
+		local a cmd
+		alias_read | while read a cmd; do
+			if [ -n "$a" ]; then
+				echo $a = $cmd
+			fi
+		done
+	fi
 }
 
 clone() {
@@ -379,6 +453,7 @@ push() {
 	hook post-push
 }
 
+
 retire() {
 	unset VCSH_DIRECTORY
 }
@@ -532,23 +607,32 @@ fi
 
 VCSH_COMMAND=$1; export VCSH_COMMAND
 
-case $VCSH_COMMAND in
-	clon|clo|cl) VCSH_COMMAND=clone;;
-	commi|comm|com|co) VCSH_COMMAND=commit;;
-	delet|dele|del|de) VCSH_COMMAND=delete;;
-	ente|ent|en) VCSH_COMMAND=enter;;
-	hel|he) VCSH_COMMAND=help;;
-	ini|in) VCSH_COMMAND=init;;
-	pul) VCSH_COMMAND=pull;;
-	pus) VCSH_COMMAND=push;;
-	renam|rena|ren|re) VCSH_COMMAND=rename;;
-	ru) VCSH_COMMAND=run;;
-	statu|stat|sta|st) VCSH_COMMAND=status;;
-	upgrad|upgra|upgr|up) VCSH_COMMAND=upgrade;;
-	versio|versi|vers|ver|ve) VCSH_COMMAND=version;;
-	which|whi|wh) VCSH_COMMAND=which;;
-	write|writ|wri|wr) VCSH_COMMAND=write-gitignore;;
-esac    
+alias=$(alias_get $VCSH_COMMAND)
+if [ -n "$alias" ]; then
+	VCSH_COMMAND="$alias"
+else
+	case $VCSH_COMMAND in
+		clon|clo|cl) old_alias=1 ;;
+		commi|comm|com|co) old_alias=1 ;;
+		delet|dele|del|de) old_alias=1 ;;
+		ente|ent|en) old_alias=1 ;;
+		hel|he) old_alias=1 ;;
+		ini|in) old_alias=1 ;;
+		pul) old_alias=1 ;;
+		pus) old_alias=1 ;;
+		renam|rena|ren|re) old_alias=1 ;;
+		ru) old_alias=1 ;;
+		statu|stat|sta|st) old_alias=1 ;;
+		upgrad|upgra|upgr|up) old_alias=1 ;;
+		versio|versi|vers|ver|ve) old_alias=1 ;;
+		which|whi|wh) old_alias=1 ;;
+		write|writ|wri|wr) old_alias=1 ;;
+	esac
+	if [ -n "$old_alias" ]; then
+		echo "Aliases now dynamically defined. See vcsh(1) for details."
+		exit 1
+	fi
+fi
 
 if [ x"$VCSH_COMMAND" = x'clone' ]; then
 	VCSH_BRANCH=
@@ -614,6 +698,10 @@ elif [ x"$VCSH_COMMAND" = x'status' ]; then
 		shift
 	fi
 	VCSH_REPO_NAME=$2; export VCSH_REPO_NAME
+elif [ x"$VCSH_COMMAND" = x'alias' ]; then
+	shift
+	aliases $@
+	exit
 elif [ -n "$2" ]; then
 	VCSH_COMMAND='run'; export VCSH_COMMAND
 	VCSH_REPO_NAME=$1; export VCSH_REPO_NAME
