@@ -220,7 +220,7 @@ Interesting knobs you can turn:
 
   Defaults to <exact>.
 
-* <$VCSH_VCSH_WORKTREE>:
+* <$VCSH_WORKTREE>:
   Can be <absolute>, or <relative>.
 
   <absolute> will set an absolute path; defaulting to <$HOME>.
@@ -338,7 +338,7 @@ config files, all of which were soft-linked into <$HOME>.
 Martin F. Krafft aka madduck came up with the concept of fake bare Git
 repositories.
 
-vcsh was initally written by madduck. This version is a re-implementation from
+vcsh was initially written by madduck. This version is a re-implementation from
 scratch with a lot more features. madduck graciously agreed to let the author
 take over the name.
 
