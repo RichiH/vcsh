@@ -22,7 +22,7 @@ num_gitrepos() {
 
 # Similar to grep -q, but prints the entire input to stderr for debugging
 test_grep() {
-	tee /dev/stderr | grep "$@" > /dev/null
+	tee /dev/stderr 2>&3 | grep "$@" > /dev/null
 }
 
 # For delete testing
