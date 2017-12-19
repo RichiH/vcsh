@@ -29,3 +29,13 @@ test_grep() {
 doit() {
 	echo "Yes, do as I say"
 }
+
+vcsh_temp_repo() {
+	$VCSH init "$1" &&
+	test_when_finished "doit | \$VCSH delete \"$1\""
+}
+
+vcsh_temp_clone() {
+	$VCSH clone "$1" "$2" &&
+	test_when_finished "doit | \$VCSH delete \"$2\""
+}

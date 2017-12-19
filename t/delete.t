@@ -58,8 +58,7 @@ test_expect_success 'Deleted repository cannot be subsequently used' \
 	test_must_fail $VCSH run foo echo fail'
 
 test_expect_success 'Delete lists staged files before confirmation' \
-	'$VCSH init foo &&
-	test_when_finished "doit | $VCSH delete foo" &&
+	'vcsh_temp_repo foo &&
 	touch randomtexttofind &&
 	$VCSH foo add randomtexttofind &&
 
@@ -68,9 +67,7 @@ test_expect_success 'Delete lists staged files before confirmation' \
 
 # Do we actually want this?
 test_expect_failure 'Delete lists files staged for removal before confirmation' \
-	'$VCSH init foo &&
-	test_when_finished "doit | $VCSH delete foo" &&
-
+	'vcsh_temp_repo foo &&
 	touch randomtexttofind &&
 	$VCSH foo add randomtexttofind &&
 	$VCSH foo commit -m 'a' &&
