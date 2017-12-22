@@ -30,20 +30,9 @@ test_setup 'Check for socat (needed for pseudo-tty)' \
 		test_set_prereq SOCAT
 	fi'
 
-test_setup 'Set color config' \
-	'$VCSH run foo git config --local color.status.added green'
-
 test_setup 'Create and add a file' \
 	'touch a &&
 	$VCSH run foo git add a'
-
-test_expect_success SOCAT 'Status colored when output to tty' \
-	'# Ensure terminal is something Git will attempt to color
-	TERM=vt100 &&
-	export TERM &&
-	printf "\\e[m\n" >expected &&
-	socat -u exec:"$VCSH status foo",pty,rawer stdio >output &&
-	test_grep -Ff expected output'
 
 test_setup 'Delete repository, init foo and bar' \
 	'doit | $VCSH delete foo &&
