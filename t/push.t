@@ -5,6 +5,9 @@ test_description='Push command'
 . ./test-lib.sh
 . "$TEST_DIRECTORY/environment.sh"
 
+test_setup 'set push.default=simple' \
+	'git config --global push.default simple'
+
 test_expect_success 'push works with no repositories' \
 	'$VCSH push &>output &&
 	test_must_be_empty output'
@@ -14,8 +17,7 @@ test_setup 'create and clone one repo' \
 	test_commit -C repo A &&
 	git clone --bare ./repo repo.git &&
 
-	$VCSH clone ./repo.git foo &&
-	$VCSH foo config push.default simple'
+	$VCSH clone ./repo.git foo'
 
 test_expect_success 'push succeeds if up-to-date' \
 	'echo -e "foo: Everything up-to-date\\n" >expected &&
@@ -37,8 +39,7 @@ test_setup 'create and clone second repo' \
 	test_commit -C repo2 C &&
 	git clone --bare ./repo2 repo2.git &&
 
-	$VCSH clone ./repo2.git bar &&
-	$VCSH bar config push.default simple'
+	$VCSH clone ./repo2.git bar'
 
 test_setup 'add more commits' \
 	'$VCSH foo commit --allow-empty -m "empty" &&
