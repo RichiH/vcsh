@@ -20,9 +20,7 @@ test_setup 'create and clone one repo' \
 	$VCSH clone ./repo.git foo'
 
 test_expect_success 'push succeeds if up-to-date' \
-	'echo -e "foo: Everything up-to-date\\n" >expected &&
-	$VCSH push &>output &&
-	test_cmp expected output'
+	'$VCSH push'
 
 test_expect_success 'push works with one repository' \
 	'$VCSH foo commit --allow-empty -m "empty" &&
