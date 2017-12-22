@@ -5,7 +5,7 @@ test_description='Run/enter commands'
 . ./test-lib.sh
 . "$TEST_DIRECTORY/environment.sh"
 
-test_expect_success 'Setup' \
+test_setup 'Create and populate repos' \
 	'test_create_repo repo1 &&
 	test_create_repo repo2 &&
 	test_commit -C repo1 A &&

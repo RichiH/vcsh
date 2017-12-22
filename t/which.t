@@ -11,7 +11,7 @@ test_expect_success 'Which command does not accept an empty parameter' \
 test_expect_success 'Which command fails if no repositories' \
 	'test_must_fail $VCSH which nope'
 
-test_expect_success '(setup) Create repository "foo"' \
+test_setup 'Create repository "foo"' \
 	'$VCSH init foo &&
 
 	mkdir -p dir/subd &&
@@ -63,7 +63,7 @@ test_expect_success 'Which command matches using POSIX BRE' \
 	$VCSH which "c.lou\\?r" >output &&
 	test_cmp expected output'
 
-test_expect_success 'Which command searches all repos' \
+test_setup 'Create and populate bar/baz repos' \
 	'$VCSH init bar &&
 	$VCSH init baz &&
 
@@ -74,9 +74,10 @@ test_expect_success 'Which command searches all repos' \
 	$VCSH bar add b &&
 	$VCSH bar commit -m "hello" &&
 	$VCSH baz add c &&
-	$VCSH baz commit -m "hello" &&
+	$VCSH baz commit -m "hello"'
 
-	echo "bar: b/hello"  >expected &&
+test_expect_success 'Which command searches all repos' \
+	'echo "bar: b/hello"  >expected &&
 	echo "baz: c/hello" >>expected &&
 	echo "foo: a/hello" >>expected &&
 	$VCSH which hello >output &&
