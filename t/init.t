@@ -108,28 +108,37 @@ test_expect_success 'VCSH_GITIGNORE variable is validated' \
 	test_env VCSH_GITIGNORE=nonsense test_must_fail $VCSH init ignore2 &&
 	test_env VCSH_GITIGNORE=fhqwhgads test_must_fail $VCSH init ignore3'
 
-# XXX test instead by making sure files are actually excluded, not by
-# reading config option
-test_expect_success 'Init command sets core.excludesfile with VCSH_GITIGNORE=exact' \
-	'test_env VCSH_GITIGNORE=exact $VCSH init excludes &&
-	$VCSH run excludes git config core.excludesfile'
+test_setup 'Create gitignore/gitattributes dirs and test files' \
+	'touch ignoreme ignoreme2 ignoreme3 attrfile attrfile2 &&
+	mkdir -p .gitignore.d .gitattributes.d'
 
-# XXX test instead by making sure files are actually excluded, not by
-# reading config option
-test_expect_success 'Init command sets core.excludesfile with VCSH_GITIGNORE=recursive' \
+test_expect_success 'Init command sets up .gitignore.d with VCSH_GITIGNORE=exact' \
+	'test_env VCSH_GITIGNORE=exact $VCSH init excludes &&
+	echo "/ignoreme" >.gitignore.d/excludes &&
+	$VCSH run excludes git check-ignore ignoreme'
+
+test_expect_success 'Init command sets up .gitignore.d with VCSH_GITIGNORE=recursive' \
 	'test_env VCSH_GITIGNORE=recursive $VCSH init excludes-r &&
-	$VCSH run excludes-r git config core.excludesfile'
+	echo "/ignoreme2" >.gitignore.d/excludes-r &&
+	$VCSH run excludes-r git check-ignore ignoreme2'
 
 test_expect_success 'Init command does not set core.excludesfile with VCSH_GITIGNORE=none' \
 	'test_env VCSH_GITIGNORE=none $VCSH init excludes-n &&
-	test_must_fail $VCSH run excludes-n git config core.excludesfile'
+	echo "/ignoreme3" >.gitignore.d/excludes-n &&
+	test_must_fail $VCSH run excludes-n git check-ignore ignoreme3'
 
 test_expect_success 'Init command sets core.attributesfile with VCSH_GITATTRIBUTES!=none' \
 	'test_env VCSH_GITATTRIBUTES=whatever $VCSH init attrs &&
-	$VCSH run attrs git config core.attributesfile'
+	echo "/attrfile vcshtest=pass" >.gitattributes.d/attrs &&
+	printf "attrfile\\0vcshtest\\0pass\\0" >expected &&
+	$VCSH run attrs git check-attr -z vcshtest attrfile >output &&
+	test_cmp expected output'
 
 test_expect_success 'Init command does not set core.attributesfile with VCSH_GITATTRIBUTES=none' \
 	'test_env VCSH_GITATTRIBUTES=none $VCSH init no-attrs &&
-	test_must_fail $VCSH run no-attrs git config core.attributesfile'
+	echo "/attrfile2 vcshtest=pass" >.gitattributes.d/no-attrs &&
+	printf "attrfile2\\0vcshtest\\0unspecified\\0" >expected &&
+	$VCSH run no-attrs git check-attr -z vcshtest attrfile2 >output &&
+	test_cmp expected output'
 
 test_done
