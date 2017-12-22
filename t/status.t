@@ -12,10 +12,11 @@ test_expect_success 'Status command correct for no repos' \
 	'$VCSH status >output &&
 	test_must_be_empty output'
 
-test_expect_success 'Status command correct for empty repo' \
-	'$VCSH init foo &&
+test_setup 'Create empty repo' \
+	'$VCSH init foo'
 
-	echo "foo:"  >expected &&
+test_expect_success 'Status command correct for empty repo' \
+	'echo "foo:"  >expected &&
 	echo ""     >>expected &&
 	$VCSH status >output &&
 	test_cmp expected output'
@@ -24,31 +25,33 @@ test_expect_success 'Terse status correct for empty repo' \
 	'$VCSH status --terse >output &&
 	test_must_be_empty output'
 
-test_expect_success 'Check for socat (needed for pseudo-tty)' \
+test_setup 'Check for socat (needed for pseudo-tty)' \
 	'if which socat; then
 		test_set_prereq SOCAT
 	fi'
 
-test_expect_success SOCAT 'Status colored when output to tty' \
-	'touch a &&
-	$VCSH run foo git add a &&
-	$VCSH run foo git config --local color.status.added green &&
+test_setup 'Set color config' \
+	'$VCSH run foo git config --local color.status.added green'
 
-	# Ensure terminal is something Git will attempt to color
+test_setup 'Create and add a file' \
+	'touch a &&
+	$VCSH run foo git add a'
+
+test_expect_success SOCAT 'Status colored when output to tty' \
+	'# Ensure terminal is something Git will attempt to color
 	TERM=vt100 &&
 	export TERM &&
-	printf "\\e[32mA\\e[m  a\n" >expected &&
+	printf "\\e[m\n" >expected &&
 	socat -u exec:"$VCSH status foo",pty,rawer stdio >output &&
-	test_cmp expected output'
+	test_grep -Ff expected output'
 
-test_expect_success 'Delete/recreate repository' \
+test_setup 'Delete repository, init foo and bar' \
 	'doit | $VCSH delete foo &&
-	$VCSH init foo'
+	$VCSH init foo &&
+	$VCSH init bar'
 
 test_expect_success 'Status command correct for multiple empty repos' \
-	'$VCSH init bar &&
-
-	echo "bar:"  >expected &&
+	'echo "bar:"  >expected &&
 	echo ""     >>expected &&
 	echo "foo:" >>expected &&
 	echo ""     >>expected &&
@@ -59,7 +62,7 @@ test_expect_success 'Terse status correct for multiple empty repos' \
 	'$VCSH status --terse >output &&
 	test_must_be_empty output'
 
-test_expect_success 'Status shows added/modified/moved/deleted files' \
+test_setup 'Set up files with many statuses' \
 	'for f in 00 0M 0D M0 MM MD A0 AM AD D0 R0x RMx RDx oo; do
 		echo "$f" > "$f"
 	done &&
@@ -89,9 +92,10 @@ test_expect_success 'Status shows added/modified/moved/deleted files' \
 	done &&
 
 	# Deleted locally
-	rm ?D &&
+	rm ?D'
 
-	echo "bar:"          >expected &&
+test_expect_success 'Status shows added/modified/moved/deleted files' \
+	'echo "bar:"          >expected &&
 	echo ""             >>expected &&
 	echo "foo:"         >>expected &&
 	echo " D 0D"        >>expected &&
