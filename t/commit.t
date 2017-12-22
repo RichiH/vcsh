@@ -9,10 +9,11 @@ test_expect_success 'commit works with no repos' \
 	'$VCSH commit >output &&
 	test_must_be_empty output'
 
-test_expect_success 'commit works with single repo' \
-	'$VCSH init foo &&
+test_setup 'create a repo' \
+	'$VCSH init foo'
 
-	touch single &&
+test_expect_success 'commit works with single repo' \
+	'touch single &&
 	$VCSH foo add single &&
 	# XXX Is printing a trailing space really intended?
 	echo "foo: " >expected &&
@@ -24,10 +25,11 @@ test_expect_success 'commit works with single repo' \
 	$VCSH foo rev-list HEAD --count >output &&
 	test_cmp expected output'
 
-test_expect_success 'commit works with multiple repos' \
-	'$VCSH init bar &&
+test_setup 'create a second repository' \
+	'$VCSH init bar'
 
-	touch multi1 multi2 &&
+test_expect_success 'commit works with multiple repos' \
+	'touch multi1 multi2 &&
 	$VCSH foo add multi1 &&
 	$VCSH bar add multi2 &&
 	# XXX Is printing a trailing space and blank line really intended?
