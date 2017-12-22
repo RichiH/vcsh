@@ -70,7 +70,7 @@ test_expect_failure 'Delete lists files staged for removal before confirmation' 
 	'vcsh_temp_repo foo &&
 	touch randomtexttofind &&
 	$VCSH foo add randomtexttofind &&
-	$VCSH foo commit -m 'a' &&
+	$VCSH foo commit -m "a" &&
 	$VCSH foo rm --cached randomtexttofind &&
 
 	: | test_must_fail $VCSH delete foo >output &&
@@ -112,7 +112,7 @@ test_expect_failure 'Delete handles filenames with spaces properly' \
 test_expect_failure 'Delete handles filenames with wildcard characters properly' \
 	'$VCSH init foo &&
 	touch a b "?" &&
-	$VCSH foo add '\''\?'\'' &&
+	$VCSH foo add "\\?" &&
 	$VCSH foo commit -m "?" &&
 
 	doit | $VCSH delete foo &&
