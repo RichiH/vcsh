@@ -15,9 +15,7 @@ test_setup 'Create upstream and downstream repos' \
 	$VCSH clone ./repo foo'
 
 test_expect_success 'pull succeeds if up-to-date' \
-	'echo -e "foo: Already up to date.\n" >expected &&
-	$VCSH pull >output &&
-	test_cmp expected output'
+	'$VCSH pull'
 
 test_setup 'Add upstream commit' \
 	'test_commit -C repo B'
