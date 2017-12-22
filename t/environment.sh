@@ -31,8 +31,10 @@ doit() {
 }
 
 vcsh_temp_repo() {
-	$VCSH init "$1" &&
-	test_when_finished "doit | \$VCSH delete \"$1\""
+	for repo; do
+		$VCSH init "$repo" &&
+		test_when_finished "doit | \$VCSH delete \"$repo\""
+	done
 }
 
 vcsh_temp_clone() {
