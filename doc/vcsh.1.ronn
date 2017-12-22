@@ -98,7 +98,7 @@ an interactive user.
   Delete an existing repository.
 
 * enter:
-  Enter repository; spawn new <$SHELL>.
+  Enter repository; spawn new <$SHELL> with <$GIT_DIR> set.
 
 * foreach:
   Execute git command for every vcsh repository.
@@ -338,7 +338,7 @@ config files, all of which were soft-linked into <$HOME>.
 Martin F. Krafft aka madduck came up with the concept of fake bare Git
 repositories.
 
-vcsh was initally written by madduck. This version is a re-implementation from
+vcsh was initially written by madduck. This version is a re-implementation from
 scratch with a lot more features. madduck graciously agreed to let the author
 take over the name.
 

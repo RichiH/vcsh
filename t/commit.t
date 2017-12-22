@@ -9,8 +9,7 @@ test_expect_success 'commit works with no repos' \
 	'$VCSH commit >output &&
 	test_must_be_empty output'
 
-# Commit is broken
-test_expect_failure 'commit works with single repo' \
+test_expect_success 'commit works with single repo' \
 	'$VCSH init foo &&
 
 	touch single &&
@@ -25,8 +24,7 @@ test_expect_failure 'commit works with single repo' \
 	$VCSH foo rev-list HEAD --count >output &&
 	test_cmp expected output'
 
-# Commit is broken
-test_expect_failure 'commit works with multiple repos' \
+test_expect_success 'commit works with multiple repos' \
 	'$VCSH init bar &&
 
 	touch multi1 multi2 &&
@@ -43,8 +41,7 @@ test_expect_failure 'commit works with multiple repos' \
 	$VCSH foo log --oneline | test_grep -x "....... multiple" &&
 	$VCSH bar log --oneline | test_grep -x "....... multiple"'
 
-# Commit is broken
-test_expect_failure 'commit can handle arguments with spaces' \
+test_expect_success 'commit can handle arguments with spaces' \
 	'touch msg1 msg2 &&
 	$VCSH foo add msg1 &&
 	$VCSH bar add msg2 &&
@@ -53,7 +50,7 @@ test_expect_failure 'commit can handle arguments with spaces' \
 	$VCSH foo log --oneline | test_grep -x "....... log message" &&
 	$VCSH bar log --oneline | test_grep -x "....... log message"'
 
-# Commit is broken
+# Commit returns failure if last repository has no staged changes
 test_expect_failure 'commit works even if not all repos have changes' \
 	'touch part1 part2 &&
 	$VCSH foo add part1 &&
