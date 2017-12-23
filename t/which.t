@@ -68,7 +68,7 @@ test_setup 'Create and populate bar/baz repos' \
 	$VCSH init baz &&
 
 	mkdir -p a b c &&
-	touch {a,b,c}/{hello,goodbye} &&
+	touch a/hello b/hello c/hello a/goodbye b/goodbye c/goodbye &&
 	$VCSH foo add a &&
 	$VCSH foo commit -m "hello" &&
 	$VCSH bar add b &&

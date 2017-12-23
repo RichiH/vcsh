@@ -9,7 +9,7 @@ test_setup 'set push.default=simple' \
 	'git config --global push.default simple'
 
 test_expect_success 'push works with no repositories' \
-	'$VCSH push &>output &&
+	'$VCSH push >output 2>&1 &&
 	test_must_be_empty output'
 
 test_setup 'create and clone one repo' \

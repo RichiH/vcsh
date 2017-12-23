@@ -13,7 +13,7 @@ test_expect_success 'Help command writes to stderr and not stdout' \
 	$VCSH help 2>/dev/null | test_must_fail test_grep ""'
 
 test_expect_success 'Help command prints usage on first line' \
-	'$VCSH help |&
+	'$VCSH help 2>&1 |
 		head -1 |
 		test_grep "^usage: "'
 
