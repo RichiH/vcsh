@@ -45,10 +45,7 @@ purge: uninstall
 	rmdir -p --ignore-fail-on-non-empty $(DESTDIR)$(DOCDIR)
 	rmdir -p --ignore-fail-on-non-empty $(DESTDIR)$(ZSHDIR)
 
-vcsh_testrepo.git:
-	git clone --mirror https://github.com/djpohly/vcsh_testrepo.git
-
-test: | vcsh_testrepo.git
+test:
 	$(MAKE) -C t/
 
 moo:
