@@ -5,73 +5,33 @@ test_description='External environment variables'
 . ./test-lib.sh
 . "$TEST_DIRECTORY/environment.sh"
 
-# XXX writeme
+test_setup 'Create a test repository' \
+	'test_create_repo repo &&
+	test_commit -C repo A &&
+	$VCSH init foo'
 
-# All of the following variables are used in vcsh.  Make sure that having
-# cockamamie values for any of the ones that aren't supposed to affect the
-# behavior of vcsh... doesn't.
-#
-# COLORING
-# GIT_DIR
-# GIT_DIR_NEW
-# GIT_REMOTE
-# GIT_VERSION
-# GIT_VERSION_MAJOR
-# GIT_VERSION_MINOR
-# IFS
-# OLDIFS
-# OPTARG
-# PATH
-# PWD
-# SELF
-# SHELL
-# STATUS
-# TMPDIR
-# VCSH_BASE
-# VCSH_BRANCH
-# VCSH_COMMAND
-# VCSH_COMMAND_PARAMETER
-# VCSH_COMMAND_RETURN_CODE
-# VCSH_CONFLICT
-# VCSH_DEBUG
-# VCSH_GITATTRIBUTES
-# VCSH_GITIGNORE
-# VCSH_GIT_OPTIONS
-# VCSH_HOOK_D
-# VCSH_OPTION_CONFIG
-# VCSH_OVERLAY_D
-# VCSH_REPO_D
-# VCSH_REPO_NAME
-# VCSH_REPO_NAME_NEW
-# VCSH_STATUS_TERSE
-# VCSH_VERBOSE
-# VCSH_WORKTREE
-# VERSION
-# XDG_CONFIG_HOME
-# answer
-# check_directory
-# command_prefix
-# commits_ahead
-# commits_behind
-# directory_component
-# directory_opt
-# exclude_standard_opt
-# file
-# files
-# gitignore
-# gitignores
-# hook
-# line
-# new
-# object
-# output
-# overlay
-# ran_once
-# remote_tracking_branch
-# repo
-# temp_file_others
-# temp_file_untracked
-# temp_file_untracked_copy
-# tempfile
+test_expect_failure 'No interference from $COLORING' \
+	'COLORING=--fail $VCSH status --terse >output 2>&1 &&
+	test_must_be_empty output'
+
+test_expect_failure 'No interference from $VCSH_COMMAND_RETURN_CODE' \
+	'VCSH_COMMAND_RETURN_CODE=1 $VCSH list'
+
+test_expect_failure 'No interference from $VCSH_CONFLICT' \
+	'VCSH_CONFLICT=1 $VCSH clone repo bar &&
+	test_pause &&
+	doit | $VCSH delete bar'
+
+test_expect_failure 'No interference from $VCSH_OPTION_CONFIG' \
+	'VCSH_OPTION_CONFIG=nothing $VCSH list'
+
+test_expect_failure 'No interference from $VCSH_STATUS_TERSE' \
+	'echo "foo:" >>expected &&
+	echo ""     >>expected &&
+	VCSH_STATUS_TERSE=1 $VCSH status >output &&
+	test_cmp expected output'
+
+# XXX: `ran_once=1 $VCSH list-untracked' is also problematic but
+# may not be worth writing a test for
 
 test_done
