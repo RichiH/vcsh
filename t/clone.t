@@ -20,6 +20,14 @@ test_setup 'Create upstream repos' \
 test_expect_success 'Clone requires a remote' \
 	'test_must_fail $VCSH clone'
 
+test_expect_success 'Clone refuses to overwrite existing files' \
+	'echo success >A.t &&
+	test_when_finished "rm -f A.t" &&
+	test_might_fail $VCSH clone repo temp &&
+	test_when_finished "doit | $VCSH delete temp" &&
+	echo success >expected &&
+	test_cmp expected A.t'
+
 test_expect_success 'Clone uses existing repo name by default' \
 	'$VCSH clone ./repo &&
 	test_when_finished "doit | $VCSH delete repo" &&
