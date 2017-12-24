@@ -53,7 +53,7 @@ test_expect_success 'Enter executes inside specific repository' \
 
 test_expect_success 'Enter executes $SHELL inside repository' \
 	'git -C repo1 rev-parse HEAD >expected &&
-	SHELL="git rev-parse HEAD" $VCSH enter foo >output &&
+	test_env SHELL="git rev-parse HEAD" $VCSH enter foo >output &&
 	test_cmp expected output'
 
 test_expect_success 'Enter implied for single non-command argument' \
@@ -75,9 +75,9 @@ test_expect_success 'Enter can be abbreviated (ente, ent, en)' \
 	'git -C repo1 rev-parse HEAD HEAD HEAD >expected &&
 
 	{
-		echo "git rev-parse HEAD" | SHELL=/bin/sh $VCSH ente foo &&
-		echo "git rev-parse HEAD" | SHELL=/bin/sh $VCSH ent foo &&
-		echo "git rev-parse HEAD" | SHELL=/bin/sh $VCSH en foo
+		echo "git rev-parse HEAD" | test_env SHELL=/bin/sh $VCSH ente foo &&
+		echo "git rev-parse HEAD" | test_env SHELL=/bin/sh $VCSH ent foo &&
+		echo "git rev-parse HEAD" | test_env SHELL=/bin/sh $VCSH en foo
 	} >output &&
 
 	test_cmp expected output'
