@@ -19,7 +19,6 @@ test_expect_failure 'No interference from $VCSH_COMMAND_RETURN_CODE' \
 
 test_expect_failure 'No interference from $VCSH_CONFLICT' \
 	'test_env VCSH_CONFLICT=1 $VCSH clone repo bar &&
-	test_pause &&
 	doit | $VCSH delete bar'
 
 test_expect_failure 'No interference from $VCSH_OPTION_CONFIG' \
