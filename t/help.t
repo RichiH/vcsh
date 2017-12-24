@@ -24,6 +24,11 @@ test_expect_failure 'Help command can be abbreviated (hel, he)' \
 	$VCSH he >output 2>&1 &&
 	test_cmp expected output'
 
+test_expect_failure 'Help printed when no command given' \
+	'$VCSH help >expected 2>&1 &&
+	$VCSH >output 2>&1 &&
+	test_cmp expected output'
+
 # Help should explain each non-deprecated command.  (Note: adjust this if the
 # format of help output changes.)
 for cmd in clone commit delete enter foreach help init list list-tracked list-untracked \
