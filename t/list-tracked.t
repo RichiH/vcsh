@@ -86,7 +86,7 @@ test_expect_success 'list-tracked does not repeat multiple-tracked files' \
 	} >expected &&
 	$VCSH list-tracked >output &&
 	test_cmp expected output &&
-	
+
 	$VCSH bar reset --hard "$rev"'
 
 test_expect_success 'list-tracked-by requires an argument' \

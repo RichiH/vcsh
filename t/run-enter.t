@@ -10,7 +10,7 @@ test_setup 'Create and populate repos' \
 	test_create_repo repo2 &&
 	test_commit -C repo1 A &&
 	test_commit -C repo2 B &&
-	
+
 	$VCSH clone ./repo1 foo &&
 	$VCSH clone ./repo2 bar'
 

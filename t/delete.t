@@ -26,7 +26,7 @@ test_expect_success 'Delete requires confirmation' \
 	echo no | test_must_fail $VCSH delete foo &&
 	$VCSH list >output &&
 	test_cmp expected output &&
-	
+
 	doit | $VCSH delete foo &&
 	$VCSH list >output &&
 	test_must_be_empty output'
@@ -39,7 +39,7 @@ test_expect_success 'Deleted repository removed from list' \
 	echo bar >expected &&
 	$VCSH list >output &&
 	test_cmp expected output &&
-	
+
 	doit | $VCSH delete bar &&
 	$VCSH list >output &&
 	test_must_be_empty output'
