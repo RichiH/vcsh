@@ -29,6 +29,13 @@ test_expect_success 'push works with one repository' \
 	git -C ./repo.git rev-parse HEAD >output &&
 	test_cmp expected output'
 
+test_expect_success 'push can be abbreviated (pus)' \
+	'$VCSH foo commit --allow-empty -m "empty2" &&
+	$VCSH foo rev-parse HEAD >expected &&
+	$VCSH pus &&
+	git -C ./repo.git rev-parse HEAD >output &&
+	test_cmp expected output'
+
 test_setup 'create and clone second repo' \
 	'test_create_repo repo2 &&
 	test_commit -C repo2 C &&

@@ -9,24 +9,42 @@ test_expect_success 'commit works with no repos' \
 	'$VCSH commit >output &&
 	test_must_be_empty output'
 
-test_setup 'create a repo' \
-	'$VCSH init foo'
-
 test_expect_success 'commit works with single repo' \
-	'touch single &&
-	$VCSH foo add single &&
+	'vcsh_temp_repo one &&
+	touch single &&
+	$VCSH one add single &&
 	# XXX Is printing a trailing space really intended?
-	echo "foo: " >expected &&
+	echo "one: " >expected &&
 	echo ""     >>expected &&
 	$VCSH commit -m "single" >output &&
 	test_cmp expected output &&
 
 	echo 1 >expected &&
-	$VCSH foo rev-list HEAD --count >output &&
+	$VCSH one rev-list HEAD --count >output &&
 	test_cmp expected output'
 
-test_setup 'create a second repository' \
-	'$VCSH init bar'
+test_expect_success 'commit can be abbreviated (commi, comm, com, co)' \
+	'vcsh_temp_repo abbr &&
+	touch commi &&
+	$VCSH abbr add commi &&
+	$VCSH commi -m "commi" &&
+	touch comm &&
+	$VCSH abbr add comm &&
+	$VCSH comm -m "comm" &&
+	touch com &&
+	$VCSH abbr add com &&
+	$VCSH com -m "com" &&
+	touch co &&
+	$VCSH abbr add co &&
+	$VCSH co -m "co" &&
+
+	echo 4 >expected &&
+	$VCSH abbr rev-list --count HEAD >output &&
+	test_cmp expected output'
+
+test_setup 'create two repositories' \
+	'$VCSH init foo &&
+	$VCSH init bar'
 
 test_expect_success 'commit works with multiple repos' \
 	'touch multi1 multi2 &&

@@ -27,6 +27,14 @@ test_expect_success 'pull works with one repository' \
 	$VCSH foo rev-parse HEAD >output &&
 	test_cmp expected output'
 
+test_expect_success 'pull can be abbreviated (pul)' \
+	'test_commit -C repo B2 &&
+	git -C repo rev-parse HEAD >expected &&
+
+	$VCSH pul &&
+	$VCSH foo rev-parse HEAD >output &&
+	test_cmp expected output'
+
 test_setup 'Create second upstream/downstream repo' \
 	'test_create_repo repo2 &&
 	test_commit -C repo2 C &&
