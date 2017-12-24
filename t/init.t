@@ -96,6 +96,23 @@ test_expect_success 'Init command marks repository with vcsh.vcsh=true' \
 	$VCSH run foo git config vcsh.vcsh >output &&
 	test_cmp expected output'
 
+test_expect_success 'VCSH_WORKTREE=absolute is honored' \
+	'test_env VCSH_WORKTREE=absolute $VCSH init work-abs &&
+	$VCSH work-abs config core.worktree | test_grep "^/"'
+
+test_expect_success 'VCSH_WORKTREE=absolute is default' \
+	'test_env $VCSH init work-abs2 &&
+	$VCSH work-abs2 config core.worktree | test_grep "^/"'
+
+test_expect_success 'VCSH_WORKTREE=relative is honored' \
+	'test_env VCSH_WORKTREE=relative $VCSH init work-rel &&
+	$VCSH work-rel config core.worktree | test_grep -v "^/"'
+
+test_expect_success 'VCSH_WORKTREE variable is validated' \
+	'test_env VCSH_WORKTREE=x test_must_fail $VCSH init wignore1 &&
+	test_env VCSH_WORKTREE=nonsense test_must_fail $VCSH init wignore2 &&
+	test_env VCSH_WORKTREE=fhqwhgads test_must_fail $VCSH init wignore3'
+
 test_expect_success 'Init command adds matching gitignore.d files' \
 	'mkdir -p .gitattributes.d .gitignore.d &&
 	touch .gitattributes.d/ignore-d .gitignore.d/ignore-d &&
