@@ -25,11 +25,6 @@ test_expect_success 'Terse status correct for empty repo' \
 	'$VCSH status --terse >output &&
 	test_must_be_empty output'
 
-test_setup 'Check for socat (needed for pseudo-tty)' \
-	'if which socat; then
-		test_set_prereq SOCAT
-	fi'
-
 test_setup 'Create and add a file' \
 	'touch a &&
 	$VCSH run foo git add a'
