@@ -6,7 +6,9 @@ test_description='Clone command'
 . "$TEST_DIRECTORY/environment.sh"
 
 test_setup 'Create upstream repos' \
-	'test_create_repo repo &&
+	'test_create_repo empty &&
+
+	test_create_repo repo &&
 	test_commit -C repo A &&
 	git -C repo checkout -b branchb &&
 	test_commit -C repo A2 &&
@@ -19,6 +21,10 @@ test_setup 'Create upstream repos' \
 
 test_expect_success 'Clone requires a remote' \
 	'test_must_fail $VCSH clone'
+
+test_expect_success 'Warn about cloning empty repo' \
+	'test_when_finished "doit | $VCSH delete empty" &&
+	test_might_fail $VCSH clone empty 2>&1 | test_grep "remote is empty"'
 
 test_expect_success 'Clone refuses to overwrite existing files' \
 	'echo success >A.t &&
