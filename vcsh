@@ -422,7 +422,7 @@ status() {
 
 status_helper() {
 	GIT_DIR=$VCSH_REPO_D/$1.git; export GIT_DIR
-	VCSH_GIT_OPTIONS=$2
+	VCSH_GIT_OPTIONS="-c status.relativePaths=false $2"
 	use
 	remote_tracking_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2> /dev/null) && {
 		commits_behind=$(git log ..${remote_tracking_branch} --oneline | wc -l)
