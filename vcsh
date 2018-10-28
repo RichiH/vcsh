@@ -276,6 +276,13 @@ list() {
 	done
 }
 
+list_has_remote() {
+	for VCSH_REPO_NAME in $(list); do
+		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
+		git config remote.origin.url >/dev/null && echo "$VCSH_REPO_NAME"
+	done
+}
+
 get_files() {
 	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 	git ls-files --full-name
@@ -354,7 +361,7 @@ list_untracked_helper() {
 
 pull() {
 	hook pre-pull
-	for VCSH_REPO_NAME in $(list); do
+	for VCSH_REPO_NAME in $(list_has_remote); do
 		printf '%s: ' "$VCSH_REPO_NAME"
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
@@ -367,7 +374,7 @@ pull() {
 
 push() {
 	hook pre-push
-	for VCSH_REPO_NAME in $(list); do
+	for VCSH_REPO_NAME in $(list_has_remote); do
 		printf '%s: ' "$VCSH_REPO_NAME"
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
