@@ -120,8 +120,8 @@ help() {
    list-untracked \\
         [<-a>] [<-r>]
         [<repo>]        List all files not tracked by all or one repositories
-   pull                 Pull from all vcsh remotes
-   push                 Push to vcsh remotes
+   pull [-j]            Pull from all vcsh remotes
+   push [-j]            Push to vcsh remotes
    rename <repo> \\
           <newname>     Rename repository
    run <repo> \\
@@ -355,26 +355,46 @@ list_untracked_helper() {
 
 pull() {
 	hook pre-pull
+	PIDS=""
 	for VCSH_REPO_NAME in $(list); do
 		printf '%s: ' "$VCSH_REPO_NAME"
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
-		git pull
-		VCSH_COMMAND_RETURN_CODE=$?
+		if [ -z "$VCSH_PARALLEL" ]; then
+			git pull
+			VCSH_COMMAND_RETURN_CODE=$?
+		else
+			git pull --quiet &
+			PIDS="$PIDS $!"
+			echo 'pulling ...'
+		fi
 		echo
+	done
+	for PID in $PIDS; do
+		wait "$PID"
 	done
 	hook post-pull
 }
 
 push() {
 	hook pre-push
+	PIDS=""
 	for VCSH_REPO_NAME in $(list); do
 		printf '%s: ' "$VCSH_REPO_NAME"
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
-		git push
-		VCSH_COMMAND_RETURN_CODE=$?
+		if [ -z "$VCSH_PARALLEL" ]; then
+			git push
+			VCSH_COMMAND_RETURN_CODE=$?
+		else
+			git push --quiet &
+			PIDS="$PIDS $!"
+			echo 'pushing ...'
+		fi
 		echo
+	done
+	for PID in $PIDS; do
+		wait "$PID"
 	done
 	hook post-push
 }
@@ -604,10 +624,14 @@ elif [ x"$VCSH_COMMAND" = x'foreach' ]; then
 elif [ x"$VCSH_COMMAND" = x'commit' ] ||
      [ x"$VCSH_COMMAND" = x'list'   ] ||
      [ x"$VCSH_COMMAND" = x'list-tracked' ] ||
-     [ x"$VCSH_COMMAND" = x'list-untracked' ] ||
-     [ x"$VCSH_COMMAND" = x'pull'   ] ||
+     [ x"$VCSH_COMMAND" = x'list-untracked' ]; then
+ 	:
+elif [ x"$VCSH_COMMAND" = x'pull'   ] ||
      [ x"$VCSH_COMMAND" = x'push'   ]; then
-	:
+	if [ x"$2" = x'-j' ]; then
+		VCSH_PARALLEL=1; export VCSH_PARALLEL
+		shift
+	fi
 elif [ x"$VCSH_COMMAND" = x'status' ]; then
 	if [ x"$2" = x'--terse' ]; then
 		VCSH_STATUS_TERSE=1; export VCSH_STATUS_TERSE
