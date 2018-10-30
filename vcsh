@@ -61,6 +61,29 @@ source_all() {
 
 # Read configuration and set defaults if anything's not set
 [ -n "$VCSH_DEBUG" ]                  && set -vx
+
+# Set $XDG_CONFIG_HOME and $VCSH_BASE based on existing .config/vcsh
+# (To create a new $VCSH_BASE: mkdir -p $VCSH_BASE/.config/vcsh)
+if [ ! -n "$XDG_CONFIG_HOME" ] && [ ! -n "$VCSH_BASE" ]; then
+  # Search for .config/vcsh in actual directory path
+  VCSH_BASE="$(realpath .)"
+  while :; do
+    if [ -d "$VCSH_BASE/.config/vcsh" ]; then
+      break
+    elif [ "$VCSH_BASE" = "/" ]; then
+      VCSH_BASE=""
+      break
+    else
+      VCSH_BASE="$(dirname "$VCSH_BASE")"
+    fi
+  done
+  if [ "$VCSH_BASE" ]; then
+    # Check Permission denied problems
+    find "$VCSH_BASE/.config/" >/dev/null || fatal "problem reading files in $VCSH_BASE/.config/"
+    XDG_CONFIG_HOME="$VCSH_BASE/.config"
+  fi
+fi
+
 : ${XDG_CONFIG_HOME:="$HOME/.config"}
 
 # Read configuration files if there are any
