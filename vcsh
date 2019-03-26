@@ -139,7 +139,7 @@ help() {
 }
 
 debug() {
-	[ -n "$VCSH_DEBUG" ] && echo "$SELF: debug: $@"
+	if [ -n "$VCSH_DEBUG" ]; then echo "$SELF: debug: $@"; fi
 }
 
 verbose() {
