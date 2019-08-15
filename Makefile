@@ -4,6 +4,8 @@ DOCDIR=$(DOCDIR_PREFIX)/$(self)
 ZSHDIR=$(PREFIX)/share/zsh/vendor-completions
 RONN ?= ronn
 
+.PHONY: all install manpages clean uninstall purge test moo
+
 self=vcsh
 manpages=$(self).1
 all=test manpages
@@ -44,8 +46,7 @@ purge: uninstall
 	rmdir -p --ignore-fail-on-non-empty $(DESTDIR)$(ZSHDIR)
 
 test:
-	@if which git   > /dev/null; then :    ; else echo "'git' not found, exiting..."         ; exit 1; fi
-	@if which prove > /dev/null; then prove; else echo "'prove' not found; not running tests";         fi
+	$(MAKE) -C t/
 
 moo:
 	@which cowsay >/dev/null 2>&1 && cowsay "I hope you're happy now..."
