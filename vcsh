@@ -120,6 +120,7 @@ help() {
    list-untracked \\
         [<-a>] [<-r>]
         [<repo>]        List all files not tracked by all or one repositories
+   locate <file>        Find repo tracking a given file
    pull                 Pull from all vcsh remotes
    push                 Push to vcsh remotes
    rename <repo> \\
@@ -279,7 +280,7 @@ list() {
 
 get_files() {
 	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
-	git ls-files --full-name
+	git ls-files --full-name "$@"
 }
 
 list_tracked() {
@@ -472,6 +473,17 @@ which() {
 	fi
 }
 
+locate() {
+	if [ ! -f "$VCSH_COMMAND_PARAMETER" ]; then
+		fatal "'$VCSH_COMMAND_PARAMETER' does not exist" 1
+	fi
+	for VCSH_REPO_NAME in $(list); do
+		if get_files "$VCSH_COMMAND_PARAMETER" | grep -q .; then
+			echo "$VCSH_REPO_NAME"
+		fi
+	done
+}
+
 write_gitignore() {
 	# Don't do anything if the user does not want to write gitignore
 	if [ "x$VCSH_GITIGNORE" = 'xnone' ]; then
@@ -547,6 +559,7 @@ case $VCSH_COMMAND in
 	upgrad|upgra|upgr|up) VCSH_COMMAND=upgrade;;
 	versio|versi|vers|ver|ve) VCSH_COMMAND=version;;
 	which|whi|wh) VCSH_COMMAND=which;;
+	locat|loc|lo) VCSH_COMMAND=locate;;
 	write|writ|wri|wr) VCSH_COMMAND=write-gitignore;;
 esac    
 
@@ -578,7 +591,8 @@ elif [ "$VCSH_COMMAND" = 'version' ]; then
 	echo "$SELF $VERSION"
 	git version
 	exit
-elif [ x"$VCSH_COMMAND" = x'which' ]; then
+elif [ x"$VCSH_COMMAND" = x'which' ]            ||
+     [ x"$VCSH_COMMAND" = x'locate' ]; then
 	[ -z "$2" ] && fatal "$VCSH_COMMAND: please specify a filename" 1
 	[ -n "$3" ] && fatal "$VCSH_COMMAND: too many parameters" 1
 	VCSH_COMMAND_PARAMETER=$2; export VCSH_COMMAND_PARAMETER
