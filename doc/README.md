@@ -293,7 +293,7 @@ Note the portage package for myrepos still has the old project name:
 
 vcsh is available via this [AUR](https://aur.archlinux.org/packages/vcsh/)
 package. Likewise myrepos is available [here](https://aur.archlinux.org/packages/myrepos/).
-You may install both useing your favorite AUR helper. e.g. with yaourt:
+You may install both using your favorite AUR helper. e.g. with yaourt:
 
     yaourt -Sya myrepos vcsh
 
