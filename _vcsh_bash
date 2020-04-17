@@ -4,7 +4,7 @@
 #   based on bash_completion:_command_offset()
 _vcsh_git_command () {
 	local word_offset=$1
-	for (( i=0; i < $word_offset; i++ )); do
+	for (( i=0; i < word_offset; i++ )); do
 		for (( j=0; j <= ${#COMP_LINE}; j++ )); do
 			[[ "$COMP_LINE" == "${COMP_WORDS[i]}"* ]] && break
 			COMP_LINE=${COMP_LINE:1}
@@ -17,14 +17,14 @@ _vcsh_git_command () {
 	((COMP_POINT+=4))
 
 	# shift COMP_WORDS elements and adjust COMP_CWORD
-	for (( i=1; i <= COMP_CWORD - $word_offset + 1; i++ )); do
+	for (( i=1; i <= COMP_CWORD - word_offset + 1; i++ )); do
 		COMP_WORDS[i]=${COMP_WORDS[i+$word_offset-1]}
 	done
 	for (( i; i <= COMP_CWORD; i++ )); do
 		unset 'COMP_WORDS[i]'
 	done
 	COMP_WORDS[0]=git
-	((COMP_CWORD -= $word_offset - 1))
+	((COMP_CWORD -= word_offset - 1))
 
 	local cspec=$( complete -p git 2>/dev/null )
 	if [[ -n $cspec ]]; then
@@ -101,7 +101,7 @@ _vcsh () {
 
 		run)
 			if [[ -n $subcmd && -n "${repos[$subcmd]}" ]]; then
-				_command_offset $(( $subcword+1 ))
+				_command_offset $(( subcword+1 ))
 				return
 			fi
 			;;&
