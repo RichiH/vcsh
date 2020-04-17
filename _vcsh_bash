@@ -55,8 +55,12 @@ _vcsh () {
 	local cur prev words cword OPTS
 	_init_completion -n = || return
 
-	local repos cmds
-	repos=( $(command vcsh list) )
+	local r reponames
+	local -A repos
+	mapfile -t reponames < <(command vcsh list)
+	for r in "${reponames[@]}"; do repos["$r"]="$r"; done
+	unset r reponames
+	local cmds
 	cmds="clone delete enter foreach help init list list-tracked list-untracked
 		  pull push rename run status upgrade version which write-gitignore"
 
