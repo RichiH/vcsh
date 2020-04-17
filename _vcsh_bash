@@ -73,7 +73,7 @@ _vcsh () {
 	if [[ -z $cmd ]]; then
 		case $prev in
 			-c)
-				COMPREPLY=( $(compgen -f -- $cur) )
+				COMPREPLY=( $(compgen -f -- "$cur") )
 				return
 				;;
 		esac
@@ -81,11 +81,11 @@ _vcsh () {
 		case $cur in
 			-*)
 				OPTS='-c -d -h -v'
-				COMPREPLY=( $(compgen -W "${OPTS[*]}" -- $cur) )
+				COMPREPLY=( $(compgen -W "${OPTS[*]}" -- "$cur") )
 				return
 				;;
 		esac
-		COMPREPLY=( $(compgen -W "${repos[*]} ${cmds[*]}" -- $cur) )
+		COMPREPLY=( $(compgen -W "${repos[*]} ${cmds[*]}" -- "$cur") )
 		return 0
 	fi
 
@@ -96,7 +96,7 @@ _vcsh () {
 
 		list-untracked)
 			[[ $cur == -* ]] && \
-				COMPREPLY=( $(compgen -W '-a -r' -- $cur) ) && return
+				COMPREPLY=( $(compgen -W '-a -r' -- "$cur") ) && return
 			;;&
 
 		run)
@@ -109,7 +109,7 @@ _vcsh () {
 		delete|enter|list-tracked|list-untracked|rename|run|status|upgrade|write-gitignore)
 			# return repos
 			if [[ -z $subcmd ]]; then
-				COMPREPLY=( $(compgen -W "${repos[*]}" -- $cur) )
+				COMPREPLY=( $(compgen -W "${repos[*]}" -- "$cur") )
 				return
 			fi
 			return
@@ -117,13 +117,13 @@ _vcsh () {
 
 		clone)
 			[[ $cur == -* ]] && \
-				COMPREPLY=( $(compgen -W '-b' -- $cur) )
+				COMPREPLY=( $(compgen -W '-b' -- "$cur") )
 			return
 			;;
 
 		foreach)
 			[[ $cur == -* ]] \
-				&& COMPREPLY=( $(compgen -W "-g" -- $cur) ) && return
+				&& COMPREPLY=( $(compgen -W "-g" -- "$cur") ) && return
 			_vcsh_git_command $subcword
 			return
 			;;
