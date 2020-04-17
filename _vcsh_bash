@@ -52,7 +52,7 @@ _vcsh_git_command () {
 }
 
 _vcsh () {
-	local cur prev words cword OPTS
+	local cur prev words OPTS
 	_init_completion -n = || return
 
 	local r reponames
