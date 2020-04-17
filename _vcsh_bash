@@ -81,11 +81,11 @@ _vcsh () {
 		case $cur in
 			-*)
 				OPTS='-c -d -h -v'
-				mapfile -t COMPREPLY < <(compgen -W "${OPTS[*]}" -- "$cur")
+				mapfile -t COMPREPLY < <(compgen -W "$OPTS" -- "$cur")
 				return
 				;;
 		esac
-		mapfile -t COMPREPLY < <(compgen -W "${repos[*]} ${cmds[*]}" -- "$cur")
+		mapfile -t COMPREPLY < <(compgen -W "${repos[*]} ${cmds}" -- "$cur")
 		return 0
 	fi
 
