@@ -1,3 +1,9 @@
+vcsh (1.20151229-2) UNRELEASED; urgency=medium
+
+  * Use secure copyright file specification URI.
+
+ -- Debian Janitor <janitor@jelmer.uk>  Tue, 05 May 2020 03:40:19 +0000
+
 vcsh (1.20151229-1) unstable; urgency=medium
 
   * New upstream release
