@@ -8,7 +8,7 @@ Build-Depends: debhelper-compat (= 12),
                libshell-command-perl,
                libtest-most-perl,
                ruby-ronn (>= 0.7.3)
-Vcs-Git: git://github.com/RichiH/vcsh.git
+Vcs-Git: https://github.com/RichiH/vcsh.git
 Vcs-Browser: https://github.com/RichiH/vcsh
 Homepage: https://github.com/RichiH/vcsh/blob/master/README.md
 
