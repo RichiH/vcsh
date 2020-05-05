@@ -3,7 +3,7 @@ Maintainer: Richard Hartmann <richih@debian.org>
 Section: misc
 Priority: optional
 Standards-Version: 3.9.6
-Build-Depends: debhelper (>= 12~),
+Build-Depends: debhelper-compat (= 12),
                git,
                libshell-command-perl,
                libtest-most-perl,

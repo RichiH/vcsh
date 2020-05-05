@@ -2,6 +2,7 @@ vcsh (1.20151229-2) UNRELEASED; urgency=medium
 
   * Use secure copyright file specification URI.
   * Bump debhelper from deprecated 7 to 12.
+  * Set debhelper-compat version in Build-Depends.
 
  -- Debian Janitor <janitor@jelmer.uk>  Tue, 05 May 2020 03:40:19 +0000
 
