@@ -1,0 +1,20 @@
+name: Test
+on: [push, pull_request]
+jobs:
+  test:
+    strategy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Prep system Lua for use
+        run: |
+      - name: Install system dependencies
+        run: |
+          sudo apt-get install ruby-ronn
+          export PERL_MM_USE_DEFAULT=1
+          perl -MCPAN -e 'install Shell::Command'
+          perl -MCPAN -e 'install Test::Most'
+      - name: Run tests
+        run: |
+          make test
