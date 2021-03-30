@@ -254,7 +254,7 @@ hook() {
 	for hook in "$VCSH_HOOK_D/$1"* "$VCSH_HOOK_D/$VCSH_REPO_NAME.$1"*; do
 		[ -x "$hook" ] || continue
 		verbose "executing '$hook'"
-		"$hook"
+		"$hook" || fatal "hook [$hook] failed" 1
 	done
 }
 
