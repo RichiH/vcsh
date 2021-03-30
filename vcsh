@@ -94,6 +94,7 @@ if [ ! "x$VCSH_WORKTREE" = 'xabsolute' ] && [ ! "x$VCSH_WORKTREE" = 'xrelative' 
 fi
 
 
+# editorconfig-checker-disable
 help() {
 	echo "usage: $SELF <options> <command>
 
@@ -137,6 +138,7 @@ help() {
    <repo> <git command> Shortcut to run git commands directly
    <repo>               Shortcut to enter repository" >&2
 }
+# editorconfig-checker-enable
 
 debug() {
 	[ -n "$VCSH_DEBUG" ] && echo "$SELF: debug: $@"
@@ -163,7 +165,7 @@ clone() {
 	git config branch."$VCSH_BRANCH".merge  refs/heads/"$VCSH_BRANCH"
 	if [ $(git ls-remote origin "$VCSH_BRANCH" 2> /dev/null | wc -l ) -lt 1 ]; then
 		info "remote is empty, not merging anything.
-  You should add files to your new repository."
+  You should add files to your new repository." # editorconfig-checker-disable-line
 		exit
 	fi
 	GIT_VERSION_MAJOR=$(git --version | sed -E -n 's/.* ([0-9]+)\..*/\1/p' )
@@ -180,7 +182,7 @@ clone() {
 	done
 	[ x"$VCSH_CONFLICT" = x'1' ]) &&
 		fatal "will stop after fetching and not try to merge!
-  Once this situation has been resolved, run 'vcsh $VCSH_REPO_NAME pull' to finish cloning." 17
+  Once this situation has been resolved, run 'vcsh $VCSH_REPO_NAME pull' to finish cloning." 17 # editorconfig-checker-disable-line
 	git -c merge.ff=true merge origin/"$VCSH_BRANCH"
 	hook post-merge
 	hook post-clone
@@ -190,7 +192,7 @@ clone() {
 
 commit() {
 	hook pre-commit
-        shift  # remove the "commit" command.
+	shift  # remove the "commit" command.
 	for VCSH_REPO_NAME in $(list); do
 		echo "$VCSH_REPO_NAME: "
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
@@ -548,7 +550,7 @@ case $VCSH_COMMAND in
 	versio|versi|vers|ver|ve) VCSH_COMMAND=version;;
 	which|whi|wh) VCSH_COMMAND=which;;
 	write|writ|wri|wr) VCSH_COMMAND=write-gitignore;;
-esac    
+esac
 
 if [ x"$VCSH_COMMAND" = x'clone' ]; then
 	VCSH_BRANCH=
@@ -583,30 +585,30 @@ elif [ x"$VCSH_COMMAND" = x'which' ]; then
 	[ -n "$3" ] && fatal "$VCSH_COMMAND: too many parameters" 1
 	VCSH_COMMAND_PARAMETER=$2; export VCSH_COMMAND_PARAMETER
 elif [ x"$VCSH_COMMAND" = x'delete' ]           ||
-     [ x"$VCSH_COMMAND" = x'enter' ]            ||
-     [ x"$VCSH_COMMAND" = x'init' ]             ||
-     [ x"$VCSH_COMMAND" = x'list-tracked-by' ]  ||
-     [ x"$VCSH_COMMAND" = x'rename' ]           ||
-     [ x"$VCSH_COMMAND" = x'run' ]              ||
-     [ x"$VCSH_COMMAND" = x'upgrade' ]          ||
-     [ x"$VCSH_COMMAND" = x'write-gitignore' ]; then
+	[ x"$VCSH_COMMAND" = x'enter' ]            ||
+	[ x"$VCSH_COMMAND" = x'init' ]             ||
+	[ x"$VCSH_COMMAND" = x'list-tracked-by' ]  ||
+	[ x"$VCSH_COMMAND" = x'rename' ]           ||
+	[ x"$VCSH_COMMAND" = x'run' ]              ||
+	[ x"$VCSH_COMMAND" = x'upgrade' ]          ||
+	[ x"$VCSH_COMMAND" = x'write-gitignore' ]; then
 	[ -z "$2" ]                                     && fatal "$VCSH_COMMAND: please specify repository to work on" 1
 	[ x"$VCSH_COMMAND" = x'rename' ] && [ -z "$3" ] && fatal "$VCSH_COMMAND: please specify a target name" 1
 	[ x"$VCSH_COMMAND" = x'run'    ] && [ -z "$3" ] && fatal "$VCSH_COMMAND: please specify a command" 1
 	VCSH_REPO_NAME=$2; export VCSH_REPO_NAME
 	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 	[ x"$VCSH_COMMAND" = x'rename' ] && { VCSH_REPO_NAME_NEW=$3; export VCSH_REPO_NAME_NEW;
-	                                      GIT_DIR_NEW=$VCSH_REPO_D/$VCSH_REPO_NAME_NEW.git; export GIT_DIR_NEW; }
+	GIT_DIR_NEW=$VCSH_REPO_D/$VCSH_REPO_NAME_NEW.git; export GIT_DIR_NEW; }
 	[ x"$VCSH_COMMAND" = x'run' ]    && shift 2
 elif [ x"$VCSH_COMMAND" = x'foreach' ]; then
 	[ -z "$2" ] && fatal "$VCSH_COMMAND: please specify a command" 1
 	shift 1
 elif [ x"$VCSH_COMMAND" = x'commit' ] ||
-     [ x"$VCSH_COMMAND" = x'list'   ] ||
-     [ x"$VCSH_COMMAND" = x'list-tracked' ] ||
-     [ x"$VCSH_COMMAND" = x'list-untracked' ] ||
-     [ x"$VCSH_COMMAND" = x'pull'   ] ||
-     [ x"$VCSH_COMMAND" = x'push'   ]; then
+	[ x"$VCSH_COMMAND" = x'list'   ] ||
+	[ x"$VCSH_COMMAND" = x'list-tracked' ] ||
+	[ x"$VCSH_COMMAND" = x'list-untracked' ] ||
+	[ x"$VCSH_COMMAND" = x'pull'   ] ||
+	[ x"$VCSH_COMMAND" = x'push'   ]; then
 	:
 elif [ x"$VCSH_COMMAND" = x'status' ]; then
 	if [ x"$2" = x'--terse' ]; then
