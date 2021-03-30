@@ -6,11 +6,11 @@ RONN ?= ronn
 
 self=vcsh
 manpages=$(self).1
-all=test manpages
+all=manpages
 
 all: $(all)
 
-install: manpages
+install: all
 	install -d $(DESTDIR)$(PREFIX)/bin
 	install -m 0755 $(self) $(DESTDIR)$(PREFIX)/bin
 	install -d $(DESTDIR)$(PREFIX)/share/man/man1
