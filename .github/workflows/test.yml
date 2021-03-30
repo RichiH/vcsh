@@ -1,0 +1,20 @@
+name: Test
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install build dependencies
+        run: |
+          sudo apt-get install ruby-ronn
+      - name: Install perl test dependencies
+        uses: perl-actions/install-with-cpanm@v1.1
+        with:
+          install: |
+            Shell::Command
+            Test::Most
+      - name: Run tests
+        run: |
+          make test

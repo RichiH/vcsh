@@ -44,8 +44,4 @@ To clean up the generated manpage, run
 
 	make clean
 
-and if you are bored, I suggest
-
-	make moo
-
 [1]: http://rtomayko.github.io/ronn/
