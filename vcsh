@@ -571,6 +571,8 @@ if [ x"$VCSH_COMMAND" = x'clone' ]; then
 	export VCSH_REPO_NAME
 	[ -n "$VCSH_BRANCH" ] || VCSH_BRANCH=master
 	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
+elif [ "$VCSH_COMMAND" = 'help' ]; then
+	help && exit
 elif [ "$VCSH_COMMAND" = 'version' ]; then
 	echo "$SELF $VERSION"
 	git version
@@ -627,8 +629,8 @@ elif [ -n "$VCSH_COMMAND" ]; then
 	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 	[ -d "$GIT_DIR" ] || { help; exit 1; }
 else
-	# $1 is empty, or 'help'
-	help && exit
+	# $1 is empty
+	help && exit 1
 fi
 
 # Did we receive a directory instead of a name?
