@@ -20,27 +20,10 @@ all_targets:=
 # Non-empty only if the "manpages" target is listed in $(all).
 is_manpaging=
 
-# Non-empty only if the "test" target is listed in $(all).
-is_testing=
-
 # If Ronn is in the current $PATH, generate Ronn-based man pages by default.
 ifneq ($(shell command -v "$(RONN)" 2>/dev/null),)
 all_targets+= manpages
 is_manpaging:=true
-endif
-
-# If Git, Perl, and the Perl-based unit test runner "prove" are all in the
-# current $PATH and the requisite Perl modules are in the @INC module path, run
-# Perl-based unit tests by default.
-ifneq ($(shell command -v git 2>/dev/null),)
-ifneq ($(shell command -v perl 2>/dev/null),)
-ifneq ($(shell command -v prove 2>/dev/null),)
- ifeq ($(shell perl -e 'use Test::Most; use Shell::Command;' 2>&1),)
-all_targets+= test
-is_testing:=true
-endif
-endif
-endif
 endif
 
 # Default target, running all preparatory installation targets without actually
@@ -49,9 +32,6 @@ all: $(all_targets)
 # Notify the user of skipped targets.
 ifeq ($(is_manpaging),)
 	@echo 'Skipping man page generation: "$(RONN)" not found.' 1>&2
-endif
-ifeq ($(is_testing),)
-	@echo 'Skipping unit tests: "git", "prove", and/or Perl modules "Test::Most" and "Shell::Command" not found.' 1>&2
 endif
 
 # Coerce the default target to be the prior target (rather than the first rule

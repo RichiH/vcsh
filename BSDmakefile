@@ -5,7 +5,7 @@
 
 # Default target, running all preparatory installation targets without actually
 # installing. This *MUST* be the first non-"."-prefixed target in this makefile.
-all: manpages test
+all: manpages
 
 # Install vcsh and supplementary artifacts.
 install: all install-common

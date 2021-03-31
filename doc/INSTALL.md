@@ -44,8 +44,16 @@ To clean up the generated manpage, run
 
 	make clean
 
-and if you are bored, I suggest
+To run the test suite, run
 
-	make moo
+    make test
+
+To run the test suite, you will need `perl`,
+and the modules `Test::Most` and `Shell::Command`.
+
+To install the perl modules, run
+
+    cpan install 'Test::Most' 'Shell::Command'.
+
 
 [1]: http://rtomayko.github.io/ronn/
