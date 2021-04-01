@@ -24,6 +24,12 @@ $output = `./vcsh status`;
 
 ok $output eq "test1:\n\n", 'Our new repo is there';
 
+ok -d $ENV{"HOME"}, $ENV{"HOME"};
+ok -d $ENV{"HOME"} . '/.config', $ENV{"HOME"} . '/.config';
+ok -d $ENV{"HOME"} . '/.config/vcsh', $ENV{"HOME"} . '/.config/vcsh';
+ok -d $ENV{"HOME"} . '/.config/vcsh/repo.d', $ENV{"HOME"} . '/.config/vcsh/repo.d';
+ok -d $ENV{"HOME"} . '/.config/vcsh/repo.d/test1.git', $ENV{"HOME"} . '/.config/vcsh/repo.d/test1.git';
+
 chdir $ENV{"HOME"} or die $!;
 chdir '.config' or die $!;
 chdir 'vcsh' or die $!;
