@@ -25,14 +25,14 @@ system (".././vcsh test1 add 'a'");
 my $output = `.././vcsh status`;
 
 ok $output eq "test1:
-A  a
+A  ~/a
 
 ", 'Adding a file works';
 
 $output = `.././vcsh status --terse`;
 
 ok $output eq "test1:
-A  a
+A  ~/a
 ", 'Terse output works';
 
 done_testing;

@@ -430,7 +430,7 @@ status_helper() {
 		[ ${commits_behind} -ne 0 ] && echo "Behind $remote_tracking_branch by $commits_behind commits"
 		[ ${commits_ahead} -ne 0 ] && echo "Ahead of $remote_tracking_branch by $commits_ahead commits"
 	}
-	git ${VCSH_GIT_OPTIONS} status --short --untracked-files='no'
+	git ${VCSH_GIT_OPTIONS} status --short --untracked-files='no' | sed -E 's@([^ ] +)@\1~/@'
 	VCSH_COMMAND_RETURN_CODE=$?
 }
 
