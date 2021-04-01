@@ -18,7 +18,7 @@ ok $output eq "", 'No repos set up yet.';
 
 $output = `./vcsh init test1`;
 
-ok $output eq "Initialized empty Git repository in " . $ENV{'HOME'} . "/.config/vcsh/repo.d/test1.git/\n", "CROAK " . $output;
+ok $output eq "Initialized empty Git repository in " . $ENV{'HOME'} . "/.config/vcsh/repo.d/test1.git/\n", "CROAK " . $output . $ENV{'HOME'};
 
 $output = `./vcsh status`;
 
