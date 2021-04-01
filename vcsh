@@ -419,7 +419,7 @@ status() {
 
 status_helper() {
 	GIT_DIR=$VCSH_REPO_D/$1.git; export GIT_DIR
-	VCSH_GIT_OPTIONS=$2
+	VCSH_GIT_OPTIONS="-c status.relativePaths=false $2"
 	use
 	remote_tracking_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2> /dev/null) && {
 		commits_behind=$(git log ..${remote_tracking_branch} --oneline | wc -l)
@@ -427,7 +427,7 @@ status_helper() {
 		[ ${commits_behind} -ne 0 ] && echo "Behind $remote_tracking_branch by $commits_behind commits"
 		[ ${commits_ahead} -ne 0 ] && echo "Ahead of $remote_tracking_branch by $commits_ahead commits"
 	}
-	git ${VCSH_GIT_OPTIONS} status --short --untracked-files='no'
+	git ${VCSH_GIT_OPTIONS} status --short --untracked-files='no' | sed -E 's@([^ ] +)@\1~/@'
 	VCSH_COMMAND_RETURN_CODE=$?
 }
 
