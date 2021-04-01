@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 
+use Cwd 'abs_path';
 use Test::Most;
 
 system ("mkdir -p t/etc");
@@ -14,6 +15,11 @@ ok !$?;
 chdir 't/etc/' or die $!;
 
 system ("ln -s '../../vcsh'");
+ok !$?;
+
+$ENV{'HOME'} = abs_path ('.vcsh_home');
+
+system ("git config --global init.defaultBranch test");
 ok !$?;
 
 done_testing;
