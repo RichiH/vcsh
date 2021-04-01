@@ -12,6 +12,7 @@ chdir 't/etc/' or die $!;
 
 print $ENV{'HOME'} . "- 1\n";
 $ENV{'HOME'} = abs_path ('.vcsh_home');
+$ENV{'HOME'} =~ s/\/\.vcsh_home//;
 print $ENV{'HOME'} . "- 2\n";
 
 my $output = `./vcsh status`;
