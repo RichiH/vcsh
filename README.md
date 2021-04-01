@@ -1,13 +1,13 @@
 vcsh - Version Control System for $HOME - multiple Git repositories in $HOME
 
-[![Build Status](https://travis-ci.org/RichiH/vcsh.svg?branch=master)](https://travis-ci.org/RichiH/vcsh)
-
+[![Test Status](https://github.com/RichiH/vcsh/actions/workflows/test.yml/badge.svg)](https://github.com/RichiH/vcsh/actions/workflows/test.yml)
 
 # Index
 
 1. [30 Second How-to](#30-second-how-to)
 2. [Introduction](#introduction)
-3. [Contact](#contact)
+3. [Installation](#installation)
+4. [Contact](#contact)
 
 
 # 30 Second How-to
@@ -47,12 +47,6 @@ For example, you may not need to have your `mplayer` configuration on a server
 or available to root and you may want to maintain different configuration for
 `ssh` on your personal and your work machines.
 
-A lot of modern UNIX-based systems offer packages for `vcsh`. In case yours
-does not, read [INSTALL.md](doc/INSTALL.md) for install instructions or
-[PACKAGING.md](doc/PACKAGING.md) to create a package yourself. If you do end
-up packaging `vcsh` please let us know so we can give you your own packaging
-branch in the upstream repository.
-
 ## Talks
 
 Some people found it useful to look at slides and videos explaining how `vcsh`
@@ -60,6 +54,13 @@ works instead of working through the docs.
 All slides, videos, and further information can be found
 [on the author's talk page][talks].
 
+# Installation
+
+A lot of modern UNIX-based systems offer packages for `vcsh`. In case yours
+does not, read [INSTALL.md](doc/INSTALL.md) for install instructions or
+[PACKAGING.md](doc/PACKAGING.md) to create a package yourself. If you do end
+up packaging `vcsh` please let us know so we can give you your own packaging
+branch in the upstream repository.
 
 # Contact
 
