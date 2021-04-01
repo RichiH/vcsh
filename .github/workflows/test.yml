@@ -15,6 +15,7 @@ jobs:
           install: |
             Shell::Command
             Test::Most
+            Test::Simple
       - name: Run tests
         run: |
           make test
