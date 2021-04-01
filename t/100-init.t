@@ -24,7 +24,8 @@ $output = `./vcsh status`;
 
 ok $output eq "test1:\n\n", 'Our new repo is there';
 
-ok -d $ENV{"HOME"}, $ENV{"HOME"};
+ok -d $ENV{'HOME'}, "single".$ENV{'HOME'};
+ok -d $ENV{"HOME"}, "double".$ENV{"HOME"};
 ok -d $ENV{"HOME"} . '/.config', $ENV{"HOME"} . '/.config';
 ok -d $ENV{"HOME"} . '/.config/vcsh', $ENV{"HOME"} . '/.config/vcsh';
 ok -d $ENV{"HOME"} . '/.config/vcsh/repo.d', $ENV{"HOME"} . '/.config/vcsh/repo.d';
