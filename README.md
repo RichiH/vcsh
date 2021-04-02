@@ -49,7 +49,7 @@ or available to root and you may want to maintain different configuration for
 
 ## Talks
 
-Some people found it useful to look at slides and videos explaining how `vcsh`
+Some people found it useful to look at [slides](https://github.com/RichiH/talks/blob/main/2013/10-linuxcon-eu/linuxcon_eu-2013-10-gitify_your_life.pdf) and videos explaining how `vcsh`
 works instead of working through the docs.
 All slides, videos, and further information can be found
 [on the author's talk page][talks].
@@ -75,6 +75,6 @@ community around the general idea of version controlling your (digital) life.
 
 
 [myrepos]: http://myrepos.branchable.com/
-[talks]: http://richardhartmann.de/talks/
+[talks]: https://github.com/RichiH/talks
 [vcsh]: https://github.com/RichiH/vcsh
 [vcs-home-list]: http://lists.madduck.net/listinfo/vcs-home
