@@ -18,6 +18,7 @@ system ("ln -s '../../vcsh'");
 ok !$?;
 
 $ENV{'HOME'} = abs_path ('.vcsh_home');
+$ENV{'XDG_CONFIG_HOME'} = $ENV{'HOME'}.'/.config';
 
 system ("git config --global init.defaultBranch test");
 ok !$?;
