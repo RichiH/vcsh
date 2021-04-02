@@ -10,10 +10,8 @@ use Test::Most;
 
 chdir 't/etc/' or die $!;
 
-print $ENV{'HOME'} . "- 1\n";
 $ENV{'HOME'} = abs_path ('.vcsh_home');
-$ENV{'HOME'} =~ s/\/\.vcsh_home//;
-print $ENV{'HOME'} . "- 2\n";
+$ENV{'XDG_CONFIG_HOME'} = $ENV{'HOME'}.'/.config';
 
 my $output = `./vcsh status`;
 
@@ -21,24 +19,13 @@ ok $output eq "", 'No repos set up yet.';
 
 $output = `./vcsh init test1`;
 
-ok $output eq "Initialized empty Git repository in " . $ENV{'HOME'} . "/.config/vcsh/repo.d/test1.git/\n", "CROAK " . $output . $ENV{'HOME'};
+ok $output eq "Initialized empty Git repository in " . $ENV{'HOME'} . "/.config/vcsh/repo.d/test1.git/\n";
 
 $output = `./vcsh status`;
 
 ok $output eq "test1:\n\n", 'Our new repo is there';
 
-ok -d $ENV{'HOME'}, "single".$ENV{'HOME'};
-ok -d $ENV{"HOME"}, "double".$ENV{"HOME"};
-ok -d $ENV{"HOME"} . '/.config', $ENV{"HOME"} . '/.config';
-ok -d $ENV{"HOME"} . '/.config/vcsh', $ENV{"HOME"} . '/.config/vcsh';
-ok -d $ENV{"HOME"} . '/.config/vcsh/repo.d', $ENV{"HOME"} . '/.config/vcsh/repo.d';
-ok -d $ENV{"HOME"} . '/.config/vcsh/repo.d/test1.git', $ENV{"HOME"} . '/.config/vcsh/repo.d/test1.git';
-
-chdir $ENV{"HOME"} or die $!;
-chdir '.config' or die $!;
-chdir 'vcsh' or die $!;
-chdir 'repo.d' or die $!;
-chdir 'test1.git' or die $!;
+chdir $ENV{"HOME"} . '/.config/vcsh/repo.d/test1.git/' or die $!;
 
 ok -f 'HEAD';
 ok -f 'config';
