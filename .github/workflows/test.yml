@@ -15,10 +15,6 @@ jobs:
           install: |
             Shell::Command
             Test::Most
-      - name: Debug
-        run: env
       - name: Run tests
         run: |
           make test
-        env:
-          TAP_HARNESS_SOURCE_FACTORY_VOTES: 1
