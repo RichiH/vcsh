@@ -158,6 +158,8 @@ info() {
 
 clone() {
 	hook pre-clone
+	# Check if remote is reachable. Abort early if there's a typo, TLS certificate problem, etc
+	git ls-remote "$GIT_REMOTE" 2> /dev/null || fatal "Can not reach '$GIT_REMOTE'"
 	init
 	git remote add origin "$GIT_REMOTE"
 	git checkout -b "$VCSH_BRANCH" || return $?
