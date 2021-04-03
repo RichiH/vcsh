@@ -14,7 +14,11 @@ AC_DEFUN([AX_PROGVAR], [AC_PATH_PROG(m4_toupper($1), m4_default($2,$1))test -n "
 AX_PROGVAR([comm])
 AX_PROGVAR([cmp])
 AX_PROGVAR([git])
+AX_PROGVAR([prove])
 AX_PROGVAR([ronn])
+
+AX_PROG_PERL_MODULES(Shell::Command, , AC_MSG_ERROR(Perl module required for testing not found))
+AX_PROG_PERL_MODULES(Test::Most, , AC_MSG_ERROR(Perl module required for testing not found))
 
 AC_ARG_WITH([bash-completion-dir],
     AS_HELP_STRING([--with-bash-completion-dir[=PATH]],

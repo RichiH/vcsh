@@ -42,6 +42,10 @@ completions/_$(_vcsh): completions/vcsh.zsh
 	$(if $<,./build-aux/git-version-gen .tarball-version,printf "$(VERSION)") > "$@"
 	$(CMP) -s "$@" "$@-prev" || autoreconf configure.ac --force
 
+.PHONY: test
+test:
+	prove
+
 dist-hook:
 	cd $(distdir)
 	echo $(VERSION) > .tarball-version
