@@ -251,6 +251,7 @@ foreach() {
 		if [ -n "${VCSH_PRINT_REPO_PREFIX+x}" ]; then
 			$command_prefix "$@" | sed "s/^/$VCSH_REPO_NAME: /"
 		else
+			echo "$VCSH_REPO_NAME:"
 			$command_prefix "$@"
 		fi
 	done
