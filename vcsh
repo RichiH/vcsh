@@ -34,21 +34,25 @@ fatal() {
 # We need to run getops as soon as possible so we catch -d and other
 # options that will modify our behaviour.
 # Commands are handled at the end of this script.
-while getopts "c:dv" flag; do
-	if [ x"$1" = x'-d' ] || [ x"$1" = x'--debug' ]; then
-		set -vx
-		VCSH_DEBUG=1
-		echo "debug mode on"
-		echo "$SELF $VERSION"
-	elif [ x"$1" = x'-v' ]; then
-		VCSH_VERBOSE=1
-		echo "verbose mode on"
-		echo "$SELF $VERSION"
-	elif [ x"$1" = x'-c' ]; then
-		VCSH_OPTION_CONFIG=$OPTARG
-	fi
-	shift 1
+while getopts c:dv flag; do
+	case "$flag" in
+		d)
+			set -vx
+			VCSH_DEBUG=1
+			echo 'debug mode on'
+			echo "$SELF $VERSION"
+			;;
+		v)
+			VCSH_VERBOSE=1
+			echo 'verbose mode on'
+			echo "$SELF $VERSION"
+			;;
+		c)
+			VCSH_OPTION_CONFIG="$OPTARG"
+			;;
+	esac
 done
+shift $((OPTIND-1))
 
 source_all() {
 	# Source file even if it's in $PWD and does not have any slashes in it
@@ -233,12 +237,12 @@ foreach() {
 	# We default to prefixing `git` to all commands passed to foreach, but
 	# allow running in general context with -g
 	command_prefix=git
-	while getopts "g" flag; do
-		if [ x"$1" = x'-g' ]; then
-			unset command_prefix
-		fi
-		shift 1
+	while getopts g flag; do
+		case "$flag" in
+			g) unset command_prefix ;;
+		esac
 	done
+	shift $((OPTIND-1))
 	for VCSH_REPO_NAME in $(list); do
 		echo "$VCSH_REPO_NAME:"
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
