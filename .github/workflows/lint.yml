@@ -1,0 +1,10 @@
+name: Lint
+on: [push, pull_request]
+jobs:
+  editor-config:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Lint code style
+        uses: editorconfig-checker/action-editorconfig-checker@v1.0.0

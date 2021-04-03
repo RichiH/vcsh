@@ -11,6 +11,7 @@ use Test::Most;
 chdir 't/etc/' or die $!;
 
 $ENV{'HOME'} = abs_path ('.vcsh_home');
+$ENV{'XDG_CONFIG_HOME'} = $ENV{'HOME'}.'/.config';
 
 chdir '.vcsh_home' or die $!;
 
@@ -25,14 +26,14 @@ system (".././vcsh test1 add 'a'");
 my $output = `.././vcsh status`;
 
 ok $output eq "test1:
-A  a
+A  ~/a
 
 ", 'Adding a file works';
 
 $output = `.././vcsh status --terse`;
 
 ok $output eq "test1:
-A  a
+A  ~/a
 ", 'Terse output works';
 
 done_testing;
