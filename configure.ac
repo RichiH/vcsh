@@ -6,6 +6,13 @@ AM_SILENT_RULES([yes])
 AC_CONFIG_MACRO_DIR([build-aux])
 
 AC_PROG_AWK
+AC_PROG_GREP
+AC_PROG_SED
+
+AC_DEFUN([AX_PROGVAR], [AC_PATH_PROG(m4_toupper($1), m4_default($2,$1))test -n "$m4_toupper($1)" || AC_MSG_ERROR([m4_default($2,$1) is required])])
+
+AX_PROGVAR([comm])
+AX_PROGVAR([git])
 
 AC_DEFUN([AX_PROGVAR], [AC_PATH_PROG(m4_toupper($1), m4_default($2,$1))test -n "$m4_toupper($1)" || AC_MSG_ERROR([m4_default($2,$1) is required])])
 
