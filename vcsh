@@ -235,20 +235,21 @@ foreach() {
 	# We default to prefixing `git` to all commands passed to foreach, but
 	# allow running in general context with -g
 	command_prefix=git
-	command_suffix='cat'
-	while getopts "gp" flag; do
-		if [ x"$1" = x'-g' ]; then
-			unset command_prefix
-		fi
-		if [ x"$1" = x'-p' ]; then
-			command_suffix='sed "s/^/$VCSH_REPO_NAME: /"'
-		fi
-		shift 1
+	while getopts gp flag; do
+		case "$flag" in
+			g) unset command_prefix ;;
+			p) VCSH_PRINT_REPO_PREFIX=1 ;;
+		esac
 	done
+	shift $((OPTIND-1))
 	for VCSH_REPO_NAME in $(list); do
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
-		$command_prefix "$@" | eval $command_suffix
+		if [ -n "${VCSH_PRINT_REPO_PREFIX+x}" ]; then
+			$command_prefix "$@" | sed "s/^/$VCSH_REPO_NAME: /"
+		else
+			$command_prefix "$@"
+		fi
 	done
 	hook post-foreach
 }
