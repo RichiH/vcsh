@@ -1,0 +1,8 @@
+AC_PREREQ([2.69])
+AC_INIT([vcsh], [1.20190619])
+AM_INIT_AUTOMAKE
+
+AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([vcsh], [chmod +x vcsh])
+
+AC_OUTPUT
