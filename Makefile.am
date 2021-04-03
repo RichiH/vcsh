@@ -46,6 +46,13 @@ completions/_$(_vcsh): completions/vcsh.zsh
 test:
 	prove
 
+CONTRIBUTORS:
+	exec > $@
+	echo 'Alphabetical list of surnames of everyone who ever committed to this repository.'
+	echo 'Auto-generated using `make -B CONTRIBUTORS`'
+	echo
+	$(GIT) shortlog -se --all | cut -f1 --complement | sort -u -k2
+
 dist-hook:
 	cd $(distdir)
 	echo $(VERSION) > .tarball-version
