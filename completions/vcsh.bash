@@ -134,9 +134,3 @@ _vcsh () {
 }
 
 complete -F _vcsh vcsh
-
-# Local Variables:
-# mode:shell-script
-# sh-shell:bash
-# End:
-# vim: ft=bash:

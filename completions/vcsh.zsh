@@ -153,9 +153,3 @@ function _vcsh () {
 }
 
 _vcsh "$@"
-
-# Local Variables:
-# mode:shell-script
-# sh-shell:zsh
-# End:
-# vim: ft=zsh:
