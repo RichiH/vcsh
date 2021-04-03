@@ -46,6 +46,10 @@ completions/_$(_vcsh): completions/vcsh.zsh
 test:
 	prove
 
+.PHONY: lint
+lint:
+	ec
+
 CONTRIBUTORS:
 	exec > $@
 	echo 'Alphabetical list of names of everyone who ever committed to this repository.'
