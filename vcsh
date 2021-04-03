@@ -34,21 +34,25 @@ fatal() {
 # We need to run getops as soon as possible so we catch -d and other
 # options that will modify our behaviour.
 # Commands are handled at the end of this script.
-while getopts "c:dv" flag; do
-	if [ x"$1" = x'-d' ] || [ x"$1" = x'--debug' ]; then
-		set -vx
-		VCSH_DEBUG=1
-		echo "debug mode on"
-		echo "$SELF $VERSION"
-	elif [ x"$1" = x'-v' ]; then
-		VCSH_VERBOSE=1
-		echo "verbose mode on"
-		echo "$SELF $VERSION"
-	elif [ x"$1" = x'-c' ]; then
-		VCSH_OPTION_CONFIG=$OPTARG
-	fi
-	shift 1
+while getopts c:dv flag; do
+	case "$flag" in
+		d)
+			set -vx
+			VCSH_DEBUG=1
+			echo 'debug mode on'
+			echo "$SELF $VERSION"
+			;;
+		v)
+			VCSH_VERBOSE=1
+			echo 'verbose mode on'
+			echo "$SELF $VERSION"
+			;;
+		c)
+			VCSH_OPTION_CONFIG="$OPTARG"
+			;;
+	esac
 done
+shift $((OPTIND-1))
 
 source_all() {
 	# Source file even if it's in $PWD and does not have any slashes in it
@@ -94,6 +98,7 @@ if [ ! "x$VCSH_WORKTREE" = 'xabsolute' ] && [ ! "x$VCSH_WORKTREE" = 'xrelative' 
 fi
 
 
+# editorconfig-checker-disable
 help() {
 	echo "usage: $SELF <options> <command>
 
@@ -133,14 +138,15 @@ help() {
    version              Print version information
    which <substring>    Find substring in name of any tracked file
    write-gitignore \\
-   <repo>               Write .gitignore.d/<repo> via git ls-files
+   [<repo>]             Write .gitignore.d/<repo> via git ls-files
 
    <repo> <git command> Shortcut to run git commands directly
    <repo>               Shortcut to enter repository" >&2
 }
+# editorconfig-checker-enable
 
 debug() {
-	[ -n "$VCSH_DEBUG" ] && echo "$SELF: debug: $@"
+	if [ -n "$VCSH_DEBUG" ]; then echo "$SELF: debug: $@"; fi
 }
 
 verbose() {
@@ -157,6 +163,8 @@ info() {
 
 clone() {
 	hook pre-clone
+	# Check if remote is reachable. Abort early if there's a typo, TLS certificate problem, etc
+	git ls-remote "$GIT_REMOTE" 2> /dev/null || fatal "Can not reach '$GIT_REMOTE'"
 	init
 	git remote add origin "$GIT_REMOTE"
 	git checkout -b "$VCSH_BRANCH" || return $?
@@ -164,7 +172,7 @@ clone() {
 	git config branch."$VCSH_BRANCH".merge  refs/heads/"$VCSH_BRANCH"
 	if [ $(git ls-remote origin "$VCSH_BRANCH" 2> /dev/null | wc -l ) -lt 1 ]; then
 		info "remote is empty, not merging anything.
-  You should add files to your new repository."
+  You should add files to your new repository." # editorconfig-checker-disable-line
 		exit
 	fi
 	GIT_VERSION_MAJOR=$(git --version | sed -E -n 's/.* ([0-9]+)\..*/\1/p' )
@@ -174,14 +182,9 @@ clone() {
 		git fetch origin
 	fi
 	hook pre-merge
-	git ls-tree -r --name-only origin/"$VCSH_BRANCH" | (while read object; do
-		[ -e "$object" ] &&
-			error "'$object' exists." &&
-			VCSH_CONFLICT=1
-	done
-	[ x"$VCSH_CONFLICT" = x'1' ]) &&
-		fatal "will stop after fetching and not try to merge!
-  Once this situation has been resolved, run 'vcsh $VCSH_REPO_NAME pull' to finish cloning." 17
+	git read-tree -n -mu origin/"$VCSH_BRANCH" \
+		|| fatal "will stop after fetching and not try to merge!
+  Once this situation has been resolved, run 'vcsh $VCSH_REPO_NAME pull' to finish cloning." 17 # editorconfig-checker-disable-line
 	git -c merge.ff=true merge origin/"$VCSH_BRANCH"
 	hook post-merge
 	hook post-clone
@@ -191,7 +194,7 @@ clone() {
 
 commit() {
 	hook pre-commit
-        shift  # remove the "commit" command.
+	shift  # remove the "commit" command.
 	for VCSH_REPO_NAME in $(list); do
 		echo "$VCSH_REPO_NAME: "
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
@@ -262,7 +265,7 @@ hook() {
 	for hook in "$VCSH_HOOK_D/$1"* "$VCSH_HOOK_D/$VCSH_REPO_NAME.$1"*; do
 		[ -x "$hook" ] || continue
 		verbose "executing '$hook'"
-		"$hook"
+		"$hook" || fatal "hook [$hook] failed" 1
 	done
 }
 
@@ -427,7 +430,7 @@ status() {
 
 status_helper() {
 	GIT_DIR=$VCSH_REPO_D/$1.git; export GIT_DIR
-	VCSH_GIT_OPTIONS=$2
+	VCSH_GIT_OPTIONS="-c status.relativePaths=false $2"
 	use
 	remote_tracking_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2> /dev/null) && {
 		commits_behind=$(git log ..${remote_tracking_branch} --oneline | wc -l)
@@ -435,7 +438,7 @@ status_helper() {
 		[ ${commits_behind} -ne 0 ] && echo "Behind $remote_tracking_branch by $commits_behind commits"
 		[ ${commits_ahead} -ne 0 ] && echo "Ahead of $remote_tracking_branch by $commits_ahead commits"
 	}
-	git ${VCSH_GIT_OPTIONS} status --short --untracked-files='no'
+	git ${VCSH_GIT_OPTIONS} status --short --untracked-files='no' | sed -E 's@([^ ] +)@\1~/@'
 	VCSH_COMMAND_RETURN_CODE=$?
 }
 
@@ -539,7 +542,7 @@ VCSH_COMMAND=$1; export VCSH_COMMAND
 
 case $VCSH_COMMAND in
 	clon|clo|cl) VCSH_COMMAND=clone;;
-	commi|comm|com|co) VCSH_COMMAND=commit;;
+	commi|comm|com|co|ci) VCSH_COMMAND=commit;;
 	delet|dele|del|de) VCSH_COMMAND=delete;;
 	ente|ent|en) VCSH_COMMAND=enter;;
 	hel|he) VCSH_COMMAND=help;;
@@ -553,7 +556,7 @@ case $VCSH_COMMAND in
 	versio|versi|vers|ver|ve) VCSH_COMMAND=version;;
 	which|whi|wh) VCSH_COMMAND=which;;
 	write|writ|wri|wr) VCSH_COMMAND=write-gitignore;;
-esac    
+esac
 
 if [ x"$VCSH_COMMAND" = x'clone' ]; then
 	VCSH_BRANCH=
@@ -579,6 +582,8 @@ if [ x"$VCSH_COMMAND" = x'clone' ]; then
 	export VCSH_REPO_NAME
 	[ -n "$VCSH_BRANCH" ] || VCSH_BRANCH=master
 	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
+elif [ "$VCSH_COMMAND" = 'help' ]; then
+	help && exit
 elif [ "$VCSH_COMMAND" = 'version' ]; then
 	echo "$SELF $VERSION"
 	git version
@@ -588,30 +593,33 @@ elif [ x"$VCSH_COMMAND" = x'which' ]; then
 	[ -n "$3" ] && fatal "$VCSH_COMMAND: too many parameters" 1
 	VCSH_COMMAND_PARAMETER=$2; export VCSH_COMMAND_PARAMETER
 elif [ x"$VCSH_COMMAND" = x'delete' ]           ||
-     [ x"$VCSH_COMMAND" = x'enter' ]            ||
-     [ x"$VCSH_COMMAND" = x'init' ]             ||
-     [ x"$VCSH_COMMAND" = x'list-tracked-by' ]  ||
-     [ x"$VCSH_COMMAND" = x'rename' ]           ||
-     [ x"$VCSH_COMMAND" = x'run' ]              ||
-     [ x"$VCSH_COMMAND" = x'upgrade' ]          ||
-     [ x"$VCSH_COMMAND" = x'write-gitignore' ]; then
-	[ -z "$2" ]                                     && fatal "$VCSH_COMMAND: please specify repository to work on" 1
+	[ x"$VCSH_COMMAND" = x'enter' ]            ||
+	[ x"$VCSH_COMMAND" = x'init' ]             ||
+	[ x"$VCSH_COMMAND" = x'list-tracked-by' ]  ||
+	[ x"$VCSH_COMMAND" = x'rename' ]           ||
+	[ x"$VCSH_COMMAND" = x'run' ]              ||
+	[ x"$VCSH_COMMAND" = x'upgrade' ]          ||
+	[ x"$VCSH_COMMAND" = x'write-gitignore' ]; then
+	if [ -z "$2" ]; then
+		[ -z "$VCSH_REPO_NAME" ] && fatal "$VCSH_COMMAND: please specify repository to work on" 1
+	else
+		VCSH_REPO_NAME=$2; export VCSH_REPO_NAME
+	fi
+	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 	[ x"$VCSH_COMMAND" = x'rename' ] && [ -z "$3" ] && fatal "$VCSH_COMMAND: please specify a target name" 1
 	[ x"$VCSH_COMMAND" = x'run'    ] && [ -z "$3" ] && fatal "$VCSH_COMMAND: please specify a command" 1
-	VCSH_REPO_NAME=$2; export VCSH_REPO_NAME
-	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 	[ x"$VCSH_COMMAND" = x'rename' ] && { VCSH_REPO_NAME_NEW=$3; export VCSH_REPO_NAME_NEW;
-	                                      GIT_DIR_NEW=$VCSH_REPO_D/$VCSH_REPO_NAME_NEW.git; export GIT_DIR_NEW; }
+	GIT_DIR_NEW=$VCSH_REPO_D/$VCSH_REPO_NAME_NEW.git; export GIT_DIR_NEW; }
 	[ x"$VCSH_COMMAND" = x'run' ]    && shift 2
 elif [ x"$VCSH_COMMAND" = x'foreach' ]; then
 	[ -z "$2" ] && fatal "$VCSH_COMMAND: please specify a command" 1
 	shift 1
 elif [ x"$VCSH_COMMAND" = x'commit' ] ||
-     [ x"$VCSH_COMMAND" = x'list'   ] ||
-     [ x"$VCSH_COMMAND" = x'list-tracked' ] ||
-     [ x"$VCSH_COMMAND" = x'list-untracked' ] ||
-     [ x"$VCSH_COMMAND" = x'pull'   ] ||
-     [ x"$VCSH_COMMAND" = x'push'   ]; then
+	[ x"$VCSH_COMMAND" = x'list'   ] ||
+	[ x"$VCSH_COMMAND" = x'list-tracked' ] ||
+	[ x"$VCSH_COMMAND" = x'list-untracked' ] ||
+	[ x"$VCSH_COMMAND" = x'pull'   ] ||
+	[ x"$VCSH_COMMAND" = x'push'   ]; then
 	:
 elif [ x"$VCSH_COMMAND" = x'status' ]; then
 	if [ x"$2" = x'--terse' ]; then
@@ -632,8 +640,8 @@ elif [ -n "$VCSH_COMMAND" ]; then
 	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 	[ -d "$GIT_DIR" ] || { help; exit 1; }
 else
-	# $1 is empty, or 'help'
-	help && exit
+	# $1 is empty
+	help && exit 1
 fi
 
 # Did we receive a directory instead of a name?

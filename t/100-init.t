@@ -11,6 +11,7 @@ use Test::Most;
 chdir 't/etc/' or die $!;
 
 $ENV{'HOME'} = abs_path ('.vcsh_home');
+$ENV{'XDG_CONFIG_HOME'} = $ENV{'HOME'}.'/.config';
 
 my $output = `./vcsh status`;
 
