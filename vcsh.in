@@ -674,3 +674,9 @@ $VCSH_COMMAND "$@"
 hook post-command
 verbose "$VCSH_COMMAND end, exiting"
 exit $VCSH_COMMAND_RETURN_CODE
+
+# Local Variables:
+# mode:shell-script
+# sh-shell:sh
+# End:
+# vim: ft=sh:
