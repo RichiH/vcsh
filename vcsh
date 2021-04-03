@@ -192,17 +192,19 @@ clone() {
 }
 
 commit() {
-	hook pre-commit
+	hook_global pre-commit
 	shift  # remove the "commit" command.
 	for VCSH_REPO_NAME in $(list); do
 		echo "$VCSH_REPO_NAME: "
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
+		hook_repo pre-commit
 		git commit --untracked-files=no --quiet "$@"
+		hook_repo post-commit
 		VCSH_COMMAND_RETURN_CODE=$?
 		echo
 	done
-	hook post-commit
+	hook_global post-commit
 }
 
 delete() {
@@ -232,7 +234,7 @@ enter() {
 }
 
 foreach() {
-	hook pre-foreach
+	hook_global pre-foreach
 
 	# We default to prefixing `git` to all commands passed to foreach, but
 	# allow running in general context with -g
@@ -247,21 +249,36 @@ foreach() {
 		echo "$VCSH_REPO_NAME:"
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
+		hook_repo pre-foreach
 		$command_prefix "$@"
+		hook_repo post-foreach
 	done
-	hook post-foreach
+	hook_global post-foreach
 }
 
 git_dir_exists() {
 	[ -d "$GIT_DIR" ] || fatal "no repository found for '$VCSH_REPO_NAME'" 12
 }
 
-hook() {
-	for hook in "$VCSH_HOOK_D/$1"* "$VCSH_HOOK_D/$VCSH_REPO_NAME.$1"*; do
+hook_global() {
+	for hook in "$VCSH_HOOK_D/$1"*; do
+		[ -x "$hook" ] || continue
+		verbose "executing '$hook'"
+		"$hook"
+	done
+}
+
+hook_repo() {
+	for hook in "$VCSH_HOOK_D/$VCSH_REPO_NAME.$1"*; do
 		[ -x "$hook" ] || continue
 		verbose "executing '$hook'"
 		"$hook" || fatal "hook [$hook] failed" 1
 	done
+}
+
+hook() {
+	hook_global "$1"
+	hook_repo "$1"
 }
 
 init() {
@@ -364,29 +381,33 @@ list_untracked_helper() {
 }
 
 pull() {
-	hook pre-pull
+	hook_global pre-pull
 	for VCSH_REPO_NAME in $(list_has_remote); do
 		printf '%s: ' "$VCSH_REPO_NAME"
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
+		hook_repo pre-pull
 		git pull
+		hook_repo post-pull
 		VCSH_COMMAND_RETURN_CODE=$?
 		echo
 	done
-	hook post-pull
+	hook_global post-pull
 }
 
 push() {
-	hook pre-push
+	hook_global pre-push
 	for VCSH_REPO_NAME in $(list_has_remote); do
 		printf '%s: ' "$VCSH_REPO_NAME"
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
+		hook_repo pre-push
 		git push
+		hook_repo post-push
 		VCSH_COMMAND_RETURN_CODE=$?
 		echo
 	done
-	hook post-push
+	hook_global post-push
 }
 
 retire() {
