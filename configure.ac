@@ -21,4 +21,6 @@ AX_PROGVAR([cmp])
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([vcsh], [chmod +x vcsh])
 
+AC_ARG_PROGRAM
+
 AC_OUTPUT
