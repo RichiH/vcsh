@@ -1,7 +1,9 @@
 AC_PREREQ([2.69])
 AC_INIT([vcsh], [m4_esyscmd(build-aux/git-version-gen .tarball-version)])
 AC_CONFIG_AUX_DIR([build-aux])
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([foreign tar-pax dist-xz dist-zip no-dist-gzip color-tests])
+AM_SILENT_RULES([yes])
+AC_CONFIG_MACRO_DIR([build-aux])
 
 AC_PROG_AWK
 
