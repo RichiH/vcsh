@@ -13,6 +13,7 @@ AC_DEFUN([AX_PROGVAR], [AC_PATH_PROG(m4_toupper($1), m4_default($2,$1))test -n "
 
 AX_PROGVAR([comm])
 AX_PROGVAR([git])
+AX_PROGVAR([ronn])
 
 AC_DEFUN([AX_PROGVAR], [AC_PATH_PROG(m4_toupper($1), m4_default($2,$1))test -n "$m4_toupper($1)" || AC_MSG_ERROR([m4_default($2,$1) is required])])
 
