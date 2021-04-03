@@ -279,7 +279,7 @@ list() {
 list_has_remote() {
 	for VCSH_REPO_NAME in $(list); do
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
-		git config remote.origin.url >/dev/null && echo "$VCSH_REPO_NAME"
+		git config branch.$VCSH_BRANCH.remote > /dev/null && echo "$VCSH_REPO_NAME"
 	done
 }
 
