@@ -34,21 +34,25 @@ fatal() {
 # We need to run getops as soon as possible so we catch -d and other
 # options that will modify our behaviour.
 # Commands are handled at the end of this script.
-while getopts "c:dv" flag; do
-	if [ x"$1" = x'-d' ] || [ x"$1" = x'--debug' ]; then
-		set -vx
-		VCSH_DEBUG=1
-		echo "debug mode on"
-		echo "$SELF $VERSION"
-	elif [ x"$1" = x'-v' ]; then
-		VCSH_VERBOSE=1
-		echo "verbose mode on"
-		echo "$SELF $VERSION"
-	elif [ x"$1" = x'-c' ]; then
-		VCSH_OPTION_CONFIG=$OPTARG
-	fi
-	shift 1
+while getopts c:dv flag; do
+	case "$flag" in
+		d)
+			set -vx
+			VCSH_DEBUG=1
+			echo 'debug mode on'
+			echo "$SELF $VERSION"
+			;;
+		v)
+			VCSH_VERBOSE=1
+			echo 'verbose mode on'
+			echo "$SELF $VERSION"
+			;;
+		c)
+			VCSH_OPTION_CONFIG="$OPTARG"
+			;;
+	esac
 done
+shift $((OPTIND-1))
 
 source_all() {
 	# Source file even if it's in $PWD and does not have any slashes in it
@@ -111,7 +115,8 @@ help() {
    delete <repo>        Delete an existing repository
    enter <repo>         Enter repository; spawn new instance of \$SHELL
                         with \$GIT_DIR set.
-   foreach [<-g>]
+   foreach \\
+     [<-g>] [<-p>] \\
      <git command>      Execute a command for every repository
    help                 Display this help text
    init <repo>          Initialize a new repository
@@ -158,6 +163,8 @@ info() {
 
 clone() {
 	hook pre-clone
+	# Check if remote is reachable. Abort early if there's a typo, TLS certificate problem, etc
+	git ls-remote "$GIT_REMOTE" 2> /dev/null || fatal "Can not reach '$GIT_REMOTE'"
 	init
 	@GIT@ remote add origin "$GIT_REMOTE"
 	@GIT@ checkout -b "$VCSH_BRANCH" || return $?
@@ -186,17 +193,19 @@ clone() {
 }
 
 commit() {
-	hook pre-commit
+	hook_global pre-commit
 	shift  # remove the "commit" command.
 	for VCSH_REPO_NAME in $(list); do
 		echo "$VCSH_REPO_NAME: "
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
+		hook_repo pre-commit
 		@GIT@ commit --untracked-files=no --quiet "$@"
+		hook_repo post-commit
 		VCSH_COMMAND_RETURN_CODE=$?
 		echo
 	done
-	hook post-commit
+	hook_global post-commit
 }
 
 delete() {
@@ -226,36 +235,56 @@ enter() {
 }
 
 foreach() {
-	hook pre-foreach
+	hook_global pre-foreach
 
 	# We default to prefixing `git` to all commands passed to foreach, but
 	# allow running in general context with -g
-	command_prefix=@GIT@
-	while getopts "g" flag; do
-		if [ x"$1" = x'-g' ]; then
-			unset command_prefix
-		fi
-		shift 1
+	command_prefix=@GIT
+	while getopts gp flag; do
+		case "$flag" in
+			g) unset command_prefix ;;
+			p) VCSH_PRINT_REPO_PREFIX=1 ;;
+		esac
 	done
+	shift $((OPTIND-1))
 	for VCSH_REPO_NAME in $(list); do
-		echo "$VCSH_REPO_NAME:"
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
-		$command_prefix "$@"
+		hook_repo pre-foreach
+		if [ -n "${VCSH_PRINT_REPO_PREFIX+x}" ]; then
+			$command_prefix "$@" | sed "s/^/$VCSH_REPO_NAME: /"
+		else
+			echo "$VCSH_REPO_NAME:"
+			$command_prefix "$@"
+		fi
+		hook_repo post-foreach
 	done
-	hook post-foreach
+	hook_global post-foreach
 }
 
 git_dir_exists() {
 	[ -d "$GIT_DIR" ] || fatal "no repository found for '$VCSH_REPO_NAME'" 12
 }
 
-hook() {
-	for hook in "$VCSH_HOOK_D/$1"* "$VCSH_HOOK_D/$VCSH_REPO_NAME.$1"*; do
+hook_global() {
+	for hook in "$VCSH_HOOK_D/$1"*; do
+		[ -x "$hook" ] || continue
+		verbose "executing '$hook'"
+		"$hook"
+	done
+}
+
+hook_repo() {
+	for hook in "$VCSH_HOOK_D/$VCSH_REPO_NAME.$1"*; do
 		[ -x "$hook" ] || continue
 		verbose "executing '$hook'"
 		"$hook" || fatal "hook [$hook] failed" 1
 	done
+}
+
+hook() {
+	hook_global "$1"
+	hook_repo "$1"
 }
 
 init() {
@@ -271,6 +300,13 @@ init() {
 list() {
 	for repo in "$VCSH_REPO_D"/*.git; do
 		[ -d "$repo" ] && [ -r "$repo" ] && echo "$(basename "$repo" .git)"
+	done
+}
+
+list_has_remote() {
+	for VCSH_REPO_NAME in $(list); do
+		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
+		git config branch.$VCSH_BRANCH.remote > /dev/null && echo "$VCSH_REPO_NAME"
 	done
 }
 
@@ -349,29 +385,33 @@ list_untracked_helper() {
 }
 
 pull() {
-	hook pre-pull
-	for VCSH_REPO_NAME in $(list); do
+	hook_global pre-pull
+	for VCSH_REPO_NAME in $(list_has_remote); do
 		printf '%s: ' "$VCSH_REPO_NAME"
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
+		hook_repo pre-pull
 		@GIT@ pull
+		hook_repo post-pull
 		VCSH_COMMAND_RETURN_CODE=$?
 		echo
 	done
-	hook post-pull
+	hook_global post-pull
 }
 
 push() {
-	hook pre-push
-	for VCSH_REPO_NAME in $(list); do
+	hook_global pre-push
+	for VCSH_REPO_NAME in $(list_has_remote); do
 		printf '%s: ' "$VCSH_REPO_NAME"
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
+		hook_repo pre-push
 		@GIT@ push
+		hook_repo post-push
 		VCSH_COMMAND_RETURN_CODE=$?
 		echo
 	done
-	hook post-push
+	hook_global post-push
 }
 
 retire() {
@@ -417,7 +457,7 @@ status() {
 
 status_helper() {
 	GIT_DIR=$VCSH_REPO_D/$1.git; export GIT_DIR
-	VCSH_GIT_OPTIONS=$2
+	VCSH_GIT_OPTIONS="-c status.relativePaths=false $2"
 	use
 	remote_tracking_branch=$(@GIT@ rev-parse --abbrev-ref --symbolic-full-name @{u} 2> /dev/null) && {
 		commits_behind=$(@GIT@ log ..${remote_tracking_branch} --oneline | wc -l)
@@ -425,7 +465,7 @@ status_helper() {
 		[ ${commits_behind} -ne 0 ] && echo "Behind $remote_tracking_branch by $commits_behind commits"
 		[ ${commits_ahead} -ne 0 ] && echo "Ahead of $remote_tracking_branch by $commits_ahead commits"
 	}
-	@GIT@ ${VCSH_GIT_OPTIONS} status --short --untracked-files='no'
+	@GIT@ ${VCSH_GIT_OPTIONS} status --short --untracked-files='no' | @SED@ -E 's@([^ ] +)@\1~/@'
 	VCSH_COMMAND_RETURN_CODE=$?
 }
 
