@@ -20,15 +20,15 @@
 # version of vcsh; the master branch is supposed to be clean at all times
 # so you can most likely just use it nonetheless
 VERSION='1.20141026'
-SELF=$(basename $0)
+SELF="$(basename "$0")"
 
 # Ensure all files created are accessible only to the current user.
 umask 0077
 
 fatal() {
 	echo "$SELF: fatal: $1" >&2
-	[ -z $2 ] && exit 1
-	exit $2
+	[ -z "$2" ] && exit 1
+	exit "$2"
 }
 
 # We need to run getops as soon as possible so we catch -d and other
@@ -56,7 +56,8 @@ shift $((OPTIND-1))
 
 source_all() {
 	# Source file even if it's in $PWD and does not have any slashes in it
-	case $1 in
+	# shellcheck source=/dev/null
+	case "$1" in
 		*/*) . "$1";;
 		*)   . "$PWD/$1";;
 	esac;
@@ -65,10 +66,12 @@ source_all() {
 
 # Read configuration and set defaults if anything's not set
 [ -n "$VCSH_DEBUG" ]                  && set -vx
-: ${XDG_CONFIG_HOME:="$HOME/.config"}
+: "${XDG_CONFIG_HOME:="$HOME/.config"}"
 
 # Read configuration files if there are any
+# shellcheck source=/dev/null
 [ -r "/etc/vcsh/config" ]             && . "/etc/vcsh/config"
+# shellcheck source=/dev/null
 [ -r "$XDG_CONFIG_HOME/vcsh/config" ] && . "$XDG_CONFIG_HOME/vcsh/config"
 if [ -n "$VCSH_OPTION_CONFIG" ]; then
 	# Source $VCSH_OPTION_CONFIG if it can be read and is in $PWD of $PATH
@@ -81,13 +84,13 @@ fi
 [ -n "$VCSH_DEBUG" ]                  && set -vx
 
 # Read defaults
-: ${VCSH_REPO_D:="$XDG_CONFIG_HOME/vcsh/repo.d"}
-: ${VCSH_HOOK_D:="$XDG_CONFIG_HOME/vcsh/hooks-enabled"}
-: ${VCSH_OVERLAY_D:="$XDG_CONFIG_HOME/vcsh/overlays-enabled"}
-: ${VCSH_BASE:="$HOME"}
-: ${VCSH_GITIGNORE:=exact}
-: ${VCSH_GITATTRIBUTES:=none}
-: ${VCSH_WORKTREE:=absolute}
+: "${VCSH_REPO_D:="$XDG_CONFIG_HOME/vcsh/repo.d"}"
+: "${VCSH_HOOK_D:="$XDG_CONFIG_HOME/vcsh/hooks-enabled"}"
+: "${VCSH_OVERLAY_D:="$XDG_CONFIG_HOME/vcsh/overlays-enabled"}"
+: "${VCSH_BASE:="$HOME"}"
+: "${VCSH_GITIGNORE:=exact}"
+: "${VCSH_GITATTRIBUTES:=none}"
+: "${VCSH_WORKTREE:=absolute}"
 
 if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xnone' ] && [ ! "x$VCSH_GITIGNORE" = 'xrecursive' ]; then
 	fatal "'\$VCSH_GITIGNORE' must equal 'exact', 'none', or 'recursive'" 1
@@ -146,11 +149,13 @@ help() {
 # editorconfig-checker-enable
 
 debug() {
-	if [ -n "$VCSH_DEBUG" ]; then echo "$SELF: debug: $@"; fi
+	if [ -n "$VCSH_DEBUG" ]; then echo "$SELF: debug: $*"; fi
 }
 
 verbose() {
-	if [ -n "$VCSH_DEBUG" ] || [ -n "$VCSH_VERBOSE" ]; then echo "$SELF: verbose: $@"; fi
+	if [ -n "$VCSH_DEBUG" ] || [ -n "$VCSH_VERBOSE" ]; then
+		echo "$SELF: verbose: $*"
+	fi
 }
 
 error() {
@@ -170,6 +175,8 @@ clone() {
 	git checkout -b "$VCSH_BRANCH" || return $?
 	git config branch."$VCSH_BRANCH".remote origin
 	git config branch."$VCSH_BRANCH".merge  refs/heads/"$VCSH_BRANCH"
+	# BSD wc emits spaces.
+	# shellcheck disable=SC2046
 	if [ $(git ls-remote origin "$VCSH_BRANCH" 2> /dev/null | wc -l ) -lt 1 ]; then
 		info "remote is empty, not merging anything.
   You should add files to your new repository." # editorconfig-checker-disable-line
@@ -219,10 +226,10 @@ $files
 
 AGAIN, THIS WILL DELETE YOUR DATA!
 To continue, type 'Yes, do as I say'"
-	read answer
+	read -r answer
 	[ "x$answer" = 'xYes, do as I say' ] || exit 16
 	for file in $files; do
-		rm -f $file || info "could not delete '$file', continuing with deletion"
+		rm -f "$file" || info "could not delete '$file', continuing with deletion"
 	done
 	rm -rf "$GIT_DIR" || error "could not delete '$GIT_DIR'"
 }
@@ -299,14 +306,14 @@ init() {
 
 list() {
 	for repo in "$VCSH_REPO_D"/*.git; do
-		[ -d "$repo" ] && [ -r "$repo" ] && echo "$(basename "$repo" .git)"
+		[ -d "$repo" ] && [ -r "$repo" ] && basename "$repo" .git
 	done
 }
 
 list_has_remote() {
 	for VCSH_REPO_NAME in $(list); do
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
-		git config branch.$VCSH_BRANCH.remote > /dev/null && echo "$VCSH_REPO_NAME"
+		git config branch."$VCSH_BRANCH".remote > /dev/null && echo "$VCSH_REPO_NAME"
 	done
 }
 
@@ -331,7 +338,7 @@ list_tracked_helper() {
 }
 
 list_tracked_by() {
-	list_tracked '' $2
+	list_tracked '' "$2"
 }
 
 list_untracked() {
@@ -357,33 +364,33 @@ list_untracked() {
 	VCSH_REPO_NAME=$1; export VCSH_REPO_NAME
 
 	if [ -n "$VCSH_REPO_NAME" ]; then
-		list_untracked_helper $VCSH_REPO_NAME
+		list_untracked_helper "$VCSH_REPO_NAME"
 	else
 		for VCSH_REPO_NAME in $(list); do
-			list_untracked_helper $VCSH_REPO_NAME
+			list_untracked_helper "$VCSH_REPO_NAME"
 		done
 	fi
-	cat $temp_file_untracked
+	cat "$temp_file_untracked"
 
 	unset directory_opt directory_component
-	rm -f $temp_file_others $temp_file_untracked $temp_file_untracked_copy || fatal 'Could not delete temp files'
+	rm -f "$temp_file_others" "$temp_file_untracked" "$temp_file_untracked_copy" || fatal 'Could not delete temp files'
 }
 
 list_untracked_helper() {
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
 	git ls-files --others $exclude_standard_opt "$directory_opt" | (
-		while read line; do
+		while read -r line; do
 			echo "$line"
 			directory_component=${line%%/*}
 			[ -d "$directory_component" ] && printf '%s/\n' "$directory_component"
 		done
-		) | sort -u > $temp_file_others
+		) | sort -u > "$temp_file_others"
 	if [ -z "$ran_once" ]; then
 		ran_once=1
-		cp $temp_file_others $temp_file_untracked || fatal 'Could not copy temp file'
+		cp "$temp_file_others" "$temp_file_untracked" || fatal 'Could not copy temp file'
 	fi
-	cp $temp_file_untracked $temp_file_untracked_copy || fatal 'Could not copy temp file'
-	comm -12 $temp_file_others $temp_file_untracked_copy > $temp_file_untracked
+	cp "$temp_file_untracked" "$temp_file_untracked_copy" || fatal 'Could not copy temp file'
+	comm -12 "$temp_file_others" "$temp_file_untracked_copy" > "$temp_file_untracked"
 }
 
 pull() {
@@ -446,11 +453,11 @@ status() {
 		COLORING="-c color.status=always"
 	fi
 	if [ -n "$VCSH_REPO_NAME" ]; then
-		status_helper $VCSH_REPO_NAME
+		status_helper "$VCSH_REPO_NAME"
 	else
 		for VCSH_REPO_NAME in $(list); do
-			STATUS=$(status_helper $VCSH_REPO_NAME "$COLORING")
-			[ -n "$STATUS" -o -z "$VCSH_STATUS_TERSE" ] && echo "$VCSH_REPO_NAME:"
+			STATUS="$(status_helper "$VCSH_REPO_NAME" "$COLORING")"
+			[ -n "$STATUS" ] || [ -z "$VCSH_STATUS_TERSE" ] && echo "$VCSH_REPO_NAME:"
 			[ -n "$STATUS" ]            && echo "$STATUS"
 			[ -z "$VCSH_STATUS_TERSE" ] && echo
 		done
