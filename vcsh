@@ -19,7 +19,7 @@
 # If '.git-HEAD' is appended to the version, you are seeing an unreleased
 # version of vcsh; the master branch is supposed to be clean at all times
 # so you can most likely just use it nonetheless
-VERSION='1.20151229'
+VERSION='1.20190621'
 SELF=$(basename $0)
 
 # Ensure all files created are accessible only to the current user.
