@@ -87,6 +87,8 @@ fi
 : ${VCSH_HOOK_D:="$XDG_CONFIG_HOME/vcsh/hooks-enabled"}
 : ${VCSH_OVERLAY_D:="$XDG_CONFIG_HOME/vcsh/overlays-enabled"}
 : ${VCSH_BASE:="$HOME"}
+: ${VCSH_GITIGNORE_D:="$VCSH_BASE/.gitignore.d"}
+: ${VCSH_GITATTRIBUTES_D:="$VCSH_BASE/.gitattributes.d"}
 : ${VCSH_GITIGNORE:=exact}
 : ${VCSH_GITATTRIBUTES:=none}
 : ${VCSH_WORKTREE:=absolute}
@@ -486,12 +488,12 @@ upgrade() {
 	elif [ ! "x$VCSH_WORKTREE" = 'xrelative' ]; then
 		git config core.worktree "$VCSH_BASE"
 	fi
-	[ ! "x$VCSH_GITIGNORE" = 'xnone' ] && git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
-	[ ! "x$VCSH_GITATTRIBUTES" = 'xnone' ] && git config core.attributesfile ".gitattributes.d/$VCSH_REPO_NAME"
+	[ ! "x$VCSH_GITIGNORE" = 'xnone' ] && git config core.excludesfile "$VCSH_GITIGNORE_D/$VCSH_REPO_NAME"
+	[ ! "x$VCSH_GITATTRIBUTES" = 'xnone' ] && git config core.attributesfile "$VCSH_GITATTRIBUTES_D/$VCSH_REPO_NAME"
 	git config vcsh.vcsh 'true'
 	use
-	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME"
-	[ -e "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME"
+	[ -e "$VCSH_GITIGNORE_D/$VCSH_REPO_NAME" ] && git add -f "$VCSH_GITIGNORE_D/$VCSH_REPO_NAME"
+	[ -e "$VCSH_GITATTRIBUTES_D/$VCSH_REPO_NAME" ] && git add -f "$VCSH_GITATTRIBUTES_D/$VCSH_REPO_NAME"
 	hook post-upgrade
 }
 
@@ -550,17 +552,17 @@ write_gitignore() {
 		fi
 	done
 	IFS=$OLDIFS
-	if diff -N "$tempfile" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" > /dev/null; then
+	if diff -N "$tempfile" "$VCSH_GITIGNORE_D/$VCSH_REPO_NAME" > /dev/null; then
 		rm -f "$tempfile" || error "could not delete '$tempfile'"
 		exit
 	fi
-	if [ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ]; then
-		info "'$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME' differs from new data, moving it to '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME.bak'"
-		mv -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME.bak" ||
-			fatal "could not move '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME' to '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME.bak'" 53
+	if [ -e "$VCSH_GITIGNORE_D/$VCSH_REPO_NAME" ]; then
+		info "'$VCSH_GITIGNORE_D/$VCSH_REPO_NAME' differs from new data, moving it to '$VCSH_GITIGNORE_D/$VCSH_REPO_NAME.bak'"
+		mv -f "$VCSH_GITIGNORE_D/$VCSH_REPO_NAME" "$VCSH_GITIGNORE_D/$VCSH_REPO_NAME.bak" ||
+			fatal "could not move '$VCSH_GITIGNORE_D/$VCSH_REPO_NAME' to '$VCSH_GITIGNORE_D/$VCSH_REPO_NAME.bak'" 53
 	fi
-	mv -f "$tempfile" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ||
-		fatal "could not move '$tempfile' to '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME'" 53
+	mv -f "$tempfile" "$VCSH_GITIGNORE_D/$VCSH_REPO_NAME" ||
+		fatal "could not move '$tempfile' to '$VCSH_GITIGNORE_D/$VCSH_REPO_NAME'" 53
 }
 
 debug $(git version)
@@ -695,8 +697,8 @@ check_dir() {
 }
 
 check_dir "$VCSH_REPO_D"
-[ ! "x$VCSH_GITIGNORE" = 'xnone' ] && check_dir "$VCSH_BASE/.gitignore.d"
-[ ! "x$VCSH_GITATTRIBUTES" = 'xnone' ] && check_dir "$VCSH_BASE/.gitattributes.d"
+[ ! "x$VCSH_GITIGNORE" = 'xnone' ] && check_dir "$VCSH_GITIGNORE_D"
+[ ! "x$VCSH_GITATTRIBUTES" = 'xnone' ] && check_dir "$VCSH_GITATTRIBUTES_D"
 
 verbose "$VCSH_COMMAND begin"
 VCSH_COMMAND=$(echo "$VCSH_COMMAND" | sed 's/-/_/g'); export VCSH_COMMAND
