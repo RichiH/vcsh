@@ -24,7 +24,7 @@ function _vcsh-enter () {
 }
 
 function _vcsh-foreach () {
-	_dispatch git git
+	_dispatch vcsh-foreach git
 }
 
 function _vcsh-help () {
@@ -63,10 +63,12 @@ function _vcsh-rename () {
 
 function _vcsh-run () {
 	(( CURRENT == 2 )) && __vcsh_repositories
-	if (( CURRENT >= 3 )); then
+	(( CURRENT == 3 )) && _command_names -e
+	if (( CURRENT >= 4 )); then
+		# see _precommand in zsh
 		words=( "${(@)words[3,-1]}" )
 		(( CURRENT -= 2 ))
-		_complete
+		_normal
 	fi
 }
 
@@ -94,6 +96,9 @@ function _vcsh () {
 	local curcontext="${curcontext}"
 	local state vcshcommand
 	local -a args subcommands
+
+	local VCSH_REPO_D
+        : ${VCSH_REPO_D:="${XDG_CONFIG_HOME:-"$HOME/.config"}/vcsh/repo.d"}
 
 	subcommands=(
 		"clone:clone an existing repository"
@@ -135,10 +140,11 @@ function _vcsh () {
 			if ! (( ${+functions[_vcsh-$vcshcommand]} )); then
 				# There is no handler function, so this is probably the name
 				# of a repository. Act accordingly.
-				_dispatch git git
+				# FIXME: this may want to use '_dispatch vcsh git'
+				GIT_DIR=$VCSH_REPO_D/$words[1].git _dispatch git git
 			else
 				curcontext="${curcontext%:*:*}:vcsh-${vcshcommand}:"
-				_call_function ret _vcsh-${vcshcommand}
+				_call_function ret _vcsh-${vcshcommand} && (( ret ))
 			fi
 		fi
 	fi

@@ -1,3 +1,21 @@
+2021-04-05  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20190621
+	* Make version reflected in `vcsh version` correct...
+
+2021-03-29  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20190620
+	* This is a safe harbour release.
+	* `release` branch should ensure downstream picks it up
+
+2021-03-29  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20190619
+	* Various bugfixes
+	* This is a safe harbour release.
+	* @alerque is now a co-maintainer
+
 2015-12-29  Richard Hartmann <richih.mailinglist@gmail.com>
 
 	* Fix tests to always use C locale, this makes vcsh reproducible
@@ -224,7 +242,7 @@
 2011-11-19  Richard Hartmann <richih.mailinglist@gmail.com>
 
 	* Bugfixes
-	* Improve XDG compability
+	* Improve XDG compatibility
 
 2011-11-18  Richard Hartmann <richih.mailinglist@gmail.com>
 
