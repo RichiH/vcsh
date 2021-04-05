@@ -19,14 +19,14 @@
 # If '.git-HEAD' is appended to the version, you are seeing an unreleased
 # version of vcsh; the master branch is supposed to be clean at all times
 # so you can most likely just use it nonetheless
-VERSION='1.20141026'
-SELF="$(basename "$0")"
+VCSH_VERSION='0.2021-GIT'; export VCSH_VERSION
+VCSH_SELF="$(basename "$0")"; export VCSH_SELF
 
 # Ensure all files created are accessible only to the current user.
 umask 0077
 
 fatal() {
-	echo "$SELF: fatal: $1" >&2
+	echo "$VCSH_SELF: fatal: $1" >&2
 	[ -z "$2" ] && exit 1
 	exit "$2"
 }
@@ -39,16 +39,19 @@ while getopts c:dv flag; do
 		d)
 			set -vx
 			VCSH_DEBUG=1
+			export VCSH_DEBUG
 			echo 'debug mode on'
-			echo "$SELF $VERSION"
+			echo "$VCSH_SELF $VCSH_VERSION"
 			;;
 		v)
 			VCSH_VERBOSE=1
+			export VCSH_VERBOSE
 			echo 'verbose mode on'
-			echo "$SELF $VERSION"
+			echo "$VCSH_SELF $VCSH_VERSION"
 			;;
 		c)
 			VCSH_OPTION_CONFIG="$OPTARG"
+			export VCSH_OPTION_CONFIG
 			;;
 	esac
 done
@@ -84,13 +87,13 @@ fi
 [ -n "$VCSH_DEBUG" ]                  && set -vx
 
 # Read defaults
-: "${VCSH_REPO_D:="$XDG_CONFIG_HOME/vcsh/repo.d"}"
-: "${VCSH_HOOK_D:="$XDG_CONFIG_HOME/vcsh/hooks-enabled"}"
-: "${VCSH_OVERLAY_D:="$XDG_CONFIG_HOME/vcsh/overlays-enabled"}"
-: "${VCSH_BASE:="$HOME"}"
-: "${VCSH_GITIGNORE:=exact}"
-: "${VCSH_GITATTRIBUTES:=none}"
-: "${VCSH_WORKTREE:=absolute}"
+: "${VCSH_REPO_D:="$XDG_CONFIG_HOME/vcsh/repo.d"}"; export VCSH_REPO_D
+: "${VCSH_HOOK_D:="$XDG_CONFIG_HOME/vcsh/hooks-enabled"}"; export VCSH_HOOK_D
+: "${VCSH_OVERLAY_D:="$XDG_CONFIG_HOME/vcsh/overlays-enabled"}"; export VCSH_OVERLAY_D
+: "${VCSH_BASE:="$HOME"}"; export VCSH_BASE
+: "${VCSH_GITIGNORE:=exact}"; export VCSH_GITIGNORE
+: "${VCSH_GITATTRIBUTES:=none}"; export VCSH_GITATTRIBUTES
+: "${VCSH_WORKTREE:=absolute}"; export VCSH_WORKTREE
 
 if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xnone' ] && [ ! "x$VCSH_GITIGNORE" = 'xrecursive' ]; then
 	fatal "'\$VCSH_GITIGNORE' must equal 'exact', 'none', or 'recursive'" 1
@@ -103,7 +106,7 @@ fi
 
 # editorconfig-checker-disable
 help() {
-	echo "usage: $SELF <options> <command>
+	echo "usage: $VCSH_SELF <options> <command>
 
    options:
    -c <file>            Source file
@@ -149,21 +152,21 @@ help() {
 # editorconfig-checker-enable
 
 debug() {
-	if [ -n "$VCSH_DEBUG" ]; then echo "$SELF: debug: $*"; fi
+	if [ -n "$VCSH_DEBUG" ]; then echo "$VCSH_SELF: debug: $*"; fi
 }
 
 verbose() {
 	if [ -n "$VCSH_DEBUG" ] || [ -n "$VCSH_VERBOSE" ]; then
-		echo "$SELF: verbose: $*"
+		echo "$VCSH_SELF: verbose: $*"
 	fi
 }
 
 error() {
-	echo "$SELF: error: $1" >&2
+	echo "$VCSH_SELF: error: $1" >&2
 }
 
 info() {
-	echo "$SELF: info: $1"
+	echo "$VCSH_SELF: info: $1"
 }
 
 clone() {
@@ -203,6 +206,7 @@ commit() {
 	hook_global pre-commit
 	shift  # remove the "commit" command.
 	for VCSH_REPO_NAME in $(list); do
+		export VCSH_REPO_NAME
 		echo "$VCSH_REPO_NAME: "
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
@@ -253,8 +257,10 @@ foreach() {
 			p) VCSH_PRINT_REPO_PREFIX=1 ;;
 		esac
 	done
+	export VCSH_PRINT_REPO_PREFIX
 	shift $((OPTIND-1))
 	for VCSH_REPO_NAME in $(list); do
+		export VCSH_REPO_NAME
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
 		hook_repo pre-foreach
@@ -396,6 +402,7 @@ list_untracked_helper() {
 pull() {
 	hook_global pre-pull
 	for VCSH_REPO_NAME in $(list_has_remote); do
+		export VCSH_REPO_NAME
 		printf '%s: ' "$VCSH_REPO_NAME"
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
@@ -411,6 +418,7 @@ pull() {
 push() {
 	hook_global pre-push
 	for VCSH_REPO_NAME in $(list_has_remote); do
+		export VCSH_REPO_NAME
 		printf '%s: ' "$VCSH_REPO_NAME"
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
@@ -634,7 +642,7 @@ if [ x"$VCSH_COMMAND" = x'clone' ]; then
 elif [ "$VCSH_COMMAND" = 'help' ]; then
 	help && exit
 elif [ "$VCSH_COMMAND" = 'version' ]; then
-	echo "$SELF $VERSION"
+	echo "$VCSH_SELF $VCSH_VERSION"
 	git version
 	exit
 elif [ x"$VCSH_COMMAND" = x'which' ]; then
