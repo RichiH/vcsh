@@ -2,3 +2,4 @@
 *.swp
 .swp
 *.bak
+debian/debhelper-build-stamp
