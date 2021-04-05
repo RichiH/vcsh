@@ -39,11 +39,13 @@ while getopts c:dv flag; do
 		d)
 			set -vx
 			VCSH_DEBUG=1
+			export VCSH_DEBUG
 			echo 'debug mode on'
 			echo "$SELF $VERSION"
 			;;
 		v)
 			VCSH_VERBOSE=1
+			export VCSH_VERBOSE
 			echo 'verbose mode on'
 			echo "$SELF $VERSION"
 			;;
