@@ -41,7 +41,7 @@ vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
 
 `vcsh` write-gitignore <repo>
 
-`vcsh` <repo> <git command>
+`vcsh` <repo> <gitcommand>
 
 `vcsh` <repo>
 
@@ -98,7 +98,7 @@ an interactive user.
   Delete an existing repository.
 
 * enter:
-  Enter repository; spawn new <$SHELL>.
+  Enter repository; spawn new <$SHELL> with <$GIT_DIR> set.
 
 * foreach:
   Execute git command for every vcsh repository.
@@ -173,7 +173,7 @@ an interactive user.
   Write .gitignore.d/<repo> via `git ls-files`.
 
 * <repo> <gitcommand>:
-  Shortcut to run `vcsh` on a repo. Will prepend `git` to <command>.
+  Shortcut to run `git` commands on a repo. Will prepend `git` to <gitcommand>.
 
 * <repo>:
   Shortcut to run `vcsh enter <repo>`.
@@ -220,7 +220,7 @@ Interesting knobs you can turn:
 
   Defaults to <exact>.
 
-* <$VCSH_VCSH_WORKTREE>:
+* <$VCSH_WORKTREE>:
   Can be <absolute>, or <relative>.
 
   <absolute> will set an absolute path; defaulting to <$HOME>.
@@ -338,7 +338,7 @@ config files, all of which were soft-linked into <$HOME>.
 Martin F. Krafft aka madduck came up with the concept of fake bare Git
 repositories.
 
-vcsh was initally written by madduck. This version is a re-implementation from
+vcsh was initially written by madduck. This version is a re-implementation from
 scratch with a lot more features. madduck graciously agreed to let the author
 take over the name.
 
