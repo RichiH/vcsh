@@ -48,10 +48,10 @@ test:
 
 CONTRIBUTORS:
 	exec > $@
-	echo 'Alphabetical list of surnames of everyone who ever committed to this repository.'
+	echo 'Alphabetical list of names of everyone who ever committed to this repository.'
 	echo 'Auto-generated using `make -B CONTRIBUTORS`'
 	echo
-	$(GIT) shortlog -se --all | cut -f1 --complement | sort -u -k2
+	$(GIT) shortlog -se --all | cut -f1 --complement | sort -u
 
 dist-hook:
 	cd $(distdir)
