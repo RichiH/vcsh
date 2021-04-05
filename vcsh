@@ -34,6 +34,7 @@ fatal() {
 # We need to run getops as soon as possible so we catch -d and other
 # options that will modify our behaviour.
 # Commands are handled at the end of this script.
+# shellcheck disable=SC2220
 while getopts c:dv flag; do
 	case "$flag" in
 		d)
@@ -251,6 +252,7 @@ foreach() {
 	# We default to prefixing `git` to all commands passed to foreach, but
 	# allow running in general context with -g
 	command_prefix=git
+	# shellcheck disable=SC2220
 	while getopts gp flag; do
 		case "$flag" in
 			g) unset command_prefix ;;
