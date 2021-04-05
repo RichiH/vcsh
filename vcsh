@@ -169,15 +169,28 @@ clone() {
 	# Check if remote is reachable. Abort early if there's a typo, TLS certificate problem, etc
 	git ls-remote "$GIT_REMOTE" 2> /dev/null || fatal "Can not reach '$GIT_REMOTE'"
 	init
+	# Test which, if any, given or detecte branches can be pulled from.
+	for VCSH_BRANCH_TEST in "$VCSH_BRANCH" main trunk development master; do
+		if [ $(git ls-remote "$GIT_REMOTE" "$VCSH_BRANCH_TEST" 2> /dev/null | wc -l ) -lt 1 ]; then
+			info "remote branch '$VCSH_BRANCH_TEST' empty"
+		else
+			info "remote branch '$VCSH_BRANCH_TEST' found"
+			VCSH_BRANCH_REMOTE=$VCSH_BRANCH_TEST
+			break
+		fi
+	done
+	if [ -z "$VCSH_BRANCH_REMOTE" ]; then
+		info "remote is empty, aborting.
+  Please run `$0 delete $VCSH_REPO_NAME`, determine the correct branch, and try again."
+		exit
+	fi
+	VCSH_BRANCH=$VCSH_BRANCH_REMOTE
+
+	# Set up remote
 	git remote add origin "$GIT_REMOTE"
 	git checkout -b "$VCSH_BRANCH" || return $?
 	git config branch."$VCSH_BRANCH".remote origin
 	git config branch."$VCSH_BRANCH".merge  refs/heads/"$VCSH_BRANCH"
-	if [ $(git ls-remote origin "$VCSH_BRANCH" 2> /dev/null | wc -l ) -lt 1 ]; then
-		info "remote is empty, not merging anything.
-  You should add files to your new repository." # editorconfig-checker-disable-line
-		exit
-	fi
 	GIT_VERSION_MAJOR=$(git --version | sed -E -n 's/.* ([0-9]+)\..*/\1/p' )
 	if [ 1 -lt "$GIT_VERSION_MAJOR" ];then
 		git fetch origin "$VCSH_BRANCH"
@@ -617,7 +630,7 @@ if [ x"$VCSH_COMMAND" = x'clone' ]; then
 	fi
 	[ -z "$VCSH_REPO_NAME" ] && fatal "$VCSH_COMMAND: could not determine repository name" 1
 	export VCSH_REPO_NAME
-	[ -n "$VCSH_BRANCH" ] || VCSH_BRANCH=master
+	[ -n "$VCSH_BRANCH" ] || VCSH_BRANCH=main
 	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 elif [ "$VCSH_COMMAND" = 'help' ]; then
 	help && exit
