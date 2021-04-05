@@ -544,7 +544,7 @@ write_gitignore() {
 	IFS=$(printf '\n\t')
 	gitignores=$(for file in $(git ls-files); do
 		if [ "$GIT_VERSION_MAJOR" -ge 2 ] \
-		   && [ "$GIT_VERSION_MINOR" -ge 7 ]; then
+				&& [ "$GIT_VERSION_MINOR" -ge 7 ]; then
 			echo "$file";
 		else
 			while true; do
