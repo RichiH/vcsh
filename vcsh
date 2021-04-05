@@ -179,9 +179,7 @@ clone() {
 	git checkout -b "$VCSH_BRANCH" || return $?
 	git config branch."$VCSH_BRANCH".remote origin
 	git config branch."$VCSH_BRANCH".merge  refs/heads/"$VCSH_BRANCH"
-	# BSD wc emits spaces.
-	# shellcheck disable=SC2046
-	if [ $(git ls-remote origin "$VCSH_BRANCH" 2> /dev/null | wc -l ) -lt 1 ]; then
+	if [ "$(git ls-remote origin "$VCSH_BRANCH" 2> /dev/null | wc -l )" -lt 1 ]; then
 		info "remote is empty, not merging anything.
   You should add files to your new repository." # editorconfig-checker-disable-line
 		exit
