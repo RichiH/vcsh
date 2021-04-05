@@ -164,7 +164,7 @@ info() {
 clone() {
 	hook pre-clone
 	# Check if remote is reachable. Abort early if there's a typo, TLS certificate problem, etc
-	git ls-remote "$GIT_REMOTE" 2> /dev/null || fatal "Can not reach '$GIT_REMOTE'"
+	@GIT@ ls-remote "$GIT_REMOTE" 2> /dev/null || fatal "Can not reach '$GIT_REMOTE'"
 	init
 	@GIT@ remote add origin "$GIT_REMOTE"
 	@GIT@ checkout -b "$VCSH_BRANCH" || return $?
@@ -252,7 +252,7 @@ foreach() {
 		use
 		hook_repo pre-foreach
 		if [ -n "${VCSH_PRINT_REPO_PREFIX+x}" ]; then
-			$command_prefix "$@" | sed "s/^/$VCSH_REPO_NAME: /"
+			$command_prefix "$@" | @SED@ "s/^/$VCSH_REPO_NAME: /"
 		else
 			echo "$VCSH_REPO_NAME:"
 			$command_prefix "$@"
@@ -306,7 +306,7 @@ list() {
 list_has_remote() {
 	for VCSH_REPO_NAME in $(list); do
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
-		git config branch.$VCSH_BRANCH.remote > /dev/null && echo "$VCSH_REPO_NAME"
+		@GIT@ config branch.$VCSH_BRANCH.remote > /dev/null && echo "$VCSH_REPO_NAME"
 	done
 }
 
