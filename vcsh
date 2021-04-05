@@ -543,7 +543,7 @@ write_gitignore() {
 	use
 	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
 	# Works in all shells we care about.
-	# shellcheck disable=SC2039
+	# shellcheck disable=SC2039,SC3043
 	local GIT_VERSION GIT_VERSION_MAJOR GIT_VERSION_MINOR
 	GIT_VERSION="$(git --version)"
 	GIT_VERSION_MAJOR="$(echo "$GIT_VERSION" | sed -E -n 's/.* ([0-9]+)\..*/\1/p')"
