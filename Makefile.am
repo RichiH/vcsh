@@ -42,7 +42,10 @@ completions/_$(_vcsh): completions/vcsh.zsh
 	$(if $<,./build-aux/git-version-gen .tarball-version,printf "$(VERSION)") > "$@"
 	$(CMP) -s "$@" "$@-prev" || autoreconf configure.ac --force
 
-check: check-version
+check: check-version prove
+
+installcheck-local:
+	./$(_vcsh) version
 
 .PHONY: check-version
 check-version: vcsh | .version
@@ -50,9 +53,12 @@ check-version: vcsh | .version
 	./$< version | $(GREP) -Ff $|
 	./$< version | $(GREP) -Ff <($(GIT) version)
 
-.PHONY: test
-test:
+.PHONY: prove
+prove:
 	prove
+
+.PHONY: test
+test: prove
 
 .PHONY: lint
 lint:
