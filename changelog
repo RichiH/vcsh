@@ -1,3 +1,9 @@
+2021-04-05  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20190620
+	* This is a safe harbour release.
+	* `release` branch should ensure downstream picks it up
+
 2021-03-29  Richard Hartmann <richih.mailinglist@gmail.com>
 
 	* Release 1.20190619
