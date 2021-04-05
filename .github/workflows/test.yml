@@ -19,6 +19,7 @@ jobs:
         run: |
           ./bootstrap.sh
           ./configure
+          make check
       - name: Run tests
         run: |
           make test
