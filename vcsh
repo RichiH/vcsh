@@ -186,8 +186,7 @@ clone() {
 		fi
 	done
 	if [ -z "$VCSH_BRANCH_REMOTE" ]; then
-		info "remote is empty, aborting.
-  Please run `$0 delete $VCSH_REPO_NAME`, determine the correct branch, and try again."
+		info "No non-empty remote branches found, aborting. Please run `$0 delete $VCSH_REPO_NAME`, determine the correct branch, and try again."
 		exit
 	fi
 	VCSH_BRANCH=$VCSH_BRANCH_REMOTE
