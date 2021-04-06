@@ -3,7 +3,7 @@ Maintainer: Richard Hartmann <richih@debian.org>
 Section: misc
 Priority: optional
 Standards-Version: 4.5.1
-Build-Depends: debhelper-compat (= 12),
+Build-Depends: debhelper-compat (= 13),
                git,
                libshell-command-perl,
                libtest-most-perl,
@@ -11,6 +11,7 @@ Build-Depends: debhelper-compat (= 12),
 Vcs-Git: https://github.com/RichiH/vcsh.git
 Vcs-Browser: https://github.com/RichiH/vcsh
 Homepage: https://github.com/RichiH/vcsh/blob/master/README.md
+Rules-Requires-Root: no
 
 Package: vcsh
 Architecture: all

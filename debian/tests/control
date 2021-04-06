@@ -1,2 +1,3 @@
-Tests: make-test
-Depends: git, prove
+Test-Command: make test
+Depends: git, perl, dash, libshell-command-perl, libtest-most-perl, ruby-ronn
+Restrictions: allow-stderr
