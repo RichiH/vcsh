@@ -1,0 +1,2 @@
+Tests: make-test
+Depends: git, prove
