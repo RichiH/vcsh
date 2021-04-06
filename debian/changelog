@@ -1,3 +1,9 @@
+vcsh (1.20190621-2) unstable; urgency=medium
+
+  * Add autopkgtest
+
+ -- Richard Hartmann <richih@debian.org>  Tue, 06 Apr 2021 12:21:38 +0200
+
 vcsh (1.20190621-1) unstable; urgency=medium
 
   * New upstream release
