@@ -1,4 +1,4 @@
 version=4
-https://github.com/RichiH/vcsh/releases
-/RichiH/vcsh/archive/v(.+)\.tar\.gz
-# http://eriberto.pro.br/blog/2013/10/07/how-to-write-a-good-debianwatch-easily/
+
+opts=filenamemangle=s/.+\/v?(\d\S*)\.tar\.gz/vcsh-$1\.tar\.gz/ \
+  https://github.com/richih/vcsh/tags .*/v?(\d\S*)\.tar\.gz

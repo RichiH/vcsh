@@ -1,3 +1,9 @@
+vcsh (1.20190621-5) unstable; urgency=medium
+
+  * Fix debian/watch
+
+ -- Richard Hartmann <richih@debian.org>  Tue, 06 Apr 2021 21:46:10 +0200
+
 vcsh (1.20190621-4) unstable; urgency=medium
 
   * Yet Another Upload, to give remote autopkgtest two passing tests
