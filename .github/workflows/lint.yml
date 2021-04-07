@@ -13,6 +13,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Configure
+        run: |
+          ./bootstrap.sh
+          ./configure --without-man-page --disable-tests
       - name: Run shellcheck
         uses: reviewdog/action-shellcheck@v1.0.0
         with:
