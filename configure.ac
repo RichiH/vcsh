@@ -26,7 +26,8 @@ fi
 AM_CONDITIONAL([ENABLE_MAN_PAGE],[test "x$with_man_page" != "xno"])
 
 AC_ARG_ENABLE([tests],
-              AS_HELP_STRING([--disable-tests], [Don't require test tooling to build]))
+              AS_HELP_STRING([--disable-tests], [Skip tooling requirements for running tests]),
+              ,[enable_tests=yes])
 AM_CONDITIONAL([ENABLE_TESTS],[test "x$enable_tests" != "xno"])
 
 AS_IF([test "x$enable_tests" != "xno"], [
