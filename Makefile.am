@@ -11,7 +11,9 @@ licensedir = $(datarootdir)/licenses/vcsh
 
 dist_doc_DATA = README.md changelog doc/INSTALL.md doc/PACKAGING.md doc/README.md doc/error_codes.md doc/sample_hooks/post-init-add-origin doc/sample_hooks/post-init-setup-mr doc/sample_hooks/post-merge-unclobber doc/sample_hooks/pre-merge-unclobber
 dist_license_DATA = LICENSE CONTRIBUTORS
+if ENABLE_MAN_PAGE
 dist_man_MANS = vcsh.1
+endif
 bin_SCRIPTS = vcsh
 
 EXTRA_DIST  = .version completions/vcsh.bash completions/vcsh.zsh

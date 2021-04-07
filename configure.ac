@@ -15,7 +15,17 @@ AX_PROGVAR([comm])
 AX_PROGVAR([cmp])
 AX_PROGVAR([git])
 AX_PROGVAR([prove])
-AX_PROGVAR([ronn])
+
+
+AC_ARG_WITH([man-page],
+    AS_HELP_STRING([--with-man-page],
+        [Generate man page @<:@default=yes@:>@]),
+    [],
+    [with_man_page=yes])
+if test "x$with_man_page" = "xyes"; then
+	AX_PROGVAR([ronn])
+fi
+AM_CONDITIONAL([ENABLE_MAN_PAGE],[test "x$with_man_page" != "xno"])
 
 AX_PROG_PERL_MODULES(Shell::Command, , AC_MSG_ERROR(Perl module required for testing not found))
 AX_PROG_PERL_MODULES(Test::Most, , AC_MSG_ERROR(Perl module required for testing not found))
