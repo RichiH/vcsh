@@ -61,8 +61,15 @@ prove:
 test: prove
 
 .PHONY: lint
-lint:
+lint: lint-editor-config lint-shellcheck
+
+.PHONY: lint-editor-config
+lint-editor-config:
 	ec
+
+.PHONY: lint-shellheck
+lint-shellcheck: vcsh
+	shellcheck $<
 
 CONTRIBUTORS:
 	exec > $@
