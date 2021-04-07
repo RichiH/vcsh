@@ -1,59 +1,127 @@
-# Pre-requisites #
+# Distro Packages
 
-If you want to build the manpage, you will need [ronn] [1].
-Debian 7.0 and above come with a package, so do most Debian clones.
+Many distributions have packages ready to go.
+If yours doesn't, you can install [from source](#installing-from-source).
+If you package VCSH for a distro please let us know.
 
-To install ronn on your Debian-based system, simply run
+## Arch Linux
 
-	apt-get install ruby-ronn
+Use your favorite AUR helper to build and install the [vcsh](https://aur.archlinux.org/packages/vcsh) package:
 
-There are no other dependencies other than `git`, `ronn` and a POSIX shell.
+```console
+$ paru -S aur
+```
 
+## CentOS / Fedora / RedHat
 
-# Installing #
+```console
+$ yum install vcsh
+```
 
-	sudo make install
+## Debian / Deepin / Kali Linux / Parrot / PureOS / Raspbian / Trisquel / Ubuntu
 
-## Installing without root privileges ##
+```console
+$ apt install vcsh
+```
 
-	make install DESTDIR=/home/myuser/local
+## Gentoo / Funtoo / LiGurOS
 
-or simply copy the shell script into any place you like, e.g. `~/bin`
+```console
+$ emerge --ask dev-vcs/vcsh
+```
 
+## GNU Guix
 
-# Uninstalling #
+```console
+$ guix install vcsh
+```
 
-	sudo make uninstall
+## Homebrew (macOS) / Linuxbrew
 
-There is another, more thorough, version. Just make sure you are not running
-this when you have installed to an important directory which is empty,
-otherwise.
+```console
+$ brew install vcsh
+```
 
-**THIS WILL DELETE /usr/local IF YOU INSTALLED THERE AND IT BECOMES EMPTY**
+## KISS Linux
 
-	sudo make purge
+```console
+$ kiss install vcsh
+```
 
-**THIS WILL DELETE /usr/local IF YOU INSTALLED THERE AND IT BECOMES EMPTY**
+## MacPorts (macOS)
 
-This is not in the default behaviour of `make uninstall` for obvious reasons.
+```console
+$ port install vcsh
+```
 
+## NIX
 
-# Other stuff #
+```console
+$ nix-env -i vcsh
+```
 
-To clean up the generated manpage, run
+## openSUSE
 
-	make clean
+```console
+$ zypper install vcsh
+```
 
-To run the test suite, run
+## Pardus
 
-    make test
+```console
+$ pisi install vcsh
+```
 
-To run the test suite, you will need `perl`,
-and the modules `Test::Most` and `Shell::Command`.
+## Termux
 
-To install the perl modules, run
+```console
+$ pkg install vcsh
+```
 
-    cpan install 'Test::Most' 'Shell::Command'.
+# Installing from Source
 
+First you'll want a copy of the source code.
+The easiest to use place to get this is the [latest release](https://github.com/RichiH/vcsh/releases/latest) posted on GitHub.
+The souree distribution will have a name such as `vcsh-2.0.0.tar.xz`.
+Note under each release GitHub also shows a "Source code" link that will download a snapshot of the repository; this is **not** the file you want (unless you want to jump through extra hoops).
+The official source release packages are the ones you want.
+
+Alternatively you may `git clone` the source repository.
+Note than some extra tooling will be required over using the regular source releases.
+Building from a clone will require a system with GNU Autotools installed; something not needed if using a source package.
+Also source releases have prebuilt man pages; to (optionally) build them from a Git clone you will need `ronn`.
+Finally building from Git clones will check for extra dependencies needed for testing, although tests can be disabled.
+If starting from a clone, run `./bootstrap.sh` once before doing anything below.
+
+Once you have the source, it's time to let it get aquainted with your system:
+
+```console
+$ ./configure
+```
+
+This command has *lots* of possible options, but the defaults should suite most use cases.
+See `./configure --help` for details if you have special needs.
+
+Once configured, you can build:
+
+```console
+$ make
+```
+
+Lastly you'll want to install it somewhere.
+
+```console
+$ make install
+```
+
+If you need elevated system permissions you may need to use `sudo make install` for this step.
+If you don't have such permissions and wish to install to your home directory, something like this might work:
+
+```console
+$ ./configure --prefix=/
+$ make DESTDIR="$HOME" install-exec
+```
+
+This will install to `~/bin/vcsh`; add `~/bin` to your path to use.
 
 [1]: http://rtomayko.github.io/ronn/
