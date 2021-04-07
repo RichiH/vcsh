@@ -14,8 +14,6 @@ AC_DEFUN([AX_PROGVAR], [AC_PATH_PROG(m4_toupper($1), m4_default($2,$1))test -n "
 AX_PROGVAR([comm])
 AX_PROGVAR([cmp])
 AX_PROGVAR([git])
-AX_PROGVAR([prove])
-
 
 AC_ARG_WITH([man-page],
     AS_HELP_STRING([--with-man-page],
@@ -27,8 +25,15 @@ if test "x$with_man_page" = "xyes"; then
 fi
 AM_CONDITIONAL([ENABLE_MAN_PAGE],[test "x$with_man_page" != "xno"])
 
-AX_PROG_PERL_MODULES(Shell::Command, , AC_MSG_ERROR(Perl module required for testing not found))
-AX_PROG_PERL_MODULES(Test::Most, , AC_MSG_ERROR(Perl module required for testing not found))
+AC_ARG_ENABLE([tests],
+              AS_HELP_STRING([--disable-tests], [Don't require test tooling to build]))
+AM_CONDITIONAL([ENABLE_TESTS],[test "x$enable_tests" != "xno"])
+
+AS_IF([test "x$enable_tests" != "xno"], [
+	AX_PROGVAR([prove])
+	AX_PROG_PERL_MODULES(Shell::Command, , AC_MSG_ERROR(Perl module required for testing not found))
+	AX_PROG_PERL_MODULES(Test::Most, , AC_MSG_ERROR(Perl module required for testing not found))
+])
 
 AC_ARG_WITH([bash-completion-dir],
     AS_HELP_STRING([--with-bash-completion-dir[=PATH]],

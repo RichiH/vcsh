@@ -44,7 +44,11 @@ completions/_$(_vcsh): completions/vcsh.zsh
 	$(if $<,./build-aux/git-version-gen .tarball-version,printf "$(VERSION)") > "$@"
 	$(CMP) -s "$@" "$@-prev" || autoreconf configure.ac --force
 
-check: check-version prove
+check: check-version
+
+if ENABLE_TESTS
+check: prove
+endif
 
 installcheck-local:
 	./$(_vcsh) version
