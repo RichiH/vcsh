@@ -1,9 +1,43 @@
+2021-04-05  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20190621
+	* Make version reflected in `vcsh version` correct...
+
+2021-03-29  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20190620
+	* This is a safe harbour release.
+	* `release` branch should ensure downstream picks it up
+
 2021-03-29  Richard Hartmann <richih.mailinglist@gmail.com>
 
 	* Release 1.20190619
 	* Various bugfixes
 	* This is a safe harbour release.
 	* @alerque is now a co-maintainer
+
+2015-12-29  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Fix tests to always use C locale, this makes vcsh reproducible
+	* Implement `vcsh foreach`
+	* Implement `vcsh list-untracked -a`
+	* Handle Git older than 2.x gracefully
+	* Fix broken list-tracked-by
+	* Fix regression in `vcsh which`
+	* Skip ignored files in the output of list-untracked
+	* Improve cloning
+	* Clean up docs
+	* Implement `vcsh status --terse`
+	* Improve tests
+
+2015-05-02  Richard Hartmann <richih.mailinglist@gmail.com>
+
+	* Release 1.20150502
+	* Add tests
+	* Integrate tests with Travis CI
+	* Make `vcsh --list_untracked` GNU-independent
+	* Improve vcsh's code quality
+	* Improve Makefile, documentation, etc
 
 2014-10-26  Richard Hartmann <richih.mailinglist@gmail.com>
 
