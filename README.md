@@ -54,6 +54,7 @@ works instead of working through the docs.
 All slides, videos, and further information can be found
 [on the author's talk page][talks].
 
+
 # Installation
 
 A lot of modern UNIX-based systems offer packages for `vcsh`. In case yours

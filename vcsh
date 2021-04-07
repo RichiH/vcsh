@@ -67,6 +67,16 @@ source_all() {
 	esac;
 }
 
+test_dir_upwards() {
+	# Recurses upwards testing [ $1 $2 ], returning pwd when true
+	(while [ $(pwd) != / ]; do
+		if [ "$1" "$2" ]; then
+			pwd
+			return
+		fi
+		cd ..
+	done)
+}
 
 # Read configuration and set defaults if anything's not set
 [ -n "$VCSH_DEBUG" ]                  && set -vx
@@ -77,6 +87,12 @@ source_all() {
 [ -r "/etc/vcsh/config" ]             && . "/etc/vcsh/config"
 # shellcheck source=/dev/null
 [ -r "$XDG_CONFIG_HOME/vcsh/config" ] && . "$XDG_CONFIG_HOME/vcsh/config"
+[ -r ".config/vcsh/config" ]          && . ".config/vcsh/config"
+
+# Recursively look up the directory tree for configuration file
+configdir=$(test_dir_upwards -r .config/vcsh/config)
+[ -n "$configdir" ]                   && . "$configdir/.config/vcsh/config"
+
 if [ -n "$VCSH_OPTION_CONFIG" ]; then
 	# Source $VCSH_OPTION_CONFIG if it can be read and is in $PWD of $PATH
 	if [ -r "$VCSH_OPTION_CONFIG" ]; then
@@ -139,10 +155,12 @@ help() {
           <newname>     Rename repository
    run <repo> \\
        <command>        Use this repository
+   setup                Create ./.config/vcsh/config for local vcsh use
    status \\
      [--terse] [<repo>] Show statuses of all/one vcsh repositories
    upgrade <repo>       Upgrade repository to currently recommended settings
    version              Print version information
+   where                Print base and config directories
    which <substring>    Find substring in name of any tracked file
    write-gitignore \\
    [<repo>]             Write .gitignore.d/<repo> via git ls-files
@@ -456,6 +474,14 @@ run() {
 	hook post-run
 }
 
+setup() {
+	mkdir -p .config/vcsh
+	echo "export VCSH_BASE=\"$(pwd)\"" >> .config/vcsh/config
+	echo "export XDG_CONFIG_HOME=\"$(pwd)/.config\"" >> .config/vcsh/config
+	echo "$SELF $VCSH_COMMAND: $SELF has been initialized in \"$(pwd)/.config\""
+	echo "$SELF will now track files locally if run from this directory"
+}
+
 status() {
 	if [ -t 1 ]; then
 		COLORING="-c color.status=always"
@@ -516,6 +542,11 @@ upgrade() {
 use() {
 	git_dir_exists
 	VCSH_DIRECTORY=$VCSH_REPO_NAME; export VCSH_DIRECTORY
+}
+
+where() {
+	echo "\$VCSH_BASE is $VCSH_BASE"
+	echo "\$XDG_CONFIG_HOME is $XDG_CONFIG_HOME"
 }
 
 which() {
@@ -608,10 +639,12 @@ case $VCSH_COMMAND in
 	pus) VCSH_COMMAND=push;;
 	renam|rena|ren|re) VCSH_COMMAND=rename;;
 	ru) VCSH_COMMAND=run;;
+	setup|setu|set|se) VCSH_COMMAND=setup;;
 	statu|stat|sta|st) VCSH_COMMAND=status;;
 	upgrad|upgra|upgr|up) VCSH_COMMAND=upgrade;;
 	versio|versi|vers|ver|ve) VCSH_COMMAND=version;;
-	which|whi|wh) VCSH_COMMAND=which;;
+	where|whe) VCSH_COMMAND=where;;
+	which|whi) VCSH_COMMAND=which;;
 	write|writ|wri|wr) VCSH_COMMAND=write-gitignore;;
 esac
 
@@ -645,6 +678,8 @@ elif [ "$VCSH_COMMAND" = 'version' ]; then
 	echo "$VCSH_SELF $VCSH_VERSION"
 	git version
 	exit
+elif [ x"$VCSH_COMMAND" = x'setup' ]; then
+	[ -r "./.config/vcsh/config" ] && fatal "$VCSH_COMMAND: .config already exists!"
 elif [ x"$VCSH_COMMAND" = x'which' ]; then
 	[ -z "$2" ] && fatal "$VCSH_COMMAND: please specify a filename" 1
 	[ -n "$3" ] && fatal "$VCSH_COMMAND: too many parameters" 1
@@ -676,7 +711,8 @@ elif [ x"$VCSH_COMMAND" = x'commit' ] ||
 	[ x"$VCSH_COMMAND" = x'list-tracked' ] ||
 	[ x"$VCSH_COMMAND" = x'list-untracked' ] ||
 	[ x"$VCSH_COMMAND" = x'pull'   ] ||
-	[ x"$VCSH_COMMAND" = x'push'   ]; then
+	[ x"$VCSH_COMMAND" = x'push' ] ||
+	[ x"$VCSH_COMMAND" = x'where' ]; then
 	:
 elif [ x"$VCSH_COMMAND" = x'status' ]; then
 	if [ x"$2" = x'--terse' ]; then
