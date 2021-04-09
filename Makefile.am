@@ -16,9 +16,10 @@ dist_man_MANS = vcsh.1
 endif
 bin_SCRIPTS = vcsh
 
-EXTRA_DIST  = .version completions/vcsh.bash completions/vcsh.zsh
+EXTRA_DIST  = completions/vcsh.bash completions/vcsh.zsh
 
 BUILT_SOURCES = .version
+CLEANFILES = $(BUILT_SOURCES) $(dist_man_MANS) $(bin_SCRIPTS)
 
 if ENABLE_BASH_COMPLETION
 bashcompletiondir = $(BASH_COMPLETION_DIR)
