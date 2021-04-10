@@ -65,7 +65,7 @@ installcheck-local:
 
 .PHONY: check-version
 check-version: vcsh | .version
-	grep -Fx '$(VERSION)' $|
+	$(GREP) -Fx '$(VERSION)' $|
 	./$< version | $(GREP) -Ff $|
 	./$< version | $(GREP) -Ff <($(GIT) version)
 
@@ -93,6 +93,9 @@ CONTRIBUTORS:
 	echo 'Auto-generated using `make -B CONTRIBUTORS`'
 	echo
 	$(GIT) shortlog -se --all | cut -f1 --complement | sort -u
+
+changelog-HEAD: changelog
+	sed -nEe '2d;s/^\t//p;/^$$/q;' $< > $@
 
 dist-hook:
 	printf "$(VERSION)" > "$(distdir)/.tarball-version"
