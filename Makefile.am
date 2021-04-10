@@ -21,30 +21,34 @@ bin_SCRIPTS = vcsh
 EXTRA_DIST  = completions/vcsh.bash completions/vcsh.zsh build-aux/git-version-gen build-aux/ax_prog_perl_modules.m4
 
 BUILT_SOURCES = .version
-CLEANFILES = $(BUILT_SOURCES) $(dist_man_MANS) $(bin_SCRIPTS)
+CLEANFILES = $(BUILT_SOURCES) .version-prev $(dist_man_MANS) $(bin_SCRIPTS)
 
 if ENABLE_BASH_COMPLETION
 bashcompletiondir = $(BASH_COMPLETION_DIR)
 nodist_bashcompletion_DATA = completions/$(_vcsh)
+CLEANFILES += $(nodist_bashcompletion_DATA)
 endif
 
 if ENABLE_ZSH_COMPLETION
 zshcompletiondir = $(ZSH_COMPLETION_DIR)
 nodist_zshcompletion_DATA = completions/_$(_vcsh)
+CLEANFILES += $(nodist_zshcompletion_DATA)
 endif
 
 vcsh.1: doc/vcsh.1.ronn
 	$(RONN) < $< > $@
 
 completions/$(_vcsh): completions/vcsh.bash
+	mkdir -p $(dir $@)
 	cp -bf $< $@
 
 completions/_$(_vcsh): completions/vcsh.zsh
+	mkdir -p $(dir $@)
 	cp -bf $< $@
 
 .version: $(shell $(AWK) '{print ".git/" $$2}' .git/HEAD 2>/dev/null ||:)
-	[ -e "$@" ] && mv "$@" "$@-prev" || touch "$@-prev"
-	$(if $<,./build-aux/git-version-gen .tarball-version,printf "$(VERSION)") > "$@"
+	[ -e "$@" ] && mv "$@" "$@-prev" || $(if $<,touch,cp "$(srcdir)/.tarball-version") "$@-prev"
+	$(if $<,./build-aux/git-version-gen "$(srcdir)/.tarball-version",printf "$(VERSION)") > "$@"
 	$(CMP) -s "$@" "$@-prev" || autoreconf configure.ac --force
 
 _CHECKDEPS = check-version
@@ -90,5 +94,4 @@ CONTRIBUTORS:
 	$(GIT) shortlog -se --all | cut -f1 --complement | sort -u
 
 dist-hook:
-	cd $(distdir)
-	echo $(VERSION) > .tarball-version
+	printf "$(VERSION)" > "$(distdir)/.tarball-version"
