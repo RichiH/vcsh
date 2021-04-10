@@ -1,0 +1,29 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Fetch tags
+        run: |
+          git fetch --prune --tags ||:
+      - name: Configure
+        run: |
+          ./bootstrap.sh
+          ./configure --disable-dependency-checks
+      - name: Build source package
+        run: |
+          make dist
+          echo VERSION=$(cat .version) >> $GITHUB_ENV
+      - name: Post build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: vcsh-${{ env.VERSION }}
+          path: vcsh-${{ env.VERSION }}
