@@ -6,9 +6,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Install build dependencies
+        with:
+          fetch-depth: 0
+      - name: Fetch tags
         run: |
-          sudo apt-get install ronn
+          git fetch --prune --tags ||:
+      - name: Install dependencies
+        run: |
+          sudo apt install ronn
       - name: Install perl test dependencies
         uses: perl-actions/install-with-cpanm@v1.1
         with:
@@ -22,3 +27,12 @@ jobs:
       - name: Run tests
         run: |
           make check
+      - name: Build source package
+        run: |
+          make dist
+          echo VERSION=$(cat .version) >> $GITHUB_ENV
+      - name: Post build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: vcsh-${{ env.VERSION }}
+          path: vcsh-${{ env.VERSION }}.zip
