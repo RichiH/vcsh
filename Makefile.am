@@ -5,9 +5,10 @@ ACLOCAL_AMFLAGS = -I build-aux
 .SECONDEXPANSION:
 .DELETE_ON_ERROR:
 
-_vcsh = $(program_prefix)$(shell sed -e "$(program_transform_name)" <<< vcsh)$(program_suffix)
+_vcsh = $(program_prefix)$(shell $(SED) -e "$(program_transform_name)" <<< vcsh)$(program_suffix)
 
-licensedir = $(datarootdir)/licenses/vcsh
+docdir = $(datarootdir)/doc/$(_vcsh)
+licensedir = $(datarootdir)/licenses/$(_vcsh)
 
 dist_doc_DATA = changelog doc/INSTALL.md doc/README.md doc/error_codes.md
 samplehooksdir = $(docdir)/sample_hooks
@@ -95,3 +96,9 @@ CONTRIBUTORS:
 
 dist-hook:
 	printf "$(VERSION)" > "$(distdir)/.tarball-version"
+
+install-exec-local:
+	$(SED) -i -E '/^VCSH_SELF/s#".*"#"$(_vcsh)"#g' "$(DESTDIR)$(bindir)/$(_vcsh)"
+
+install-data-hook:
+	$(SED) -i -E 's#(\\fB)vcsh\b#\1$(_vcsh)#g' "$(DESTDIR)$(man1dir)/$(_vcsh).1"
