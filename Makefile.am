@@ -18,7 +18,7 @@ dist_man_MANS = vcsh.1
 endif
 bin_SCRIPTS = vcsh
 
-EXTRA_DIST  = completions/vcsh.bash completions/vcsh.zsh
+EXTRA_DIST  = completions/vcsh.bash completions/vcsh.zsh build-aux/git-version-gen build-aux/ax_prog_perl_modules.m4
 
 BUILT_SOURCES = .version
 CLEANFILES = $(BUILT_SOURCES) $(dist_man_MANS) $(bin_SCRIPTS)
