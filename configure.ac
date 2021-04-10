@@ -25,9 +25,10 @@ if test "x$with_man_page" = "xyes"; then
 fi
 AM_CONDITIONAL([ENABLE_MAN_PAGE],[test "x$with_man_page" != "xno"])
 
+AS_IF([test -e .tarball-version], m4_define([TESTDEF], [yes]), m4_define([TESTDEF], [no]))
 AC_ARG_ENABLE([tests],
-              AS_HELP_STRING([--disable-tests], [Skip tooling requirements for running tests]),
-              ,[enable_tests=yes])
+              AS_HELP_STRING([--disable-tests], [Configure tooling to run tests @<:@default=TESTDEF@:>@]),
+              ,[enable_tests=TESTDEF])
 AM_CONDITIONAL([ENABLE_TESTS],[test "x$enable_tests" != "xno"])
 
 AS_IF([test "x$enable_tests" != "xno"], [
