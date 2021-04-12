@@ -74,6 +74,7 @@ AC_SUBST([TRANSFORMED_PACKAGE_NAME])
 
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([vcsh], [chmod +x vcsh])
+AC_CONFIG_FILES([doc/vcsh.1.ronn])
 
 AC_ARG_PROGRAM
 

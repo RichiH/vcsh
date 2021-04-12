@@ -20,7 +20,7 @@
 # version of vcsh; the main branch is supposed to be clean at all times
 # so you can most likely just use it nonetheless
 VCSH_VERSION='@VERSION@'; export VCSH_VERSION
-VCSH_SELF="$(basename "$0")"; export VCSH_SELF
+VCSH_SELF="@TRANSFORMED_PACKAGE_NAME@"; export VCSH_SELF
 
 # Ensure all files created are accessible only to the current user.
 umask 0077

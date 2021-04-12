@@ -97,9 +97,3 @@ changelog-HEAD: changelog
 
 dist-hook:
 	printf "$(VERSION)" > "$(distdir)/.tarball-version"
-
-install-exec-local:
-	$(SED) -i -E '/^VCSH_SELF/s#".*"#"$(TRANSFORMED_PACKAGE_NAME)"#g' "$(DESTDIR)$(bindir)/$(TRANSFORMED_PACKAGE_NAME)"
-
-install-data-hook:
-	$(SED) -i -E 's#(\\fB)vcsh\b#\1$(TRANSFORMED_PACKAGE_NAME)#g' "$(DESTDIR)$(man1dir)/$(TRANSFORMED_PACKAGE_NAME).1"
