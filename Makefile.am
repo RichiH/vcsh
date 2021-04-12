@@ -5,10 +5,8 @@ ACLOCAL_AMFLAGS = -I build-aux
 .SECONDEXPANSION:
 .DELETE_ON_ERROR:
 
-_vcsh = $(program_prefix)$(shell $(SED) -e "$(program_transform_name)" <<< vcsh)$(program_suffix)
-
-docdir = $(datarootdir)/doc/$(_vcsh)
-licensedir = $(datarootdir)/licenses/$(_vcsh)
+docdir = $(datarootdir)/doc/$(TRANSFORMED_PACKAGE_NAME)
+licensedir = $(datarootdir)/licenses/$(TRANSFORMED_PACKAGE_NAME)
 
 dist_doc_DATA = changelog doc/INSTALL.md doc/README.md doc/error_codes.md
 samplehooksdir = $(docdir)/sample_hooks
@@ -26,24 +24,24 @@ CLEANFILES = $(BUILT_SOURCES) .version-prev $(dist_man_MANS) $(bin_SCRIPTS)
 
 if ENABLE_BASH_COMPLETION
 bashcompletiondir = $(BASH_COMPLETION_DIR)
-nodist_bashcompletion_DATA = completions/$(_vcsh)
+nodist_bashcompletion_DATA = completions/$(TRANSFORMED_PACKAGE_NAME)
 CLEANFILES += $(nodist_bashcompletion_DATA)
 endif
 
 if ENABLE_ZSH_COMPLETION
 zshcompletiondir = $(ZSH_COMPLETION_DIR)
-nodist_zshcompletion_DATA = completions/_$(_vcsh)
+nodist_zshcompletion_DATA = completions/_$(TRANSFORMED_PACKAGE_NAME)
 CLEANFILES += $(nodist_zshcompletion_DATA)
 endif
 
 vcsh.1: doc/vcsh.1.ronn
 	$(RONN) < $< > $@
 
-completions/$(_vcsh): completions/vcsh.bash
+completions/$(TRANSFORMED_PACKAGE_NAME): completions/vcsh.bash
 	mkdir -p $(dir $@)
 	cp -bf $< $@
 
-completions/_$(_vcsh): completions/vcsh.zsh
+completions/_$(TRANSFORMED_PACKAGE_NAME): completions/vcsh.zsh
 	mkdir -p $(dir $@)
 	cp -bf $< $@
 
@@ -61,7 +59,7 @@ endif
 check-local: $(_CHECKDEPS)
 
 installcheck-local:
-	./$(_vcsh) version
+	./$(TRANSFORMED_PACKAGE_NAME) version
 
 .PHONY: check-version
 check-version: vcsh | .version
@@ -101,7 +99,7 @@ dist-hook:
 	printf "$(VERSION)" > "$(distdir)/.tarball-version"
 
 install-exec-local:
-	$(SED) -i -E '/^VCSH_SELF/s#".*"#"$(_vcsh)"#g' "$(DESTDIR)$(bindir)/$(_vcsh)"
+	$(SED) -i -E '/^VCSH_SELF/s#".*"#"$(TRANSFORMED_PACKAGE_NAME)"#g' "$(DESTDIR)$(bindir)/$(TRANSFORMED_PACKAGE_NAME)"
 
 install-data-hook:
-	$(SED) -i -E 's#(\\fB)vcsh\b#\1$(_vcsh)#g' "$(DESTDIR)$(man1dir)/$(_vcsh).1"
+	$(SED) -i -E 's#(\\fB)vcsh\b#\1$(TRANSFORMED_PACKAGE_NAME)#g' "$(DESTDIR)$(man1dir)/$(TRANSFORMED_PACKAGE_NAME).1"
