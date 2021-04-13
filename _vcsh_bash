@@ -26,7 +26,14 @@ _vcsh_git_command () {
 	COMP_WORDS[0]=git
 	((COMP_CWORD -= word_offset - 1))
 
-	local cspec=$( complete -p git 2>/dev/null )
+	local cspec
+	cspec=$( complete -p git 2>/dev/null )
+	if [[ -z $cspec ]]; then
+		if declare -F __load_completion &> /dev/null; then
+			__load_completion git
+			cspec=$( complete -p git 2>/dev/null )
+		fi
+	fi
 	if [[ -n $cspec ]]; then
 		if [[ ${cspec#* -F } != $cspec ]]; then
 			local func=${cspec#*-F }
@@ -62,7 +69,7 @@ _vcsh () {
 	unset r reponames
 	local cmds
 	cmds="clone delete enter foreach help init list list-tracked list-untracked
-		  pull push rename run status upgrade version which write-gitignore"
+		pull push rename run status upgrade version which write-gitignore"
 
 	local subcword cmd subcmd
 	for (( subcword=1; subcword < ${#words[@]}-1; subcword++ )); do
