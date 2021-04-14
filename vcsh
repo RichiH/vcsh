@@ -504,10 +504,34 @@ upgrade() {
 	elif [ ! "x$VCSH_WORKTREE" = 'xrelative' ]; then
 		git config core.worktree "$VCSH_BASE"
 	fi
-	[ ! "x$VCSH_GITIGNORE" = 'xnone' ] && git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
-	[ ! "x$VCSH_GITATTRIBUTES" = 'xnone' ] && git config core.attributesfile ".gitattributes.d/$VCSH_REPO_NAME"
-	git config vcsh.vcsh 'true'
 	use
+	if [ ! "x$VCSH_GITIGNORE" = 'xnone' ]; then
+    old_gitignore_file=$(git config core.excludesfile)
+    git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
+    if [ ! -z "$old_gitignore_file" ] && [ ! "$old_gitignore_file" = ".gitignore.d/$VCSH_REPO_NAME" ] && [ ! "$old_gitignore_file" = "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ]; then
+      if [ -e "$VCSH_BASE/$old_gitignore_file" ]; then
+        mv "$VCSH_BASE/$old_gitignore_file" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" || error "could not rename .gitignore.d file from $old_gitignore_file"
+      elif [ -e "$old_gitignore_file" ]; then
+        mv $old_gitignore_file "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" || error "could not rename .gitignore.d file from $old_gitignore_file"
+      else
+        debug "no old gitignore file to rename"
+      fi
+    fi
+  fi
+  if [ ! "x$VCSH_GITATTRIBUTES" = 'xnone' ]; then
+    old_gitattributes_file=$(git config core.attributesfile)
+    git config core.attributesfile ".gitattributes.d/$VCSH_REPO_NAME"
+    if [ ! -z "$old_gitattributes_file" ] && [ ! "$old_gitattributes_file" = ".gitattributes.d/$VCSH_REPO_NAME" ] && [ ! "$old_gitattributes_file" = "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME" ]; then
+      if [ -e "$VCSH_BASE/$old_gitattributes_file" ]; then
+        mv "$VCSH_BASE/$old_gitattributes_file" "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME" || error "could not rename .gitattributes.d file from $old_gitattributes_file"
+      elif [ -e "$old_gitattributes_file" ]; then
+        mv $old_gitattributes_file "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME" || error "could not rename .gitattributes.d file from $old_gitattributes_file"
+      else
+        debug "no old gitattributes file to rename"
+      fi
+    fi
+  fi
+  git config vcsh.vcsh 'true'
 	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME"
 	[ -e "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME"
 	hook post-upgrade
