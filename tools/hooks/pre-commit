@@ -1,7 +1,0 @@
-#!/bin/sh
-
-# Unfortunately, Git decided to set those two during pre-commit
-unset GIT_DIR
-unset GIT_INDEX_FILE
-
-prove

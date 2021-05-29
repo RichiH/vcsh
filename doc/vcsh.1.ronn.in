@@ -3,68 +3,68 @@ vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
 
 ## SYNOPSIS
 
-`vcsh` [<options>] <command>
+`@TRANSFORMED_PACKAGE_NAME@` [<options>] <command>
 
-`vcsh` alias [-d] [<alias>[=<command>]]
+`@TRANSFORMED_PACKAGE_NAME@` alias [-d] [<alias>[=<command>]]
 
-`vcsh` clone [-b <branch>] <url> [<repo>]
+`@TRANSFORMED_PACKAGE_NAME@` clone [-b <branch>] <url> [<repo>]
 
-`vcsh` delete <repo>
+`@TRANSFORMED_PACKAGE_NAME@` delete <repo>
 
-`vcsh` enter <repo>
+`@TRANSFORMED_PACKAGE_NAME@` enter <repo>
 
-`vcsh` foreach [-g] <git command>
+`@TRANSFORMED_PACKAGE_NAME@` foreach [-g] <git command>
 
-`vcsh` help
+`@TRANSFORMED_PACKAGE_NAME@` help
 
-`vcsh` init <repo>
+`@TRANSFORMED_PACKAGE_NAME@` init <repo>
 
-`vcsh` list
+`@TRANSFORMED_PACKAGE_NAME@` list
 
-`vcsh` list-tracked [<repo>]
+`@TRANSFORMED_PACKAGE_NAME@` list-tracked [<repo>]
 
-`vcsh` list-untracked [<-a>] [<-r>] [<repo>]
+`@TRANSFORMED_PACKAGE_NAME@` list-untracked [<-a>] [<-r>] [<repo>]
 
-`vcsh` pull
+`@TRANSFORMED_PACKAGE_NAME@` pull
 
-`vcsh` push
+`@TRANSFORMED_PACKAGE_NAME@` push
 
-`vcsh` rename <repo> <newname>
+`@TRANSFORMED_PACKAGE_NAME@` rename <repo> <newname>
 
-`vcsh` run <repo> <shell command>
+`@TRANSFORMED_PACKAGE_NAME@` run <repo> <shell command>
 
-`vcsh` status [<repo>]
+`@TRANSFORMED_PACKAGE_NAME@` status [<repo>]
 
-`vcsh` upgrade <repo>
+`@TRANSFORMED_PACKAGE_NAME@` upgrade <repo>
 
-`vcsh` version
+`@TRANSFORMED_PACKAGE_NAME@` version
 
-`vcsh` which <substring>
+`@TRANSFORMED_PACKAGE_NAME@` which <substring>
 
-`vcsh` write-gitignore <repo>
+`@TRANSFORMED_PACKAGE_NAME@` write-gitignore [<repo>]
 
-`vcsh` <repo> <gitcommand>
+`@TRANSFORMED_PACKAGE_NAME@` <repo> <gitcommand>
 
-`vcsh` <repo>
+`@TRANSFORMED_PACKAGE_NAME@` <repo>
 
 
 ## DESCRIPTION
 
-`vcsh` allows you to have several `git`(1) repositories, all maintaining their
+`@TRANSFORMED_PACKAGE_NAME@` allows you to have several `git`(1) repositories, all maintaining their
 working trees in $HOME without clobbering each other. That, in turn, means you
 can have one repository per config set (zsh, vim, ssh, etc), picking and
 choosing which configs you want to use on which machine.
 
-`vcsh` is using a technique called fake bare Git repositories, keeping <$GIT_DIR>
+`@TRANSFORMED_PACKAGE_NAME@` is using a technique called fake bare Git repositories, keeping <$GIT_DIR>
 in a different directory from <$GIT_WORK_TREE> which is pointed to <$HOME>.
 
 The use of symlinks is not needed in this setup, making for a cleaner setup.
 
-`vcsh` was designed with `mr`(1) in mind so you might want to install it alongside
-vcsh. That being said, you can easily use `vcsh` without `mr` if you prefer.
+`@TRANSFORMED_PACKAGE_NAME@` was designed with `mr`(1) in mind so you might want to install it alongside
+vcsh. That being said, you can easily use `@TRANSFORMED_PACKAGE_NAME@` without `mr` if you prefer.
 
-A sample configuration for `vcsh` and `mr` can be found at
-*https://github.com/RichiH/vcsh_mr_template* and used with `vcsh clone
+A sample configuration for `@TRANSFORMED_PACKAGE_NAME@` and `mr` can be found at
+*https://github.com/RichiH/vcsh_mr_template* and used with `@TRANSFORMED_PACKAGE_NAME@ clone
 https://github.com/RichiH/vcsh_mr_template mr`.
 
 Please note that you can always use a path instead of a name for <repo>.
@@ -163,7 +163,7 @@ an interactive user.
 
   Please note that there is a somewhat magic feature for run. Instead of <repo>
   it accepts <path>, as well. Anything that has a slash in it will be assumed to
-  be a path. `vcsh run` will then operate on this directory instead of the one
+  be a path. `@TRANSFORMED_PACKAGE_NAME@ run` will then operate on this directory instead of the one
   normally generated from the repository's name.
   This is needed to support mr and other scripts properly and of no concern to
   an interactive user.
@@ -181,25 +181,26 @@ an interactive user.
   Find <substring> in name of any tracked file.
 
 * write-gitignore:
-  Write .gitignore.d/<repo> via `git ls-files`.
+  Write .gitignore.d/<repo> via `git ls-files`. If <repo> is not specified but
+  we're withing a vcsh repository, use that.
 
 * <repo> <gitcommand>:
   Shortcut to run `git` commands on a repo. Will prepend `git` to <gitcommand>.
 
 * <repo>:
-  Shortcut to run `vcsh enter <repo>`.
+  Shortcut to run `@TRANSFORMED_PACKAGE_NAME@ enter <repo>`.
 
 ## ENVIRONMENT
 
-As noted earlier, `vcsh` will set <$GIT_DIR> and <$GIT_WORK_TREE> to the
+As noted earlier, `@TRANSFORMED_PACKAGE_NAME@` will set <$GIT_DIR> and <$GIT_WORK_TREE> to the
 appropriate values for fake bare Git repositories.
 
 ## ALIASES
 
-`vcsh' allows to define aliases. The first existing file
+`@TRANSFORMED_PACKAGE_NAME@` allows to define aliases. The first existing file
 
-* $XDG_CONFIG_HOME/vcsh/aliases
-* /etc/vcsh/aliases
+* <$XDG_CONFIG_HOME/vcsh/aliases>
+* </etc/vcsh/aliases>
 
 will be read. An alias definition has the format `alias = command`.
 Empty lines and lines starting with '#' are ignored.
@@ -207,13 +208,13 @@ Empty lines and lines starting with '#' are ignored.
 
 ## CONFIG
 
-There are several ways to turn the various knobs on `vcsh`. In order of
+There are several ways to turn the various knobs on `@TRANSFORMED_PACKAGE_NAME@`. In order of
 ascending precedence, they are:
 
-* `VARIABLE=foo vcsh`
+* `VARIABLE=foo @TRANSFORMED_PACKAGE_NAME@`
 * </etc/vcsh/config>
 * <$XDG_CONFIG_HOME/vcsh/config>
-* `vcsh -c <file>`
+* `@TRANSFORMED_PACKAGE_NAME@ -c <file>`
 
 Please note that those files are sourced. Any and all commands will be
 executed in the context of your shell.
@@ -242,7 +243,7 @@ Interesting knobs you can turn:
 
   Defaults to <exact>.
 
-* <$VCSH_VCSH_WORKTREE>:
+* <$VCSH_WORKTREE>:
   Can be <absolute>, or <relative>.
 
   <absolute> will set an absolute path; defaulting to <$HOME>.
@@ -280,9 +281,9 @@ Less interesting knobs you could turn:
 
 ## HOOK SYSTEM
 
-`vcsh` provides a hook system. Hook scripts must be executable and should be
+`@TRANSFORMED_PACKAGE_NAME@` provides a hook system. Hook scripts must be executable and should be
 placed in <$XDG_CONFIG_HOME/vcsh/hooks-available>. From there, they can be
-soft-linked into <$XDG_CONFIG_HOME/vcsh/hooks-enabled>; `vcsh` will only
+soft-linked into <$XDG_CONFIG_HOME/vcsh/hooks-enabled>; `@TRANSFORMED_PACKAGE_NAME@` will only
 execute hooks that are in this directory.
 
 Hooks follow a simple format. <pre-run> will be run before anything is run.
@@ -305,7 +306,7 @@ we can ship them by default.
 
 ## OVERLAY SYSTEM
 
-`vcsh` also provides an overlay system. Similar to hooks, the recommended
+`@TRANSFORMED_PACKAGE_NAME@` also provides an overlay system. Similar to hooks, the recommended
 locations are <$XDG_CONFIG_HOME/vcsh/overlays-available> and
 <$XDG_CONFIG_HOME/vcsh/overlays-enabled>.
 
@@ -335,8 +336,8 @@ On Debian-based systems, this file can be found in </usr/share/doc/vcsh>.
 
 ## SECURITY CONSIDERATIONS
 
-`vcsh` allows you to execute arbitrary commands via `vcsh run`. For example,
-adding a `sudo`(8) rule for `vcsh` would be pretty stupid.
+`@TRANSFORMED_PACKAGE_NAME@` allows you to execute arbitrary commands via `@TRANSFORMED_PACKAGE_NAME@ run`. For example,
+adding a `sudo`(8) rule for `@TRANSFORMED_PACKAGE_NAME@` would be pretty stupid.
 
 Additionally, vcsh will source, i.e. execute, all files listed in <CONFIG>.
 You can put any and all commands into these config files and they will be
@@ -360,13 +361,13 @@ config files, all of which were soft-linked into <$HOME>.
 Martin F. Krafft aka madduck came up with the concept of fake bare Git
 repositories.
 
-vcsh was initally written by madduck. This version is a re-implementation from
+vcsh was initially written by madduck. This version is a re-implementation from
 scratch with a lot more features. madduck graciously agreed to let the author
 take over the name.
 
 ## AUTHOR
 
-This manpage and `vcsh` itself were written by Richard "RichiH" Hartmann.
+This manpage and `@TRANSFORMED_PACKAGE_NAME@` itself were written by Richard "RichiH" Hartmann.
 
 ## COPYRIGHT
 
