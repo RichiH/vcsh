@@ -1,5 +1,3 @@
-# bash completion for vcsh.
-
 # run git command
 #   based on bash_completion:_command_offset()
 _vcsh_git_command () {
@@ -68,8 +66,7 @@ _vcsh () {
 	for r in "${reponames[@]}"; do repos["$r"]="$r"; done
 	unset r reponames
 	local cmds
-	cmds="clone delete enter foreach help init list list-tracked list-untracked
-		pull push rename run status upgrade version which write-gitignore"
+	cmds="clone delete enter foreach help init list list-tracked list-untracked pull push rename run status upgrade version which write-gitignore"
 
 	local subcword cmd subcmd
 	for (( subcword=1; subcword < ${#words[@]}-1; subcword++ )); do
@@ -146,9 +143,3 @@ _vcsh () {
 }
 
 complete -F _vcsh vcsh
-
-# Local Variables:
-# mode:shell-script
-# sh-shell:bash
-# End:
-# vim: ft=sh:

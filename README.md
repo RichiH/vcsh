@@ -57,10 +57,9 @@ All slides, videos, and further information can be found
 # Installation
 
 A lot of modern UNIX-based systems offer packages for `vcsh`. In case yours
-does not, read [INSTALL.md](doc/INSTALL.md) for install instructions or
-[PACKAGING.md](doc/PACKAGING.md) to create a package yourself. If you do end
-up packaging `vcsh` please let us know so we can give you your own packaging
-branch in the upstream repository.
+does not, read [INSTALL.md](doc/INSTALL.md) for instructions on installing from
+sources or even create a package for your system. If you do end up packaging
+`vcsh` please let us know so we can document package availability.
 
 # Contact
 

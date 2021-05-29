@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - v*.*.*
+
+jobs:
+
+  ghrelase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Configure
+        run: |
+          echo "VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
+          echo "${GITHUB_REF#refs/*/v}" > .tarball-version
+          ./bootstrap.sh
+          ./configure --disable-dependency-checks
+      - name: Build source package
+        run: |
+          make dist
+      - name: Check source package behaviour
+        run: |
+          make distcheck
+      - name: Make sure changelog was updated
+        run: |
+          make changelog-HEAD
+          grep -F "* Release ${{ env.VERSION }}" changelog-HEAD
+      - name: Publish Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: changelog-HEAD
+          files: |
+            vcsh-${{ env.VERSION }}.zip
+            vcsh-${{ env.VERSION }}.tar.xz
+        env:
+          GITHUB_TOKEN: ${{ github.token }}

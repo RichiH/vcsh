@@ -99,7 +99,7 @@ function _vcsh () {
 	local -a args subcommands
 
 	local VCSH_REPO_D
-        : ${VCSH_REPO_D:="${XDG_CONFIG_HOME:-"$HOME/.config"}/vcsh/repo.d"}
+	: ${VCSH_REPO_D:="${XDG_CONFIG_HOME:-"$HOME/.config"}/vcsh/repo.d"}
 
 	subcommands=(
 		"clone:clone an existing repository"
