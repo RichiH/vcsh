@@ -575,8 +575,7 @@ write_gitignore() {
 	done
 	IFS=$OLDIFS
 	if diff -N "$tempfile" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" > /dev/null; then
-		rm -f "$tempfile" || error "could not delete '$tempfile'"
-		exit
+		rm -f "$tempfile" || fatal "could not delete '$tempfile'" 59
 	fi
 	if [ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ]; then
 		info "'$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME' differs from new data, moving it to '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME.bak'"
