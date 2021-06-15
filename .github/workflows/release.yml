@@ -7,6 +7,28 @@ on:
 
 jobs:
 
+  standalone:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Configure standalone script
+        run: |
+          echo "VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
+          ./bootstrap.sh
+          ./configure \
+              --without-man-page \
+              --disable-tests \
+              --without-bash-completion-dir \
+              --without-zsh-completion-dir \
+              --with-edition=standalone \
+              COMM=comm GIT=git GREP=grep SED=sed SHELL=/bin/sh
+      - name: Upload standalone script artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: vcsh-standalone
+          path: vcsh
+
   ghrelase:
     runs-on: ubuntu-latest
     steps:
@@ -28,6 +50,13 @@ jobs:
         run: |
           make changelog-HEAD
           grep -F "* Release ${{ env.VERSION }}" changelog-HEAD
+      - name: Download standalone script artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: vcsh-standalone
+          path: standalone
+      - name: Rename standalone deployment script
+        run: mv standalone/vcsh vcsh-standalone.sh
       - name: Publish Release
         uses: softprops/action-gh-release@v1
         with:
@@ -35,5 +64,6 @@ jobs:
           files: |
             vcsh-${{ env.VERSION }}.zip
             vcsh-${{ env.VERSION }}.tar.xz
+            vcsh-standalone.sh
         env:
           GITHUB_TOKEN: ${{ github.token }}
