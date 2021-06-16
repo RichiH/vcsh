@@ -18,12 +18,12 @@ AX_PROGVAR([comm])
 AX_PROGVAR([cmp])
 AX_PROGVAR([git])
 
-AC_ARG_WITH([edition],
-            AS_HELP_STRING([--with-edition],
-                           [Add edition string to version @<:@default=@:>@]),
+AC_ARG_WITH([deployment],
+            AS_HELP_STRING([--with-deployment],
+                           [Add deployment string to version @<:@default=@:>@]),
             [],
-            [with_edition=])
-AC_SUBST([EDITION], [${with_edition:+-$with_edition}])
+            [with_deployment=])
+AC_SUBST([DEPLOYMENT], [${with_deployment:+-$with_deployment}])
 
 AC_ARG_WITH([man-page],
             AS_HELP_STRING([--with-man-page],

@@ -22,7 +22,7 @@ jobs:
               --disable-tests \
               --without-bash-completion-dir \
               --without-zsh-completion-dir \
-              --with-edition=standalone \
+              --with-deployment=standalone \
               COMM=comm GIT=git GREP=grep SED=sed SHELL=/bin/sh
       - name: Post standalone script artifact
         uses: actions/upload-artifact@v2
