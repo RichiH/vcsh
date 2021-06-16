@@ -19,6 +19,8 @@ unreleased
 	* Allow use of specific path when running Git or any dependency
 	* Fail if hook scripts return failure codes
 	* Check GIT_REMOTE early on clone()
+	* Support renaming script as configuration option
+	* Setup standalone script build profile and attach directly to releases
 
 2021-04-05  Richard Hartmann <richih.mailinglist@gmail.com>
 
