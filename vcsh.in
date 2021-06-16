@@ -19,7 +19,7 @@
 # If '.r<N>-g<SHA>' is appended to the version, you are seeing an unreleased
 # version of vcsh; the main branch is supposed to be clean at all times
 # so you can most likely just use it nonetheless
-VCSH_VERSION='@VERSION@'; export VCSH_VERSION
+VCSH_VERSION='@VERSION@@EDITION@'; export VCSH_VERSION
 VCSH_SELF="@TRANSFORMED_PACKAGE_NAME@"; export VCSH_SELF
 
 # Ensure all files created are accessible only to the current user.

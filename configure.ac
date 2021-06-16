@@ -18,6 +18,13 @@ AX_PROGVAR([comm])
 AX_PROGVAR([cmp])
 AX_PROGVAR([git])
 
+AC_ARG_WITH([edition],
+            AS_HELP_STRING([--with-edition],
+                           [Add edition string to version @<:@default=@:>@]),
+            [],
+            [with_edition=])
+AC_SUBST([EDITION], [${with_edition:+-$with_edition}])
+
 AC_ARG_WITH([man-page],
             AS_HELP_STRING([--with-man-page],
                            [Generate man page @<:@default=yes@:>@]),
