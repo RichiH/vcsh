@@ -16,20 +16,12 @@ jobs:
         run: |
           echo "VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
           ./bootstrap.sh
-          ./configure \
-              --without-man-page \
-              --disable-tests \
-              --without-bash-completion-dir \
-              --without-zsh-completion-dir \
-              --program-suffix=-standalone.sh \
-              --with-deployment=standalone \
-              --bindir=/ \
-              COMM=comm GIT=git GREP=grep SED=sed SHELL=/bin/sh
-            make DESTDIR=. install-exec
+          ./configure --with-standalone --bindir=/
+          make DESTDIR=. install-exec
       - name: Upload standalone script artifact
         uses: actions/upload-artifact@v2
         with:
-          name: vcsh-standalone
+          name: standalone-deployment
           path: vcsh-standalone.sh
 
   ghrelase:
@@ -61,7 +53,7 @@ jobs:
       - name: Download standalone script artifact
         uses: actions/download-artifact@v2
         with:
-          name: vcsh-standalone
+          name: standalone-deployment
       - name: Publish Release
         uses: softprops/action-gh-release@v1
         with:
@@ -69,6 +61,6 @@ jobs:
           files: |
             vcsh-${{ env.VERSION }}.zip
             vcsh-${{ env.VERSION }}.tar.xz
-            standalone/vcsh-standalone.sh
+            vcsh-standalone.sh
         env:
           GITHUB_TOKEN: ${{ github.token }}

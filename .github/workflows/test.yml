@@ -17,20 +17,12 @@ jobs:
       - name: Configure standalone script
         run: |
           ./bootstrap.sh
-          ./configure
-            --without-man-page \
-            --disable-tests \
-            --without-bash-completion-dir \
-            --without-zsh-completion-dir \
-            --with-deployment=standalone \
-            --program-suffix=-standalone.sh \
-            --bindir=/ \
-            COMM=comm GIT=git GREP=grep SED=sed SHELL=/bin/sh
+          ./configure --with-standalone --bindir=/
           make DESTDIR=. install-exec
       - name: Post standalone script artifact
         uses: actions/upload-artifact@v2
         with:
-          name: vcsh-standalone
+          name: standalone-deployment
           path: vcsh-standalone.sh
 
   test:
