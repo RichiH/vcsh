@@ -21,13 +21,16 @@ jobs:
               --disable-tests \
               --without-bash-completion-dir \
               --without-zsh-completion-dir \
+              --program-suffix=-standalone.sh \
               --with-deployment=standalone \
+              --bindir=/ \
               COMM=comm GIT=git GREP=grep SED=sed SHELL=/bin/sh
+            make DESTDIR=. install-exec
       - name: Upload standalone script artifact
         uses: actions/upload-artifact@v2
         with:
           name: vcsh-standalone
-          path: vcsh
+          path: vcsh-standalone.sh
 
   ghrelase:
     runs-on: ubuntu-latest
@@ -59,9 +62,6 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: vcsh-standalone
-          path: standalone
-      - name: Rename standalone deployment script
-        run: mv standalone/vcsh vcsh-standalone.sh
       - name: Publish Release
         uses: softprops/action-gh-release@v1
         with:
@@ -69,6 +69,6 @@ jobs:
           files: |
             vcsh-${{ env.VERSION }}.zip
             vcsh-${{ env.VERSION }}.tar.xz
-            vcsh-standalone.sh
+            standalone/vcsh-standalone.sh
         env:
           GITHUB_TOKEN: ${{ github.token }}
