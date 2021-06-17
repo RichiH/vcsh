@@ -127,12 +127,12 @@ This will install to `~/bin/vcsh`; add `~/bin` to your path to use.
 
 # Standalone Script
 
-A special variant of VCSH can be deployed as a single POSIX script with no configure/build step.
-Deploying it this way leave you without any man page or shell completion functions.
-This variant is also dependent or you `$PATH` to have proper versions of dependencies such as `git`.
+A special variant of VCSH can be deployed as a single POSIX shell script with no configure/build step.
+Deploying it this way leaves you without any man page or shell completion functions (or possibly with mismatched resources installed by your package manager for a different vcsh version).
+This variant is also dependent or your `$PATH` to have proper versions of dependencies such as `git`.
 If your user space has different tools by default than your system beware!
 
-The standalone variant can be downloaded from under any entry in [releases](https://github.com/RichiH/vcsh/releases).
+The standalone variant can be downloaded from any recent entry in [releases](https://github.com/RichiH/vcsh/releases).
 
 This method is suited for installation to a user space where you don't have control over the system packages, e.g.:
 
@@ -142,12 +142,12 @@ $ curl -fsLS https://github.com/RichiH/vcsh/releases/latest/download/vcsh-standa
 $ chmod 755 ~/bin/vcsh
 ```
 
-It could also be used to directly bootstrap a dotfiles repository something like this:
+It could also be used to directly bootstrap a dotfiles repository with something like this:
 
 ```console
 $ sh <(curl -fsLS https://github.com/RichiH/vcsh/releases/latest/download/vcsh-standalone.sh) clone <path_to_your_dotfiles_repo> dotfiles
 ```
 
-Note that we strongly encourage using a tagged version that you've tested to work for you instead of the *latest* keyword.
+While we are enabling cURL-based workflows on purpose, we still encourage you to avoid them where reasonably possible. If you do use it, please consider using a tagged version that you've tested to work for you instead of the "latest" keyword.
 
 [1]: http://rtomayko.github.io/ronn/
