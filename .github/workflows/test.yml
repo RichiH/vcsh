@@ -1,6 +1,9 @@
 name: Test
+
 on: [push, pull_request]
+
 jobs:
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -11,9 +14,9 @@ jobs:
       - name: Fetch tags
         run: |
           git fetch --prune --tags ||:
-      - name: Install dependencies
+      - name: Install build dependencies
         run: |
-          sudo apt install ronn
+          sudo apt install -y ronn
       - name: Install perl test dependencies
         uses: perl-actions/install-with-cpanm@v1.1
         with:
@@ -27,12 +30,6 @@ jobs:
       - name: Run tests
         run: |
           make check
-      - name: Build source package
+      - name: Run full cycle packaging check
         run: |
-          make dist
-          echo VERSION=$(cat .version) >> $GITHUB_ENV
-      - name: Post build artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: vcsh-${{ env.VERSION }}
-          path: vcsh-${{ env.VERSION }}.zip
+          make distcheck

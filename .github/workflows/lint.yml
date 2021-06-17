@@ -1,6 +1,9 @@
 name: Lint
+
 on: [push, pull_request]
+
 jobs:
+
   editor-config:
     runs-on: ubuntu-latest
     steps:
@@ -8,6 +11,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Lint code style
         uses: editorconfig-checker/action-editorconfig-checker@v1.0.0
+
   shellcheck:
     runs-on: ubuntu-latest
     steps:

@@ -10,6 +10,23 @@ AC_DEFUN([AX_PROGVAR], [
           test -n "$m4_toupper($1)" || AC_MSG_ERROR([m4_default($2,$1) is required])
           ])
 
+AC_ARG_WITH([standalone],
+            AS_HELP_STRING([--with-standalone],
+                           [Use configuration presets for a standalone script deployment @<:@default=no@:>@]),
+            [COMM=comm GIT=git GREP=grep SED=sed SHELL=/bin/sh
+             with_deployment=standalone
+             with_man_page=no
+             enable_tests=no
+             with_bash_completion_dir=no
+             with_zsh_completion_dir=no
+             program_suffix=-standalone.sh
+             # By this point program_suffix has already been processed so we have to redo what configure did
+             # Code copied from approx L2670-2671
+             program_transform_name="s&\$&$program_suffix&;$program_transform_name"
+             program_transform_name=`printf "%s\n" "$program_transform_name" | sed "$ac_script"`
+            ],
+            [])
+
 AC_PROG_AWK
 AC_PROG_GREP
 AC_PROG_SED
@@ -17,6 +34,13 @@ AC_PROG_SED
 AX_PROGVAR([comm])
 AX_PROGVAR([cmp])
 AX_PROGVAR([git])
+
+AC_ARG_WITH([deployment],
+            AS_HELP_STRING([--with-deployment],
+                           [Add deployment string to version @<:@default=@:>@]),
+            [],
+            [with_deployment=])
+AC_SUBST([DEPLOYMENT], [${with_deployment:+-$with_deployment}])
 
 AC_ARG_WITH([man-page],
             AS_HELP_STRING([--with-man-page],
