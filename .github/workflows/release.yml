@@ -7,8 +7,40 @@ on:
 
 jobs:
 
-  standalone:
+  ghrelease:
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install build dependencies
+        run: |
+          sudo apt install -y ronn
+      - name: Configure
+        run: |
+          echo "VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
+          echo "${GITHUB_REF#refs/*/v}" > .tarball-version
+          ./bootstrap.sh
+          ./configure
+      - name: Make sure changelog was updated
+        run: |
+          make changelog-HEAD
+          grep -F "* Release ${{ env.VERSION }}" changelog-HEAD
+      - name: Build source package
+        run: |
+          make dist
+      - name: Publish Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: changelog-HEAD
+          files: |
+            vcsh-${{ env.VERSION }}.zip
+            vcsh-${{ env.VERSION }}.tar.xz
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+  deploy-standalone:
+    runs-on: ubuntu-latest
+    needs: [ ghrelease ]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -18,49 +50,9 @@ jobs:
           ./bootstrap.sh
           ./configure --with-standalone --bindir=/
           make DESTDIR=. install-exec
-      - name: Upload standalone script artifact
-        uses: actions/upload-artifact@v2
+      - name: Add standalone deployment to release
+        uses: svenstaro/upload-release-action@v2
         with:
-          name: standalone-deployment
-          path: vcsh-standalone.sh
-
-  ghrelase:
-    runs-on: ubuntu-latest
-    needs: [ standalone ]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Install ronn
-        run: |
-          sudo apt update
-          sudo apt install -y ronn
-      - name: Configure
-        run: |
-          echo "VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
-          echo "${GITHUB_REF#refs/*/v}" > .tarball-version
-          ./bootstrap.sh
-          ./configure
-      - name: Build source package
-        run: |
-          make dist
-      - name: Check source package behaviour
-        run: |
-          make distcheck
-      - name: Make sure changelog was updated
-        run: |
-          make changelog-HEAD
-          grep -F "* Release ${{ env.VERSION }}" changelog-HEAD
-      - name: Download standalone script artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: standalone-deployment
-      - name: Publish Release
-        uses: softprops/action-gh-release@v1
-        with:
-          body_path: changelog-HEAD
-          files: |
-            vcsh-${{ env.VERSION }}.zip
-            vcsh-${{ env.VERSION }}.tar.xz
-            vcsh-standalone.sh
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+          repo_token: ${{ github.token }}
+          file: vcsh-standalone.sh
+          tag: ${{ github.ref }}

@@ -4,27 +4,6 @@ on: [push, pull_request]
 
 jobs:
 
-  standalone:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Fetch tags
-        run: |
-          git fetch --prune --tags ||:
-      - name: Configure standalone script
-        run: |
-          ./bootstrap.sh
-          ./configure --with-standalone --bindir=/
-          make DESTDIR=. install-exec
-      - name: Post standalone script artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: standalone-deployment
-          path: vcsh-standalone.sh
-
   test:
     runs-on: ubuntu-latest
     steps:
@@ -35,9 +14,9 @@ jobs:
       - name: Fetch tags
         run: |
           git fetch --prune --tags ||:
-      - name: Install dependencies
+      - name: Install build dependencies
         run: |
-          sudo apt install ronn
+          sudo apt install -y ronn
       - name: Install perl test dependencies
         uses: perl-actions/install-with-cpanm@v1.1
         with:
@@ -51,12 +30,6 @@ jobs:
       - name: Run tests
         run: |
           make check
-      - name: Build source package
+      - name: Run full cycle packaging check
         run: |
-          make dist
-          echo VERSION=$(cat .version) >> $GITHUB_ENV
-      - name: Post build artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: vcsh-${{ env.VERSION }}
-          path: vcsh-${{ env.VERSION }}.zip
+          make distcheck
