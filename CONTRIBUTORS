@@ -1,41 +1,66 @@
-Alphabetical list of surnames of everyone who ever committed to this repository.
-Auto-generated from tools/list_CONTRIBUTORS.
+Alphabetical list of names of everyone who ever committed to this repository.
+Auto-generated using `make -B CONTRIBUTORS`
 
-Skurikhin Alexander <a@skurih.in>
-Eric Bouchut <ebouchut@gmail.com>
-Dridi Boukelmoune <dridi.boukelmoune@gmail.com>
-Rob Cornish <jrmcornish@gmail.com>
-Vincent Demeester <vincent@demeester.fr>
-Mert Dirik <mertdirik@gmail.com>
-Jeff Fein-Worton <jeff@fein-worton.com>
-Thomas Ferris Nicolaisen <tfnico@gmail.com>
-martin f. krafft <madduck@madduck.net>
-Alessandro Ghedini <alessandro@ghedini.me>
-Dennis Gilmore <dennis@ausil.us>
-Thorsten Glaser <tg@mirbsd.org>
-G.raud <graud@gmx.com>
-Mikhail Gusarov <dottedmag@dottedmag.net>
-Valentin Haenel <valentin.haenel@gmx.de>
-Richard Hartmann <richih@debian.org>
-Gregor Jasny <gjasny@googlemail.com>
-Errietta Kostala <errietta@errietta.me>
-Yuval Langer <yuval.langer@gmail.com>
-Caleb Maclennan <caleb@alerque.com>
-Markus Martin <markus@archwyrm.net>
-mek-apelsin <mek@pels.in>
-Evan Pitstick <nerdx00@gmail.com>
-Dieter Plaetinck <dieter@plaetinck.be>
-Corey Quinn <corey@sequestered.net>
-Pavlos Ratis <dastergon@gentoo.org>
-Dewey Sasser <dewey@sasser.com>
-Gernot Schulz <post@gernot-schulz.com>
 Aaron Schumacher <ajschumacher@gmail.com>
-Andrew Schwartzmeyer <andrew@schwartzmeyer.com>
-Dato Simó <dato@net.com.org.es>
-Alexander Skurikhin <a.skurihin@gmail.com>
-Jonathan Sternberg <jonathansternberg@gmail.com>
-Mathias Svensson <freaken@freaken.dk>
-Frank Terbeck <ft@bewatermyfriend.org>
-mirabilos <tg@debian.org>
 Aaron VonderHaar <gruen0aermel@gmail.com>
+Alessandro Ghedini <alessandro@ghedini.me>
+Alexander Skurikhin <a.skurihin@gmail.com>
+Andrew Schwartzmeyer <andrew@schwartzmeyer.com>
+arndtc <arndtc@gmail.com>
+Aryel Mota Góis <aryel.gois@gmail.com>
+Caleb Maclennan <caleb@alerque.com>
+Corey Quinn <corey@sequestered.net>
+Daniel Shahaf <d.s@daniel.shahaf.name>
+Dato Simó <dato@net.com.org.es>
+Debian Janitor <janitor@jelmer.uk>
+Dennis Gilmore <dennis@ausil.us>
+Devin J. Pohly <djpohly@gmail.com>
+Dewey Sasser <dewey@sasser.com>
+Dieter Plaetinck <dieter@plaetinck.be>
+Don <don@ohspite.net>
+Don March <don@ohspite.net>
+Dridi Boukelmoune <dridi.boukelmoune@gmail.com>
+Edward Betts <edward@4angle.com>
+Eli Young <elyscape@gmail.com>
+Eric Bouchut <ebouchut@gmail.com>
+Errietta Kostala <errietta@errietta.me>
+Evan Pitstick <nerdx00@gmail.com>
+Fedora Release Engineering <rel-eng@lists.fedoraproject.org>
+Felix Eckhofer <felix@eckhofer.com>
+Florian Engel <florian.engel@adletec.de>
+Frank Terbeck <ft@bewatermyfriend.org>
+Gernot Schulz <post@gernot-schulz.com>
+G.raud <graud@gmx.com>
+Gregor Jasny <gjasny@googlemail.com>
+guy hughes <guyhugh3s@gmail.com>
+Harendra Kumar <harendra.kumar@gmail.com>
+James Davidson <james@greycastle.net>
+Jeff Fein-Worton <jeff@fein-worton.com>
+Jochen Keil <jochen.keil@gmail.com>
+Jonathan Sternberg <jonathansternberg@gmail.com>
+Julien Lecomte <julien@lecomte.at>
+Kevin Lyda <kevin@lyda.ie>
+leycec <leycec@gmail.com>
+Markus Martin <markus@archwyrm.net>
+martin f. krafft <madduck@madduck.net>
+Mathias Svensson <freaken@freaken.dk>
+mek-apelsin <mek@pels.in>
+Mert Dirik <mertdirik@gmail.com>
+Mikhail Gusarov <dottedmag@dottedmag.net>
+mirabilos <tg@debian.org>
+miramir <gmiramir@gmail.com>
+Noah Birnel <nbirnel@gmail.com>
+Pavlos Ratis <dastergon@gentoo.org>
+Richard Hartmann <richih@debian.org>
+Rob Cornish <jrmcornish@gmail.com>
+Roland Hopferwieser <develop@int0x80.at>
+Skurikhin Alexander <a@skurih.in>
+soulofmischief <30357883+soulofmischief@users.noreply.github.com>
+Thomas Ferris Nicolaisen <tfnico@gmail.com>
+Thomas Tuegel <ttuegel@mailbox.org>
+Thorsten Glaser <tg@mirbsd.org>
+tikki <tikki@users.noreply.github.com>
 Tony <zearin@gonk.net>
+Valentin Haenel <valentin.haenel@gmx.de>
+Vincent Demeester <vincent@demeester.fr>
+Yuval Langer <yuval.langer@gmail.com>
