@@ -176,14 +176,14 @@ clone() {
 	# Check if remote is reachable. Abort early if there's a typo, TLS certificate problem, etc
 	@GIT@ ls-remote "$GIT_REMOTE" 2> /dev/null || fatal "Can not reach '$GIT_REMOTE'"
 	init
-	# Test which, if any, given or detecte branches can be pulled from.
+	# Test which, if any, given or detected branches can be pulled from.
 	# In a future version, if we need the logic, we could do the following:
 	#   git ls-remote ORIGIN
 	#   get HEAD commit ID
 	#   see what refs/heads/* match that commit ID
 	#   set VCSH_BRANCH if only one match
 	#   offer a list of all matching refs for the user to choose
-	for VCSH_BRANCH_TEST in "$VCSH_BRANCH" main trunk development master; do
+	for VCSH_BRANCH_TEST in "$VCSH_BRANCH" master trunk development; do
 		if [ $(@GIT@ ls-remote "$GIT_REMOTE" "$VCSH_BRANCH_TEST" 2> /dev/null | @WC@ -l ) -lt 1 ]; then
 			info "remote branch '$VCSH_BRANCH_TEST' empty"
 		else
