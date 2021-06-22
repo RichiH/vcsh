@@ -184,7 +184,7 @@ clone() {
 	#   set VCSH_BRANCH if only one match
 	#   offer a list of all matching refs for the user to choose
 	for VCSH_BRANCH_TEST in "$VCSH_BRANCH" main trunk development master; do
-		if [ $(@GIT@ ls-remote "$GIT_REMOTE" "$VCSH_BRANCH_TEST" 2> /dev/null | wc -l ) -lt 1 ]; then
+		if [ $(@GIT@ ls-remote "$GIT_REMOTE" "$VCSH_BRANCH_TEST" 2> /dev/null | @WC@ -l ) -lt 1 ]; then
 			info "remote branch '$VCSH_BRANCH_TEST' empty"
 		else
 			info "remote branch '$VCSH_BRANCH_TEST' found"
@@ -499,8 +499,8 @@ status_helper() {
 	# Shellcheck isn't understanding a complex block.
 	# shellcheck disable=SC1083
 	remote_tracking_branch=$(@GIT@ rev-parse --abbrev-ref --symbolic-full-name @{u} 2> /dev/null) && {
-		commits_behind=$(@GIT@ log ..${remote_tracking_branch} --oneline | wc -l)
-		commits_ahead=$(@GIT@ log ${remote_tracking_branch}.. --oneline | wc -l)
+		commits_behind=$(@GIT@ log ..${remote_tracking_branch} --oneline | @WC@ -l)
+		commits_ahead=$(@GIT@ log ${remote_tracking_branch}.. --oneline | @WC@ -l)
 		[ ${commits_behind} -ne 0 ] && echo "Behind $remote_tracking_branch by $commits_behind commits"
 		[ ${commits_ahead} -ne 0 ] && echo "Ahead of $remote_tracking_branch by $commits_ahead commits"
 	}
