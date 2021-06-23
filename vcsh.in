@@ -320,7 +320,9 @@ list() {
 list_has_remote() {
 	for VCSH_REPO_NAME in $(list); do
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
-		@GIT@ config branch."$VCSH_BRANCH".remote > /dev/null && echo "$VCSH_REPO_NAME"
+		# This command returns the tracking branch of the currently-checked-out local
+		# branch, if any. See https://stackoverflow.com/a/9753364
+		[ -n  "$(git for-each-ref "$(git symbolic-ref -q HEAD)")" ] && echo "$VCSH_REPO_NAME"
 	done
 }
 
