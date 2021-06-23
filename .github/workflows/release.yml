@@ -3,7 +3,10 @@ name: Release
 on:
   push:
     tags:
-      - v*.*.*
+      - v[0-9]+.[0-9]+.[0-9]+
+      - v[0-9]+.[0-9]+.[0-9]+-alpha.[0-9]+
+      - v[0-9]+.[0-9]+.[0-9]+-beta.[0-9]+
+      - v[0-9]+.[0-9]+.[0-9]+-rc.[0-9]+
 
 jobs:
 
@@ -21,9 +24,13 @@ jobs:
           echo "${GITHUB_REF#refs/*/v}" > .tarball-version
           ./bootstrap.sh
           ./configure
-      - name: Make sure changelog was updated
+      - name: Generate release-specific changelog
         run: |
+          echo "PRERELEASE=${{ contains(env.VERSION, '-alpha') || contains(env.VERSION, '-beta') || contains(env.VERSION, '-rc') }}" >> $GITHUB_ENV
           make changelog-HEAD
+      - name: If a final release, make sure changelog matches
+        if: ${{ ! (contains(env.VERSION, '-alpha') || contains(env.VERSION, '-beta') || contains(env.VERSION, '-rc')) }}
+        run: |
           grep -F "* Release ${{ env.VERSION }}" changelog-HEAD
       - name: Build source package
         run: |
@@ -31,6 +38,7 @@ jobs:
       - name: Publish Release
         uses: softprops/action-gh-release@v1
         with:
+          prerelease: ${{ env.PRERELEASE }}
           body_path: changelog-HEAD
           files: |
             vcsh-${{ env.VERSION }}.zip
@@ -46,7 +54,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Configure standalone script
         run: |
-          echo "VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
+          echo "${GITHUB_REF#refs/*/v}" > .tarball-version
           ./bootstrap.sh
           ./configure --with-standalone --bindir=/
           make DESTDIR=. install-exec
