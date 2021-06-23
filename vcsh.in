@@ -17,17 +17,19 @@ set -o errexit
 set -o nounset
 IFS=$(printf '\n\t')
 
-# This should always be the first line of code to facilitate debugging
+# This block should always come as early as possible to facilitate debugging
 VCSH_DEBUG=''; export VCSH_DEBUG
 [ -n "$VCSH_DEBUG" ] && set -vx
 
 
+# Initialize globals
 # If '.r<N>-g<SHA>' is appended to the version, you are seeing an unreleased
 # version built from the main branch HEAD. If "-standalone" is appended you are
 # using a version built explicitly for portability as a standalone script
 # rather than being installed to a specific system.
 VCSH_VERSION='@VERSION@@DEPLOYMENT@'; export VCSH_VERSION
 VCSH_SELF='@TRANSFORMED_PACKAGE_NAME@'; export VCSH_SELF
+VCSH_VERBOSE=''; export VCSH_VERBOSE
 
 # Ensure all files created are accessible only to the current user.
 umask 0077
@@ -707,9 +709,14 @@ else
 	help && exit 1
 fi
 
-# Did we receive a directory instead of a name?
-# Mangle the input to fit normal operation.
-if echo "$VCSH_REPO_NAME" | @GREP@ -q '/'; then
+# Detect and handle if $VCSH_REPO_NAME is set to a directory instead of a repo.
+# TODO: We rely on $VCSH_REPO_NAME being set which implicitly transports if it
+# should be set, then then we ${-} that check away to make `setopt -o nounset`
+# pass. That seems potentially brittle and against the intention of nounset;
+# We may need to make it explicit if we should anticipate $VCSH_REPO_NAME being
+# set here. At which point it would make sense to do the check for a directory
+# earlier and move this all into a helper function.
+if echo "${VCSH_REPO_NAME-}" | @GREP@ -q '/'; then
 	GIT_DIR=$VCSH_REPO_NAME; export GIT_DIR
 	VCSH_REPO_NAME=$(basename "$VCSH_REPO_NAME" .git); export VCSH_REPO_NAME
 fi
@@ -735,11 +742,13 @@ VCSH_COMMAND=$(echo "$VCSH_COMMAND" | @SED@ 's/-/_/g'); export VCSH_COMMAND
 
 # Source repo-specific configuration file
 # shellcheck source=/dev/null
-[ -r "$XDG_CONFIG_HOME/vcsh/config.d/$VCSH_REPO_NAME" ] \
+# TODO: And we rely on $VCSH_REPO_NAME implictly again
+[ -r "$XDG_CONFIG_HOME/vcsh/config.d/${VCSH_REPO_NAME-}" ] \
 	&& . "$XDG_CONFIG_HOME/vcsh/config.d/$VCSH_REPO_NAME"
 
 # source overlay functions
-for overlay in "$VCSH_OVERLAY_D/$VCSH_COMMAND"* "$VCSH_OVERLAY_D/$VCSH_REPO_NAME.$VCSH_COMMAND"*; do
+# TODO: And we rely on $VCSH_REPO_NAME implictly again
+for overlay in "$VCSH_OVERLAY_D/$VCSH_COMMAND"* "$VCSH_OVERLAY_D/${VCSH_REPO_NAME-}.$VCSH_COMMAND"*; do
 	[ -r "$overlay" ] || continue
 	info "sourcing '$overlay'"
 	# shellcheck source=/dev/null
