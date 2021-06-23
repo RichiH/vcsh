@@ -176,15 +176,33 @@ clone() {
 	# Check if remote is reachable. Abort early if there's a typo, TLS certificate problem, etc
 	@GIT@ ls-remote "$GIT_REMOTE" 2> /dev/null || fatal "Can not reach '$GIT_REMOTE'"
 	init
+	# Test which, if any, given or detected branches can be pulled from.
+	# In a future version, if we need the logic, we could do the following:
+	#   git ls-remote ORIGIN
+	#   get HEAD commit ID
+	#   see what refs/heads/* match that commit ID
+	#   set VCSH_BRANCH if only one match
+	#   offer a list of all matching refs for the user to choose
+	for VCSH_BRANCH_TEST in "$VCSH_BRANCH" master trunk development; do
+		if [ $(@GIT@ ls-remote "$GIT_REMOTE" "$VCSH_BRANCH_TEST" 2> /dev/null | @WC@ -l ) -lt 1 ]; then
+			info "remote branch '$VCSH_BRANCH_TEST' empty"
+		else
+			info "remote branch '$VCSH_BRANCH_TEST' found"
+			VCSH_BRANCH_REMOTE=$VCSH_BRANCH_TEST
+			break
+		fi
+	done
+	if [ -z "$VCSH_BRANCH_REMOTE" ]; then
+		info "No non-empty remote branches found, aborting. Please run `$0 delete $VCSH_REPO_NAME`, determine the correct branch, and try again."
+		exit
+	fi
+	VCSH_BRANCH=$VCSH_BRANCH_REMOTE
+
+	# Set up remote
 	@GIT@ remote add origin "$GIT_REMOTE"
 	@GIT@ checkout -b "$VCSH_BRANCH" || return $?
 	@GIT@ config branch."$VCSH_BRANCH".remote origin
 	@GIT@ config branch."$VCSH_BRANCH".merge  refs/heads/"$VCSH_BRANCH"
-	if [ "$(@GIT@ ls-remote origin "$VCSH_BRANCH" 2> /dev/null | wc -l )" -lt 1 ]; then
-		info "remote is empty, not merging anything.
-  You should add files to your new repository." # editorconfig-checker-disable-line
-		exit
-	fi
 	GIT_VERSION_MAJOR=$(@GIT@ --version | @SED@ -E -n 's/.* ([0-9]+)\..*/\1/p' )
 	if [ 1 -lt "$GIT_VERSION_MAJOR" ];then
 		@GIT@ fetch origin "$VCSH_BRANCH"
@@ -483,8 +501,8 @@ status_helper() {
 	# Shellcheck isn't understanding a complex block.
 	# shellcheck disable=SC1083
 	remote_tracking_branch=$(@GIT@ rev-parse --abbrev-ref --symbolic-full-name @{u} 2> /dev/null) && {
-		commits_behind=$(@GIT@ log ..${remote_tracking_branch} --oneline | wc -l)
-		commits_ahead=$(@GIT@ log ${remote_tracking_branch}.. --oneline | wc -l)
+		commits_behind=$(@GIT@ log ..${remote_tracking_branch} --oneline | @WC@ -l)
+		commits_ahead=$(@GIT@ log ${remote_tracking_branch}.. --oneline | @WC@ -l)
 		[ ${commits_behind} -ne 0 ] && echo "Behind $remote_tracking_branch by $commits_behind commits"
 		[ ${commits_ahead} -ne 0 ] && echo "Ahead of $remote_tracking_branch by $commits_ahead commits"
 	}
@@ -637,7 +655,7 @@ if [ x"$VCSH_COMMAND" = x'clone' ]; then
 	fi
 	[ -z "$VCSH_REPO_NAME" ] && fatal "$VCSH_COMMAND: could not determine repository name" 1
 	export VCSH_REPO_NAME
-	[ -n "$VCSH_BRANCH" ] || VCSH_BRANCH=master
+	[ -n "$VCSH_BRANCH" ] || VCSH_BRANCH=main
 	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 elif [ "$VCSH_COMMAND" = 'help' ]; then
 	help && exit

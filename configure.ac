@@ -13,7 +13,7 @@ AC_DEFUN([AX_PROGVAR], [
 AC_ARG_WITH([standalone],
             AS_HELP_STRING([--with-standalone],
                            [Use configuration presets for a standalone script deployment @<:@default=no@:>@]),
-            [COMM=comm GIT=git GREP=grep SED=sed SHELL=/bin/sh
+            [COMM=comm GIT=git GREP=grep SED=sed WC=wc SHELL=/bin/sh
              with_deployment=standalone
              with_man_page=no
              enable_tests=no
@@ -34,6 +34,7 @@ AC_PROG_SED
 AX_PROGVAR([comm])
 AX_PROGVAR([cmp])
 AX_PROGVAR([git])
+AX_PROGVAR([wc])
 
 AC_ARG_WITH([deployment],
             AS_HELP_STRING([--with-deployment],
