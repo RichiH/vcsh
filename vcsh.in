@@ -12,7 +12,13 @@
 # which is admittedly extremely unlikely to the point of being impossible,
 # this software will most likely follow suit.
 
+# POSIX strict mode; set -eu would be the other way to write this
+set -o errexit
+set -o nounset
+IFS=$(printf '\n\t')
+
 # This should always be the first line of code to facilitate debugging
+VCSH_DEBUG=''; export VCSH_DEBUG
 [ -n "$VCSH_DEBUG" ] && set -vx
 
 
@@ -36,6 +42,7 @@ fatal() {
 # options that will modify our behaviour.
 # Commands are handled at the end of this script.
 # shellcheck disable=SC2220
+VCSH_OPTION_CONFIG=''; export VCSH_OPTION_CONFIG
 while getopts c:dv flag; do
 	case "$flag" in
 		d)
@@ -593,7 +600,7 @@ if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xnone' ] && 
 	fatal "'\$VCSH_GITIGNORE' must equal 'exact', 'none', or 'recursive'" 1
 fi
 
-VCSH_COMMAND=$1; export VCSH_COMMAND
+VCSH_COMMAND=${1-}; export VCSH_COMMAND
 
 case $VCSH_COMMAND in
 	clon|clo|cl) VCSH_COMMAND=clone;;
@@ -682,7 +689,7 @@ elif [ x"$VCSH_COMMAND" = x'status' ]; then
 		shift
 	fi
 	VCSH_REPO_NAME=$2; export VCSH_REPO_NAME
-elif [ -n "$2" ]; then
+elif [ -n "${2-}" ]; then
 	VCSH_COMMAND='run'; export VCSH_COMMAND
 	VCSH_REPO_NAME=$1; export VCSH_REPO_NAME
 	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
@@ -695,7 +702,8 @@ elif [ -n "$VCSH_COMMAND" ]; then
 	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 	[ -d "$GIT_DIR" ] || { help; exit 1; }
 else
-	# $1 is empty
+	# $1 is empty. We exit 1 to discern from `vcsh help` and to help catch
+	# scripts which erroueously don't provide options
 	help && exit 1
 fi
 
