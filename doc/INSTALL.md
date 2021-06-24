@@ -137,9 +137,9 @@ The standalone variant can be downloaded from any recent entry in [releases](htt
 This method is suited for installation to a user space where you don't have control over the system packages, e.g.:
 
 ```console
-$ mkdir ~/bin
-$ curl -fsLS https://github.com/RichiH/vcsh/releases/latest/download/vcsh-standalone.sh -O ~/bin/vcsh
-$ chmod 755 ~/bin/vcsh
+$ mkdir -p ~/bin
+$ curl -fsLS https://github.com/RichiH/vcsh/releases/latest/download/vcsh-standalone.sh -o ~/bin/vcsh
+$ chmod u+x ~/bin/vcsh
 ```
 
 It could also be used to directly bootstrap a dotfiles repository with something like this:
