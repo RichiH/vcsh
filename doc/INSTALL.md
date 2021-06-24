@@ -1,7 +1,7 @@
 # Distro Packages
 
 Many distributions have packages ready to go.
-If yours doesn't, you can install [from source](#installing-from-source).
+If yours doesn’t, you can install [from source](#installing-from-source).
 VCSH can also be deployed as a [standalone script](#standalone-script).
 If you package VCSH for a distro please let us know.
 
@@ -81,11 +81,11 @@ $ pkg install vcsh
 
 # Installing from Source
 
-First you'll want a copy of the source code.
+First you’ll want a copy of the source code.
 The easiest to use place to get this is the [latest release](https://github.com/RichiH/vcsh/releases/latest) posted on GitHub.
 The souree distribution will have a name such as `vcsh-2.0.0.tar.xz`.
-Note under each release GitHub also shows a "Source code" link that will download a snapshot of the repository; this is **not** the file you want (unless you want to jump through extra hoops).
-The official source release packages are the ones you want.
+Note under each release GitHub also show two “Source code” links that will download a snapshot of the repository; this is **not** the file you want (unless you want to jump through extra hoops).
+The official source release packages with the release version in the file names are the ones you want.
 
 Alternatively you may `git clone` the source repository.
 Note than some extra tooling will be required over using the regular source releases.
@@ -94,7 +94,7 @@ Also source releases have prebuilt man pages; to (optionally) build them from a 
 Finally building from Git clones will check for extra dependencies needed for testing, although tests can be disabled.
 If starting from a clone, run `./bootstrap.sh` once before doing anything below.
 
-Once you have the source, it's time to let it get aquainted with your system:
+Once you have the source, it’s time to let it get aquainted with your system:
 
 ```console
 $ ./configure
@@ -109,14 +109,14 @@ Once configured, you can build:
 $ make
 ```
 
-Lastly you'll want to install it somewhere.
+Lastly you’ll want to install it somewhere.
 
 ```console
 $ make install
 ```
 
 If you need elevated system permissions you may need to use `sudo make install` for this step.
-If you don't have such permissions and wish to install to your home directory, something like this might work:
+If you don’t have such permissions and wish to install to your home directory, something like this might work:
 
 ```console
 $ ./configure --prefix=/
@@ -134,7 +134,7 @@ If your user space has different tools by default than your system beware!
 
 The standalone variant can be downloaded from any recent entry in [releases](https://github.com/RichiH/vcsh/releases).
 
-This method is suited for installation to a user space where you don't have control over the system packages, e.g.:
+This method is suited for installation to a user space where you don’t have control over the system packages, e.g.:
 
 ```console
 $ mkdir -p ~/bin
@@ -148,6 +148,6 @@ It could also be used to directly bootstrap a dotfiles repository with something
 $ sh <(curl -fsLS https://github.com/RichiH/vcsh/releases/latest/download/vcsh-standalone.sh) clone <path_to_your_dotfiles_repo> dotfiles
 ```
 
-While we are enabling cURL-based workflows on purpose, we still encourage you to avoid them where reasonably possible. If you do use it, please consider using a tagged version that you've tested to work for you instead of the "latest" keyword.
+While we are enabling cURL-based workflows on purpose, we still encourage you to avoid them where reasonably possible. If you do use it, please consider using a tagged version that you’ve tested to work for you instead of the “latest” keyword. Note: the URL for tagged releases is in a different order than when using the “latest” keyword, substitute a tag name by changing `latest/download` to `download/v2.0.0`.
 
 [1]: http://rtomayko.github.io/ronn/
