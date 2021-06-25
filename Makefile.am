@@ -18,6 +18,7 @@ endif
 bin_SCRIPTS = vcsh
 
 EXTRA_DIST  = completions/vcsh.bash completions/vcsh.zsh build-aux/git-version-gen build-aux/ax_prog_perl_modules.m4
+EXTRA_DIST += t/000-tear-env.t t/001-setup-env.t t/100-init.t t/300-add.t t/950-delete.t t/999-tear-env.t
 
 BUILT_SOURCES = .version
 CLEANFILES = $(BUILT_SOURCES) .version-prev $(dist_man_MANS) $(bin_SCRIPTS)
