@@ -603,6 +603,7 @@ write_gitignore() {
 	GIT_IGNORE_PATH="$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME"
 	if diff -N "$tempfile" "$GIT_IGNORE_PATH" > /dev/null; then
 		rm -f "$tempfile" || fatal "could not delete '$tempfile'" 59
+		return
 	fi
 	if [ -e "$GIT_IGNORE_PATH" ]; then
 		info "'$GIT_IGNORE_PATH' differs from new data, moving it to '$GIT_IGNORE_PATH.bak'"
