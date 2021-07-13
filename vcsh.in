@@ -585,26 +585,32 @@ write_gitignore() {
 	# Contrary to GNU mktemp, mktemp on BSD/OSX requires a template for temp files
 	# Using a template makes GNU mktemp default to $PWD and not #TMPDIR for tempfile location
 	# To make every OS happy, set full path explicitly
-	tempfile=$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX") || fatal "could not create tempfile: '${tempfile}'" 51
+	local tempfile
+	tempfile=$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX") ||
+		fatal "could not create tempfile: '${tempfile}'" 51
 
 	echo '*' > "$tempfile" || fatal "could not write to '$tempfile'" 57
 	for gitignore in $gitignores; do
-		echo "$gitignore" | @SED@ 's@^@!/@' >> "$tempfile" || fatal "could not write to '$tempfile'" 57
+		echo "$gitignore" | @SED@ 's@^@!/@' >> "$tempfile" ||
+			fatal "could not write to '$tempfile'" 57
 		if [ "x$VCSH_GITIGNORE" = 'xrecursive' ] && [ -d "$gitignore" ]; then
-			{ echo "$gitignore/*" | @SED@ 's@^@!/@' >> "$tempfile" || fatal "could not write to '$tempfile'" 57; }
+			{ echo "$gitignore/*" | @SED@ 's@^@!/@' >> "$tempfile" ||
+				fatal "could not write to '$tempfile'" 57; }
 		fi
 	done
 	IFS=$OLDIFS
-	if diff -N "$tempfile" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" > /dev/null; then
+	local GIT_IGNORE_PATH
+	GIT_IGNORE_PATH="$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME"
+	if diff -N "$tempfile" "$GIT_IGNORE_PATH" > /dev/null; then
 		rm -f "$tempfile" || fatal "could not delete '$tempfile'" 59
 	fi
-	if [ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ]; then
-		info "'$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME' differs from new data, moving it to '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME.bak'"
-		mv -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME.bak" ||
-			fatal "could not move '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME' to '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME.bak'" 53
+	if [ -e "$GIT_IGNORE_PATH" ]; then
+		info "'$GIT_IGNORE_PATH' differs from new data, moving it to '$GIT_IGNORE_PATH.bak'"
+		mv -f "$GIT_IGNORE_PATH"{,.bak} ||
+			fatal "could not move '$GIT_IGNORE_PATH' to '$GIT_IGNORE_PATH.bak'" 53
 	fi
-	mv -f "$tempfile" "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ||
-		fatal "could not move '$tempfile' to '$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME'" 53
+	mv -f "$tempfile" "$GIT_IGNORE_PATH" ||
+		fatal "could not move '$tempfile' to '$GIT_IGNORE_PATH'" 53
 }
 
 debug "$(@GIT@ version)"
