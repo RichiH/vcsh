@@ -43,8 +43,6 @@ jobs:
           files: |
             vcsh-${{ env.VERSION }}.zip
             vcsh-${{ env.VERSION }}.tar.xz
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
 
   deploy-standalone:
     runs-on: ubuntu-latest
