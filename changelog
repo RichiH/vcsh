@@ -1,5 +1,6 @@
-unreleased
+2021-08-20  Caleb Maclennan <caleb@alerque.com>
 
+	* Release 2.0.0
 	* Replace homegrown Makefile with Autotools for configure and build
 	* Post source builds as part of automated release process
 	* Switch to versioning scheme to semver
