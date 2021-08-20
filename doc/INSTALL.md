@@ -7,10 +7,8 @@ If you package VCSH for a distro please let us know.
 
 ## Arch Linux
 
-Use your favorite AUR helper to build and install the [vcsh](https://aur.archlinux.org/packages/vcsh) package:
-
-```console
-$ paru -S vcsh
+```
+$ pacman -S vcsh
 ```
 
 ## CentOS / Fedora / RedHat
