@@ -48,7 +48,7 @@ AC_ARG_WITH([man-page],
                            [Generate man page @<:@default=yes@:>@]),
             [],
             [with_man_page=yes])
-if test x"$with_man_page" = x"yes"; then
+if test x"$with_man_page" = x"yes" -a ! -f .tarball-version; then
     AX_PROGVAR([ronn])
 fi
 AM_CONDITIONAL([ENABLE_MAN_PAGE],
