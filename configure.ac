@@ -6,7 +6,7 @@ AM_SILENT_RULES([yes])
 AC_CONFIG_MACRO_DIR([build-aux])
 
 AM_CONDITIONAL([IS_SDIST],
-               [test -e .gitignore])
+               [test ! -e .gitignore])
 
 AC_DEFUN([AX_PROGVAR], [
           test -n "$m4_toupper($1)" || { AC_PATH_PROG(m4_toupper($1), m4_default($2,$1)) }
