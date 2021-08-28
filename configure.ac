@@ -5,6 +5,9 @@ AM_INIT_AUTOMAKE([foreign tar-pax dist-xz dist-zip no-dist-gzip color-tests])
 AM_SILENT_RULES([yes])
 AC_CONFIG_MACRO_DIR([build-aux])
 
+AM_CONDITIONAL([IS_SDIST],
+               [test -e .tarball-version])
+
 AC_DEFUN([AX_PROGVAR], [
           test -n "$m4_toupper($1)" || { AC_PATH_PROG(m4_toupper($1), m4_default($2,$1)) }
           test -n "$m4_toupper($1)" || AC_MSG_ERROR([m4_default($2,$1) is required])
@@ -48,15 +51,18 @@ AC_ARG_WITH([man-page],
                            [Generate man page @<:@default=yes@:>@]),
             [],
             [with_man_page=yes])
-if test x"$with_man_page" = x"yes" -a ! -f .tarball-version; then
-    AX_PROGVAR([ronn])
-fi
 AM_CONDITIONAL([ENABLE_MAN_PAGE],
                [test x"$with_man_page" != x"no"])
 
-AS_IF([test -e .tarball-version],
-      m4_define([TESTDEF], [yes]),
-      m4_define([TESTDEF], [no]))
+AM_COND_IF([IS_SDIST],
+           [],
+           [AM_COND_IF([ENABLE_MAN_PAGE],
+                       [AX_PROGVAR([ronn])])
+])
+
+AM_COND_IF([IS_SDIST],
+           m4_define([TESTDEF], [yes]),
+           m4_define([TESTDEF], [no]))
 AC_ARG_ENABLE([tests],
               AS_HELP_STRING([--disable-tests],
                              [Configure tooling to run tests @<:@default=TESTDEF@:>@]),

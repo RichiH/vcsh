@@ -35,8 +35,10 @@ nodist_zshcompletion_DATA = completions/_$(TRANSFORMED_PACKAGE_NAME)
 CLEANFILES += $(nodist_zshcompletion_DATA)
 endif
 
+if !IS_SDIST
 doc/vcsh.1: doc/vcsh.1.ronn
 	$(RONN) < $< > $@
+endif
 
 completions/$(TRANSFORMED_PACKAGE_NAME): completions/vcsh.bash
 	mkdir -p $(dir $@)
