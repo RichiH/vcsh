@@ -1,5 +1,6 @@
-unreleased
+2021-08-28  Caleb Maclennan <caleb@alerque.com>
 
+	* Release 2.0.1
 	* Stop requiring `ronn` when building from source tarball
 
 2021-08-20  Caleb Maclennan <caleb@alerque.com>
