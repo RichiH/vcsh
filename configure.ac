@@ -68,9 +68,10 @@ AC_ARG_ENABLE([tests],
                              [Configure tooling to run tests @<:@default=TESTDEF@:>@]),
               [],
               [enable_tests=TESTDEF])
-AM_CONDITIONAL([ENABLE_TESTS],[test x"$enable_tests" != x"no"])
+AM_CONDITIONAL([ENABLE_TESTS],
+               [test x"$enable_tests" != x"no"])
 
-AS_IF([test x"$enable_tests" != x"no"], [
+AM_COND_IF([ENABLE_TESTS], [
        AX_PROGVAR([prove])
        AX_PROG_PERL_MODULES(Shell::Command, [],
                             AC_MSG_ERROR(Perl module required for testing not found))
@@ -83,28 +84,26 @@ AC_ARG_WITH([bash-completion-dir],
                            [Install bash auto-completion definitions to a directory. @<:@default=yes@:>@]),
             [],
             [with_bash_completion_dir=yes])
-AS_IF([test x"$with_bash_completion_dir" = x"yes"],
+AM_CONDITIONAL([ENABLE_BASH_COMPLETION],
+               [test x"$with_bash_completion_dir" != x"no"])
+AM_COND_IF([ENABLE_BASH_COMPLETION],
       [PKG_CHECK_MODULES([BASH_COMPLETION], [bash-completion >= 2.0],
                          [BASH_COMPLETION_DIR="$(pkg-config --define-variable=datadir=$datadir --variable=completionsdir bash-completion)"],
                          [BASH_COMPLETION_DIR="$datadir/bash-completion/completions"])],
       [BASH_COMPLETION_DIR="$with_bash_completion_dir"])
 AC_SUBST([BASH_COMPLETION_DIR])
-AM_CONDITIONAL([ENABLE_BASH_COMPLETION],
-               [test x"$with_bash_completion_dir" != x"no"])
 
 AC_ARG_WITH([zsh-completion-dir],
             AS_HELP_STRING([--with-zsh-completion-dir[=PATH]],
                            [Install zsh auto-completion definitions to a directory. @<:@default=yes@:>@]),
             [],
             [with_zsh_completion_dir=yes])
-if test x"$with_zsh_completion_dir" = x"yes"; then
-    ZSH_COMPLETION_DIR="$datadir/zsh/site-functions"
-else
-    ZSH_COMPLETION_DIR="$with_zsh_completion_dir"
-fi
-AC_SUBST([ZSH_COMPLETION_DIR])
 AM_CONDITIONAL([ENABLE_ZSH_COMPLETION],
                [test x"$with_zsh_completion_dir" != x"no"])
+AM_COND_IF([ENABLE_ZSH_COMPLETION],
+           [ZSH_COMPLETION_DIR="$datadir/zsh/site-functions"],
+           [ZSH_COMPLETION_DIR="$with_zsh_completion_dir"])
+AC_SUBST([ZSH_COMPLETION_DIR])
 
 TRANSFORMED_PACKAGE_NAME="$(printf "$PACKAGE_NAME" | $SED -e "${program_transform_name//\$\$/\$}")"
 AC_SUBST([TRANSFORMED_PACKAGE_NAME])
