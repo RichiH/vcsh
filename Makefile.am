@@ -13,7 +13,7 @@ samplehooksdir = $(docdir)/sample_hooks
 dist_samplehooks_DATA = doc/sample_hooks/post-init-add-origin doc/sample_hooks/post-init-setup-mr doc/sample_hooks/post-merge-unclobber doc/sample_hooks/pre-merge-unclobber
 dist_license_DATA = LICENSE CONTRIBUTORS
 if ENABLE_MAN_PAGE
-dist_man_MANS = vcsh.1
+dist_man_MANS = doc/vcsh.1
 endif
 bin_SCRIPTS = vcsh
 
@@ -35,8 +35,10 @@ nodist_zshcompletion_DATA = completions/_$(TRANSFORMED_PACKAGE_NAME)
 CLEANFILES += $(nodist_zshcompletion_DATA)
 endif
 
-vcsh.1: doc/vcsh.1.ronn
+if !IS_SDIST
+doc/vcsh.1: doc/vcsh.1.ronn
 	$(RONN) < $< > $@
+endif
 
 completions/$(TRANSFORMED_PACKAGE_NAME): completions/vcsh.bash
 	mkdir -p $(dir $@)
