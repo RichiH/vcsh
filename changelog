@@ -1,3 +1,7 @@
+unreleased
+
+	* Refactor ‘mkdir && install’ to ‘install -D’
+
 2021-09-04  Caleb Maclennan <caleb@alerque.com>
 
 	* Release 2.0.2
