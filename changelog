@@ -1,5 +1,6 @@
-unreleased
+2021-09-04  Caleb Maclennan <caleb@alerque.com>
 
+	* Release 2.0.2
 	* Fix Makefile portability by swapping cp for install
 
 2021-08-28  Caleb Maclennan <caleb@alerque.com>
