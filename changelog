@@ -1,3 +1,7 @@
+unreleased
+
+	* Fix Makefile portability my removing unnecessary cp flag
+
 2021-08-28  Caleb Maclennan <caleb@alerque.com>
 
 	* Release 2.0.1
