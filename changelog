@@ -1,6 +1,6 @@
 unreleased
 
-	* Fix Makefile portability my removing unnecessary cp flag
+	* Fix Makefile portability by swapping cp for install
 
 2021-08-28  Caleb Maclennan <caleb@alerque.com>
 
