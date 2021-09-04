@@ -1,3 +1,33 @@
+2021-08-28  Caleb Maclennan <caleb@alerque.com>
+
+	* Release 2.0.1
+	* Stop requiring `ronn` when building from source tarball
+
+2021-08-20  Caleb Maclennan <caleb@alerque.com>
+
+	* Release 2.0.0
+	* Replace homegrown Makefile with Autotools for configure and build
+	* Post source builds as part of automated release process
+	* Switch to versioning scheme to semver
+	* Replace Travis test runner with GitHub Actions
+	* Make VCSH_* variables available to hooks
+	* More carefully handle shell quoting
+	* Improve handling of non-default remote names and branches
+	* Fix per-repo pre/post hook handling
+	* Output path relative to $HOME in ‘vcsh status’
+	* Add flag to prefix output of ‘vcsh foreach -p’ with repo name
+	* Fix debugging on Windows 10 / Cygwin
+	* Improve option flag handling to allow multiple flags, squash bugs
+	* Don't require Ruby or Perl tooling to build and install
+	* Avoid false-positive conflicts on checkout
+	* Make <repo> arg optional for write-ignore subcommand
+	* Fix ZSH completions, improve Bash completions
+	* Allow use of specific path when running Git or any dependency
+	* Fail if hook scripts return failure codes
+	* Check GIT_REMOTE early on clone()
+	* Support renaming script as configuration option
+	* Setup standalone script build profile and attach directly to releases
+
 2021-04-05  Richard Hartmann <richih.mailinglist@gmail.com>
 
 	* Release 1.20190621
