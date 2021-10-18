@@ -376,15 +376,14 @@ list_untracked() {
 	# Hack in support for `vcsh list-untracked -r`...
 	exclude_standard_opt='--exclude-standard'
 	directory_opt="--directory"
-	shift 1
+	shift
 	while getopts "ar" flag; do
-		if [ x"$1" = x'-a' ]; then
-			unset exclude_standard_opt
-		elif [ x"$1" = x'-r' ]; then
-			unset directory_opt
-		fi
-		shift 1
+		case "$flag" in
+			a) unset exclude_standard_opt ;;
+			r) unset directory_opt ;;
+		esac
 	done
+	shift $((OPTIND-1))
 	# ...and parse for a potential parameter afterwards. As we shifted things out of $* in during getops, we need to look at $1
 	VCSH_REPO_NAME=$1; export VCSH_REPO_NAME
 
@@ -403,7 +402,7 @@ list_untracked() {
 
 list_untracked_helper() {
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
-	@GIT@ ls-files --others $exclude_standard_opt "$directory_opt" | (
+	@GIT@ ls-files --others $exclude_standard_opt $directory_opt | (
 		while read -r line; do
 			echo "$line"
 			directory_component=${line%%/*}
