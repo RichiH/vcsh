@@ -276,8 +276,8 @@ foreach() {
 			p) VCSH_PRINT_REPO_PREFIX=1 ;;
 		esac
 	done
-	export VCSH_PRINT_REPO_PREFIX
 	shift $((OPTIND-1))
+	export VCSH_PRINT_REPO_PREFIX
 	for VCSH_REPO_NAME in $(list); do
 		export VCSH_REPO_NAME
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
@@ -375,9 +375,9 @@ list_untracked() {
 
 	# Hack in support for `vcsh list-untracked -r`...
 	exclude_standard_opt='--exclude-standard'
-	directory_opt="--directory"
+	directory_opt='--directory'
 	shift
-	while getopts "ar" flag; do
+	while getopts ar flag; do
 		case "$flag" in
 			a) unset exclude_standard_opt ;;
 			r) unset directory_opt ;;
