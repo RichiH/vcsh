@@ -1,5 +1,6 @@
-unreleased
+2021-10-23  Caleb Maclennan <caleb@alerque.com>
 
+	* Release 2.0.3
 	* Fix list-untracked subcommand option parsing
 	* Refactor ‘mkdir && install’ to ‘install -D’
 
