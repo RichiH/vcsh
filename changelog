@@ -1,3 +1,7 @@
+unreleased  Richard Hartmann <richih@richih.org>
+
+	* Fix build failure on non-GNU systems, #321
+
 2021-10-23  Caleb Maclennan <caleb@alerque.com>
 
 	* Release 2.0.3

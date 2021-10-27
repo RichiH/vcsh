@@ -41,10 +41,12 @@ doc/vcsh.1: doc/vcsh.1.ronn
 endif
 
 completions/$(TRANSFORMED_PACKAGE_NAME): completions/vcsh.bash
-	install -D $< $@
+	mkdir -p $(dir $@)
+	install $< $@
 
 completions/_$(TRANSFORMED_PACKAGE_NAME): completions/vcsh.zsh
-	install -D $< $@
+	mkdir -p $(dir $@)
+	install $< $@
 
 .version: $(shell $(AWK) '{print ".git/" $$2}' .git/HEAD 2>/dev/null ||:)
 	[ -e "$@" ] && mv "$@" "$@-prev" || $(if $<,touch,cp "$(srcdir)/.tarball-version") "$@-prev"
