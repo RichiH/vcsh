@@ -1,3 +1,8 @@
+2022-11-08  Caleb Maclennan <caleb@alerque.com>
+
+	* Release 2.0.5
+	* Replace bashism with POSIX compliant syntax in configure script
+
 2021-10-27  Richard Hartmann <richih@richih.org>
 
 	* Release 2.0.4
