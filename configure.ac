@@ -8,11 +8,6 @@ AC_CONFIG_MACRO_DIR([build-aux])
 AM_CONDITIONAL([IS_SDIST],
                [test ! -e .gitignore])
 
-AC_DEFUN([AX_PROGVAR], [
-          test -n "$m4_toupper($1)" || { AC_PATH_PROG(m4_toupper($1), m4_default($2,$1)) }
-          test -n "$m4_toupper($1)" || AC_MSG_ERROR([m4_default($2,$1) is required])
-          ])
-
 AC_ARG_WITH([standalone],
             AS_HELP_STRING([--with-standalone],
                            [Use configuration presets for a standalone script deployment @<:@default=no@:>@]),
@@ -105,8 +100,7 @@ AM_COND_IF([ENABLE_ZSH_COMPLETION],
            [ZSH_COMPLETION_DIR="$with_zsh_completion_dir"])
 AC_SUBST([ZSH_COMPLETION_DIR])
 
-TRANSFORMED_PACKAGE_NAME="$(printf "$PACKAGE_NAME" | $SED -e "${program_transform_name//\$\$/\$}")"
-AC_SUBST([TRANSFORMED_PACKAGE_NAME])
+AX_SUBST_TRANSFORMED_PACKAGE_NAME
 
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([vcsh], [chmod +x vcsh])

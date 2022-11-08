@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Fetch tags
@@ -21,7 +21,7 @@ jobs:
           make DESTDIR=. install-exec
           echo VERSION=$(cat .version) >> $GITHUB_ENV
       - name: Post standalone script artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: standalone-deployment-${{ env.VERSION }}
           path: vcsh-standalone.sh
@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Fetch tags
@@ -40,7 +40,7 @@ jobs:
         run: |
           sudo apt install -y ronn
       - name: Install perl test dependencies
-        uses: perl-actions/install-with-cpanm@v1.1
+        uses: perl-actions/install-with-cpanm@v1.4
         with:
           install: |
             Shell::Command
@@ -57,7 +57,7 @@ jobs:
           make dist
           echo VERSION=$(cat .version) >> $GITHUB_ENV
       - name: Post build artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: vcsh-${{ env.VERSION }}
           path: vcsh-${{ env.VERSION }}.zip
