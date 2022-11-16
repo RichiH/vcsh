@@ -57,7 +57,7 @@ jobs:
           ./configure --with-standalone --bindir=/
           make DESTDIR=. install-exec
       - name: Add standalone deployment to release
-        uses: svenstaro/upload-release-action@v3
+        uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ github.token }}
           file: vcsh-standalone.sh
