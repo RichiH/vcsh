@@ -7,7 +7,8 @@ vcsh - Version Control System for $HOME - multiple Git repositories in $HOME
 1. [30 Second How-to](#30-second-how-to)
 2. [Introduction](#introduction)
 3. [Installation](#installation)
-4. [Contact](#contact)
+4. [Detailed documentation](#detailed-documentation)
+5. [Contact](#contact)
 
 
 # 30 Second How-to
@@ -60,6 +61,10 @@ A lot of modern UNIX-based systems offer packages for `vcsh`. In case yours
 does not, read [INSTALL.md](doc/INSTALL.md) for instructions on installing from
 sources or even create a package for your system. If you do end up packaging
 `vcsh` please let us know so we can document package availability.
+
+# Detailed documentation
+
+For more information, consult the [detailed documentation](doc/README.md).
 
 # Contact
 
