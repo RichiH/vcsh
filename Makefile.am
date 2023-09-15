@@ -17,11 +17,13 @@ if ENABLE_MAN_PAGE
 dist_man_MANS = doc/vcsh.1
 endif
 
-EXTRA_DIST  = completions/vcsh.bash completions/vcsh.zsh build-aux/git-version-gen build-aux/ax_prog_perl_modules.m4
+EXTRA_DIST  = completions/vcsh.bash completions/vcsh.zsh build-aux/ax_prog_perl_modules.m4
 EXTRA_DIST += t/000-tear-env.t t/001-setup-env.t t/100-init.t t/300-add.t t/950-delete.t t/999-tear-env.t
 
-BUILT_SOURCES = .version
-CLEANFILES = $(BUILT_SOURCES) .version-prev $(dist_man_MANS) $(bin_SCRIPTS)
+BUILT_SOURCES =
+CLEANFILES = $(dist_man_MANS) $(bin_SCRIPTS)
+
+include $(top_srcdir)/build-aux/git_version.am
 
 if ENABLE_BASH_COMPLETION
 bashcompletiondir = $(BASH_COMPLETION_DIR)
@@ -48,26 +50,16 @@ completions/_$(TRANSFORMED_PACKAGE_NAME): completions/vcsh.zsh
 	mkdir -p $(dir $@)
 	install $< $@
 
-.version: $(shell $(AWK) '{print ".git/" $$2}' .git/HEAD 2>/dev/null ||:)
-	[ -e "$@" ] && mv "$@" "$@-prev" || $(if $<,touch,cp "$(srcdir)/.tarball-version") "$@-prev"
-	$(if $<,./build-aux/git-version-gen "$(srcdir)/.tarball-version",printf "$(VERSION)") > "$@"
-	$(CMP) -s "$@" "$@-prev" || autoreconf configure.ac --force
-
-_CHECKDEPS = check-version
-
 if ENABLE_TESTS
-_CHECKDEPS += prove
+_CHECKDEPS = prove
 endif
 
 check-local: $(_CHECKDEPS)
 
-installcheck-local:
-	./$(TRANSFORMED_PACKAGE_NAME) version
+check-version: check-dep-versions
 
-.PHONY: check-version
-check-version: vcsh | .version
-	$(GREP) -Fx '$(VERSION)' $|
-	./$< version | $(GREP) -Ff $|
+.PHONY: check-dep-versions
+check-dep-version: $(PACKAGE_NAME) | .version
 	./$< version | $(GREP) -Ff <($(GIT) version)
 
 .PHONY: prove
@@ -97,6 +89,3 @@ CONTRIBUTORS:
 
 changelog-HEAD: changelog
 	sed -nEe '2d;s/^\t//p;/^$$/q;' $< > $@
-
-dist-hook:
-	printf "$(VERSION)" > "$(distdir)/.tarball-version"

@@ -5,6 +5,7 @@ AC_CONFIG_MACRO_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign tar-pax dist-xz dist-zip no-dist-gzip color-tests])
 AM_SILENT_RULES([yes])
 
+AX_GIT_VERSION
 AX_TRANSFORM_PACKAGE_NAME
 
 AM_CONDITIONAL([IS_SDIST],
@@ -27,12 +28,10 @@ AC_ARG_WITH([standalone],
             ],
             [])
 
-AC_PROG_AWK
 AC_PROG_GREP
 AC_PROG_SED
 
 AX_PROGVAR([comm])
-AX_PROGVAR([cmp])
 AX_PROGVAR([git])
 AX_PROGVAR([wc])
 
