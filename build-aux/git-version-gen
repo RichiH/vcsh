@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
-set -x
 
 # Print a version string.
 scriptversion=2012-03-18.17; # UTC
@@ -183,7 +182,7 @@ then
             ;;
     esac
 
-	v=`echo "$v" | sed 's/-\([0-9]\)/.r\1/'`;
+    v=`echo "$v" | sed 's/-\([0-9]\)/.r\1/'`;
     v_from_git=1
 else
     v=UNKNOWN
