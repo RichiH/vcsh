@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
-set -x
 
 # Print a version string.
 scriptversion=2012-03-18.17; # UTC
