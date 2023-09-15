@@ -8,6 +8,7 @@ ACLOCAL_AMFLAGS = -I build-aux
 docdir = $(datarootdir)/doc/$(TRANSFORMED_PACKAGE_NAME)
 licensedir = $(datarootdir)/licenses/$(TRANSFORMED_PACKAGE_NAME)
 
+bin_SCRIPTS = vcsh
 dist_doc_DATA = changelog doc/INSTALL.md doc/README.md doc/error_codes.md
 samplehooksdir = $(docdir)/sample_hooks
 dist_samplehooks_DATA = doc/sample_hooks/post-init-add-origin doc/sample_hooks/post-init-setup-mr doc/sample_hooks/post-merge-unclobber doc/sample_hooks/pre-merge-unclobber
@@ -15,7 +16,6 @@ dist_license_DATA = LICENSE CONTRIBUTORS
 if ENABLE_MAN_PAGE
 dist_man_MANS = doc/vcsh.1
 endif
-bin_SCRIPTS = vcsh
 
 EXTRA_DIST  = completions/vcsh.bash completions/vcsh.zsh build-aux/git-version-gen build-aux/ax_prog_perl_modules.m4
 EXTRA_DIST += t/000-tear-env.t t/001-setup-env.t t/100-init.t t/300-add.t t/950-delete.t t/999-tear-env.t
@@ -85,7 +85,7 @@ lint-editor-config:
 	ec
 
 .PHONY: lint-shellheck
-lint-shellcheck: vcsh
+lint-shellcheck: $(PACKAGE_NAME)
 	shellcheck $<
 
 CONTRIBUTORS:

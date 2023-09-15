@@ -1,9 +1,11 @@
 AC_PREREQ([2.69])
 AC_INIT([vcsh], [m4_esyscmd(build-aux/git-version-gen .tarball-version)])
 AC_CONFIG_AUX_DIR([build-aux])
+AC_CONFIG_MACRO_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign tar-pax dist-xz dist-zip no-dist-gzip color-tests])
 AM_SILENT_RULES([yes])
-AC_CONFIG_MACRO_DIR([build-aux])
+
+AX_TRANSFORM_PACKAGE_NAME
 
 AM_CONDITIONAL([IS_SDIST],
                [test ! -e .gitignore])
@@ -100,12 +102,8 @@ AM_COND_IF([ENABLE_ZSH_COMPLETION],
            [ZSH_COMPLETION_DIR="$with_zsh_completion_dir"])
 AC_SUBST([ZSH_COMPLETION_DIR])
 
-AX_SUBST_TRANSFORMED_PACKAGE_NAME
-
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([vcsh], [chmod +x vcsh])
 AC_CONFIG_FILES([doc/vcsh.1.ronn])
-
-AC_ARG_PROGRAM
 
 AC_OUTPUT
