@@ -33,3 +33,5 @@ dist-hook: dist-tarball-version
 .PHONY: dist-tarball-version
 dist-tarball-version:
 	printf "$(VERSION)" > "$(distdir)/.tarball-version"
+
+# vim: ft=automake

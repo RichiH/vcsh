@@ -23,8 +23,8 @@ EXTRA_DIST += t/000-tear-env.t t/001-setup-env.t t/100-init.t t/300-add.t t/950-
 BUILT_SOURCES =
 CLEANFILES = $(dist_man_MANS) $(bin_SCRIPTS)
 
-include $(top_srcdir)/build-aux/git_version.am
-include $(top_srcdir)/build-aux/shell_completion_dirs.am
+include $(top_srcdir)/build-aux/git_version.mk
+include $(top_srcdir)/build-aux/shell_completion_dirs.mk
 
 if !IS_SDIST
 doc/vcsh.1: doc/vcsh.1.ronn
