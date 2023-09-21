@@ -24,29 +24,18 @@ BUILT_SOURCES =
 CLEANFILES = $(dist_man_MANS) $(bin_SCRIPTS)
 
 include $(top_srcdir)/build-aux/git_version.am
-
-if ENABLE_BASH_COMPLETION
-bashcompletiondir = $(BASH_COMPLETION_DIR)
-nodist_bashcompletion_DATA = completions/$(TRANSFORMED_PACKAGE_NAME)
-CLEANFILES += $(nodist_bashcompletion_DATA)
-endif
-
-if ENABLE_ZSH_COMPLETION
-zshcompletiondir = $(ZSH_COMPLETION_DIR)
-nodist_zshcompletion_DATA = completions/_$(TRANSFORMED_PACKAGE_NAME)
-CLEANFILES += $(nodist_zshcompletion_DATA)
-endif
+include $(top_srcdir)/build-aux/shell_completion_dirs.am
 
 if !IS_SDIST
 doc/vcsh.1: doc/vcsh.1.ronn
 	$(RONN) < $< > $@
 endif
 
-completions/$(TRANSFORMED_PACKAGE_NAME): completions/vcsh.bash
+$(COMPLETIONS_OUT_DIR)/$(TRANSFORMED_PACKAGE_NAME): completions/vcsh.bash
 	mkdir -p $(dir $@)
 	install $< $@
 
-completions/_$(TRANSFORMED_PACKAGE_NAME): completions/vcsh.zsh
+$(COMPLETIONS_OUT_DIR)/_$(TRANSFORMED_PACKAGE_NAME): completions/vcsh.zsh
 	mkdir -p $(dir $@)
 	install $< $@
 
