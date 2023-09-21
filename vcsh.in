@@ -1,20 +1,15 @@
 #!@SHELL@
-
-# This program is licensed under the GNU GPL version 2 or later.
-# (c) Richard "RichiH" Hartmann <richih@debian.org>, 2011-2015
-# For details, see LICENSE. To submit patches, you have to agree to
-# license your code under the GNU GPL version 2 or later.
-
-# While the following is not legally binding, the author would like to
-# explain the choice of GPLv2+ over GPLv3+.
-# The author prefers GPLv3+ over GPLv2+ but feels it's better to maintain
-# full compatibility's with Git. In case Git ever changes its licensing terms,
-# which is admittedly extremely unlikely to the point of being impossible,
-# this software will most likely follow suit.
+# Copyright (C) 2011-2015 Richard "RichiH" Hartmann <richih@debian.org>, see CONTRIBUTORS for details.
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# While the following is not legally binding, the author would like to explain
+# the choice of GPLv2+ over GPLv3+. The author prefers GPLv3+ over GPLv2+ but
+# feels it's better to maintain full compatibility's with Git. In case Git ever
+# changes its licensing terms, which is admittedly extremely unlikely to the
+# point of being impossible, this software will most likely follow suit.
 
 # This should always be the first line of code to facilitate debugging
 [ -n "$VCSH_DEBUG" ] && set -vx
-
 
 # If '.r<N>-g<SHA>' is appended to the version, you are seeing an unreleased
 # version built from the main branch HEAD. If "-standalone" is appended you are

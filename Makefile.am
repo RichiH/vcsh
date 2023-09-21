@@ -12,7 +12,7 @@ bin_SCRIPTS = vcsh
 dist_doc_DATA = changelog doc/INSTALL.md doc/README.md doc/error_codes.md
 samplehooksdir = $(docdir)/sample_hooks
 dist_samplehooks_DATA = doc/sample_hooks/post-init-add-origin doc/sample_hooks/post-init-setup-mr doc/sample_hooks/post-merge-unclobber doc/sample_hooks/pre-merge-unclobber
-dist_license_DATA = LICENSE CONTRIBUTORS
+dist_license_DATA = LICENSE.md CONTRIBUTORS
 if ENABLE_MAN_PAGE
 dist_man_MANS = doc/vcsh.1
 endif
