@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install build dependencies
         run: |
           sudo apt install -y ronn
@@ -49,7 +49,7 @@ jobs:
     needs: [ ghrelease ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Configure standalone script
         run: |
           echo "${GITHUB_REF#refs/*/v}" > .tarball-version
