@@ -1,4 +1,4 @@
-# The autotools supplied AC_ARG_PROGAM enables renaming operations, but it
+# The autotools supplied AC_ARG_PROGRAM enables renaming operations, but it
 # supplies them as a sed operation that can be applied to multiple binaries.
 # This isn't convenient to use if we're just renaming the top level package, so
 # we go ahead and *do* the transformation and save for use as a substitution.
