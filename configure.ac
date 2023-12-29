@@ -5,10 +5,6 @@ AC_CONFIG_MACRO_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign tar-pax dist-xz dist-zip no-dist-gzip color-tests])
 AM_SILENT_RULES([yes])
 
-AX_GIT_VERSION
-AX_TRANSFORM_PACKAGE_NAME
-AX_SHELL_COMPLETION_DIRS
-
 AM_CONDITIONAL([IS_SDIST],
                [test ! -e .gitignore])
 
@@ -22,12 +18,21 @@ AC_ARG_WITH([standalone],
              with_bash_completion_dir=no
              with_zsh_completion_dir=no
              program_suffix=-standalone.sh
-             # By this point program_suffix has already been processed so we have to redo what configure did
-             # Code copied from approx L2670-2671
+             # By this point, ./configure has already handled its built in
+             # arguments and hence thinks program_suffix has made its way into
+             # program_transform_name. We're backtracking on it, so we have to
+             # do the work again manually.
+             # Code copied from generated ./configure at approx L2104 and 2108...
              program_transform_name="s&\$&$program_suffix&;$program_transform_name"
              program_transform_name=`printf "%s\n" "$program_transform_name" | sed "$ac_script"`
             ],
             [])
+
+# These three macros must be run after processing our standalone setup because
+# they all expect the program name transformation setup to be complete.
+AX_GIT_VERSION
+AX_SHELL_COMPLETION_DIRS
+AX_TRANSFORM_PACKAGE_NAME
 
 AC_PROG_GREP
 AC_PROG_SED
