@@ -569,16 +569,11 @@ write_gitignore() {
 	OLDIFS=$IFS
 	IFS=$(printf '\n\t')
 	gitignores=$(for file in $(@GIT@ ls-files); do
-		if [ "$GIT_VERSION_MAJOR" -ge 2 ] \
-				&& [ "$GIT_VERSION_MINOR" -ge 7 ]; then
-			echo "$file";
-		else
-			while true; do
-				echo "$file"; new=${file%/*}
-				[ x"$file" = x"$new" ] && break
-				file=$new
-			done;
-		fi
+		while true; do
+			echo "$file"; new=${file%/*}
+			[ x"$file" = x"$new" ] && break
+			file=$new
+		done;
 	done | sort -u)
 
 	# Contrary to GNU mktemp, mktemp on BSD/OSX requires a template for temp files
