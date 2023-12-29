@@ -1,0 +1,9 @@
+AC_DEFUN([AX_GIT_VERSION], [
+
+        AC_PROG_AWK
+        AC_PROG_GREP
+        AX_PROGVAR([cmp])
+
+        AX_TRANSFORM_PACKAGE_NAME
+
+])

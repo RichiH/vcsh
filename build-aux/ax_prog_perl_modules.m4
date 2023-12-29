@@ -38,40 +38,39 @@ AU_ALIAS([AC_PROG_PERL_MODULES], [AX_PROG_PERL_MODULES])
 AC_DEFUN([AX_PROG_PERL_MODULES],[dnl
 
 m4_define([ax_perl_modules])
-m4_foreach([ax_perl_module], m4_split(m4_normalize([$1])),
-	  [
-	   m4_append([ax_perl_modules],
-		     [']m4_bpatsubst(ax_perl_module,=,[ ])[' ])
-          ])
+m4_foreach([ax_perl_module], m4_split(m4_normalize([$1])), [
+        m4_append([ax_perl_modules],
+                [']m4_bpatsubst(ax_perl_module,=,[ ])[' ])
+])
 
 # Make sure we have perl
 if test -z "$PERL"; then
-AC_CHECK_PROG(PERL,perl,perl)
+        AC_CHECK_PROG(PERL,perl,perl)
 fi
 
 if test "x$PERL" != x; then
-  ax_perl_modules_failed=0
-  for ax_perl_module in ax_perl_modules; do
-    AC_MSG_CHECKING(for perl module $ax_perl_module)
+        ax_perl_modules_failed=0
+        for ax_perl_module in ax_perl_modules; do
+                AC_MSG_CHECKING(for perl module $ax_perl_module)
 
-    # Would be nice to log result here, but can't rely on autoconf internals
-    $PERL -e "use $ax_perl_module; exit" > /dev/null 2>&1
-    if test $? -ne 0; then
-      AC_MSG_RESULT(no);
-      ax_perl_modules_failed=1
-   else
-      AC_MSG_RESULT(ok);
-    fi
-  done
+                # Would be nice to log result here, but can't rely on autoconf internals
+                $PERL -e "use $ax_perl_module; exit" > /dev/null 2>&1
+                if test $? -ne 0; then
+                        AC_MSG_RESULT(no);
+                        ax_perl_modules_failed=1
+                else
+                        AC_MSG_RESULT(ok);
+                fi
+        done
 
-  # Run optional shell commands
-  if test "$ax_perl_modules_failed" = 0; then
-    :
-    $2
-  else
-    :
-    $3
-  fi
+        # Run optional shell commands
+        if test "$ax_perl_modules_failed" = 0; then
+                :
+                $2
+        else
+                :
+                $3
+        fi
 else
-  AC_MSG_WARN(could not find perl)
+        AC_MSG_WARN(could not find perl)
 fi])dnl

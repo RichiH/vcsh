@@ -152,7 +152,7 @@ then
 # directory, and "git describe" output looks sensible, use that to
 # derive a version string.
 elif test "`git log -1 --pretty=format:x . 2>/dev/null`" = x \
-    && v=`git describe --tags --abbrev=7 --match="$prefix*" HEAD 2>/dev/null \
+    && v=`git describe --tags --abbrev=7 --match="$prefix*\.*\.*" HEAD 2>/dev/null \
           || git describe --tags --abbrev=7 HEAD 2>/dev/null \
           || git log -1 --pretty=format:'v0-HEAD-%h' 2>/dev/null` \
     && v=`printf '%s\n' "$v" | sed "$tag_sed_script"` \
@@ -182,7 +182,7 @@ then
             ;;
     esac
 
-	v=`echo "$v" | sed 's/-\([0-9]\)/.r\1/'`;
+    v=`echo "$v" | sed 's/-\([0-9]\)/.r\1/'`;
     v_from_git=1
 else
     v=UNKNOWN

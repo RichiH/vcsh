@@ -8,66 +8,47 @@ ACLOCAL_AMFLAGS = -I build-aux
 docdir = $(datarootdir)/doc/$(TRANSFORMED_PACKAGE_NAME)
 licensedir = $(datarootdir)/licenses/$(TRANSFORMED_PACKAGE_NAME)
 
+bin_SCRIPTS = vcsh
 dist_doc_DATA = changelog doc/INSTALL.md doc/README.md doc/error_codes.md
 samplehooksdir = $(docdir)/sample_hooks
 dist_samplehooks_DATA = doc/sample_hooks/post-init-add-origin doc/sample_hooks/post-init-setup-mr doc/sample_hooks/post-merge-unclobber doc/sample_hooks/pre-merge-unclobber
-dist_license_DATA = LICENSE CONTRIBUTORS
+dist_license_DATA = LICENSE.md CONTRIBUTORS
 if ENABLE_MAN_PAGE
 dist_man_MANS = doc/vcsh.1
 endif
-bin_SCRIPTS = vcsh
 
-EXTRA_DIST  = completions/vcsh.bash completions/vcsh.zsh build-aux/git-version-gen build-aux/ax_prog_perl_modules.m4
+EXTRA_DIST  = completions/vcsh.bash completions/vcsh.zsh build-aux/ax_prog_perl_modules.m4
 EXTRA_DIST += t/000-tear-env.t t/001-setup-env.t t/100-init.t t/300-add.t t/950-delete.t t/999-tear-env.t
 
-BUILT_SOURCES = .version
-CLEANFILES = $(BUILT_SOURCES) .version-prev $(dist_man_MANS) $(bin_SCRIPTS)
+BUILT_SOURCES =
+CLEANFILES = $(dist_man_MANS) $(bin_SCRIPTS)
 
-if ENABLE_BASH_COMPLETION
-bashcompletiondir = $(BASH_COMPLETION_DIR)
-nodist_bashcompletion_DATA = completions/$(TRANSFORMED_PACKAGE_NAME)
-CLEANFILES += $(nodist_bashcompletion_DATA)
-endif
-
-if ENABLE_ZSH_COMPLETION
-zshcompletiondir = $(ZSH_COMPLETION_DIR)
-nodist_zshcompletion_DATA = completions/_$(TRANSFORMED_PACKAGE_NAME)
-CLEANFILES += $(nodist_zshcompletion_DATA)
-endif
+include $(top_srcdir)/build-aux/git_version.mk
+include $(top_srcdir)/build-aux/shell_completion_dirs.mk
 
 if !IS_SDIST
 doc/vcsh.1: doc/vcsh.1.ronn
 	$(RONN) < $< > $@
 endif
 
-completions/$(TRANSFORMED_PACKAGE_NAME): completions/vcsh.bash
+$(COMPLETIONS_OUT_DIR)/$(TRANSFORMED_PACKAGE_NAME): completions/vcsh.bash
 	mkdir -p $(dir $@)
 	install $< $@
 
-completions/_$(TRANSFORMED_PACKAGE_NAME): completions/vcsh.zsh
+$(COMPLETIONS_OUT_DIR)/_$(TRANSFORMED_PACKAGE_NAME): completions/vcsh.zsh
 	mkdir -p $(dir $@)
 	install $< $@
-
-.version: $(shell $(AWK) '{print ".git/" $$2}' .git/HEAD 2>/dev/null ||:)
-	[ -e "$@" ] && mv "$@" "$@-prev" || $(if $<,touch,cp "$(srcdir)/.tarball-version") "$@-prev"
-	$(if $<,./build-aux/git-version-gen "$(srcdir)/.tarball-version",printf "$(VERSION)") > "$@"
-	$(CMP) -s "$@" "$@-prev" || autoreconf configure.ac --force
-
-_CHECKDEPS = check-version
 
 if ENABLE_TESTS
-_CHECKDEPS += prove
+_CHECKDEPS = prove
 endif
 
 check-local: $(_CHECKDEPS)
 
-installcheck-local:
-	./$(TRANSFORMED_PACKAGE_NAME) version
+check-version: check-dep-versions
 
-.PHONY: check-version
-check-version: vcsh | .version
-	$(GREP) -Fx '$(VERSION)' $|
-	./$< version | $(GREP) -Ff $|
+.PHONY: check-dep-versions
+check-dep-version: $(PACKAGE_NAME) | .version
 	./$< version | $(GREP) -Ff <($(GIT) version)
 
 .PHONY: prove
@@ -85,7 +66,7 @@ lint-editor-config:
 	ec
 
 .PHONY: lint-shellheck
-lint-shellcheck: vcsh
+lint-shellcheck: $(PACKAGE_NAME)
 	shellcheck $<
 
 CONTRIBUTORS:
@@ -97,6 +78,3 @@ CONTRIBUTORS:
 
 changelog-HEAD: changelog
 	sed -nEe '2d;s/^\t//p;/^$$/q;' $< > $@
-
-dist-hook:
-	printf "$(VERSION)" > "$(distdir)/.tarball-version"

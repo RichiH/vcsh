@@ -7,5 +7,5 @@
 # the now-renamed files.
 
 for object in $(git ls-tree -r origin/master | awk '{print $4}'); do
-	[ -e "$object" ] && mv "$object" "$object.vcsh-unclobber" 
+	[ -e "$object" ] && mv "$object" "$object.vcsh-unclobber"
 done
