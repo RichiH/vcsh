@@ -1,3 +1,10 @@
+2023-12-29  Caleb Maclennan <caleb@alerque.com>
+
+	* Release 2.0.6
+	* Revert .gitignore.d handling to match revert in Git 2.17→2.18
+	* Cleanup some configure and build odds and ends
+	* Fix some CI linting and publishing glitches
+
 2022-11-08  Caleb Maclennan <caleb@alerque.com>
 
 	* Release 2.0.5
