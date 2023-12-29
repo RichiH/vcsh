@@ -12,16 +12,24 @@
 # which is admittedly extremely unlikely to the point of being impossible,
 # this software will most likely follow suit.
 
-# This should always be the first line of code to facilitate debugging
+# POSIX strict mode; set -eu would be the other way to write this
+set -o errexit
+set -o nounset
+IFS=$(printf '\n\t')
+
+# This block should always come as early as possible to facilitate debugging
+VCSH_DEBUG=''; export VCSH_DEBUG
 [ -n "$VCSH_DEBUG" ] && set -vx
 
 
+# Initialize globals
 # If '.r<N>-g<SHA>' is appended to the version, you are seeing an unreleased
 # version built from the main branch HEAD. If "-standalone" is appended you are
 # using a version built explicitly for portability as a standalone script
 # rather than being installed to a specific system.
 VCSH_VERSION='@VERSION@@DEPLOYMENT@'; export VCSH_VERSION
 VCSH_SELF='@TRANSFORMED_PACKAGE_NAME@'; export VCSH_SELF
+VCSH_VERBOSE=''; export VCSH_VERBOSE
 
 # Ensure all files created are accessible only to the current user.
 umask 0077
@@ -36,6 +44,7 @@ fatal() {
 # options that will modify our behaviour.
 # Commands are handled at the end of this script.
 # shellcheck disable=SC2220
+VCSH_OPTION_CONFIG=''; export VCSH_OPTION_CONFIG
 while getopts c:dv flag; do
 	case "$flag" in
 		d)
@@ -615,7 +624,7 @@ if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xnone' ] && 
 	fatal "'\$VCSH_GITIGNORE' must equal 'exact', 'none', or 'recursive'" 1
 fi
 
-VCSH_COMMAND=$1; export VCSH_COMMAND
+VCSH_COMMAND=${1-}; export VCSH_COMMAND
 
 case $VCSH_COMMAND in
 	clon|clo|cl) VCSH_COMMAND=clone;;
@@ -704,7 +713,7 @@ elif [ x"$VCSH_COMMAND" = x'status' ]; then
 		shift
 	fi
 	VCSH_REPO_NAME=$2; export VCSH_REPO_NAME
-elif [ -n "$2" ]; then
+elif [ -n "${2-}" ]; then
 	VCSH_COMMAND='run'; export VCSH_COMMAND
 	VCSH_REPO_NAME=$1; export VCSH_REPO_NAME
 	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
@@ -717,13 +726,19 @@ elif [ -n "$VCSH_COMMAND" ]; then
 	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 	[ -d "$GIT_DIR" ] || { help; exit 1; }
 else
-	# $1 is empty
+	# $1 is empty. We exit 1 to discern from `vcsh help` and to help catch
+	# scripts which erroueously don't provide options
 	help && exit 1
 fi
 
-# Did we receive a directory instead of a name?
-# Mangle the input to fit normal operation.
-if echo "$VCSH_REPO_NAME" | @GREP@ -q '/'; then
+# Detect and handle if $VCSH_REPO_NAME is set to a directory instead of a repo.
+# TODO: We rely on $VCSH_REPO_NAME being set which implicitly transports if it
+# should be set, then then we ${-} that check away to make `setopt -o nounset`
+# pass. That seems potentially brittle and against the intention of nounset;
+# We may need to make it explicit if we should anticipate $VCSH_REPO_NAME being
+# set here. At which point it would make sense to do the check for a directory
+# earlier and move this all into a helper function.
+if echo "${VCSH_REPO_NAME-}" | @GREP@ -q '/'; then
 	GIT_DIR=$VCSH_REPO_NAME; export GIT_DIR
 	VCSH_REPO_NAME=$(basename "$VCSH_REPO_NAME" .git); export VCSH_REPO_NAME
 fi
@@ -749,11 +764,13 @@ VCSH_COMMAND=$(echo "$VCSH_COMMAND" | @SED@ 's/-/_/g'); export VCSH_COMMAND
 
 # Source repo-specific configuration file
 # shellcheck source=/dev/null
-[ -r "$XDG_CONFIG_HOME/vcsh/config.d/$VCSH_REPO_NAME" ] \
+# TODO: And we rely on $VCSH_REPO_NAME implictly again
+[ -r "$XDG_CONFIG_HOME/vcsh/config.d/${VCSH_REPO_NAME-}" ] \
 	&& . "$XDG_CONFIG_HOME/vcsh/config.d/$VCSH_REPO_NAME"
 
 # source overlay functions
-for overlay in "$VCSH_OVERLAY_D/$VCSH_COMMAND"* "$VCSH_OVERLAY_D/$VCSH_REPO_NAME.$VCSH_COMMAND"*; do
+# TODO: And we rely on $VCSH_REPO_NAME implictly again
+for overlay in "$VCSH_OVERLAY_D/$VCSH_COMMAND"* "$VCSH_OVERLAY_D/${VCSH_REPO_NAME-}.$VCSH_COMMAND"*; do
 	[ -r "$overlay" ] || continue
 	info "sourcing '$overlay'"
 	# shellcheck source=/dev/null
