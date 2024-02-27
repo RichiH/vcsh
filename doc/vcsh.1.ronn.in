@@ -266,12 +266,12 @@ execute hooks that are in this directory.
 
 Hooks follow a simple format. <pre-run> will be run before anything is run.
 If you want to have more than one script for a certain hook, just append
-any kind of string to order them. A system of <pre-run>, <pre-run.10>,
-<pre-run.20> etc is suggested; other options would be <pre-run-10> or
-<pre-run.sh>. A dot after the hook name is optional.
+any kind of string to order them. A system of <pre-run>, <pre-run\.10>,
+<pre-run\.20> etc is suggested; other options would be <pre-run-10> or
+<pre-run\.sh>. A dot after the hook name is optional.
 
 If you want to create hooks for a specific <vcsh> repository, simply prepend
-the repository's name, followed by a dot, i.e. <zsh.pre-run>. Otherwise, the
+the repository's name, followed by a dot, i.e. <zsh\.pre-run>. Otherwise, the
 same rules as above apply. The dot between the repository's name and the hook
 is mandatory, though.
 
@@ -306,7 +306,7 @@ Manpages are often short and sometimes useless to glean best practices from.
 While the author tried to avoid this in this case, manpages can not cover
 detailed howtos.
 
-This software also comes with a file called <README.md>. It contains various
+This software also comes with a file called <README\.md>. It contains various
 approaches to setting up and using vcsh. You can view the file it as
 plain text or render it into various other formats via Markdown.
 
