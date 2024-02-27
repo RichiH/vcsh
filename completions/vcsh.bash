@@ -66,7 +66,7 @@ _vcsh () {
 	for r in "${reponames[@]}"; do repos["$r"]="$r"; done
 	unset r reponames
 	local cmds
-	cmds="clone delete enter foreach help init list list-tracked list-untracked pull push rename run status upgrade version which write-gitignore"
+	cmds="clone delete enter foreach help init commit list list-tracked list-untracked pull push rename run status upgrade version which write-gitignore"
 
 	local subcword cmd subcmd
 	for (( subcword=1; subcword < ${#words[@]}-1; subcword++ )); do
@@ -94,7 +94,7 @@ _vcsh () {
 	fi
 
 	case $cmd in
-		help|init|list|pull|push|version|which)
+		help|init|commit|list|pull|push|version|which)
 			return
 			;;
 
