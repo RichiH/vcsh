@@ -300,6 +300,19 @@ may even lose data.
 
 You have been warned.
 
+## PLUGIN SYSTEM
+
+`@TRANSFORMED_PACKAGE_NAME@` also provides a plugin system. Similar to overlays, the recommended
+locations are <$XDG_CONFIG_HOME/vcsh/plugins-available> and
+<$XDG_CONFIG_HOME/vcsh/plugins-enabled>.
+
+Plugins follow the same rules as hooks and you are free to overwrite any
+and all functions.
+
+The plugin file name will be the added `@TRANSFORMED_PACKAGE_NAME@` command.
+The file should contain a function with same name as the file and
+optionally a help function. The help is stubbed if not implemented.
+
 ## DETAILED HOWTO AND FURTHER READING
 
 Manpages are often short and sometimes useless to glean best practices from.

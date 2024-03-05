@@ -87,6 +87,7 @@ fi
 : "${VCSH_REPO_D:="$XDG_CONFIG_HOME/vcsh/repo.d"}"; export VCSH_REPO_D
 : "${VCSH_HOOK_D:="$XDG_CONFIG_HOME/vcsh/hooks-enabled"}"; export VCSH_HOOK_D
 : "${VCSH_OVERLAY_D:="$XDG_CONFIG_HOME/vcsh/overlays-enabled"}"; export VCSH_OVERLAY_D
+: "${VCSH_PLUGIN_D:="$XDG_CONFIG_HOME/vcsh/plugins-enabled"}"; export VCSH_PLUGIN_D
 : "${VCSH_BASE:="$HOME"}"; export VCSH_BASE
 : "${VCSH_GITIGNORE:=exact}"; export VCSH_GITIGNORE
 : "${VCSH_GITATTRIBUTES:=none}"; export VCSH_GITATTRIBUTES
@@ -145,6 +146,17 @@ help() {
 
    <repo> <git command> Shortcut to run git commands directly
    <repo>               Shortcut to enter repository" >&2
+	for plugin in "$VCSH_PLUGIN_D/"*; do
+		[ -r "$plugin" ] || continue
+		(
+			help() {
+				printf "   %-21s%s\n" "$(basename "$plugin")" "Plugin help not implemented"
+			}
+			# shellcheck source=/dev/null
+			. "$plugin"
+			help
+		) >&2
+	done
 }
 # editorconfig-checker-enable
 
@@ -699,6 +711,11 @@ elif [ x"$VCSH_COMMAND" = x'status' ]; then
 		shift
 	fi
 	VCSH_REPO_NAME=$2; export VCSH_REPO_NAME
+elif [ -n "$VCSH_COMMAND" ] &&
+	[ -r "$VCSH_PLUGIN_D/$VCSH_COMMAND" ]; then
+	info "sourcing plugin '$VCSH_PLUGIN_D/$VCSH_COMMAND'"
+	# shellcheck source=/dev/null
+	. "$VCSH_PLUGIN_D/$VCSH_COMMAND"
 elif [ -n "$2" ]; then
 	VCSH_COMMAND='run'; export VCSH_COMMAND
 	VCSH_REPO_NAME=$1; export VCSH_REPO_NAME
