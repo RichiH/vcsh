@@ -81,7 +81,7 @@ $ pkg install vcsh
 
 First you’ll want a copy of the source code.
 The easiest to use place to get this is the [latest release](https://github.com/RichiH/vcsh/releases/latest) posted on GitHub.
-The souree distribution will have a name such as `vcsh-2.0.0.tar.xz`.
+The souree distribution will have a name such as `vcsh-2.0.0.tar.zst`.
 Note under each release GitHub also show two “Source code” links that will download a snapshot of the repository; this is **not** the file you want (unless you want to jump through extra hoops).
 The official source release packages with the release version in the file names are the ones you want.
 

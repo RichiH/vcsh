@@ -41,8 +41,8 @@ jobs:
           prerelease: ${{ env.PRERELEASE }}
           body_path: changelog-HEAD
           files: |
+            vcsh-${{ env.VERSION }}.tar.zst
             vcsh-${{ env.VERSION }}.zip
-            vcsh-${{ env.VERSION }}.tar.xz
 
   deploy-standalone:
     runs-on: ubuntu-latest
