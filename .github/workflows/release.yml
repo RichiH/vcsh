@@ -43,6 +43,7 @@ jobs:
           files: |
             vcsh-${{ env.VERSION }}.tar.zst
             vcsh-${{ env.VERSION }}.zip
+            vcsh-${{ env.VERSION }}.sha256.txt
 
   deploy-standalone:
     runs-on: ubuntu-latest
@@ -56,9 +57,11 @@ jobs:
           ./bootstrap.sh
           ./configure --with-standalone --bindir=/
           make DESTDIR=. install-exec
+          sha256sum vcsh-standalone.sh | tee vcsh-standalone.sha256.txt
       - name: Add standalone deployment to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ github.token }}
-          file: vcsh-standalone.sh
           tag: ${{ github.ref }}
+          file_glob: true
+          file: vcsh-standalone.{sh,sha256.txt}

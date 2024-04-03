@@ -28,9 +28,10 @@ AC_ARG_WITH([standalone],
             ],
             [])
 
-# These three macros must be run after processing our standalone setup because
+# These macros must be run after processing our standalone setup because
 # they all expect the program name transformation setup to be complete.
 AX_GIT_VERSION
+AX_DIST_CHECKSUMS
 AX_SHELL_COMPLETION_DIRS
 AX_TRANSFORM_PACKAGE_NAME
 

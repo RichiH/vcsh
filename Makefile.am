@@ -24,6 +24,7 @@ BUILT_SOURCES =
 CLEANFILES = $(dist_man_MANS) $(bin_SCRIPTS)
 
 include $(top_srcdir)/build-aux/git_version.mk
+include $(top_srcdir)/build-aux/dist_checksums.mk
 include $(top_srcdir)/build-aux/shell_completion_dirs.mk
 
 if !IS_SDIST
