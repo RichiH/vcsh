@@ -16,5 +16,6 @@ completions/vcsh
 config.log
 config.status
 configure
+aminclude.am
 /vcsh
 vcsh-*

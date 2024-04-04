@@ -5,9 +5,6 @@ AC_CONFIG_MACRO_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign tar-pax dist-zstd dist-zip no-dist-gzip color-tests])
 AM_SILENT_RULES([yes])
 
-AM_CONDITIONAL([IS_SDIST],
-               [test ! -e .gitignore])
-
 AC_ARG_WITH([standalone],
             AS_HELP_STRING([--with-standalone],
                            [Use configuration presets for a standalone script deployment @<:@default=no@:>@]),
@@ -28,19 +25,20 @@ AC_ARG_WITH([standalone],
             ],
             [])
 
+QUE_TRANSFORM_PACKAGE_NAME
+
 # These macros must be run after processing our standalone setup because
 # they all expect the program name transformation setup to be complete.
-AX_GIT_VERSION
-AX_DIST_CHECKSUMS
-AX_SHELL_COMPLETION_DIRS
-AX_TRANSFORM_PACKAGE_NAME
+QUE_GIT_VERSION
+QUE_SHELL_COMPLETION_DIRS
+QUE_DIST_CHECKSUMS
 
 AC_PROG_GREP
 AC_PROG_SED
 
-AX_PROGVAR([comm])
-AX_PROGVAR([git])
-AX_PROGVAR([wc])
+QUE_PROGVAR([comm])
+QUE_PROGVAR([git])
+QUE_PROGVAR([wc])
 
 AC_ARG_WITH([deployment],
             AS_HELP_STRING([--with-deployment],
@@ -57,13 +55,12 @@ AC_ARG_WITH([man-page],
 AM_CONDITIONAL([ENABLE_MAN_PAGE],
                [test x"$with_man_page" != x"no"])
 
-AM_COND_IF([IS_SDIST],
-           [],
+AM_COND_IF([SOURCE_IS_GIT],
            [AM_COND_IF([ENABLE_MAN_PAGE],
-                       [AX_PROGVAR([ronn])])
+                       [QUE_PROGVAR([ronn])])
 ])
 
-AM_COND_IF([IS_SDIST],
+AM_COND_IF([SOURCE_IS_GIT],
            m4_define([TESTDEF], [yes]),
            m4_define([TESTDEF], [no]))
 AC_ARG_ENABLE([tests],
@@ -75,7 +72,7 @@ AM_CONDITIONAL([ENABLE_TESTS],
                [test x"$enable_tests" != x"no"])
 
 AM_COND_IF([ENABLE_TESTS], [
-       AX_PROGVAR([prove])
+       QUE_PROGVAR([prove])
        AX_PROG_PERL_MODULES(Shell::Command, [],
                             AC_MSG_ERROR(Perl module required for testing not found))
        AX_PROG_PERL_MODULES(Test::Most, [],

@@ -23,13 +23,22 @@ EXTRA_DIST += t/000-tear-env.t t/001-setup-env.t t/100-init.t t/300-add.t t/950-
 BUILT_SOURCES =
 CLEANFILES = $(dist_man_MANS) $(bin_SCRIPTS)
 
-include $(top_srcdir)/build-aux/git_version.mk
-include $(top_srcdir)/build-aux/dist_checksums.mk
-include $(top_srcdir)/build-aux/shell_completion_dirs.mk
+# A classical use of the autoconf-archive include macro would expand
+# INC_AMINCLUDE here, but the perl script that inlines include statements
+# runs before the automake that organizes logic and performs substitution.
+# Consequentially with a substitution here it becomes impossible to use
+# automake conditionals and substitutions in the included Makefile fragments.
+# By entering the expanded value directly we are ready in time for the inlining
+# functionality and hence can use conditionals in included makefile fragments.
+include $(top_srcdir)/aminclude.am
 
-if !IS_SDIST
+DISTCLEANFILES = @AMINCLUDE@
+
+if !SOURCE_IS_DIST
+
 doc/vcsh.1: doc/vcsh.1.ronn
 	$(RONN) < $< > $@
+
 endif
 
 $(COMPLETIONS_OUT_DIR)/$(TRANSFORMED_PACKAGE_NAME): completions/vcsh.bash
@@ -41,7 +50,7 @@ $(COMPLETIONS_OUT_DIR)/_$(TRANSFORMED_PACKAGE_NAME): completions/vcsh.zsh
 	install $< $@
 
 if ENABLE_TESTS
-_CHECKDEPS = prove
+_CHECKDEPS = $(PROVE)
 endif
 
 check-local: $(_CHECKDEPS)

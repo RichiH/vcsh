@@ -15,3 +15,5 @@ distclean-local:
 
 # Append checksum operation to function that runs after compressing dist archives
 am__post_remove_distdir = $(am__remove_distdir); $(checksum_dist)
+
+# vim: ft=automake
