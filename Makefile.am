@@ -1,4 +1,5 @@
 ACLOCAL_AMFLAGS = -I build-aux
+AM_DISTCHECK_CONFIGURE_FLAGS = --enable-developer-mode
 
 .ONESHELL:
 .SECONDARY:
@@ -68,16 +69,27 @@ prove:
 .PHONY: test
 test: prove
 
-.PHONY: lint
+PHONY_DEVELOPER_TARGETS = lint lint-editor-config lint-shellheck
+.PHONY: $(PHONY_DEVELOPER_TARGETS)
+
+if DEVELOPER_MODE
+
 lint: lint-editor-config lint-shellcheck
 
-.PHONY: lint-editor-config
 lint-editor-config:
 	ec
 
-.PHONY: lint-shellheck
 lint-shellcheck: $(PACKAGE_NAME)
 	shellcheck $<
+
+else !DEVELOPER_MODE
+
+$(PHONY_DEVELOPER_TARGETS):
+	@: $(error "Please reconfigure using --enable-developer-mode to use developer tooling")
+
+endif !DEVELOPER_MODE
+
+if SOURCE_IS_GIT
 
 CONTRIBUTORS:
 	exec > $@
@@ -88,3 +100,5 @@ CONTRIBUTORS:
 
 changelog-HEAD: changelog
 	sed -nEe '2d;s/^\t//p;/^$$/q;' $< > $@
+
+endif SOURCE_IS_GIT

@@ -23,7 +23,7 @@ jobs:
           echo "VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
           echo "${GITHUB_REF#refs/*/v}" > .tarball-version
           ./bootstrap.sh
-          ./configure
+          ./configure --enable-developer-mode
       - name: Generate release-specific changelog
         run: |
           echo "PRERELEASE=${{ contains(env.VERSION, '-alpha') || contains(env.VERSION, '-beta') || contains(env.VERSION, '-rc') }}" >> $GITHUB_ENV

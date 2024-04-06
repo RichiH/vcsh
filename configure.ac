@@ -26,6 +26,7 @@ AC_ARG_WITH([standalone],
             [])
 
 QUE_TRANSFORM_PACKAGE_NAME
+QUE_DEVELOPER_MODE
 
 # These macros must be run after processing our standalone setup because
 # they all expect the program name transformation setup to be complete.

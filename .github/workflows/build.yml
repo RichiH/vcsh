@@ -49,7 +49,7 @@ jobs:
       - name: Configure
         run: |
           ./bootstrap.sh
-          ./configure
+          ./configure --enable-developer-mode
       - name: Run tests
         run: |
           make check
