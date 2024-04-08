@@ -129,6 +129,7 @@ help() {
    list-untracked \\
         [<-a>] [<-r>]
         [<repo>]        List all files not tracked by all or one repositories
+   locate <file>        Find repo tracking a given file
    pull                 Pull from all vcsh remotes
    push                 Push to vcsh remotes
    rename <repo> \\
@@ -341,7 +342,7 @@ list_has_remote() {
 
 get_files() {
 	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
-	@GIT@ ls-files --full-name
+	@GIT@ ls-files --full-name -- "$@"
 }
 
 list_tracked() {
@@ -544,6 +545,17 @@ which() {
 	fi
 }
 
+locate() {
+	if [ ! -f "$VCSH_COMMAND_PARAMETER" ]; then
+		fatal "'$VCSH_COMMAND_PARAMETER' does not exist" 1
+	fi
+	for VCSH_REPO_NAME in $(list); do
+		if get_files "$VCSH_COMMAND_PARAMETER" | @GREP@ -q .; then
+			echo "$VCSH_REPO_NAME"
+		fi
+	done
+}
+
 # Ignore warnings about VCSH_REPO_NAME being changed in a subshell.
 # shellcheck disable=SC2031
 write_gitignore() {
@@ -627,6 +639,7 @@ case $VCSH_COMMAND in
 	upgrad|upgra|upgr|up) VCSH_COMMAND=upgrade;;
 	versio|versi|vers|ver|ve) VCSH_COMMAND=version;;
 	which|whi|wh) VCSH_COMMAND=which;;
+	locat|loc|lo) VCSH_COMMAND=locate;;
 	write|writ|wri|wr) VCSH_COMMAND=write-gitignore;;
 esac
 
@@ -660,11 +673,12 @@ elif [ "$VCSH_COMMAND" = 'version' ]; then
 	echo "$VCSH_SELF $VCSH_VERSION"
 	@GIT@ version
 	exit
-elif [ x"$VCSH_COMMAND" = x'which' ]; then
+elif [ x"$VCSH_COMMAND" = x'which' ]           ||
+	[ x"$VCSH_COMMAND" = x'locate' ]; then
 	[ -z "$2" ] && fatal "$VCSH_COMMAND: please specify a filename" 1
 	[ -n "$3" ] && fatal "$VCSH_COMMAND: too many parameters" 1
 	VCSH_COMMAND_PARAMETER=$2; export VCSH_COMMAND_PARAMETER
-elif [ x"$VCSH_COMMAND" = x'delete' ]           ||
+elif [ x"$VCSH_COMMAND" = x'delete' ]          ||
 	[ x"$VCSH_COMMAND" = x'enter' ]            ||
 	[ x"$VCSH_COMMAND" = x'init' ]             ||
 	[ x"$VCSH_COMMAND" = x'list-tracked-by' ]  ||
