@@ -1,4 +1,5 @@
 vcsh.1
+doc/vcsh.1.ronn
 *.patch
 *.swp
 .swp
@@ -16,5 +17,6 @@ completions/vcsh
 config.log
 config.status
 configure
+aminclude.am
 /vcsh
 vcsh-*

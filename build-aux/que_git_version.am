@@ -1,6 +1,5 @@
 .SECONDEXPANSION:
 
-# EXTRA_@PACKAGE_VAR@_SOURCES += .version
 EXTRA_DIST += build-aux/git-version-gen
 BUILT_SOURCES += .version
 CLEANFILES += .version .version-prev
