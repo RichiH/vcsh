@@ -4,29 +4,6 @@ on: [push, pull_request]
 
 jobs:
 
-  standalone:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Fetch tags
-        run: |
-          git fetch --prune --tags ||:
-      - name: Configure standalone script
-        run: |
-          ./bootstrap.sh
-          ./configure --with-standalone --bindir=/
-          make DESTDIR=. install-exec
-          echo VERSION=$(cat .version) >> $GITHUB_ENV
-          sha256sum vcsh-standalone.sh
-      - name: Post standalone script artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: standalone-deployment-${{ env.VERSION }}
-          path: vcsh-standalone.sh
-
   source-dist:
     runs-on: ubuntu-latest
     steps:
@@ -62,3 +39,26 @@ jobs:
         with:
           name: vcsh-${{ env.VERSION }}
           path: vcsh-${{ env.VERSION }}.zip
+
+  standalone:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch tags
+        run: |
+          git fetch --prune --tags ||:
+      - name: Configure standalone script
+        run: |
+          ./bootstrap.sh
+          ./configure --with-standalone --bindir=/
+          make DESTDIR=. install-exec
+          echo VERSION=$(cat .version) >> $GITHUB_ENV
+          sha256sum vcsh-standalone.sh
+      - name: Post standalone script artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: standalone-deployment-${{ env.VERSION }}
+          path: vcsh-standalone.sh
