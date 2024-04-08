@@ -1,3 +1,11 @@
+2024-04-08  Caleb Maclennan <caleb@alerque.com>
+
+	* Release 2.0.9
+	* Add missing 'commit' sub-command in bash completions
+	* Switch from xz to zst compression for official artifacts
+	* Generate checksums for release artifacts in CI
+	* Use more idiomatic GNU/Autotools patterns
+
 2024-02-27  Caleb Maclennan <caleb@alerque.com>
 
 	* Release 2.0.8
