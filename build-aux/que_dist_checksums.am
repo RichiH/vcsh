@@ -10,7 +10,9 @@ checksum_dist = \
 # Since the checksums file isn't an artifact produced by the default source dist
 # creation process, we have to clean it up ourselves so distcheck can see that
 # everything round-tripped cleanly.
-distclean-local:
+distclean-local: distclean-local-checksums
+
+distclean-local-checksums:
 	rm -f $(distdir).sha256.txt
 
 # Append checksum operation to function that runs after compressing dist archives
