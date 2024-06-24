@@ -372,7 +372,7 @@ You're welcome to clone the example repository:
     vim .mrconfig
 
 Look around in the clone. It should be reasonably simple to understand. If not,
-poke me, RichiH, on Libera (query) or OFTC (#vcs-home).
+poke RichiH or alerque on Libera (#vcs-home) or OFTC (#vcs-home).
 
 
 ### The Manual Way
