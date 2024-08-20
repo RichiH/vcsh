@@ -21,6 +21,14 @@ VCSH_SELF='@TRANSFORMED_PACKAGE_NAME@'; export VCSH_SELF
 # Ensure all files created are accessible only to the current user.
 umask 0077
 
+# Allow override of shell dependencies (including outside of $PATH) either by
+# setting ENV vars at build time or run time.
+alias comm="${COMM:-@COMM@}"
+alias git="${GIT:-@GIT@}"
+alias grep="${GREP:-@GREP@}"
+alias sed="${SED:-@SED@}"
+alias wc="${WC:-@WC@}"
+
 fatal() {
 	echo "$VCSH_SELF: fatal: $1" >&2
 	[ -z "$2" ] && exit 1
@@ -169,7 +177,7 @@ info() {
 clone() {
 	hook pre-clone
 	# Check if remote is reachable. Abort early if there's a typo, TLS certificate problem, etc
-	@GIT@ ls-remote "$GIT_REMOTE" 2> /dev/null || fatal "Can not reach '$GIT_REMOTE'"
+	git ls-remote "$GIT_REMOTE" 2> /dev/null || fatal "Can not reach '$GIT_REMOTE'"
 	init
 	# Test which, if any, given or detected branches can be pulled from.
 	# In a future version, if we need the logic, we could do the following:
@@ -179,7 +187,7 @@ clone() {
 	#   set VCSH_BRANCH if only one match
 	#   offer a list of all matching refs for the user to choose
 	for VCSH_BRANCH_TEST in "$VCSH_BRANCH" master trunk development; do
-		if [ $(@GIT@ ls-remote "$GIT_REMOTE" "$VCSH_BRANCH_TEST" 2> /dev/null | @WC@ -l ) -lt 1 ]; then
+		if [ $(git ls-remote "$GIT_REMOTE" "$VCSH_BRANCH_TEST" 2> /dev/null | wc -l ) -lt 1 ]; then
 			info "remote branch '$VCSH_BRANCH_TEST' empty"
 		else
 			info "remote branch '$VCSH_BRANCH_TEST' found"
@@ -194,21 +202,21 @@ clone() {
 	VCSH_BRANCH=$VCSH_BRANCH_REMOTE
 
 	# Set up remote
-	@GIT@ remote add origin "$GIT_REMOTE"
-	@GIT@ checkout -b "$VCSH_BRANCH" || return $?
-	@GIT@ config branch."$VCSH_BRANCH".remote origin
-	@GIT@ config branch."$VCSH_BRANCH".merge  refs/heads/"$VCSH_BRANCH"
-	GIT_VERSION_MAJOR=$(@GIT@ --version | @SED@ -E -n 's/.* ([0-9]+)\..*/\1/p' )
+	git remote add origin "$GIT_REMOTE"
+	git checkout -b "$VCSH_BRANCH" || return $?
+	git config branch."$VCSH_BRANCH".remote origin
+	git config branch."$VCSH_BRANCH".merge  refs/heads/"$VCSH_BRANCH"
+	GIT_VERSION_MAJOR=$(git --version | sed -E -n 's/.* ([0-9]+)\..*/\1/p' )
 	if [ 1 -lt "$GIT_VERSION_MAJOR" ];then
-		@GIT@ fetch origin "$VCSH_BRANCH"
+		git fetch origin "$VCSH_BRANCH"
 	else
-		@GIT@ fetch origin
+		git fetch origin
 	fi
 	hook pre-merge
-	@GIT@ read-tree -n -mu origin/"$VCSH_BRANCH" \
+	git read-tree -n -mu origin/"$VCSH_BRANCH" \
 		|| fatal "will stop after fetching and not try to merge!
   Once this situation has been resolved, run 'vcsh $VCSH_REPO_NAME pull' to finish cloning." 17 # editorconfig-checker-disable-line
-	@GIT@ -c merge.ff=true merge origin/"$VCSH_BRANCH"
+	git -c merge.ff=true merge origin/"$VCSH_BRANCH"
 	hook post-merge
 	hook post-clone
 	retire
@@ -224,7 +232,7 @@ commit() {
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
 		hook_repo pre-commit
-		@GIT@ commit --untracked-files=no --quiet "$@"
+		git commit --untracked-files=no --quiet "$@"
 		hook_repo post-commit
 		VCSH_COMMAND_RETURN_CODE=$?
 		echo
@@ -236,7 +244,7 @@ delete() {
 	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
 	use
 	info "This operation WILL DESTROY DATA!"
-	files=$(@GIT@ ls-files)
+	files=$(git ls-files)
 	echo "These files will be deleted:
 
 $files
@@ -263,7 +271,7 @@ foreach() {
 
 	# We default to prefixing `git` to all commands passed to foreach, but
 	# allow running in general context with -g
-	command_prefix=@GIT@
+	command_prefix=git
 	# shellcheck disable=SC2220
 	while getopts gp flag; do
 		case "$flag" in
@@ -279,7 +287,7 @@ foreach() {
 		use
 		hook_repo pre-foreach
 		if [ -n "${VCSH_PRINT_REPO_PREFIX+x}" ]; then
-			$command_prefix "$@" | @SED@ "s/^/$VCSH_REPO_NAME: /"
+			$command_prefix "$@" | sed "s/^/$VCSH_REPO_NAME: /"
 		else
 			echo "$VCSH_REPO_NAME:"
 			$command_prefix "$@"
@@ -319,7 +327,7 @@ init() {
 	[ ! -e "$GIT_DIR" ] || fatal "'$GIT_DIR' exists" 10
 	mkdir -p "$VCSH_BASE" || fatal "could not create '$VCSH_BASE'" 50
 	cd "$VCSH_BASE" || fatal "could not enter '$VCSH_BASE'" 11
-	@GIT@ init --shared=false
+	git init --shared=false
 	upgrade
 	hook post-init
 }
@@ -335,13 +343,13 @@ list_has_remote() {
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		# This command returns the tracking branch of the currently-checked-out local
 		# branch, if any. See https://stackoverflow.com/a/9753364
-		[ -n  "$(@GIT@ for-each-ref "$(@GIT@ symbolic-ref -q HEAD)")" ] && echo "$VCSH_REPO_NAME"
+		[ -n  "$(git for-each-ref "$(git symbolic-ref -q HEAD)")" ] && echo "$VCSH_REPO_NAME"
 	done
 }
 
 get_files() {
 	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
-	@GIT@ ls-files --full-name
+	git ls-files --full-name
 }
 
 list_tracked() {
@@ -356,7 +364,7 @@ list_tracked() {
 }
 
 list_tracked_helper() {
-	@SED@ "s,^,$(printf '%s\n' "$VCSH_BASE/" | @SED@ 's/[,\&]/\\&/g')," | sort -u
+	sed "s,^,$(printf '%s\n' "$VCSH_BASE/" | sed 's/[,\&]/\\&/g')," | sort -u
 }
 
 list_tracked_by() {
@@ -397,7 +405,7 @@ list_untracked() {
 
 list_untracked_helper() {
 	export GIT_DIR="$VCSH_REPO_D/$VCSH_REPO_NAME.git"
-	@GIT@ ls-files --others $exclude_standard_opt $directory_opt | (
+	git ls-files --others $exclude_standard_opt $directory_opt | (
 		while read -r line; do
 			echo "$line"
 			directory_component=${line%%/*}
@@ -409,7 +417,7 @@ list_untracked_helper() {
 		cp "$temp_file_others" "$temp_file_untracked" || fatal 'Could not copy temp file'
 	fi
 	cp "$temp_file_untracked" "$temp_file_untracked_copy" || fatal 'Could not copy temp file'
-	@COMM@ -12 "$temp_file_others" "$temp_file_untracked_copy" > "$temp_file_untracked"
+	comm -12 "$temp_file_others" "$temp_file_untracked_copy" > "$temp_file_untracked"
 }
 
 pull() {
@@ -420,7 +428,7 @@ pull() {
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
 		hook_repo pre-pull
-		@GIT@ pull
+		git pull
 		hook_repo post-pull
 		VCSH_COMMAND_RETURN_CODE=$?
 		echo
@@ -436,7 +444,7 @@ push() {
 		GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 		use
 		hook_repo pre-push
-		@GIT@ push
+		git push
 		hook_repo post-push
 		VCSH_COMMAND_RETURN_CODE=$?
 		echo
@@ -494,13 +502,13 @@ status_helper() {
 	use
 	# Shellcheck isn't understanding a complex block.
 	# shellcheck disable=SC1083
-	remote_tracking_branch=$(@GIT@ rev-parse --abbrev-ref --symbolic-full-name @{u} 2> /dev/null) && {
-		commits_behind=$(@GIT@ log ..${remote_tracking_branch} --oneline | @WC@ -l)
-		commits_ahead=$(@GIT@ log ${remote_tracking_branch}.. --oneline | @WC@ -l)
+	remote_tracking_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2> /dev/null) && {
+		commits_behind=$(git log ..${remote_tracking_branch} --oneline | wc -l)
+		commits_ahead=$(git log ${remote_tracking_branch}.. --oneline | wc -l)
 		[ ${commits_behind} -ne 0 ] && echo "Behind $remote_tracking_branch by $commits_behind commits"
 		[ ${commits_ahead} -ne 0 ] && echo "Ahead of $remote_tracking_branch by $commits_ahead commits"
 	}
-	@GIT@ ${VCSH_GIT_OPTIONS} status --short --untracked-files='no' | @SED@ -E 's@([^ ] +)@\1~/@'
+	git ${VCSH_GIT_OPTIONS} status --short --untracked-files='no' | sed -E 's@([^ ] +)@\1~/@'
 	VCSH_COMMAND_RETURN_CODE=$?
 }
 
@@ -509,20 +517,20 @@ upgrade() {
 	# fake-bare repositories are not bare, actually. Set this to false
 	# because otherwise Git complains "fatal: core.bare and core.worktree
 	# do not make sense"
-	@GIT@ config core.bare false
+	git config core.bare false
 	# core.worktree may be absolute or relative to $GIT_DIR, depending on
 	# user preference
 	if [ ! "x$VCSH_WORKTREE" = 'xabsolute' ]; then
-		@GIT@ config core.worktree "$(cd "$GIT_DIR" && GIT_WORK_TREE=$VCSH_BASE @GIT@ rev-parse --show-cdup)"
+		git config core.worktree "$(cd "$GIT_DIR" && GIT_WORK_TREE=$VCSH_BASE git rev-parse --show-cdup)"
 	elif [ ! "x$VCSH_WORKTREE" = 'xrelative' ]; then
-		@GIT@ config core.worktree "$VCSH_BASE"
+		git config core.worktree "$VCSH_BASE"
 	fi
-	[ ! "x$VCSH_GITIGNORE" = 'xnone' ] && @GIT@ config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
-	[ ! "x$VCSH_GITATTRIBUTES" = 'xnone' ] && @GIT@ config core.attributesfile ".gitattributes.d/$VCSH_REPO_NAME"
-	@GIT@ config vcsh.vcsh 'true'
+	[ ! "x$VCSH_GITIGNORE" = 'xnone' ] && git config core.excludesfile ".gitignore.d/$VCSH_REPO_NAME"
+	[ ! "x$VCSH_GITATTRIBUTES" = 'xnone' ] && git config core.attributesfile ".gitattributes.d/$VCSH_REPO_NAME"
+	git config vcsh.vcsh 'true'
 	use
-	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ] && @GIT@ add -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME"
-	[ -e "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME" ] && @GIT@ add -f "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME"
+	[ -e "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitignore.d/$VCSH_REPO_NAME"
+	[ -e "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME" ] && git add -f "$VCSH_BASE/.gitattributes.d/$VCSH_REPO_NAME"
 	hook post-upgrade
 }
 
@@ -535,7 +543,7 @@ which() {
 	# It's ok to modify VCSH_REPO_NAME in a subshell.
 	# shellcheck disable=SC2030
 	output=$(for VCSH_REPO_NAME in $(list); do
-		get_files | @GREP@ -- "$VCSH_COMMAND_PARAMETER" | @SED@ "s/^/$VCSH_REPO_NAME: /"
+		get_files | grep -- "$VCSH_COMMAND_PARAMETER" | sed "s/^/$VCSH_REPO_NAME: /"
 	done | sort -u)
 	if [ -z "$output" ]; then
 		fatal "'$VCSH_COMMAND_PARAMETER' does not exist" 1
@@ -558,12 +566,12 @@ write_gitignore() {
 	# Works in all shells we care about.
 	# shellcheck disable=SC2039,SC3043
 	local GIT_VERSION GIT_VERSION_MAJOR GIT_VERSION_MINOR
-	GIT_VERSION="$(@GIT@ --version)"
-	GIT_VERSION_MAJOR="$(echo "$GIT_VERSION" | @SED@ -E -n 's/.* ([0-9]+)\..*/\1/p')"
-	GIT_VERSION_MINOR="$(echo "$GIT_VERSION" | @SED@ -E -n 's/.* ([0-9]+)\.([0-9]+)\..*/\2/p')"
+	GIT_VERSION="$(git --version)"
+	GIT_VERSION_MAJOR="$(echo "$GIT_VERSION" | sed -E -n 's/.* ([0-9]+)\..*/\1/p')"
+	GIT_VERSION_MINOR="$(echo "$GIT_VERSION" | sed -E -n 's/.* ([0-9]+)\.([0-9]+)\..*/\2/p')"
 	OLDIFS=$IFS
 	IFS=$(printf '\n\t')
-	gitignores=$(for file in $(@GIT@ ls-files); do
+	gitignores=$(for file in $(git ls-files); do
 		while true; do
 			echo "$file"; new=${file%/*}
 			[ x"$file" = x"$new" ] && break
@@ -580,10 +588,10 @@ write_gitignore() {
 
 	echo '*' > "$tempfile" || fatal "could not write to '$tempfile'" 57
 	for gitignore in $gitignores; do
-		echo "$gitignore" | @SED@ 's@^@!/@' >> "$tempfile" ||
+		echo "$gitignore" | sed 's@^@!/@' >> "$tempfile" ||
 			fatal "could not write to '$tempfile'" 57
 		if [ "x$VCSH_GITIGNORE" = 'xrecursive' ] && [ -d "$gitignore" ]; then
-			{ echo "$gitignore/*" | @SED@ 's@^@!/@' >> "$tempfile" ||
+			{ echo "$gitignore/*" | sed 's@^@!/@' >> "$tempfile" ||
 				fatal "could not write to '$tempfile'" 57; }
 		fi
 	done
@@ -604,7 +612,7 @@ write_gitignore() {
 		fatal "could not move '$tempfile' to '$GIT_IGNORE_PATH'" 53
 }
 
-debug "$(@GIT@ version)"
+debug "$(git version)"
 
 if [ ! "x$VCSH_GITIGNORE" = 'xexact' ] && [ ! "x$VCSH_GITIGNORE" = 'xnone' ] && [ ! "x$VCSH_GITIGNORE" = 'xrecursive' ]; then
 	fatal "'\$VCSH_GITIGNORE' must equal 'exact', 'none', or 'recursive'" 1
@@ -658,7 +666,7 @@ elif [ "$VCSH_COMMAND" = 'help' ]; then
 	help && exit
 elif [ "$VCSH_COMMAND" = 'version' ]; then
 	echo "$VCSH_SELF $VCSH_VERSION"
-	@GIT@ version
+	git version
 	exit
 elif [ x"$VCSH_COMMAND" = x'which' ]; then
 	[ -z "$2" ] && fatal "$VCSH_COMMAND: please specify a filename" 1
@@ -705,7 +713,7 @@ elif [ -n "$2" ]; then
 	GIT_DIR=$VCSH_REPO_D/$VCSH_REPO_NAME.git; export GIT_DIR
 	[ -d "$GIT_DIR" ] || { help; exit 1; }
 	shift 1
-	set -- "@GIT@" "$@"
+	set -- "git" "$@"
 elif [ -n "$VCSH_COMMAND" ]; then
 	VCSH_COMMAND='enter'; export VCSH_COMMAND
 	VCSH_REPO_NAME=$1; export VCSH_REPO_NAME
@@ -718,7 +726,7 @@ fi
 
 # Did we receive a directory instead of a name?
 # Mangle the input to fit normal operation.
-if echo "$VCSH_REPO_NAME" | @GREP@ -q '/'; then
+if echo "$VCSH_REPO_NAME" | grep -q '/'; then
 	GIT_DIR=$VCSH_REPO_NAME; export GIT_DIR
 	VCSH_REPO_NAME=$(basename "$VCSH_REPO_NAME" .git); export VCSH_REPO_NAME
 fi
@@ -740,7 +748,7 @@ check_dir "$VCSH_REPO_D"
 [ ! "x$VCSH_GITATTRIBUTES" = 'xnone' ] && check_dir "$VCSH_BASE/.gitattributes.d"
 
 verbose "$VCSH_COMMAND begin"
-VCSH_COMMAND=$(echo "$VCSH_COMMAND" | @SED@ 's/-/_/g'); export VCSH_COMMAND
+VCSH_COMMAND=$(echo "$VCSH_COMMAND" | sed 's/-/_/g'); export VCSH_COMMAND
 
 # Source repo-specific configuration file
 # shellcheck source=/dev/null
