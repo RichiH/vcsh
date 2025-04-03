@@ -24,7 +24,7 @@ test_expect_success 'Clone requires a remote' \
 
 test_expect_success 'Warn about cloning empty repo' \
 	'test_when_finished "doit | $VCSH delete empty" &&
-	test_might_fail $VCSH clone empty 2>&1 | test_grep "remote is empty"'
+	test_might_fail $VCSH clone empty 2>&1 | test_grep "remote branch .* empty"'
 
 test_expect_success 'Clone refuses to overwrite existing files' \
 	'echo success >A.t &&

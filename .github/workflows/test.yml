@@ -1,0 +1,35 @@
+name: Test
+
+on: [push, pull_request]
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch tags
+        run: |
+          git fetch --prune --tags ||:
+      - name: Install build dependencies
+        run: |
+          sudo apt install -y ronn
+      - name: Install perl test dependencies
+        uses: perl-actions/install-with-cpanm@v1
+        with:
+          install: |
+            Shell::Command
+            Test::Most
+      - name: Configure
+        run: |
+          ./bootstrap.sh
+          ./configure
+      - name: Run tests
+        run: |
+          make check
+      - name: Run full cycle packaging check
+        run: |
+          make distcheck

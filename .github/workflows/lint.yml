@@ -1,0 +1,29 @@
+name: Lint
+
+on: [push, pull_request]
+
+jobs:
+
+  editor-config:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Lint code style
+        uses: editorconfig-checker/action-editorconfig-checker@v2
+
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure
+        run: |
+          ./bootstrap.sh
+          ./configure --without-man-page --disable-tests
+      - name: Run shellcheck
+        uses: reviewdog/action-shellcheck@v1
+        with:
+          pattern: vcsh
+          reporter: github-pr-review
+          github_token: ${{ github.token }}

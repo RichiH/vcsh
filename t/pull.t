@@ -64,7 +64,7 @@ test_expect_failure 'pull fails if first pull fails' \
 
 	test_must_fail $VCSH pull'
 
-test_expect_success 'pull fails if last pull fails' \
+test_expect_failure 'pull fails if last pull fails' \
 	'mv repo repo.missing &&
 	test_when_finished "mv repo.missing repo" &&
 

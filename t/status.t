@@ -80,21 +80,21 @@ test_setup 'Set up files with many statuses' \
 
 test_expect_success 'Status shows added/modified/moved/deleted files' \
 	'echo "bar:"          >expected &&
-	echo ""             >>expected &&
-	echo "foo:"         >>expected &&
-	echo " D 0D"        >>expected &&
-	echo " M 0M"        >>expected &&
-	echo "A  A0"        >>expected &&
-	echo "AD AD"        >>expected &&
-	echo "AM AM"        >>expected &&
-	echo "D  D0"        >>expected &&
-	echo "M  M0"        >>expected &&
-	echo "MD MD"        >>expected &&
-	echo "MM MM"        >>expected &&
-	echo "R  R0x -> R0" >>expected &&
-	echo "RD RDx -> RD" >>expected &&
-	echo "RM RMx -> RM" >>expected &&
-	echo ""             >>expected &&
+	echo ""               >>expected &&
+	echo "foo:"           >>expected &&
+	echo " D ~/0D"        >>expected &&
+	echo " M ~/0M"        >>expected &&
+	echo "A  ~/A0"        >>expected &&
+	echo "AD ~/AD"        >>expected &&
+	echo "AM ~/AM"        >>expected &&
+	echo "D  ~/D0"        >>expected &&
+	echo "M  ~/M0"        >>expected &&
+	echo "MD ~/MD"        >>expected &&
+	echo "MM ~/MM"        >>expected &&
+	echo "R  ~/R0x -> R0" >>expected &&
+	echo "RD ~/RDx -> RD" >>expected &&
+	echo "RM ~/RMx -> RM" >>expected &&
+	echo ""               >>expected &&
 	$VCSH status >output &&
 	test_cmp expected output'
 

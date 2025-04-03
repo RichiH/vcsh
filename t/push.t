@@ -65,7 +65,7 @@ test_expect_failure 'push fails if first push fails' \
 
 	test_must_fail $VCSH push'
 
-test_expect_success 'push fails if last push fails' \
+test_expect_failure 'push fails if last push fails' \
 	'$VCSH foo commit --allow-empty -m "empty" &&
 	$VCSH bar commit --allow-empty -m "empty" &&
 

@@ -1,0 +1,70 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+      - v[0-9]+.[0-9]+.[0-9]+-alpha.[0-9]+
+      - v[0-9]+.[0-9]+.[0-9]+-beta.[0-9]+
+      - v[0-9]+.[0-9]+.[0-9]+-rc.[0-9]+
+
+jobs:
+
+  ghrelease:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch tags
+        run: |
+          git fetch --prune --tags ||:
+      - name: Install build dependencies
+        run: |
+          sudo apt install -y ronn
+      - name: Configure
+        run: |
+          echo "VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
+          ./bootstrap.sh
+          ./configure --enable-developer-mode
+      - name: Generate release-specific changelog
+        run: |
+          echo "PRERELEASE=${{ contains(env.VERSION, '-alpha') || contains(env.VERSION, '-beta') || contains(env.VERSION, '-rc') }}" >> $GITHUB_ENV
+          make changelog-HEAD
+      - name: If a final release, make sure changelog matches
+        if: ${{ ! (contains(env.VERSION, '-alpha') || contains(env.VERSION, '-beta') || contains(env.VERSION, '-rc')) }}
+        run: |
+          grep -F "* Release ${{ env.VERSION }}" changelog-HEAD
+      - name: Build source package
+        run: |
+          make dist
+      - name: Publish Release
+        uses: softprops/action-gh-release@v1
+        with:
+          prerelease: ${{ env.PRERELEASE }}
+          body_path: changelog-HEAD
+          files: |
+            vcsh-${{ env.VERSION }}.tar.zst
+            vcsh-${{ env.VERSION }}.zip
+            vcsh-${{ env.VERSION }}.sha256.txt
+
+  deploy-standalone:
+    runs-on: ubuntu-latest
+    needs: [ ghrelease ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure standalone script
+        run: |
+          ./bootstrap.sh
+          ./configure --with-standalone --bindir=/
+          make DESTDIR=. install-exec
+          sha256sum vcsh-standalone.sh | tee vcsh-standalone.sha256.txt
+      - name: Add standalone deployment to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ github.token }}
+          tag: ${{ github.ref }}
+          file_glob: true
+          file: vcsh-standalone.{sh,sha256.txt}

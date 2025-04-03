@@ -1,0 +1,21 @@
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+trim_trailing_whitespace = true
+
+[{Makefile*,*.mk,*.mk.in}]
+indent_style = tab
+indent_size = 4
+
+[*.m4]
+indent_style = space
+indent_size = 8
+
+[*.md]
+trim_trailing_whitespace = false
+
+[{vcsh.in,completions/vcsh.*}]
+indent_style = tab

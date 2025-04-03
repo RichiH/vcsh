@@ -15,13 +15,13 @@ test_expect_success '300-add.t' \
 	echo "test1:"  >expected &&
 	echo ""       >>expected &&
 	echo "test2:" >>expected &&
-	echo "A  a"   >>expected &&
+	echo "A  ~/a" >>expected &&
 	echo ""       >>expected &&
 	$VCSH status >output &&
 	test_cmp expected output &&
 
 	echo "test2:"  >expected &&
-	echo "A  a"   >>expected &&
+	echo "A  ~/a" >>expected &&
 	$VCSH status --terse >output &&
 	test_cmp expected output'
 
