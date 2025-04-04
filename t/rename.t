@@ -2,8 +2,8 @@
 
 test_description='Rename command'
 
-. ./test-lib.sh
-. "$TEST_DIRECTORY/environment.sh"
+. ./sharness/sharness.sh
+. "$SHARNESS_TEST_DIRECTORY/environment.sh"
 
 test_setup 'Create repo and make commits' \
 	'test_create_repo repo &&

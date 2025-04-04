@@ -2,8 +2,8 @@
 
 test_description='Version command'
 
-. ./test-lib.sh
-. "$TEST_DIRECTORY/environment.sh"
+. ./sharness/sharness.sh
+. "$SHARNESS_TEST_DIRECTORY/environment.sh"
 
 test_expect_success 'Version command succeeds' \
 	'$VCSH version'

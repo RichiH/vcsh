@@ -2,8 +2,8 @@
 
 test_description='Push command'
 
-. ./test-lib.sh
-. "$TEST_DIRECTORY/environment.sh"
+. ./sharness/sharness.sh
+. "$SHARNESS_TEST_DIRECTORY/environment.sh"
 
 test_setup 'set push.default=simple' \
 	'git config --global push.default simple'

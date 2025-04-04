@@ -2,8 +2,8 @@
 
 test_description='Delete command'
 
-. ./test-lib.sh
-. "$TEST_DIRECTORY/environment.sh"
+. ./sharness/sharness.sh
+. "$SHARNESS_TEST_DIRECTORY/environment.sh"
 
 test_expect_success 'Delete requires repo name' \
 	'test_must_fail $VCSH delete'

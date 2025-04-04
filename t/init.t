@@ -2,8 +2,8 @@
 
 test_description='Init command'
 
-. ./test-lib.sh
-. "$TEST_DIRECTORY/environment.sh"
+. ./sharness/sharness.sh
+. "$SHARNESS_TEST_DIRECTORY/environment.sh"
 
 test_expect_success 'Init command succeeds' \
 	'$VCSH init foo &&

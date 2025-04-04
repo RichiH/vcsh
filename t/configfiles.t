@@ -2,8 +2,8 @@
 
 test_description='Configuration files'
 
-. ./test-lib.sh
-. "$TEST_DIRECTORY/environment.sh"
+. ./sharness/sharness.sh
+. "$SHARNESS_TEST_DIRECTORY/environment.sh"
 
 test_expect_success 'File given with -c is sourced' \
 	'echo "echo _SUCCESS_" >config &&

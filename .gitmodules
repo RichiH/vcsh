@@ -1,0 +1,3 @@
+[submodule "t/sharness"]
+	path = t/sharness
+	url = https://github.com/felipec/sharness/

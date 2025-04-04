@@ -2,8 +2,8 @@
 
 test_description='Clone command'
 
-. ./test-lib.sh
-. "$TEST_DIRECTORY/environment.sh"
+. ./sharness/sharness.sh
+. "$SHARNESS_TEST_DIRECTORY/environment.sh"
 
 test_setup 'Create upstream repos' \
 	'test_create_repo empty &&

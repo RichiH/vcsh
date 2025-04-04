@@ -2,8 +2,8 @@
 
 test_description='Pull command'
 
-. ./test-lib.sh
-. "$TEST_DIRECTORY/environment.sh"
+. ./sharness/sharness.sh
+. "$SHARNESS_TEST_DIRECTORY/environment.sh"
 
 test_expect_success 'pull works with no repositories' \
 	'$VCSH pull >output &&

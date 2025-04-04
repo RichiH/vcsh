@@ -5,8 +5,8 @@
 
 test_description='write-gitignore command'
 
-. ./test-lib.sh
-. "$TEST_DIRECTORY/environment.sh"
+. ./sharness/sharness.sh
+. "$SHARNESS_TEST_DIRECTORY/environment.sh"
 
 test_expect_success 'parameter is required' \
 	'test_must_fail $VCSH write-gitignore'

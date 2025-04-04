@@ -2,8 +2,8 @@
 
 test_description='Run/enter commands'
 
-. ./test-lib.sh
-. "$TEST_DIRECTORY/environment.sh"
+. ./sharness/sharness.sh
+. "$SHARNESS_TEST_DIRECTORY/environment.sh"
 
 test_setup 'Create and populate repos' \
 	'test_create_repo repo1 &&

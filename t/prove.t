@@ -2,8 +2,8 @@
 
 test_description='Old tests'
 
-. ./test-lib.sh
-. "$TEST_DIRECTORY/environment.sh"
+. ./sharness/sharness.sh
+. "$SHARNESS_TEST_DIRECTORY/environment.sh"
 
 test_expect_success '300-add.t' \
 	'$VCSH init test1 &&

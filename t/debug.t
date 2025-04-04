@@ -2,8 +2,8 @@
 
 test_description='Debug/verbose output'
 
-. ./test-lib.sh
-. "$TEST_DIRECTORY/environment.sh"
+. ./sharness/sharness.sh
+. "$SHARNESS_TEST_DIRECTORY/environment.sh"
 
 test_expect_success 'Verbose output triggered by -v' \
 	'$VCSH -v list 2>&1 | test_grep "list begin"'

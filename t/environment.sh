@@ -11,6 +11,21 @@ export VCSH
 unset VCSH_OPTION_CONFIG VCSH_REPO_D VCSH_HOOK_D VCSH_OVERLAY_D
 unset VCSH_BASE VCSH_GITIGNORE VCSH_GITATTRIBUTES VCSH_WORKTREE
 
+# Set Git environment variables
+GIT_AUTHOR_EMAIL=author@example.com
+GIT_AUTHOR_NAME='A U Thor'
+GIT_COMMITTER_EMAIL=committer@example.com
+GIT_COMMITTER_NAME='C O Mitter'
+GIT_MERGE_VERBOSITY=5
+GIT_MERGE_AUTOEDIT=no
+GIT_ADVICE=0
+export GIT_MERGE_VERBOSITY GIT_MERGE_AUTOEDIT
+export GIT_AUTHOR_EMAIL GIT_AUTHOR_NAME
+export GIT_COMMITTER_EMAIL GIT_COMMITTER_NAME
+export GIT_ADVICE
+
+. "$SHARNESS_TEST_DIRECTORY"/git-functions.sh
+
 find_gitrepos() {
 	# Prints apparent Git repositories below $1
 	find "$1" -mindepth 1 -type d -name '*.git'
@@ -18,6 +33,12 @@ find_gitrepos() {
 
 num_gitrepos() {
 	find_gitrepos "$@" | wc -l
+}
+
+test_setup() {
+	desc=$1
+	shift
+	test_expect_success "[setup] $desc" "$@"
 }
 
 # Similar to grep -q, but prints the entire input to stderr for debugging
