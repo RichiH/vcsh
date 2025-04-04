@@ -71,7 +71,7 @@ test_expect_success 'commit can handle arguments with spaces' \
 	$VCSH bar log --oneline | test_grep -x "....... log message"'
 
 # Commit returns failure if last repository has no staged changes
-test_expect_failure 'commit works even if not all repos have changes' \
+test_expect_success 'commit works even if not all repos have changes' \
 	'touch part1 part2 &&
 	$VCSH foo add part1 &&
 	$VCSH commit -m "part1" &&
@@ -83,7 +83,7 @@ test_expect_failure 'commit works even if not all repos have changes' \
 	$VCSH bar log --oneline | test_grep -x "....... part2"'
 
 # Known bug
-test_expect_failure 'commit not affected by existing $VCSH_COMMAND_RETURN_CODE' \
+test_expect_success 'commit not affected by existing $VCSH_COMMAND_RETURN_CODE' \
 	'VCSH_COMMAND_RETURN_CODE=1 &&
 	export VCSH_COMMAND_RETURN_CODE &&
 	$VCSH commit'

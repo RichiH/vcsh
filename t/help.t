@@ -5,7 +5,7 @@ test_description='Help command'
 . ./test-lib.sh
 . "$TEST_DIRECTORY/environment.sh"
 
-test_expect_failure 'Help command succeeds' \
+test_expect_success 'Help command succeeds' \
 	'$VCSH help'
 
 test_expect_success 'Help command writes to stderr and not stdout' \
@@ -17,7 +17,7 @@ test_expect_success 'Help command prints usage on first line' \
 		head -1 |
 		test_grep "^usage: "'
 
-test_expect_failure 'Help command can be abbreviated (hel, he)' \
+test_expect_success 'Help command can be abbreviated (hel, he)' \
 	'$VCSH help >expected 2>&1 &&
 	$VCSH hel >output 2>&1 &&
 	test_cmp expected output &&

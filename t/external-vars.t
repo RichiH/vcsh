@@ -17,7 +17,7 @@ test_expect_failure 'No interference from $COLORING' \
 test_expect_failure 'No interference from $VCSH_COMMAND_RETURN_CODE' \
 	'test_env VCSH_COMMAND_RETURN_CODE=1 $VCSH list'
 
-test_expect_failure 'No interference from $VCSH_CONFLICT' \
+test_expect_success 'No interference from $VCSH_CONFLICT' \
 	'test_env VCSH_CONFLICT=1 $VCSH clone repo bar &&
 	doit | $VCSH delete bar'
 
