@@ -37,9 +37,9 @@ QUE_DIST_CHECKSUMS
 AC_PROG_GREP
 AC_PROG_SED
 
-QUE_PROGVAR([comm])
-QUE_PROGVAR([git])
-QUE_PROGVAR([wc])
+AX_REQUIRE_PROG([comm])
+AX_REQUIRE_PROG([git])
+AX_REQUIRE_PROG([wc])
 
 AC_ARG_WITH([deployment],
             AS_HELP_STRING([--with-deployment],
@@ -58,7 +58,7 @@ AM_CONDITIONAL([ENABLE_MAN_PAGE],
 
 AM_COND_IF([SOURCE_IS_GIT],
            [AM_COND_IF([ENABLE_MAN_PAGE],
-                       [QUE_PROGVAR([ronn])])
+                       [AX_REQUIRE_PROG([ronn])])
 ])
 
 AM_COND_IF([SOURCE_IS_GIT],
@@ -73,7 +73,7 @@ AM_CONDITIONAL([ENABLE_TESTS],
                [test x"$enable_tests" != x"no"])
 
 AM_COND_IF([ENABLE_TESTS], [
-       QUE_PROGVAR([prove])
+       AX_REQUIRE_PROG([prove])
        AX_PROG_PERL_MODULES(Shell::Command, [],
                             AC_MSG_ERROR(Perl module required for testing not found))
        AX_PROG_PERL_MODULES(Test::Most, [],

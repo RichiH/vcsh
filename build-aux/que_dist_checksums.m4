@@ -2,8 +2,8 @@ AC_DEFUN_ONCE([QUE_DIST_CHECKSUMS], [
 
         AM_COND_IF([DEVELOPER_MODE], [
 
-                QUE_PROGVAR([sha256sum])
-                QUE_PROGVAR([tee])
+                AX_REQUIRE_PROG([sha256sum])
+                AX_REQUIRE_PROG([tee])
 
                 QUE_TRANSFORM_PACKAGE_NAME
 
