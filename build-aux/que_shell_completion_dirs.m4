@@ -2,8 +2,6 @@ AC_DEFUN_ONCE([QUE_SHELL_COMPLETION_DIRS], [
 
         QUE_TRANSFORM_PACKAGE_NAME
 
-        AC_PROG_SED
-
         AC_ARG_WITH([bash-completion-dir],
                 AS_HELP_STRING([--with-bash-completion-dir[=PATH]],
                         [Install the bash auto-completion script in this directory. @<:@default=yes@:>@]),
@@ -34,6 +32,8 @@ AC_DEFUN_ONCE([QUE_SHELL_COMPLETION_DIRS], [
 
         AC_REQUIRE([AX_AM_MACROS])
         AX_ADD_AM_MACRO([dnl
+EXTRA_DIST += build-aux/que_shell_completion_dirs.am
+
 $(cat build-aux/que_shell_completion_dirs.am)
 ])dnl
 
