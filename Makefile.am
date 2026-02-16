@@ -64,7 +64,7 @@ check-dep-version: $(PACKAGE_NAME) | .version
 
 .PHONY: prove
 prove:
-	prove
+	$(MAKE) -C t
 
 .PHONY: test
 test: prove
