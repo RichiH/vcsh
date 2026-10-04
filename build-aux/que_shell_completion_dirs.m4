@@ -25,7 +25,7 @@ AC_DEFUN_ONCE([QUE_SHELL_COMPLETION_DIRS], [
         AM_CONDITIONAL([ENABLE_ZSH_COMPLETION],
                 [test "x$with_zsh_completion_dir" != "xno"])
 
-        AM_COND_IF([ENABLE_ZSH_COMPLETION],
+        AS_IF([test "x$with_zsh_completion_dir" = "xyes"],
                 [ZSH_COMPLETION_DIR="$datadir/zsh/site-functions"],
                 [ZSH_COMPLETION_DIR="$with_zsh_completion_dir"])
         AC_SUBST([ZSH_COMPLETION_DIR])
