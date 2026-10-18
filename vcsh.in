@@ -189,7 +189,7 @@ clone() {
 	done
 	if [ -z "$VCSH_BRANCH_REMOTE" ]; then
 		info "No non-empty remote branches found, aborting. Please run `$0 delete $VCSH_REPO_NAME`, determine the correct branch, and try again."
-		exit
+		exit 1
 	fi
 	VCSH_BRANCH=$VCSH_BRANCH_REMOTE
 
@@ -225,8 +225,8 @@ commit() {
 		use
 		hook_repo pre-commit
 		@GIT@ commit --untracked-files=no --quiet "$@"
-		hook_repo post-commit
 		VCSH_COMMAND_RETURN_CODE=$?
+		hook_repo post-commit
 		echo
 	done
 	hook_global post-commit
@@ -421,8 +421,8 @@ pull() {
 		use
 		hook_repo pre-pull
 		@GIT@ pull
-		hook_repo post-pull
 		VCSH_COMMAND_RETURN_CODE=$?
+		hook_repo post-pull
 		echo
 	done
 	hook_global post-pull
@@ -437,8 +437,8 @@ push() {
 		use
 		hook_repo pre-push
 		@GIT@ push
-		hook_repo post-push
 		VCSH_COMMAND_RETURN_CODE=$?
+		hook_repo post-push
 		echo
 	done
 	hook_global post-push
@@ -500,8 +500,11 @@ status_helper() {
 		[ ${commits_behind} -ne 0 ] && echo "Behind $remote_tracking_branch by $commits_behind commits"
 		[ ${commits_ahead} -ne 0 ] && echo "Ahead of $remote_tracking_branch by $commits_ahead commits"
 	}
-	@GIT@ ${VCSH_GIT_OPTIONS} status --short --untracked-files='no' | @SED@ -E 's@([^ ] +)@\1~/@'
+	VCSH_STATUS_OUTPUT=$(@GIT@ ${VCSH_GIT_OPTIONS} status --short --untracked-files='no')
 	VCSH_COMMAND_RETURN_CODE=$?
+	if [ -n "$VCSH_STATUS_OUTPUT" ]; then
+		printf '%s\n' "$VCSH_STATUS_OUTPUT" | @SED@ -E 's@([^ ] +)@\1~/@'
+	fi
 }
 
 upgrade() {
